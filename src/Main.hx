@@ -11,7 +11,7 @@ class Main {
 	}
 
 	function init() {
-		// initDocument();
+		// initDocument(); // if document doesn't have elements with correct id
 		sketchSVG();
 		sketchCanvas();
 	}
@@ -44,8 +44,7 @@ class Main {
 		rect.opacity = 0.75;
 		rect.noStroke();
 
-		// Don't forget to tell two to render everything
-		// to the screen
+		// Don't forget to tell two to render everything to the screen
 		two.update();
 	}
 
@@ -68,8 +67,7 @@ class Main {
 		rect.opacity = 0.75;
 		rect.noStroke();
 
-		// Don't forget to tell two to render everything
-		// to the screen
+		// Don't forget to tell two to render everything to the screen
 		two.update();
 	}
 
