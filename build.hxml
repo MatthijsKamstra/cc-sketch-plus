@@ -1,0 +1,11 @@
+-lib hxquicksettings
+-lib cc-sketch
+-cp src
+-main Main
+-js docs/cc_example.js
+-D source-map-content
+-D state=debug
+-debug
+# -dce full
+# -dce no
+
