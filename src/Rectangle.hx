@@ -75,7 +75,38 @@ class Rectangle extends Base implements IBase {
 		ctx.beginPath();
 
 		ctx.rect(this.xpos, this.ypos, this.width, this.height);
-		ctx.fill();
+		/*
+			_width = Math.abs(_width);
+			_height = Math.abs(_height);
+			_x = _x - _width / 2;
+			_y = _y - _height / 2;
+			// if (_width < radius) radius = _width;
+			var radius = {
+				tl: _radius,
+				tr: _radius,
+				br: _radius,
+				bl: _radius
+			};
+			ctx.beginPath();
+			ctx.moveTo(_x + radius.tl, _y);
+			ctx.lineTo(_x + _width - radius.tr, _y);
+			ctx.quadraticCurveTo(_x + _width, _y, _x + _width, _y + radius.tr);
+			ctx.lineTo(_x + _width, _y + _height - radius.br);
+			ctx.quadraticCurveTo(_x + _width, _y + _height, _x + _width - radius.br, _y + _height);
+			ctx.lineTo(_x + radius.bl, _y + _height);
+			ctx.quadraticCurveTo(_x, _y + _height, _x, _y + _height - radius.bl);
+			ctx.lineTo(_x, _y + radius.tl);
+			ctx.quadraticCurveTo(_x, _y, _x + radius.tl, _y);
+			ctx.closePath();
+		 */
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null) {
+			ctx.stroke();
+		}
+
+		// ctx.fill();
 		// ctx.stroke();
 	}
 
