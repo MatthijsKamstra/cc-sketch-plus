@@ -134,6 +134,7 @@ Main.prototype = {
 		this.sketchSVG();
 		this.sketchCanvas();
 		this.sketchShapesSVG();
+		this.sketchShapesCanvas();
 	}
 	,initDocument: function() {
 		var div0 = window.document.createElement("div");
@@ -146,6 +147,21 @@ Main.prototype = {
 	,sketchShapesSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg-shapes");
 		var params = new Settings(680,200,"svg");
+		var two = Sketcher.create(params).appendTo(elem);
+		var _g = 0;
+		while(_g < 6) {
+			var i = _g++;
+			var offset = 110;
+			var rect = two.makeRoundedRectangle(60 + offset * i,100,100,100,i * 10);
+			rect.set_fill("#FF8000");
+			rect.set_stroke("orangered");
+			rect.set_linewidth(i);
+		}
+		two.update();
+	}
+	,sketchShapesCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas-shapes");
+		var params = new Settings(680,200,"canvas");
 		var two = Sketcher.create(params).appendTo(elem);
 		var _g = 0;
 		while(_g < 6) {
@@ -260,7 +276,12 @@ Rectangle.prototype = $extend(Base.prototype,{
 		console.log(this.get_fill());
 		ctx.beginPath();
 		ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
-		ctx.fill();
+		if(this.get_fill() != null) {
+			ctx.fill();
+		}
+		if(this.get_stroke() != null) {
+			ctx.stroke();
+		}
 	}
 	,get_radius: function() {
 		return this.radius;
