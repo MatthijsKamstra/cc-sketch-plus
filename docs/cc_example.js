@@ -34,7 +34,14 @@ Circle.__interfaces__ = [IBase];
 Circle.__super__ = Base;
 Circle.prototype = $extend(Base.prototype,{
 	svg: function(settings) {
-		return "<circle cx=\"" + this.get_x() + "\" cy=\"" + this.get_y() + "\" r=\"" + this.get_radius() + "\" stroke=\"" + this.get_stroke() + "\" fill=\"" + this.get_fill() + "\" stroke-width=\"" + this.get_linewidth() + "\" />";
+		var xml = Xml.createElement("circle");
+		xml.set("cx",Std.string(this.get_x()));
+		xml.set("cy",Std.string(this.get_y()));
+		xml.set("r",Std.string(this.get_radius()));
+		xml.set("fill",Std.string(this.get_fill()));
+		xml.set("stroke",Std.string(this.get_stroke()));
+		xml.set("stroke-width",Std.string(this.get_linewidth()));
+		return haxe_xml_Printer.print(xml);
 	}
 	,ctx: function(ctx) {
 		ctx.fillStyle = this.get_fill();
@@ -92,6 +99,25 @@ HxOverrides.cca = function(s,index) {
 	}
 	return x;
 };
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
 var Main = function() {
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
@@ -107,6 +133,7 @@ Main.prototype = {
 	init: function() {
 		this.sketchSVG();
 		this.sketchCanvas();
+		this.sketchShapesSVG();
 	}
 	,initDocument: function() {
 		var div0 = window.document.createElement("div");
@@ -115,6 +142,21 @@ Main.prototype = {
 		div1.id = "sketcher-canvas";
 		window.document.body.appendChild(div0);
 		window.document.body.appendChild(div1);
+	}
+	,sketchShapesSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg-shapes");
+		var params = new Settings(680,200,"svg");
+		var two = Sketcher.create(params).appendTo(elem);
+		var _g = 0;
+		while(_g < 6) {
+			var i = _g++;
+			var offset = 110;
+			var rect = two.makeRoundedRectangle(60 + offset * i,100,100,100,i * 10);
+			rect.set_fill("#FF8000");
+			rect.set_stroke("orangered");
+			rect.set_linewidth(i);
+		}
+		two.update();
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -152,7 +194,7 @@ var Rectangle = function(x,y,width,height) {
 	this.opacity = 1;
 	this.linewidth = 1;
 	this.stroke = "#000000";
-	this.fill = "#FF3333";
+	this.fill = "#909090";
 	this.set_x(x);
 	this.set_y(y);
 	this.set_width(width);
@@ -169,7 +211,23 @@ Rectangle.prototype = $extend(Base.prototype,{
 		this.set_stroke("transparant");
 	}
 	,svg: function(settings) {
-		return "<rect x=\"" + this.xpos + "\" y=\"" + this.ypos + "\" width=\"" + this.get_width() + "\" height=\"" + this.get_height() + "\" stroke=\"" + this.get_stroke() + "\" fill=\"" + this.get_fill() + "\" stroke-width=\"" + this.get_linewidth() + "\" fill-opacity=\"" + this.get_opacity() + "\" stroke-opacity=\"" + this.get_opacity() + "\"/>";
+		var xml = Xml.createElement("rect");
+		xml.set("x",Std.string(this.xpos));
+		xml.set("y",Std.string(this.ypos));
+		xml.set("width",Std.string(this.get_width()));
+		xml.set("height",Std.string(this.get_height()));
+		xml.set("stroke",Std.string(this.get_stroke()));
+		xml.set("fill",Std.string(this.get_fill()));
+		xml.set("stroke-width",Std.string(this.get_linewidth()));
+		xml.set("fill-opacity",Std.string(this.get_opacity()));
+		xml.set("stroke-opacity",Std.string(this.get_opacity()));
+		if(this.get_radius() != null) {
+			xml.set("rx",Std.string(this.get_radius()));
+		}
+		if(this.get_radius() != null) {
+			xml.set("ry",Std.string(this.get_radius()));
+		}
+		return haxe_xml_Printer.print(xml);
 	}
 	,ctx: function(ctx) {
 		ctx.fillStyle = this.get_fill();
@@ -324,6 +382,18 @@ Sketcher.prototype = {
 		this.baseArray.push(shape);
 		return shape;
 	}
+	,makeRoundedRectangle: function(x,y,width,height,radius) {
+		var shape = new Rectangle(x,y,width,height);
+		shape.set_radius(radius);
+		this.baseArray.push(shape);
+		return shape;
+	}
+	,makeLine: function(x1,y1,x2,y2) {
+	}
+	,makeEllipse: function(x,y,width,height) {
+	}
+	,makePolygon: function(ox,oy,r,sides) {
+	}
 	,update: function() {
 		console.log("WIP update");
 		if(this.settings.get_type() == "svg") {
@@ -368,8 +438,54 @@ Std.parseInt = function(x) {
 	}
 	return v;
 };
+var StringBuf = function() {
+	this.b = "";
+};
+StringBuf.__name__ = ["StringBuf"];
+StringBuf.prototype = {
+	__class__: StringBuf
+};
 var StringTools = function() { };
 StringTools.__name__ = ["StringTools"];
+StringTools.htmlEscape = function(s,quotes) {
+	s = s.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
+	if(quotes) {
+		return s.split("\"").join("&quot;").split("'").join("&#039;");
+	} else {
+		return s;
+	}
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	if(!(c > 8 && c < 14)) {
+		return c == 32;
+	} else {
+		return true;
+	}
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,r)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,r,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,0,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
+};
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
@@ -396,6 +512,51 @@ Type.getClassName = function(c) {
 		return null;
 	}
 	return a.join(".");
+};
+var Xml = function(nodeType) {
+	this.nodeType = nodeType;
+	this.children = [];
+	this.attributeMap = new haxe_ds_StringMap();
+};
+Xml.__name__ = ["Xml"];
+Xml.createElement = function(name) {
+	var xml = new Xml(Xml.Element);
+	if(xml.nodeType != Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + xml.nodeType);
+	}
+	xml.nodeName = name;
+	return xml;
+};
+Xml.prototype = {
+	get: function(att) {
+		if(this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		}
+		var _this = this.attributeMap;
+		if(__map_reserved[att] != null) {
+			return _this.getReserved(att);
+		} else {
+			return _this.h[att];
+		}
+	}
+	,set: function(att,value) {
+		if(this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		}
+		var _this = this.attributeMap;
+		if(__map_reserved[att] != null) {
+			_this.setReserved(att,value);
+		} else {
+			_this.h[att] = value;
+		}
+	}
+	,attributes: function() {
+		if(this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		}
+		return this.attributeMap.keys();
+	}
+	,__class__: Xml
 };
 var cc_AST = function() { };
 cc_AST.__name__ = ["cc","AST"];
@@ -619,6 +780,224 @@ cc_util_MathUtil.shuffle = function(array) {
 cc_util_MathUtil.clamp = function(value,min,max) {
 	return Math.min(Math.max(value,Math.min(min,max)),Math.max(min,max));
 };
+var haxe_IMap = function() { };
+haxe_IMap.__name__ = ["haxe","IMap"];
+var haxe_ds_StringMap = function() {
+	this.h = { };
+};
+haxe_ds_StringMap.__name__ = ["haxe","ds","StringMap"];
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	setReserved: function(key,value) {
+		if(this.rh == null) {
+			this.rh = { };
+		}
+		this.rh["$" + key] = value;
+	}
+	,getReserved: function(key) {
+		if(this.rh == null) {
+			return null;
+		} else {
+			return this.rh["$" + key];
+		}
+	}
+	,keys: function() {
+		return HxOverrides.iter(this.arrayKeys());
+	}
+	,arrayKeys: function() {
+		var out = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) {
+			out.push(key);
+		}
+		}
+		if(this.rh != null) {
+			for( var key in this.rh ) {
+			if(key.charCodeAt(0) == 36) {
+				out.push(key.substr(1));
+			}
+			}
+		}
+		return out;
+	}
+	,__class__: haxe_ds_StringMap
+};
+var haxe_xml_Printer = function(pretty) {
+	this.output = new StringBuf();
+	this.pretty = pretty;
+};
+haxe_xml_Printer.__name__ = ["haxe","xml","Printer"];
+haxe_xml_Printer.print = function(xml,pretty) {
+	if(pretty == null) {
+		pretty = false;
+	}
+	var printer = new haxe_xml_Printer(pretty);
+	printer.writeNode(xml,"");
+	return printer.output.b;
+};
+haxe_xml_Printer.prototype = {
+	writeNode: function(value,tabs) {
+		var _g = value.nodeType;
+		switch(_g) {
+		case 0:
+			this.output.b += Std.string(tabs + "<");
+			if(value.nodeType != Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + value.nodeType);
+			}
+			this.output.b += Std.string(value.nodeName);
+			var attribute = value.attributes();
+			while(attribute.hasNext()) {
+				var attribute1 = attribute.next();
+				this.output.b += Std.string(" " + attribute1 + "=\"");
+				var input = StringTools.htmlEscape(value.get(attribute1),true);
+				this.output.b += Std.string(input);
+				this.output.b += "\"";
+			}
+			if(this.hasChildren(value)) {
+				this.output.b += ">";
+				if(this.pretty) {
+					this.output.b += "\n";
+				}
+				if(value.nodeType != Xml.Document && value.nodeType != Xml.Element) {
+					throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + value.nodeType);
+				}
+				var child = HxOverrides.iter(value.children);
+				while(child.hasNext()) {
+					var child1 = child.next();
+					this.writeNode(child1,this.pretty ? tabs + "\t" : tabs);
+				}
+				this.output.b += Std.string(tabs + "</");
+				if(value.nodeType != Xml.Element) {
+					throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + value.nodeType);
+				}
+				this.output.b += Std.string(value.nodeName);
+				this.output.b += ">";
+				if(this.pretty) {
+					this.output.b += "\n";
+				}
+			} else {
+				this.output.b += "/>";
+				if(this.pretty) {
+					this.output.b += "\n";
+				}
+			}
+			break;
+		case 1:
+			if(value.nodeType == Xml.Document || value.nodeType == Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, unexpected " + value.nodeType);
+			}
+			var nodeValue = value.nodeValue;
+			if(nodeValue.length != 0) {
+				var input1 = tabs + StringTools.htmlEscape(nodeValue);
+				this.output.b += Std.string(input1);
+				if(this.pretty) {
+					this.output.b += "\n";
+				}
+			}
+			break;
+		case 2:
+			this.output.b += Std.string(tabs + "<![CDATA[");
+			if(value.nodeType == Xml.Document || value.nodeType == Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, unexpected " + value.nodeType);
+			}
+			var input2 = StringTools.trim(value.nodeValue);
+			this.output.b += Std.string(input2);
+			this.output.b += "]]>";
+			if(this.pretty) {
+				this.output.b += "\n";
+			}
+			break;
+		case 3:
+			if(value.nodeType == Xml.Document || value.nodeType == Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, unexpected " + value.nodeType);
+			}
+			var commentContent = value.nodeValue;
+			var _this_r = new RegExp("[\n\r\t]+","g".split("u").join(""));
+			commentContent = commentContent.replace(_this_r,"");
+			commentContent = "<!--" + commentContent + "-->";
+			this.output.b += tabs == null ? "null" : "" + tabs;
+			var input3 = StringTools.trim(commentContent);
+			this.output.b += Std.string(input3);
+			if(this.pretty) {
+				this.output.b += "\n";
+			}
+			break;
+		case 4:
+			if(value.nodeType == Xml.Document || value.nodeType == Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, unexpected " + value.nodeType);
+			}
+			this.output.b += Std.string("<!DOCTYPE " + value.nodeValue + ">");
+			if(this.pretty) {
+				this.output.b += "\n";
+			}
+			break;
+		case 5:
+			if(value.nodeType == Xml.Document || value.nodeType == Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, unexpected " + value.nodeType);
+			}
+			this.output.b += Std.string("<?" + value.nodeValue + "?>");
+			if(this.pretty) {
+				this.output.b += "\n";
+			}
+			break;
+		case 6:
+			if(value.nodeType != Xml.Document && value.nodeType != Xml.Element) {
+				throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + value.nodeType);
+			}
+			var child2 = HxOverrides.iter(value.children);
+			while(child2.hasNext()) {
+				var child3 = child2.next();
+				this.writeNode(child3,tabs);
+			}
+			break;
+		}
+	}
+	,hasChildren: function(value) {
+		if(value.nodeType != Xml.Document && value.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + value.nodeType);
+		}
+		var child = HxOverrides.iter(value.children);
+		while(child.hasNext()) {
+			var child1 = child.next();
+			var _g = child1.nodeType;
+			switch(_g) {
+			case 0:case 1:
+				return true;
+			case 2:case 3:
+				if(child1.nodeType == Xml.Document || child1.nodeType == Xml.Element) {
+					throw new js__$Boot_HaxeError("Bad node type, unexpected " + child1.nodeType);
+				}
+				if(StringTools.ltrim(child1.nodeValue).length != 0) {
+					return true;
+				}
+				break;
+			default:
+			}
+		}
+		return false;
+	}
+	,__class__: haxe_xml_Printer
+};
+var js__$Boot_HaxeError = function(val) {
+	Error.call(this);
+	this.val = val;
+	this.message = String(val);
+	if(Error.captureStackTrace) {
+		Error.captureStackTrace(this,js__$Boot_HaxeError);
+	}
+};
+js__$Boot_HaxeError.__name__ = ["js","_Boot","HaxeError"];
+js__$Boot_HaxeError.wrap = function(val) {
+	if((val instanceof Error)) {
+		return val;
+	} else {
+		return new js__$Boot_HaxeError(val);
+	}
+};
+js__$Boot_HaxeError.__super__ = Error;
+js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
+	__class__: js__$Boot_HaxeError
+});
 var js_Boot = function() { };
 js_Boot.__name__ = ["js","Boot"];
 js_Boot.getClass = function(o) {
@@ -733,6 +1112,9 @@ js_Boot.__resolveNativeClass = function(name) {
 String.prototype.__class__ = String;
 String.__name__ = ["String"];
 Array.__name__ = ["Array"];
+var __map_reserved = {};
+Xml.Element = 0;
+Xml.Document = 6;
 cc_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 cc_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
 cc_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};
