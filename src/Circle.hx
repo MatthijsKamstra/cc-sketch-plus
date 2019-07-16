@@ -17,7 +17,26 @@ class Circle extends Base implements IBase {
 	}
 
 	public function svg(settings:Settings):String {
-		return '<circle cx="${this.x}" cy="${this.y}" r="${this.radius}" stroke="${this.stroke}" fill="${this.fill}" stroke-width="${this.linewidth}" />';
+		var xml = Xml.createElement('circle');
+		xml.set('cx', Std.string(this.x));
+		xml.set('cy', Std.string(this.y));
+		xml.set('r', Std.string(this.radius));
+		xml.set('fill', Std.string(this.fill));
+		xml.set('stroke', Std.string(this.stroke));
+		xml.set('stroke-width', Std.string(this.linewidth));
+		// xml.set('fill-opacity', Std.string(this.opacity));
+		// xml.set('stroke-opacity', Std.string(this.opacity));
+
+		return xml.toString();
+		/*
+			return '<circle
+			cx="${this.x}"
+			cy="${this.y}"
+			r="${this.radius}"
+			stroke="${this.stroke}"
+			fill="${this.fill}"
+			stroke-width="${this.linewidth}" />';
+		 */
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
