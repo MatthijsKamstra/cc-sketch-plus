@@ -16,6 +16,7 @@ class Main {
 		sketchCanvas();
 		//
 		sketchShapesSVG();
+		sketchShapesCanvas();
 	}
 
 	function initDocument() {
@@ -31,6 +32,24 @@ class Main {
 		// Make an instance of two and place it on the page.
 		var elem = document.getElementById('sketcher-svg-shapes');
 		var params:Settings = new Settings(680, 200, 'svg');
+		var two = Sketcher.create(params).appendTo(elem);
+
+		for (i in 0...6) {
+			var offset = 110;
+			var rect = two.makeRoundedRectangle(60 + (offset * i), 100, 100, 100, i * 10);
+			rect.fill = '#FF8000';
+			rect.stroke = 'orangered'; // Accepts all valid css color
+			rect.linewidth = i;
+		}
+
+		// Don't forget to tell two to render everything to the screen
+		two.update();
+	}
+
+	function sketchShapesCanvas() {
+		// Make an instance of two and place it on the page.
+		var elem = document.getElementById('sketcher-canvas-shapes');
+		var params:Settings = new Settings(680, 200, 'canvas');
 		var two = Sketcher.create(params).appendTo(elem);
 
 		for (i in 0...6) {
