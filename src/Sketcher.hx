@@ -9,11 +9,14 @@ class Sketcher {
 	var baseArray:Array<IBase> = [];
 	var svg:String;
 	var canvas:js.html.CanvasElement;
+
 	public static var ctx:js.html.CanvasRenderingContext2D;
 
 	public function new(settings:Settings) {
 		this.settings = settings;
 	}
+
+	// ____________________________________ util to append ____________________________________
 
 	public function appendTo(element:js.html.Element):Sketcher {
 		this.element = element;
@@ -28,6 +31,8 @@ class Sketcher {
 		return this;
 	}
 
+	// ____________________________________ make something ____________________________________
+
 	public function makeCircle(x, y, radius):Circle {
 		var shape = new Circle(x, y, radius);
 		baseArray.push(shape);
@@ -40,10 +45,33 @@ class Sketcher {
 		return shape;
 	}
 
+	public function makeRoundedRectangle(x, y, width, height, radius):Rectangle {
+		var shape = new Rectangle(x, y, width, height);
+		shape.radius = radius;
+		baseArray.push(shape);
+		return shape;
+	}
+
+	public function makeLine(x1, y1, x2, y2):Void {
+		// your code
+	}
+
+	public function makeEllipse(x, y, width, height):Void {
+		// your code
+	}
+
+	public function makePolygon(ox, oy, r, sides):Void {
+		// your code
+	}
+
+	// ____________________________________ update ____________________________________
+
 	public function update() {
 		trace('WIP update');
 		if (settings.type == 'svg') {
 			trace('${settings.type}');
+
+			// [mck] TODO change string into XML!!!
 			var paper = '<?xml version="1.0" standalone="no"?><svg width="${settings.width}" height="${settings.height}" version="1.1" xmlns="http://www.w3.org/2000/svg">';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
