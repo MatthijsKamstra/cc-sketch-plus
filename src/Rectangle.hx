@@ -7,7 +7,7 @@ class Rectangle extends Base implements IBase {
 	@:isVar public var x(get, set):Int;
 	@:isVar public var width(get, set):Int;
 	@:isVar public var height(get, set):Int;
-	@:isVar public var fill(get, set):String = '#FF3333';
+	@:isVar public var fill(get, set):String = '#909090';
 	@:isVar public var stroke(get, set):String = '#000000';
 	@:isVar public var linewidth(get, set):Int = 1;
 	@:isVar public var opacity(get, set):Float = 1;
@@ -33,9 +33,30 @@ class Rectangle extends Base implements IBase {
 	}
 
 	public function svg(settings:Settings):String {
-		return
-			'<rect x="${this.xpos}" y="${this.ypos}" width="${this.width}" height="${this.height}" stroke="${this.stroke}" fill="${this.fill}" stroke-width="${this.linewidth}" fill-opacity="${this.opacity}" stroke-opacity="${this.opacity}"/>';
+		var xml = Xml.createElement('rect');
+		xml.set('x', Std.string(this.xpos));
+		xml.set('y', Std.string(this.ypos));
+		xml.set('width', Std.string(this.width));
+		xml.set('height', Std.string(this.height));
+		xml.set('stroke', Std.string(this.stroke));
+		xml.set('fill', Std.string(this.fill));
+		xml.set('stroke-width', Std.string(this.linewidth));
+		xml.set('fill-opacity', Std.string(this.opacity));
+		xml.set('stroke-opacity', Std.string(this.opacity));
+		if (radius != null)
+			xml.set('rx', Std.string(this.radius));
+		if (radius != null)
+			xml.set('ry', Std.string(this.radius));
 
+		return xml.toString();
+
+		// trace(xml.toString());
+		// var svg = '';
+		// svg += '<rect x="${this.xpos}" y="${this.ypos}" width="${this.width}"
+		// height="${this.height}" stroke="${this.stroke}" fill="${this.fill}"
+		// stroke-width="${this.linewidth}" fill-opacity="${this.opacity}" stroke-opacity="${this.opacity}"/>';
+
+		// return svg;
 		// return '<circle cx="${this.x}" cy="${this.y}" r="${this.radius}" stroke="${this.stroke}" fill="${this.fill}" stroke-width="${this.linewidth}"/>';
 	}
 
