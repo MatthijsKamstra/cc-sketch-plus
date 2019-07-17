@@ -153,8 +153,8 @@ Main.prototype = {
 			var i = _g++;
 			var offset = 110;
 			var rect = two.makeRoundedRectangle(60 + offset * i,100,100,100,i * 10);
-			rect.set_fill("#FF8000");
-			rect.set_stroke("orangered");
+			rect.set_fill("#74b9ff");
+			rect.set_stroke("#6c5ce7");
 			rect.set_linewidth(i);
 		}
 		two.update();
@@ -168,8 +168,8 @@ Main.prototype = {
 			var i = _g++;
 			var offset = 110;
 			var rect = two.makeRoundedRectangle(60 + offset * i,100,100,100,i * 10);
-			rect.set_fill("#FF8000");
-			rect.set_stroke("orangered");
+			rect.set_fill("#74b9ff");
+			rect.set_stroke("#6c5ce7");
 			rect.set_linewidth(i);
 		}
 		two.update();
@@ -268,6 +268,17 @@ Rectangle.prototype = $extend(Base.prototype,{
 			_r = arr1[0];
 			_g = arr1[1];
 			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var rgb_r;
+			var rgb_g;
+			var rgb_b;
+			var $int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			rgb_r = $int >> 16 & 255;
+			rgb_g = $int >> 8 & 255;
+			rgb_b = $int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
 		}
 		var color = { r : _r, g : _g, b : _b, a : _a};
 		ctx.fillStyle = cc_util_ColorUtil.getColourObj(color,this.get_opacity());
@@ -275,11 +286,32 @@ Rectangle.prototype = $extend(Base.prototype,{
 		console.log(color);
 		console.log(this.get_fill());
 		ctx.beginPath();
-		ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
+		if(this.get_radius() == null) {
+			ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
+		} else {
+			var radius_tr;
+			var radius_tl;
+			var radius_br;
+			var radius_bl;
+			radius_tl = this.get_radius();
+			radius_tr = this.get_radius();
+			radius_br = this.get_radius();
+			radius_bl = this.get_radius();
+			ctx.moveTo(this.xpos + radius_tl,this.ypos);
+			ctx.lineTo(this.xpos + this.get_width() - radius_tr,this.ypos);
+			ctx.quadraticCurveTo(this.xpos + this.get_width(),this.ypos,this.xpos + this.get_width(),this.ypos + radius_tr);
+			ctx.lineTo(this.xpos + this.get_width(),this.ypos + this.get_height() - radius_br);
+			ctx.quadraticCurveTo(this.xpos + this.get_width(),this.ypos + this.get_height(),this.xpos + this.get_width() - radius_br,this.ypos + this.get_height());
+			ctx.lineTo(this.xpos + radius_bl,this.ypos + this.get_height());
+			ctx.quadraticCurveTo(this.xpos,this.ypos + this.get_height(),this.xpos,this.ypos + this.get_height() - radius_bl);
+			ctx.lineTo(this.xpos,this.ypos + radius_tl);
+			ctx.quadraticCurveTo(this.xpos,this.ypos,this.xpos + radius_tl,this.ypos);
+			ctx.closePath();
+		}
 		if(this.get_fill() != null) {
 			ctx.fill();
 		}
-		if(this.get_stroke() != null) {
+		if(this.get_stroke() != null && this.get_linewidth() != 0) {
 			ctx.stroke();
 		}
 	}
@@ -666,6 +698,17 @@ cc_util_ColorUtil.assumption = function(value) {
 		_r = arr1[0];
 		_g = arr1[1];
 		_b = arr1[2];
+	} else if(value.indexOf("#") != -1) {
+		var rgb_r;
+		var rgb_g;
+		var rgb_b;
+		var $int = Std.parseInt(StringTools.replace(value,"#","0x"));
+		rgb_r = $int >> 16 & 255;
+		rgb_g = $int >> 8 & 255;
+		rgb_b = $int & 255;
+		_r = rgb_r;
+		_g = rgb_g;
+		_b = rgb_b;
 	}
 	return { r : _r, g : _g, b : _b, a : _a};
 };
