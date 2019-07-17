@@ -15,3 +15,10 @@ This project started when I did a [30-days-challenge](https://matthijskamstra.gi
 I have gotten some inspiration for this project from
 
 <https://two.js.org/>
+
+
+## Screenshot
+
+example can be found <https://matthijskamstra.github.io/cc-sketch-plus/>
+
+![](img/screenshot.png)
