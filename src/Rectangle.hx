@@ -74,35 +74,33 @@ class Rectangle extends Base implements IBase {
 
 		ctx.beginPath();
 
-		ctx.rect(this.xpos, this.ypos, this.width, this.height);
-		/*
-			_width = Math.abs(_width);
-			_height = Math.abs(_height);
-			_x = _x - _width / 2;
-			_y = _y - _height / 2;
-			// if (_width < radius) radius = _width;
+		if (this.radius == null) {
+			// normal rectangle
+			ctx.rect(this.xpos, this.ypos, this.width, this.height);
+		} else {
+			// rectangle with radius
 			var radius = {
-				tl: _radius,
-				tr: _radius,
-				br: _radius,
-				bl: _radius
+				tl: this.radius,
+				tr: this.radius,
+				br: this.radius,
+				bl: this.radius
 			};
-			ctx.beginPath();
-			ctx.moveTo(_x + radius.tl, _y);
-			ctx.lineTo(_x + _width - radius.tr, _y);
-			ctx.quadraticCurveTo(_x + _width, _y, _x + _width, _y + radius.tr);
-			ctx.lineTo(_x + _width, _y + _height - radius.br);
-			ctx.quadraticCurveTo(_x + _width, _y + _height, _x + _width - radius.br, _y + _height);
-			ctx.lineTo(_x + radius.bl, _y + _height);
-			ctx.quadraticCurveTo(_x, _y + _height, _x, _y + _height - radius.bl);
-			ctx.lineTo(_x, _y + radius.tl);
-			ctx.quadraticCurveTo(_x, _y, _x + radius.tl, _y);
+			ctx.moveTo(this.xpos + radius.tl, this.ypos);
+			ctx.lineTo(this.xpos + this.width - radius.tr, this.ypos);
+			ctx.quadraticCurveTo(this.xpos + this.width, this.ypos, this.xpos + this.width, this.ypos + radius.tr);
+			ctx.lineTo(this.xpos + this.width, this.ypos + this.height - radius.br);
+			ctx.quadraticCurveTo(this.xpos + this.width, this.ypos + this.height, this.xpos + this.width - radius.br, this.ypos + this.height);
+			ctx.lineTo(this.xpos + radius.bl, this.ypos + this.height);
+			ctx.quadraticCurveTo(this.xpos, this.ypos + this.height, this.xpos, this.ypos + this.height - radius.bl);
+			ctx.lineTo(this.xpos, this.ypos + radius.tl);
+			ctx.quadraticCurveTo(this.xpos, this.ypos, this.xpos + radius.tl, this.ypos);
 			ctx.closePath();
-		 */
+		}
+
 		if (this.fill != null) {
 			ctx.fill();
 		}
-		if (this.stroke != null) {
+		if (this.stroke != null && this.linewidth != 0) {
 			ctx.stroke();
 		}
 

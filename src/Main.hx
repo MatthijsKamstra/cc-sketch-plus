@@ -37,8 +37,8 @@ class Main {
 		for (i in 0...6) {
 			var offset = 110;
 			var rect = two.makeRoundedRectangle(60 + (offset * i), 100, 100, 100, i * 10);
-			rect.fill = '#FF8000';
-			rect.stroke = 'orangered'; // Accepts all valid css color
+			rect.fill = '#74b9ff';
+			rect.stroke = '#6c5ce7'; // Accepts all valid css color
 			rect.linewidth = i;
 		}
 
@@ -55,8 +55,8 @@ class Main {
 		for (i in 0...6) {
 			var offset = 110;
 			var rect = two.makeRoundedRectangle(60 + (offset * i), 100, 100, 100, i * 10);
-			rect.fill = '#FF8000';
-			rect.stroke = 'orangered'; // Accepts all valid css color
+			rect.fill = '#74b9ff';
+			rect.stroke = '#6c5ce7'; // Accepts all valid css color
 			rect.linewidth = i;
 		}
 
