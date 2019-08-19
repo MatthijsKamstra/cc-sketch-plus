@@ -15,8 +15,10 @@ class Main {
 		sketchSVG();
 		sketchCanvas();
 		//
-		sketchShapesSVG();
-		sketchShapesCanvas();
+		sketchRoundedRectSVG();
+		sketchRoundedRectCanvas();
+		//
+		sketchShapes();
 	}
 
 	function initDocument() {
@@ -28,9 +30,26 @@ class Main {
 		document.body.appendChild(div1);
 	}
 
-	function sketchShapesSVG() {
+	function sketchShapes() {
 		// Make an instance of two and place it on the page.
 		var elem = document.getElementById('sketcher-svg-shapes');
+		var params:Settings = new Settings(680, 200, 'svg');
+		var two = Sketcher.create(params).appendTo(elem);
+
+		var rect = two.makeRoundedRectangle(60, 100, 100, 100, 20);
+		rect.fill = '#fab1a0';
+		rect.stroke = '#ff7675'; // Accepts all valid css color
+		rect.linewidth = 3;
+
+		// var line = two.makeLine(0, 0, 100, 100);
+
+		// Don't forget to tell two to render everything to the screen
+		two.update();
+	}
+
+	function sketchRoundedRectSVG() {
+		// Make an instance of two and place it on the page.
+		var elem = document.getElementById('sketcher-svg-roundedrect');
 		var params:Settings = new Settings(680, 200, 'svg');
 		var two = Sketcher.create(params).appendTo(elem);
 
@@ -46,9 +65,9 @@ class Main {
 		two.update();
 	}
 
-	function sketchShapesCanvas() {
+	function sketchRoundedRectCanvas() {
 		// Make an instance of two and place it on the page.
-		var elem = document.getElementById('sketcher-canvas-shapes');
+		var elem = document.getElementById('sketcher-canvas-roundedrect');
 		var params:Settings = new Settings(680, 200, 'canvas');
 		var two = Sketcher.create(params).appendTo(elem);
 

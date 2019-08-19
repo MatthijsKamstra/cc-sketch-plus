@@ -133,8 +133,9 @@ Main.prototype = {
 	init: function() {
 		this.sketchSVG();
 		this.sketchCanvas();
-		this.sketchShapesSVG();
-		this.sketchShapesCanvas();
+		this.sketchRoundedRectSVG();
+		this.sketchRoundedRectCanvas();
+		this.sketchShapes();
 	}
 	,initDocument: function() {
 		var div0 = window.document.createElement("div");
@@ -144,8 +145,18 @@ Main.prototype = {
 		window.document.body.appendChild(div0);
 		window.document.body.appendChild(div1);
 	}
-	,sketchShapesSVG: function() {
+	,sketchShapes: function() {
 		var elem = window.document.getElementById("sketcher-svg-shapes");
+		var params = new Settings(680,200,"svg");
+		var two = Sketcher.create(params).appendTo(elem);
+		var rect = two.makeRoundedRectangle(60,100,100,100,20);
+		rect.set_fill("#fab1a0");
+		rect.set_stroke("#ff7675");
+		rect.set_linewidth(3);
+		two.update();
+	}
+	,sketchRoundedRectSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg-roundedrect");
 		var params = new Settings(680,200,"svg");
 		var two = Sketcher.create(params).appendTo(elem);
 		var _g = 0;
@@ -159,8 +170,8 @@ Main.prototype = {
 		}
 		two.update();
 	}
-	,sketchShapesCanvas: function() {
-		var elem = window.document.getElementById("sketcher-canvas-shapes");
+	,sketchRoundedRectCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas-roundedrect");
 		var params = new Settings(680,200,"canvas");
 		var two = Sketcher.create(params).appendTo(elem);
 		var _g = 0;
