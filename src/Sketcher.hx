@@ -33,6 +33,12 @@ class Sketcher {
 
 	// ____________________________________ make something ____________________________________
 
+	public function makeText(str:String, ?x, ?y):Text {
+		var shape = new Text(str, x, y);
+		baseArray.push(shape);
+		return shape;
+	}
+
 	public function makeCircle(x, y, radius):Circle {
 		var shape = new Circle(x, y, radius);
 		baseArray.push(shape);
@@ -52,25 +58,62 @@ class Sketcher {
 		return shape;
 	}
 
-	public function makeLine(x1, y1, x2, y2):Void {
-		// your code
+	public function makeLine(x1, y1, x2, y2):Line {
+		var shape = new Line(x1, y1, x2, y2);
+		baseArray.push(shape);
+		return shape;
 	}
 
 	public function makeEllipse(x, y, width, height):Void {
 		// your code
+		console.warn('this function is not working');
 	}
 
 	public function makePolygon(ox, oy, r, sides):Void {
 		// your code
+		console.warn('this function is not working');
+	}
+
+	/**
+	 * wip!!!!
+	 * @param one
+	 * @param two
+	 * @return Group
+	 */
+	public function makeGroup(one, two):Group {
+		var shape = new Group(one, two);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	public function makeX(x, y):Line {
+		var cx = x;
+		var cy = y;
+		var r = 5;
+
+		var lineX = new Line(cx - r, cy, cx + r, cy);
+		lineX.stroke = 'red';
+		baseArray.push(lineX);
+		var lineY = new Line(cx, cy - r, cx, cy + r);
+		lineY.stroke = 'red';
+		baseArray.push(lineY);
+
+		// var group = two.makeGroup(circle, rect);
+
+		return lineX;
 	}
 
 	// ____________________________________ update ____________________________________
 
 	public function update() {
-		trace('WIP update');
+		// trace('WIP update');
+		if (element == null) {
+			// make sure the element exists
+			console.warn('element doesn\'t exist in DOM (${element})');
+			return;
+		}
+		trace('type:${settings.type}, id:${element.id}');
 		if (settings.type == 'svg') {
-			trace('${settings.type}');
-
 			// [mck] TODO change string into XML!!!
 			var paper = '<?xml version="1.0" standalone="no"?><svg width="${settings.width}" height="${settings.height}" version="1.1" xmlns="http://www.w3.org/2000/svg">';
 			for (i in 0...baseArray.length) {
@@ -81,10 +124,8 @@ class Sketcher {
 				paper += draw;
 			}
 			paper += '</svg>';
-
 			element.innerHTML = (paper);
 		} else {
-			trace('${settings.type}');
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
 				trace(base.type);
