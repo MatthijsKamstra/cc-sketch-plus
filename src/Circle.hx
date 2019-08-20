@@ -4,9 +4,10 @@ class Circle extends Base implements IBase {
 	@:isVar public var y(get, set):Int;
 	@:isVar public var x(get, set):Int;
 	@:isVar public var radius(get, set):Int;
-	@:isVar public var fill(get, set):String = '#FF3333';
+	@:isVar public var fill(get, set):String = '#909090';
 	@:isVar public var stroke(get, set):String = '#000000';
 	@:isVar public var linewidth(get, set):Int = 1;
+	@:isVar public var opacity(get, set):Float; // should between 0 and 1
 
 	public var type = 'circle'; // base (get class name?)
 
@@ -24,8 +25,10 @@ class Circle extends Base implements IBase {
 		xml.set('fill', Std.string(this.fill));
 		xml.set('stroke', Std.string(this.stroke));
 		xml.set('stroke-width', Std.string(this.linewidth));
-		// xml.set('fill-opacity', Std.string(this.opacity));
-		// xml.set('stroke-opacity', Std.string(this.opacity));
+		if (opacity != null) {
+			xml.set('fill-opacity', Std.string(this.opacity));
+			xml.set('stroke-opacity', Std.string(this.opacity));
+		}
 
 		return xml.toString();
 		/*
@@ -96,5 +99,13 @@ class Circle extends Base implements IBase {
 
 	function set_linewidth(value:Int):Int {
 		return linewidth = value;
+	}
+
+	function get_opacity():Float {
+		return opacity;
+	}
+
+	function set_opacity(value:Float):Float {
+		return opacity = value;
 	}
 }
