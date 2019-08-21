@@ -1,4 +1,4 @@
-package;
+package draw;
 
 class Polygon extends Base implements IBase {
 	@:isVar public var y(get, set):Int;
@@ -46,6 +46,17 @@ class Polygon extends Base implements IBase {
 	// ____________________________________ hmmmm ____________________________________
 	// transform="translate(20,2.5) rotate(10)">
 	public function setTranslate(x, y) {
+		this.translate = [x, y];
+	}
+
+	/**
+	 * position the shape by offset x and y
+	 * usefull when having a polygon but the values need to repostioned
+	 *
+	 * @param x position in x direction
+	 * @param y position in y dir
+	 */
+	public function position(x, y) {
 		this.translate = [x, y];
 	}
 
