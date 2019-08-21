@@ -306,7 +306,7 @@ Main.prototype = {
 		var elem = window.document.getElementById("sketcher-svg-defaultshapes");
 		var params = new Settings(680,200,"svg");
 		var two = Sketcher.create(params).appendTo(elem);
-		var arr = ["square","circle","line","rectangle","oval","poly","group","text"];
+		var arr = ["square","circle","line","rectangle","ellipse","polygon","group","text"];
 		var xoffset = 80;
 		var _g1 = 0;
 		var _g = arr.length;
@@ -323,35 +323,41 @@ Main.prototype = {
 		var x1 = two.makeX(_x,_y);
 		var _x1 = 50 + xoffset;
 		var circle = two.makeCircle(_x1,_y,25);
-		var x2 = two.makeX(_x1,_y);
 		var _x11 = 50 + 2 * xoffset;
 		var _x2 = 50 + 3 * xoffset;
 		var _y1 = 100;
 		var _y2 = 50;
 		var line = two.makeLine(_x11,_y1,_x2,_y2);
-		var x3 = two.makeX(_x11,_y1);
-		var x4 = two.makeX(_x2,_y2);
+		var x2 = two.makeX(_x11,_y1);
+		var x3 = two.makeX(_x2,_y2);
 		var _x3 = 50 + 3 * xoffset;
-		var rect1 = two.makeRectangle(_x3,_y,100,50);
+		var rect1 = two.makeRectangle(_x3,_y,50,100);
+		rect1.set_opacity(0.5);
 		rect1.set_fill("#fab1a0");
 		rect1.set_stroke("#ff7675");
-		var x5 = two.makeX(_x3,_y);
-		var _x4 = 50 + 5 * xoffset;
+		var _x4 = 50 + 4 * xoffset;
+		var ellipse = two.makeEllipse(_x4,_y,50,20);
+		var _x5 = 50 + 5 * xoffset;
 		var poly = two.makePolygon([0,100,50,25,50,75,100,0]);
 		poly.set_id("bliksum");
-		poly.setTranslate(_x4,_y);
-		var x6 = two.makeX(_x4,_y);
-		var _x5 = 50 + 6 * xoffset;
-		var circle1 = two.makeCircle(_x5,_y + 10,25);
+		poly.position(_x5 - 50,_y - 50);
+		var _x6 = 50 + 6 * xoffset;
+		var circle1 = two.makeCircle(_x6,_y + 10,25);
 		circle1.set_opacity(0.5);
-		var circle2 = two.makeCircle(_x5,_y - 10,25);
+		var circle2 = two.makeCircle(_x6,_y - 10,25);
 		circle2.set_opacity(0.5);
-		var x7 = two.makeX(_x5,_y);
 		var group = two.makeGroup(circle1,circle2);
 		group.set_rotation(Math.PI);
 		group.set_scale(0.75);
 		var txt1 = two.makeText("Saira\nStencil\nOne",50 + (arr.length - 1) * xoffset,100);
 		txt1.set_style("font-family: 'Saira Stencil One', Arial, cursive; font-size: 50px; fill:red;");
+		var _g11 = 0;
+		var _g2 = arr.length;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			var _x7 = 50 + i1 * xoffset;
+			var x4 = two.makeX(_x7,_y,"green");
+		}
 		two.update();
 		elem.onclick = function(e) {
 			Main.downloadTextFile(elem.innerHTML,"" + elem.id + "_" + new Date().getTime() + ".svg");
@@ -430,67 +436,6 @@ Main.prototype = {
 	,__class__: Main
 };
 Math.__name__ = ["Math"];
-var Polygon = function(arr) {
-	this.type = "Polygon";
-	this.set_arr(arr);
-};
-Polygon.__name__ = ["Polygon"];
-Polygon.__interfaces__ = [IBase];
-Polygon.__super__ = Base;
-Polygon.prototype = $extend(Base.prototype,{
-	svg: function(settings) {
-		var xml = Xml.createElement("polygon");
-		if(this.get_id() != null) {
-			xml.set("id",this.get_id());
-		}
-		var str = "";
-		var _g1 = 0;
-		var _g = this.get_arr().length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var value = this.get_arr()[i];
-			str += "" + value + " ";
-		}
-		xml.set("points",str);
-		if(this.get_translate() != null) {
-			xml.set("transform","translate(" + this.get_translate()[0] + "," + this.get_translate()[1] + ")");
-		}
-		return haxe_xml_Printer.print(xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,setTranslate: function(x,y) {
-		this.set_translate([x,y]);
-	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
-	}
-	,get_arr: function() {
-		return this.arr;
-	}
-	,set_arr: function(value) {
-		return this.arr = value;
-	}
-	,get_translate: function() {
-		return this.translate;
-	}
-	,set_translate: function(value) {
-		return this.translate = value;
-	}
-	,__class__: Polygon
-});
 var Rectangle = function(x,y,width,height) {
 	this.type = "rectangle";
 	this.opacity = 1;
@@ -738,11 +683,13 @@ Sketcher.prototype = {
 		this.baseArray.push(shape);
 		return shape;
 	}
-	,makeEllipse: function(x,y,width,height) {
-		window.console.warn("this function is not working");
+	,makeEllipse: function(x,y,rx,ry) {
+		var shape = new draw_Ellipse(x,y,rx,ry);
+		this.baseArray.push(shape);
+		return shape;
 	}
 	,makePolygon: function(sides) {
-		var shape = new Polygon(sides);
+		var shape = new draw_Polygon(sides);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -751,15 +698,18 @@ Sketcher.prototype = {
 		this.baseArray.push(shape);
 		return shape;
 	}
-	,makeX: function(x,y) {
+	,makeX: function(x,y,color) {
+		if(color == null) {
+			color = "red";
+		}
 		var cx = x;
 		var cy = y;
 		var r = 5;
 		var lineX = new Line(cx - r,cy,cx + r,cy);
-		lineX.set_stroke("red");
+		lineX.set_stroke(color);
 		this.baseArray.push(lineX);
 		var lineY = new Line(cx,cy - r,cx,cy + r);
-		lineY.set_stroke("red");
+		lineY.set_stroke(color);
 		this.baseArray.push(lineY);
 		return lineX;
 	}
@@ -1297,6 +1247,136 @@ cc_util_MathUtil.shuffle = function(array) {
 cc_util_MathUtil.clamp = function(value,min,max) {
 	return Math.min(Math.max(value,Math.min(min,max)),Math.max(min,max));
 };
+var draw_Ellipse = function(x,y,rx,ry) {
+	this.type = "Ellipse";
+	this.stroke = "#000000";
+	this.fill = "#909090";
+	this.set_x(x);
+	this.set_y(y);
+	this.set_rx(rx);
+	this.set_ry(ry);
+};
+draw_Ellipse.__name__ = ["draw","Ellipse"];
+draw_Ellipse.__interfaces__ = [IBase];
+draw_Ellipse.__super__ = Base;
+draw_Ellipse.prototype = $extend(Base.prototype,{
+	svg: function(settings) {
+		var xml = Xml.createElement("ellipse");
+		xml.set("cx",Std.string(this.get_x()));
+		xml.set("cy",Std.string(this.get_y()));
+		xml.set("rx",Std.string(this.get_rx()));
+		xml.set("ry",Std.string(this.get_ry()));
+		xml.set("stroke",Std.string(this.get_stroke()));
+		xml.set("fill",Std.string(this.get_fill()));
+		return haxe_xml_Printer.print(xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,get_y: function() {
+		return this.y;
+	}
+	,set_y: function(value) {
+		return this.y = value;
+	}
+	,get_x: function() {
+		return this.x;
+	}
+	,set_x: function(value) {
+		return this.x = value;
+	}
+	,get_ry: function() {
+		return this.ry;
+	}
+	,set_ry: function(value) {
+		return this.ry = value;
+	}
+	,get_rx: function() {
+		return this.rx;
+	}
+	,set_rx: function(value) {
+		return this.rx = value;
+	}
+	,get_fill: function() {
+		return this.fill;
+	}
+	,set_fill: function(value) {
+		return this.fill = value;
+	}
+	,get_stroke: function() {
+		return this.stroke;
+	}
+	,set_stroke: function(value) {
+		return this.stroke = value;
+	}
+	,__class__: draw_Ellipse
+});
+var draw_Polygon = function(arr) {
+	this.type = "Polygon";
+	this.set_arr(arr);
+};
+draw_Polygon.__name__ = ["draw","Polygon"];
+draw_Polygon.__interfaces__ = [IBase];
+draw_Polygon.__super__ = Base;
+draw_Polygon.prototype = $extend(Base.prototype,{
+	svg: function(settings) {
+		var xml = Xml.createElement("polygon");
+		if(this.get_id() != null) {
+			xml.set("id",this.get_id());
+		}
+		var str = "";
+		var _g1 = 0;
+		var _g = this.get_arr().length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var value = this.get_arr()[i];
+			str += "" + value + " ";
+		}
+		xml.set("points",str);
+		if(this.get_translate() != null) {
+			xml.set("transform","translate(" + this.get_translate()[0] + "," + this.get_translate()[1] + ")");
+		}
+		return haxe_xml_Printer.print(xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,setTranslate: function(x,y) {
+		this.set_translate([x,y]);
+	}
+	,position: function(x,y) {
+		this.set_translate([x,y]);
+	}
+	,get_y: function() {
+		return this.y;
+	}
+	,set_y: function(value) {
+		return this.y = value;
+	}
+	,get_x: function() {
+		return this.x;
+	}
+	,set_x: function(value) {
+		return this.x = value;
+	}
+	,get_arr: function() {
+		return this.arr;
+	}
+	,set_arr: function(value) {
+		return this.arr = value;
+	}
+	,get_translate: function() {
+		return this.translate;
+	}
+	,set_translate: function(value) {
+		return this.translate = value;
+	}
+	,__class__: draw_Polygon
+});
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = ["haxe","IMap"];
 var haxe_ds_StringMap = function() {
@@ -2006,6 +2086,7 @@ Array.__name__ = ["Array"];
 Date.prototype.__class__ = Date;
 Date.__name__ = ["Date"];
 var __map_reserved = {};
+Base.COUNT = 0;
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;
