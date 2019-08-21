@@ -1,4 +1,4 @@
-package;
+package draw;
 
 class Group extends Base implements IBase {
 	@:isVar public var y(get, set):Int;

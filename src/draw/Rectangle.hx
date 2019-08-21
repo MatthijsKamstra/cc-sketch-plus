@@ -1,4 +1,4 @@
-package;
+package draw;
 
 import cc.util.ColorUtil;
 

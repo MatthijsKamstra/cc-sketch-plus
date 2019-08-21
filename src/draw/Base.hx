@@ -1,4 +1,4 @@
-package;
+package draw;
 
 class Base {
 	public static var COUNT:Int = 0;

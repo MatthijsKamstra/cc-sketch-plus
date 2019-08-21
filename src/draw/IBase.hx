@@ -1,3 +1,5 @@
+package draw;
+
 interface IBase {
 	public var type:String;
 	@:isVar public var id(get, set):String;
