@@ -1,6 +1,7 @@
 package;
 
 import js.Browser.*;
+import draw.*;
 
 class Sketcher {
 	var settings:Settings;
@@ -64,9 +65,10 @@ class Sketcher {
 		return shape;
 	}
 
-	public function makeEllipse(x, y, width, height):Void {
-		// your code
-		console.warn('this function is not working');
+	public function makeEllipse(x, y, rx, ry):Ellipse {
+		var shape = new Ellipse(x, y, rx, ry);
+		baseArray.push(shape);
+		return shape;
 	}
 
 	public function makePolygon(sides):Polygon {
@@ -87,16 +89,24 @@ class Sketcher {
 		return shape;
 	}
 
-	public function makeX(x, y):Line {
+	/**
+	 * helpfull debug tool, register point
+	 *
+	 * @param x		position in x dir
+	 * @param y		position in y dir
+	 * @param color	(optional) default color is red
+	 * @return Line 	(weird to return one line????)
+	 */
+	public function makeX(x, y, ?color:String = 'red'):Line {
 		var cx = x;
 		var cy = y;
 		var r = 5;
 
 		var lineX = new Line(cx - r, cy, cx + r, cy);
-		lineX.stroke = 'red';
+		lineX.stroke = color;
 		baseArray.push(lineX);
 		var lineY = new Line(cx, cy - r, cx, cy + r);
-		lineY.stroke = 'red';
+		lineY.stroke = color;
 		baseArray.push(lineY);
 
 		// var group = two.makeGroup(circle, rect);
