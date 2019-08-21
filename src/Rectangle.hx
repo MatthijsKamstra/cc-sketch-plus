@@ -34,6 +34,8 @@ class Rectangle extends Base implements IBase {
 
 	public function svg(settings:Settings):String {
 		var xml = Xml.createElement('rect');
+		if (this.id != null)
+			xml.set('id', Std.string(this.id));
 		xml.set('x', Std.string(this.xpos));
 		xml.set('y', Std.string(this.ypos));
 		xml.set('width', Std.string(this.width));
@@ -43,21 +45,11 @@ class Rectangle extends Base implements IBase {
 		xml.set('stroke-width', Std.string(this.linewidth));
 		xml.set('fill-opacity', Std.string(this.opacity));
 		xml.set('stroke-opacity', Std.string(this.opacity));
-		if (radius != null)
+		if (radius != null) {
 			xml.set('rx', Std.string(this.radius));
-		if (radius != null)
 			xml.set('ry', Std.string(this.radius));
-
+		}
 		return xml.toString();
-
-		// trace(xml.toString());
-		// var svg = '';
-		// svg += '<rect x="${this.xpos}" y="${this.ypos}" width="${this.width}"
-		// height="${this.height}" stroke="${this.stroke}" fill="${this.fill}"
-		// stroke-width="${this.linewidth}" fill-opacity="${this.opacity}" stroke-opacity="${this.opacity}"/>';
-
-		// return svg;
-		// return '<circle cx="${this.x}" cy="${this.y}" r="${this.radius}" stroke="${this.stroke}" fill="${this.fill}" stroke-width="${this.linewidth}"/>';
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
