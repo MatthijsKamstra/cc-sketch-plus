@@ -39,13 +39,14 @@ class Main {
 		var params:Settings = new Settings(680, 200, 'svg');
 		var two = Sketcher.create(params).appendTo(elem);
 
-		var arr = ['square', 'circle', 'line', 'rectangle', 'oval', 'poly', 'group', 'text'];
+		var arr = ['square', 'circle', 'line', 'rectangle', 'ellipse', 'polygon', 'group', 'text'];
 		var xoffset = 80;
 		for (i in 0...arr.length) {
 			var xpos = 50 + (i * xoffset);
 			var ypos = 180;
 			var txt = two.makeText(arr[i], xpos, ypos);
 			// txt.style = '';
+			// see alignment
 			var x = two.makeX(xpos, ypos);
 		}
 		// square
@@ -62,7 +63,6 @@ class Main {
 		var circle = two.makeCircle(_x, _y, 25);
 		// circle.fill = '#fab1a0';
 		// circle.stroke = '#ff7675'; // Accepts all valid css color
-		var x = two.makeX(_x, _y);
 
 		// line
 		var _x1 = 50 + (2 * xoffset);
@@ -75,19 +75,22 @@ class Main {
 
 		// rectangle
 		var _x = 50 + (3 * xoffset);
-		var rect = two.makeRectangle(_x, _y, 100, 50);
+		var rect = two.makeRectangle(_x, _y, 50, 100);
+		rect.opacity = 0.5;
 		rect.fill = '#fab1a0';
 		rect.stroke = '#ff7675'; // Accepts all valid css color
-		var x = two.makeX(_x, _y);
 
-		// poly
+		// ellipse
+		var _x = 50 + (4 * xoffset);
+		var ellipse = two.makeEllipse(_x, _y, 50, 20);
+
+		// polygon
 		var _x = 50 + (5 * xoffset);
 		var poly = two.makePolygon([0, 100, 50, 25, 50, 75, 100, 0]);
 		poly.id = 'bliksum';
-		poly.setTranslate(_x, _y);
+		poly.position(_x - 50, _y - 50);
 		// poly.fill = '#fab1a0';
 		// poly.stroke = '#ff7675'; // Accepts all valid css color
-		var x = two.makeX(_x, _y);
 
 		// group
 		var _x = 50 + (6 * xoffset);
@@ -95,7 +98,6 @@ class Main {
 		circle1.opacity = 0.5;
 		var circle2 = two.makeCircle(_x, _y - 10, 25);
 		circle2.opacity = 0.5;
-		var x = two.makeX(_x, _y);
 
 		// Groups can take an array of shapes and/or groups.
 		var group = two.makeGroup(circle1, circle2);
@@ -105,6 +107,13 @@ class Main {
 
 		var txt = two.makeText("Saira\nStencil\nOne", 50 + ((arr.length - 1) * xoffset), 100);
 		txt.style = 'font-family: \'Saira Stencil One\', Arial, cursive; font-size: 50px; fill:red;';
+
+		// set all x
+		for (i in 0...arr.length) {
+			var _x = 50 + (i * xoffset);
+			// see registeration point (center point for shape)
+			var x = two.makeX(_x, _y, 'green');
+		}
 
 		// var line = two.makeLine(0, 0, 100, 100);
 
