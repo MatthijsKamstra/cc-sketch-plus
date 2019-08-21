@@ -69,9 +69,10 @@ class Sketcher {
 		console.warn('this function is not working');
 	}
 
-	public function makePolygon(ox, oy, r, sides):Void {
-		// your code
-		console.warn('this function is not working');
+	public function makePolygon(sides):Polygon {
+		var shape = new Polygon(sides);
+		baseArray.push(shape);
+		return shape;
 	}
 
 	/**
@@ -118,13 +119,15 @@ class Sketcher {
 			var paper = '<?xml version="1.0" standalone="no"?><svg width="${settings.width}" height="${settings.height}" version="1.1" xmlns="http://www.w3.org/2000/svg">';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
+				if (base.id == null)
+					base.id = base.getName();
 				var draw = base.svg(settings);
 				// trace(base.toString());
 				// trace(draw);
 				paper += draw;
 			}
 			paper += '</svg>';
-			element.innerHTML = (paper);
+			element.innerHTML = paper;
 		} else {
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
