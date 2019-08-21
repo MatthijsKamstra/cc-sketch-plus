@@ -80,8 +80,17 @@ class Main {
 		rect.stroke = '#ff7675'; // Accepts all valid css color
 		var x = two.makeX(_x, _y);
 
-		// group
+		// poly
 		var _x = 50 + (5 * xoffset);
+		var poly = two.makePolygon([0, 100, 50, 25, 50, 75, 100, 0]);
+		poly.id = 'bliksum';
+		poly.setTranslate(_x, _y);
+		// poly.fill = '#fab1a0';
+		// poly.stroke = '#ff7675'; // Accepts all valid css color
+		var x = two.makeX(_x, _y);
+
+		// group
+		var _x = 50 + (6 * xoffset);
 		var circle1 = two.makeCircle(_x, _y + 10, 25);
 		circle1.opacity = 0.5;
 		var circle2 = two.makeCircle(_x, _y - 10, 25);
@@ -104,7 +113,7 @@ class Main {
 
 		elem.onclick = function(e) {
 			// trace(elem.innerHTML);
-			downloadTextFile(elem.innerHTML, '${elem.id}.svg');
+			downloadTextFile(elem.innerHTML, '${elem.id}_${Date.now().getTime()}.svg');
 		};
 	}
 
