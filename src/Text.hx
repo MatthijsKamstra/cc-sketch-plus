@@ -6,7 +6,6 @@ class Text extends Base implements IBase {
 	@:isVar public var y(get, set):Int;
 	@:isVar public var x(get, set):Int;
 	@:isVar public var str(get, set):String;
-
 	@:isVar public var style(get, set):String;
 
 	public var type = 'Text'; // base (get class name?)
@@ -56,19 +55,6 @@ class Text extends Base implements IBase {
 		 */
 
 		return xml.toString();
-		/*
-			return '<circle
-			cx="${this.x}"
-			cy="${this.y}"
-			r="${this.radius}"
-			stroke="${this.stroke}"
-			fill="${this.fill}"
-			stroke-width="${this.linewidth}" />';
-
-
-			<text x="20" y="35" class="small">My</text>
-
-		 */
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
