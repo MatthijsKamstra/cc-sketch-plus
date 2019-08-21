@@ -1,6 +1,8 @@
 package;
 
 class Base {
+	public static var COUNT:Int = 0;
+
 	@:isVar public var id(get, set):String;
 
 	// ____________________________________ getter/setter ____________________________________
