@@ -9,7 +9,17 @@ function $extend(from, fields) {
 var Base = function() { };
 Base.__name__ = ["Base"];
 Base.prototype = {
-	toString: function() {
+	get_id: function() {
+		return this.id;
+	}
+	,set_id: function(value) {
+		return this.id = value;
+	}
+	,getName: function() {
+		var name = Type.getClassName(js_Boot.getClass(this));
+		return "" + name;
+	}
+	,toString: function() {
 		var name = Type.getClassName(js_Boot.getClass(this));
 		return "" + name + ": " + Std.string(JSON.parse(JSON.stringify(this)));
 	}
@@ -327,11 +337,16 @@ Main.prototype = {
 		rect1.set_stroke("#ff7675");
 		var x5 = two.makeX(_x3,_y);
 		var _x4 = 50 + 5 * xoffset;
-		var circle1 = two.makeCircle(_x4,_y + 10,25);
-		circle1.set_opacity(0.5);
-		var circle2 = two.makeCircle(_x4,_y - 10,25);
-		circle2.set_opacity(0.5);
+		var poly = two.makePolygon([0,100,50,25,50,75,100,0]);
+		poly.set_id("bliksum");
+		poly.setTranslate(_x4,_y);
 		var x6 = two.makeX(_x4,_y);
+		var _x5 = 50 + 6 * xoffset;
+		var circle1 = two.makeCircle(_x5,_y + 10,25);
+		circle1.set_opacity(0.5);
+		var circle2 = two.makeCircle(_x5,_y - 10,25);
+		circle2.set_opacity(0.5);
+		var x7 = two.makeX(_x5,_y);
 		var group = two.makeGroup(circle1,circle2);
 		group.set_rotation(Math.PI);
 		group.set_scale(0.75);
@@ -339,7 +354,7 @@ Main.prototype = {
 		txt1.set_style("font-family: 'Saira Stencil One', Arial, cursive; font-size: 50px; fill:red;");
 		two.update();
 		elem.onclick = function(e) {
-			Main.downloadTextFile(elem.innerHTML,"" + elem.id + ".svg");
+			Main.downloadTextFile(elem.innerHTML,"" + elem.id + "_" + new Date().getTime() + ".svg");
 		};
 	}
 	,sketchDefaultShapesC: function() {
@@ -415,6 +430,67 @@ Main.prototype = {
 	,__class__: Main
 };
 Math.__name__ = ["Math"];
+var Polygon = function(arr) {
+	this.type = "Polygon";
+	this.set_arr(arr);
+};
+Polygon.__name__ = ["Polygon"];
+Polygon.__interfaces__ = [IBase];
+Polygon.__super__ = Base;
+Polygon.prototype = $extend(Base.prototype,{
+	svg: function(settings) {
+		var xml = Xml.createElement("polygon");
+		if(this.get_id() != null) {
+			xml.set("id",this.get_id());
+		}
+		var str = "";
+		var _g1 = 0;
+		var _g = this.get_arr().length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var value = this.get_arr()[i];
+			str += "" + value + " ";
+		}
+		xml.set("points",str);
+		if(this.get_translate() != null) {
+			xml.set("transform","translate(" + this.get_translate()[0] + "," + this.get_translate()[1] + ")");
+		}
+		return haxe_xml_Printer.print(xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,setTranslate: function(x,y) {
+		this.set_translate([x,y]);
+	}
+	,get_y: function() {
+		return this.y;
+	}
+	,set_y: function(value) {
+		return this.y = value;
+	}
+	,get_x: function() {
+		return this.x;
+	}
+	,set_x: function(value) {
+		return this.x = value;
+	}
+	,get_arr: function() {
+		return this.arr;
+	}
+	,set_arr: function(value) {
+		return this.arr = value;
+	}
+	,get_translate: function() {
+		return this.translate;
+	}
+	,set_translate: function(value) {
+		return this.translate = value;
+	}
+	,__class__: Polygon
+});
 var Rectangle = function(x,y,width,height) {
 	this.type = "rectangle";
 	this.opacity = 1;
@@ -438,6 +514,9 @@ Rectangle.prototype = $extend(Base.prototype,{
 	}
 	,svg: function(settings) {
 		var xml = Xml.createElement("rect");
+		if(this.get_id() != null) {
+			xml.set("id",Std.string(this.get_id()));
+		}
 		xml.set("x",Std.string(this.xpos));
 		xml.set("y",Std.string(this.ypos));
 		xml.set("width",Std.string(this.get_width()));
@@ -449,8 +528,6 @@ Rectangle.prototype = $extend(Base.prototype,{
 		xml.set("stroke-opacity",Std.string(this.get_opacity()));
 		if(this.get_radius() != null) {
 			xml.set("rx",Std.string(this.get_radius()));
-		}
-		if(this.get_radius() != null) {
 			xml.set("ry",Std.string(this.get_radius()));
 		}
 		return haxe_xml_Printer.print(xml);
@@ -664,8 +741,10 @@ Sketcher.prototype = {
 	,makeEllipse: function(x,y,width,height) {
 		window.console.warn("this function is not working");
 	}
-	,makePolygon: function(ox,oy,r,sides) {
-		window.console.warn("this function is not working");
+	,makePolygon: function(sides) {
+		var shape = new Polygon(sides);
+		this.baseArray.push(shape);
+		return shape;
 	}
 	,makeGroup: function(one,two) {
 		var shape = new Group(one,two);
@@ -697,6 +776,9 @@ Sketcher.prototype = {
 			while(_g1 < _g) {
 				var i = _g1++;
 				var base = this.baseArray[i];
+				if(base.get_id() == null) {
+					base.set_id(base.getName());
+				}
 				var draw = base.svg(this.settings);
 				paper += draw;
 			}
