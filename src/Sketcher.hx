@@ -20,7 +20,11 @@ class Sketcher {
 	// ____________________________________ util to append ____________________________________
 
 	public function appendTo(element:js.html.Element):Sketcher {
+		if (element == null) {
+			return this;
+		}
 		this.element = element;
+
 		if (settings.type == 'canvas') {
 			canvas = document.createCanvasElement();
 			canvas.width = settings.width;
@@ -120,7 +124,7 @@ class Sketcher {
 		// trace('WIP update');
 		if (element == null) {
 			// make sure the element exists
-			console.warn('element doesn\'t exist in DOM (${element})');
+			// console.warn('element doesn\'t exist in DOM (${element})');
 			return;
 		}
 		trace('type:${settings.type}, id:${element.id}');
