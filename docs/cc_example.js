@@ -104,7 +104,9 @@ Main.prototype = {
 		var rect = two.makeRectangle(50,50,50,50);
 		rect.set_id("animationObject");
 		two.update();
-		console.log(window.document.getElementById(rect.get_id()));
+		var temp = window.document.getElementById("animationObject");
+		console.log(rect.toString());
+		console.log(rect.toObject());
 		var Go = new cc_lets_Go(rect,1.5);
 		Go._isFrom = false;
 		var _this = Go;
@@ -118,14 +120,27 @@ Main.prototype = {
 			_this.updateProperties(0);
 		}
 		var _this1 = _this;
-		_this1._options.onUpdate = $bind(this,this.onUpdateHandler);
-		_this1._options.onUpdateParams = [two,rect];
+		var objValue1 = 0;
+		if(Object.prototype.hasOwnProperty.call(_this1._target,"opacity")) {
+			objValue1 = Reflect.getProperty(_this1._target,"opacity");
+		}
+		var _range1 = { key : "opacity", from : _this1._isFrom ? 0 : objValue1, to : !_this1._isFrom ? 0 : objValue1};
+		_this1._props.set("opacity",_range1);
+		if(_this1._isFrom) {
+			_this1.updateProperties(0);
+		}
 		var _this2 = _this1;
-		_this2._options.onComplete = $bind(this,this.onAnimateHandler);
-		_this2._options.onCompleteParams = [];
+		_this2._options.onUpdate = $bind(this,this.onUpdateHandler);
+		_this2._options.onUpdateParams = [rect];
+		var _this3 = _this2;
+		_this3._options.onComplete = $bind(this,this.onAnimateHandler);
+		_this3._options.onCompleteParams = [];
 	}
 	,onUpdateHandler: function(arr) {
-		console.log("" + Std.string(arr));
+		var svgElement = window.document.getElementById("animationObject");
+		var rect = arr;
+		svgElement.setAttribute("x",Std.string(rect.get_x()));
+		svgElement.setAttribute("opacity",Std.string(rect.get_opacity()));
 	}
 	,onAnimateHandler: function() {
 		console.log("xxxxx");
@@ -1620,6 +1635,10 @@ draw_Base.prototype = {
 	,getName: function() {
 		var name = Type.getClassName(js_Boot.getClass(this));
 		return "" + name;
+	}
+	,toObject: function() {
+		var name = Type.getClassName(js_Boot.getClass(this));
+		return JSON.parse(JSON.stringify(this));
 	}
 	,toString: function() {
 		var name = Type.getClassName(js_Boot.getClass(this));

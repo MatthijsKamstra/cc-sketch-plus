@@ -22,6 +22,11 @@ class Base {
 		return ('${name}');
 	}
 
+	public function toObject() {
+		var name = Type.getClassName(Type.getClass(this));
+		return haxe.Json.parse(haxe.Json.stringify(this));
+	}
+
 	public function toString() {
 		var name = Type.getClassName(Type.getClass(this));
 		return ('${name}: ' + haxe.Json.parse(haxe.Json.stringify(this)));

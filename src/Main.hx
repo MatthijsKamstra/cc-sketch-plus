@@ -48,13 +48,19 @@ class Main {
 		// Don't forget to tell two to render everything to the screen
 		two.update();
 
-		trace(document.getElementById(rect.id));
+		var temp = (document.getElementById('animationObject'));
 
-		Go.to(rect, 1.5).x(600).onUpdate(onUpdateHandler, [two, rect]).onComplete(onAnimateHandler, []);
+		trace(rect.toString());
+		trace(rect.toObject());
+
+		Go.to(rect, 1.5).x(600).prop('opacity', 0).onUpdate(onUpdateHandler, [rect]).onComplete(onAnimateHandler, []);
 	};
 
 	function onUpdateHandler(arr:Array<Dynamic>) {
-		trace('${arr}');
+		var svgElement:js.html.svg.RectElement = cast(document.getElementById('animationObject'));
+		var rect:draw.Rectangle = untyped arr;
+		svgElement.setAttribute('x', Std.string(rect.x));
+		svgElement.setAttribute('opacity', Std.string(rect.opacity));
 	}
 
 	function onAnimateHandler() {
