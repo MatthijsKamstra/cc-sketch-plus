@@ -1,6 +1,7 @@
 package;
 
 import js.Browser.*;
+import cc.lets.Go;
 
 class Main {
 	public function new() {
@@ -19,9 +20,12 @@ class Main {
 		sketchRoundedRectCanvas();
 		//
 		sketchShapes();
-		//
+		// shape research
 		sketchDefaultShapes();
-		sketchDefaultShapesC();
+		sketchDefaultShapesC(); // (canvas) wip
+		// animation
+		sketchAnimation();
+		sketchAnimationC();
 	}
 
 	function initDocument() {
@@ -32,6 +36,32 @@ class Main {
 		document.body.appendChild(div0);
 		document.body.appendChild(div1);
 	}
+
+	function sketchAnimation() {
+		var elem = document.getElementById('sketcher-svg-animation');
+		var params:Settings = new Settings(680, 200, 'svg');
+		var two = Sketcher.create(params).appendTo(elem);
+
+		var rect = two.makeRectangle(50, 50, 50, 50);
+		rect.id = 'animationObject';
+
+		// Don't forget to tell two to render everything to the screen
+		two.update();
+
+		trace(document.getElementById(rect.id));
+
+		Go.to(rect, 1.5).x(600).onUpdate(onUpdateHandler, [two, rect]).onComplete(onAnimateHandler, []);
+	};
+
+	function onUpdateHandler(arr:Array<Dynamic>) {
+		trace('${arr}');
+	}
+
+	function onAnimateHandler() {
+		trace('xxxxx');
+	}
+
+	function sketchAnimationC() {};
 
 	function sketchDefaultShapes() {
 		// Make an instance of two and place it on the page.
@@ -120,10 +150,13 @@ class Main {
 		// Don't forget to tell two to render everything to the screen
 		two.update();
 
-		elem.onclick = function(e) {
-			// trace(elem.innerHTML);
-			downloadTextFile(elem.innerHTML, '${elem.id}_${Date.now().getTime()}.svg');
-		};
+		if (elem != null) {
+			// [mck] create an automate function for this, is element is null don't
+			elem.onclick = function(e) {
+				// trace(elem.innerHTML);
+				downloadTextFile(elem.innerHTML, '${elem.id}_${Date.now().getTime()}.svg');
+			};
+		}
 	}
 
 	function sketchDefaultShapesC() {}
