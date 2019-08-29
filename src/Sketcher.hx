@@ -96,6 +96,11 @@ class Sketcher {
 	/**
 	 * helpfull debug tool, register point
 	 *
+	 * ```
+	 * var sketch = Sketcher.create(params).appendTo(elem);
+	 * sketch.makeX(10,10);
+	 * ```
+	 *
 	 * @param x		position in x dir
 	 * @param y		position in y dir
 	 * @param color	(optional) default color is red
