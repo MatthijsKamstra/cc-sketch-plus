@@ -17,6 +17,11 @@ class Circle extends Base implements IBase {
 		this.radius = radius;
 	}
 
+	public function noStroke() {
+		this.linewidth = 0;
+		this.stroke = 'transparant';
+	}
+
 	public function svg(settings:Settings):String {
 		var xml = Xml.createElement('circle');
 		xml.set('cx', Std.string(this.x));
