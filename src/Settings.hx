@@ -6,6 +6,9 @@ class Settings {
 	@:isVar public var type(get, set):String = 'svg';
 	@:isVar public var height(get, set):Int;
 
+	@:isVar public var padding(get, set):Int;
+	@:isVar public var scale(get, set):Bool;
+
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
 		this.height = height;
@@ -35,5 +38,21 @@ class Settings {
 
 	function set_type(value:String):String {
 		return type = value;
+	}
+
+	function get_padding():Int {
+		return padding;
+	}
+
+	function set_padding(value:Int):Int {
+		return padding = value;
+	}
+
+	function get_scale():Bool {
+		return scale;
+	}
+
+	function set_scale(value:Bool):Bool {
+		return scale = value;
 	}
 }
