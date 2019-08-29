@@ -1,7 +1,13 @@
 package;
 
 import js.Browser.*;
+// cc
+import Sketch;
 import cc.lets.Go;
+import cc.util.GridUtil;
+import cc.util.MathUtil.*;
+import cc.AST;
+import cc.util.ColorUtil.*;
 
 class Main {
 	public function new() {
@@ -26,6 +32,9 @@ class Main {
 		// animation
 		sketchAnimation();
 		sketchAnimationC();
+		// drips and spatter
+		sketchDrips();
+		sketchDripsC();
 	}
 
 	function initDocument() {
@@ -35,6 +44,70 @@ class Main {
 		div1.id = 'sketcher-canvas';
 		document.body.appendChild(div0);
 		document.body.appendChild(div1);
+	}
+
+	function sketchDrips() {
+		var size = 500; // instagram 1080
+		var elem = document.getElementById('sketcher-svg-drips');
+		var params:Settings = new Settings(size, size, 'svg');
+		// params.autostart = true;
+		params.padding = 10;
+		params.scale = true;
+		var sketch = Sketcher.create(params).appendTo(elem);
+
+		// ughhh probably needs some love (might be better in Sketcher.create?)
+		Sketch.Global.w = params.width;
+		Sketch.Global.h = params.height;
+
+		var grid:GridUtil = new GridUtil();
+		grid.setIsCenterPoint(true);
+		grid.setNumbered(3, 3);
+
+		var circleRadius = 50;
+
+		for (k in 0...grid.array.length) {
+			// center point
+			var cp:cc.Point = grid.array[k];
+			sketch.makeX(Math.round(cp.x), Math.round(cp.y));
+
+			// random biggest spatter
+			var randomCircleRadius = random(circleRadius / 2, circleRadius);
+			// for-ground
+			var circle = sketch.makeCircle(Math.round(cp.x), Math.round(cp.y), Math.round(randomCircleRadius));
+			circle.fill = 'black';
+			circle.noStroke();
+			// border spatter
+			for (i in 0...10) {
+				var rp:cc.Point = {
+					x: cp.x + random(-randomCircleRadius, randomCircleRadius),
+					y: cp.y + random(-randomCircleRadius, randomCircleRadius)
+				};
+				var spatter = sketch.makeCircle(Math.round(rp.x), Math.round(rp.y), Math.round(random(randomCircleRadius / 2)));
+				spatter.fill = rgb(0); // 'black';
+				spatter.noStroke();
+			}
+			// drip
+			for (j in 0...3) {
+				var dripWeight = randomInt(10, Math.round(randomCircleRadius / 2));
+				var rp:cc.Point = {
+					x: cp.x + random(-randomCircleRadius + dripWeight, randomCircleRadius - dripWeight),
+					y: cp.y + random(-randomCircleRadius + dripWeight, randomCircleRadius - dripWeight)
+				};
+				// drip line, straight down
+				var line = sketch.makeLine(Math.round(rp.x), Math.round(rp.y), Math.round(rp.x),
+					Math.round(rp.y + random(randomCircleRadius, randomCircleRadius + 100)));
+				line.lineCap = 'round'; // "butt|round|square";
+				line.stroke = rgb(0);
+				line.lineWeight = dripWeight;
+			}
+		}
+
+		// draw
+		sketch.update();
+	}
+
+	function sketchDripsC() {
+		var elem = document.getElementById('sketcher-canvas-drips');
 	}
 
 	function sketchAnimation() {
@@ -53,18 +126,39 @@ class Main {
 		trace(rect.toString());
 		trace(rect.toObject());
 
-		Go.to(rect, 1.5).x(600).prop('opacity', 0).onUpdate(onUpdateHandler, [rect]).onComplete(onAnimateHandler, []);
+		// Go.to(rect, 1.5).x(600).prop('opacity', 0).onUpdate(onUpdateHandler, [1, 2, 3]).onComplete(onAnimateHandler, ['one', 'two', 'three']);
+		// Go.to(rect,
+		// 	1.5).x(600).prop('opacity',
+		// 	0).onAnimationStart(onStartHandler, ['a', 'b', 'c']).onUpdate(onUpdateHandler, ['ones', 'two', 'three']).onComplete(onAnimateHandler, ['1', '2', '3']);
+
+		var temp = rect.toObject();
+
+		// Go.to(temp, 1.5).x(600).prop('opacity', 0).onUpdate(onUpdateHandler, [temp]).onComplete(onAnimateHandler, ['one', 'two', 'three']);
+		Go.to(rect, 1.5).x(600).prop('opacity', 0).onComplete(onAnimateHandler, ['one', 'two', 'three']);
+
+		var svgElement:js.html.svg.RectElement = cast(document.getElementById('animationObject'));
+		// svgElement.
 	};
 
-	function onUpdateHandler(arr:Array<Dynamic>) {
-		var svgElement:js.html.svg.RectElement = cast(document.getElementById('animationObject'));
-		var rect:draw.Rectangle = untyped arr;
-		svgElement.setAttribute('x', Std.string(rect.x));
-		svgElement.setAttribute('opacity', Std.string(rect.opacity));
+	function onStartHandler(arr:Dynamic) {
+		// console.log(arr);
+		trace('onStartHandler: ' + arr.length, arr);
+		var arrr:Array<Dynamic> = cast arr;
+		trace('onStartHandler: ' + arrr.length, arrr);
+		// trace('onStartHandler');
 	}
 
-	function onAnimateHandler() {
-		trace('xxxxx');
+	function onUpdateHandler(arr:Array<Dynamic>) {
+		trace('onUpdateHandler: ' + arr.length, arr);
+		// var svgElement:js.html.svg.RectElement = cast(document.getElementById('animationObject'));
+		// var rect:draw.Rectangle = untyped arr;
+		// svgElement.setAttribute('x', Std.string(rect.x));
+		// svgElement.setAttribute('opacity', Std.string(rect.opacity));
+	}
+
+	function onAnimateHandler(arr:Array<Dynamic>) {
+		trace('onAnimateHandler: ' + arr.length, arr);
+		// trace('xxxxx');
 	}
 
 	function sketchAnimationC() {};
