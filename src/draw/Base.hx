@@ -5,6 +5,11 @@ class Base {
 
 	@:isVar public var id(get, set):String;
 
+	// ____________________________________ funciton s ____________________________________
+	// public function noStroke() {
+	// 	this.linewidth = 0;
+	// 	this.stroke = 'transparant';
+	// }
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_id():String {
