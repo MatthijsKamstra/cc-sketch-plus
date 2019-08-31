@@ -15,6 +15,9 @@ class Sketcher {
 
 	public function new(settings:Settings) {
 		this.settings = settings;
+
+		Sketch.Global.w = settings.width;
+		Sketch.Global.h = settings.height;
 	}
 
 	// ____________________________________ util to append ____________________________________
@@ -87,8 +90,17 @@ class Sketcher {
 	 * @param two
 	 * @return Group
 	 */
-	public function makeGroup(one, two):Group {
-		var shape = new Group(one, two);
+	public function makeGroup(array:Array<IBase>):Group {
+		var shape = new Group(array);
+		for (j in 0...array.length) {
+			var _base = array[j];
+			for (i in 0...baseArray.length) {
+				var base:IBase = baseArray[i];
+				if (base == _base) {
+					baseArray[i] = null;
+				}
+			}
+		}
 		baseArray.push(shape);
 		return shape;
 	}
@@ -138,8 +150,13 @@ class Sketcher {
 			var paper = '<?xml version="1.0" standalone="no"?><svg width="${settings.width}" height="${settings.height}" version="1.1" xmlns="http://www.w3.org/2000/svg">';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
-				if (base.id == null)
-					base.id = base.getName();
+				if (base == null)
+					continue; // groups do this
+
+				if (base.type == 'Group') {
+					trace('ggggg');
+					cast(base, draw.Group).test();
+				}
 				var draw = base.svg(settings);
 				// trace(base.toString());
 				// trace(draw);

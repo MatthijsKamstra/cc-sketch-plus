@@ -13,6 +13,10 @@ class Base {
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_id():String {
+		if (id == null) {
+			id = getName() + "_" + COUNT;
+			COUNT++;
+		}
 		return id;
 	}
 

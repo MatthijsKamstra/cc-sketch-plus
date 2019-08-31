@@ -72,7 +72,7 @@ Lambda.has = function(it,elt) {
 var Main = function() {
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		haxe_Log.trace("Start Sketcher",{ fileName : "Main.hx", lineNumber : 15, className : "Main", methodName : "new"});
+		haxe_Log.trace("Start Sketcher",{ fileName : "Main.hx", lineNumber : 16, className : "Main", methodName : "new"});
 		_gthis.init();
 	});
 };
@@ -105,6 +105,8 @@ Main.prototype = {
 		this.sketchAnimationC();
 		this.sketchDrips();
 		this.sketchDripsC();
+		this.sketchPapertoys();
+		this.sketchPapertoysC();
 	}
 	,initDocument: function() {
 		var div0 = window.document.createElement("div");
@@ -114,6 +116,45 @@ Main.prototype = {
 		window.document.body.appendChild(div0);
 		window.document.body.appendChild(div1);
 	}
+	,sketchPapertoys: function() {
+		var size = 600;
+		var elem = window.document.getElementById("sketcher-svg-papertoys");
+		var params = new Settings(size,size,"svg");
+		params.set_padding(10);
+		params.set_scale(true);
+		var sketch = Sketcher.create(params).appendTo(elem);
+		var cellWidth = 100;
+		var cellHeight = 100;
+		var cp_y;
+		var cp_x = Global.w / 2;
+		cp_y = cellHeight;
+		var sq0 = sketch.makeRectangle(Math.round(cp_x),Math.round(cp_y),Math.round(cellWidth),Math.round(cellHeight));
+		var cp_y1;
+		var cp_x1 = Global.w / 2;
+		cp_y1 = cellHeight * 2;
+		var sq1 = sketch.makeRectangle(Math.round(cp_x1),Math.round(cp_y1),Math.round(cellWidth),Math.round(cellHeight));
+		var cp_y2;
+		var cp_x2 = Global.w / 2;
+		cp_y2 = cellHeight * 3;
+		var sq2 = sketch.makeRectangle(Math.round(cp_x2),Math.round(cp_y2),Math.round(cellWidth),Math.round(cellHeight));
+		var cp_y3;
+		var cp_x3 = Global.w / 2;
+		cp_y3 = cellHeight * 4;
+		var sq3 = sketch.makeRectangle(Math.round(cp_x3),Math.round(cp_y3),Math.round(cellWidth),Math.round(cellHeight));
+		var cp_y4;
+		var cp_x4 = Global.w / 2 - cellWidth;
+		cp_y4 = cellHeight * 3;
+		var sq4 = sketch.makeRectangle(Math.round(cp_x4),Math.round(cp_y4),Math.round(cellWidth),Math.round(cellHeight));
+		var cp_y5;
+		var cp_x5 = Global.w / 2 + cellWidth;
+		cp_y5 = cellHeight * 3;
+		var sq5 = sketch.makeRectangle(Math.round(cp_x5),Math.round(cp_y5),Math.round(cellWidth),Math.round(cellHeight));
+		sketch.makeGroup([sq0,sq1,sq2,sq3,sq4,sq5]);
+		sketch.update();
+	}
+	,sketchPapertoysC: function() {
+		var elem = window.document.getElementById("sketcher-canvas-papertoys");
+	}
 	,sketchDrips: function() {
 		var size = 500;
 		var elem = window.document.getElementById("sketcher-svg-drips");
@@ -121,8 +162,6 @@ Main.prototype = {
 		params.set_padding(10);
 		params.set_scale(true);
 		var sketch = Sketcher.create(params).appendTo(elem);
-		Global.w = params.get_width();
-		Global.h = params.get_height();
 		var grid = new cc_util_GridUtil();
 		grid.setIsCenterPoint(true);
 		grid.setNumbered(3,3);
@@ -173,8 +212,6 @@ Main.prototype = {
 		rect.set_id("animationObject");
 		two.update();
 		var temp = window.document.getElementById("animationObject");
-		haxe_Log.trace(rect.toString(),{ fileName : "Main.hx", lineNumber : 126, className : "Main", methodName : "sketchAnimation"});
-		haxe_Log.trace(rect.toObject(),{ fileName : "Main.hx", lineNumber : 127, className : "Main", methodName : "sketchAnimation"});
 		var temp1 = rect.toObject();
 		var Go = new cc_lets_Go(rect,1.5);
 		Go._isFrom = false;
@@ -204,15 +241,15 @@ Main.prototype = {
 		var svgElement = window.document.getElementById("animationObject");
 	}
 	,onStartHandler: function(arr) {
-		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 145, className : "Main", methodName : "onStartHandler", customParams : [arr]});
+		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 183, className : "Main", methodName : "onStartHandler", customParams : [arr]});
 		var arrr = arr;
-		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 147, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
+		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 185, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
 	}
 	,onUpdateHandler: function(arr) {
-		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 152, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
+		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 190, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
 	}
 	,onAnimateHandler: function(arr) {
-		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 160, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
+		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 198, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
 	}
 	,sketchAnimationC: function() {
 	}
@@ -260,7 +297,7 @@ Main.prototype = {
 		circle1.set_opacity(0.5);
 		var circle2 = two.makeCircle(_x6,_y - 10,25);
 		circle2.set_opacity(0.5);
-		var group = two.makeGroup(circle1,circle2);
+		var group = two.makeGroup([circle1,circle2]);
 		group.set_rotation(Math.PI);
 		group.set_scale(0.75);
 		var txt1 = two.makeText("Saira\nStencil\nOne",50 + (arr.length - 1) * xoffset,100);
@@ -817,6 +854,8 @@ Global.__name__ = ["Global"];
 var Sketcher = function(settings) {
 	this.baseArray = [];
 	this.settings = settings;
+	Global.w = settings.get_width();
+	Global.h = settings.get_height();
 };
 Sketcher.__name__ = ["Sketcher"];
 Sketcher.create = function(settings) {
@@ -876,8 +915,23 @@ Sketcher.prototype = {
 		this.baseArray.push(shape);
 		return shape;
 	}
-	,makeGroup: function(one,two) {
-		var shape = new draw_Group(one,two);
+	,makeGroup: function(array) {
+		var shape = new draw_Group(array);
+		var _g1 = 0;
+		var _g = array.length;
+		while(_g1 < _g) {
+			var j = _g1++;
+			var _base = array[j];
+			var _g3 = 0;
+			var _g2 = this.baseArray.length;
+			while(_g3 < _g2) {
+				var i = _g3++;
+				var base = this.baseArray[i];
+				if(base == _base) {
+					this.baseArray[i] = null;
+				}
+			}
+		}
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -900,7 +954,7 @@ Sketcher.prototype = {
 		if(this.element == null) {
 			return;
 		}
-		haxe_Log.trace("type:" + this.settings.get_type() + ", id:" + this.element.id,{ fileName : "Sketcher.hx", lineNumber : 135, className : "Sketcher", methodName : "update"});
+		haxe_Log.trace("type:" + this.settings.get_type() + ", id:" + this.element.id,{ fileName : "Sketcher.hx", lineNumber : 147, className : "Sketcher", methodName : "update"});
 		if(this.settings.get_type() == "svg") {
 			var paper = "<?xml version=\"1.0\" standalone=\"no\"?><svg width=\"" + this.settings.get_width() + "\" height=\"" + this.settings.get_height() + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">";
 			var _g1 = 0;
@@ -908,11 +962,15 @@ Sketcher.prototype = {
 			while(_g1 < _g) {
 				var i = _g1++;
 				var base = this.baseArray[i];
-				if(base.get_id() == null) {
-					base.set_id(base.getName());
+				if(base == null) {
+					continue;
 				}
-				var draw = base.svg(this.settings);
-				paper += draw;
+				if(base.type == "Group") {
+					haxe_Log.trace("ggggg",{ fileName : "Sketcher.hx", lineNumber : 157, className : "Sketcher", methodName : "update"});
+					(js_Boot.__cast(base , draw_Group)).test();
+				}
+				var draw1 = base.svg(this.settings);
+				paper += draw1;
 			}
 			paper += "</svg>";
 			this.element.innerHTML = paper;
@@ -922,7 +980,7 @@ Sketcher.prototype = {
 			while(_g11 < _g2) {
 				var i1 = _g11++;
 				var base1 = this.baseArray[i1];
-				haxe_Log.trace(base1.type,{ fileName : "Sketcher.hx", lineNumber : 153, className : "Sketcher", methodName : "update"});
+				haxe_Log.trace(base1.type,{ fileName : "Sketcher.hx", lineNumber : 170, className : "Sketcher", methodName : "update"});
 				base1.ctx(Sketcher.ctx);
 			}
 		}
@@ -2523,6 +2581,10 @@ var draw_Base = function() { };
 draw_Base.__name__ = ["draw","Base"];
 draw_Base.prototype = {
 	get_id: function() {
+		if(this.id == null) {
+			this.set_id(this.getName() + "_" + draw_Base.COUNT);
+			draw_Base.COUNT++;
+		}
 		return this.id;
 	}
 	,set_id: function(value) {
@@ -2701,9 +2763,9 @@ draw_Ellipse.prototype = $extend(draw_Base.prototype,{
 	,__class__: draw_Ellipse
 	,__properties__: $extend(draw_Base.prototype.__properties__,{set_rx:"set_rx",get_rx:"get_rx",set_ry:"set_ry",get_ry:"get_ry",set_stroke:"set_stroke",get_stroke:"get_stroke",set_fill:"set_fill",get_fill:"get_fill",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
 });
-var draw_Group = function(obj1,obj2) {
+var draw_Group = function(arr) {
 	this.type = "Group";
-	this.set_arr([obj1,obj2]);
+	this.set_arr(arr);
 };
 draw_Group.__name__ = ["draw","Group"];
 draw_Group.__interfaces__ = [draw_IBase];
@@ -2711,13 +2773,18 @@ draw_Group.__super__ = draw_Base;
 draw_Group.prototype = $extend(draw_Base.prototype,{
 	svg: function(settings) {
 		var xml = Xml.createElement("g");
+		if(this.get_id() != null) {
+			xml.set("id",Std.string(this.get_id()));
+		}
+		xml.set("fill","green");
 		var comment = Xml.createComment("test");
 		xml.addChild(comment);
 		var _g1 = 0;
 		var _g = this.get_arr().length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			xml.addChild(Xml.createComment(this.get_arr()[i].type));
+			var temp = this.get_arr()[i];
+			xml.addChild(Xml.parse(temp.svg(null)));
 		}
 		return haxe_xml_Printer.print(xml);
 	}
@@ -2725,6 +2792,9 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 		ctx.beginPath();
 		ctx.fill();
 		ctx.stroke();
+	}
+	,test: function() {
+		haxe_Log.trace("test",{ fileName : "Group.hx", lineNumber : 49, className : "draw.Group", methodName : "test"});
 	}
 	,get_y: function() {
 		return this.y;
@@ -3890,12 +3960,96 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+js_Boot.__interfLoop = function(cc,cl) {
+	if(cc == null) {
+		return false;
+	}
+	if(cc == cl) {
+		return true;
+	}
+	var intf = cc.__interfaces__;
+	if(intf != null) {
+		var _g1 = 0;
+		var _g = intf.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var i1 = intf[i];
+			if(i1 == cl || js_Boot.__interfLoop(i1,cl)) {
+				return true;
+			}
+		}
+	}
+	return js_Boot.__interfLoop(cc.__super__,cl);
+};
+js_Boot.__instanceof = function(o,cl) {
+	if(cl == null) {
+		return false;
+	}
+	switch(cl) {
+	case Array:
+		if((o instanceof Array)) {
+			return o.__enum__ == null;
+		} else {
+			return false;
+		}
+		break;
+	case Bool:
+		return typeof(o) == "boolean";
+	case Dynamic:
+		return true;
+	case Float:
+		return typeof(o) == "number";
+	case Int:
+		if(typeof(o) == "number") {
+			return (o|0) === o;
+		} else {
+			return false;
+		}
+		break;
+	case String:
+		return typeof(o) == "string";
+	default:
+		if(o != null) {
+			if(typeof(cl) == "function") {
+				if(o instanceof cl) {
+					return true;
+				}
+				if(js_Boot.__interfLoop(js_Boot.getClass(o),cl)) {
+					return true;
+				}
+			} else if(typeof(cl) == "object" && js_Boot.__isNativeObj(cl)) {
+				if(o instanceof cl) {
+					return true;
+				}
+			}
+		} else {
+			return false;
+		}
+		if(cl == Class ? o.__name__ != null : false) {
+			return true;
+		}
+		if(cl == Enum ? o.__ename__ != null : false) {
+			return true;
+		}
+		return o.__enum__ == cl;
+	}
+};
+js_Boot.__cast = function(o,t) {
+	if(js_Boot.__instanceof(o,t)) {
+		return o;
+	} else {
+		throw new js__$Boot_HaxeError("Cannot cast " + Std.string(o) + " to " + Std.string(t));
+	}
+};
 js_Boot.__nativeClassName = function(o) {
 	var name = js_Boot.__toStr.call(o).slice(8,-1);
 	if(name == "Object" || name == "Function" || name == "Math" || name == "JSON") {
 		return null;
 	}
 	return name;
+};
+js_Boot.__isNativeObj = function(o) {
+	return js_Boot.__nativeClassName(o) != null;
 };
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
@@ -3908,6 +4062,14 @@ String.__name__ = ["String"];
 Array.__name__ = ["Array"];
 Date.prototype.__class__ = Date;
 Date.__name__ = ["Date"];
+var Int = { __name__ : ["Int"]};
+var Dynamic = { __name__ : ["Dynamic"]};
+var Float = Number;
+Float.__name__ = ["Float"];
+var Bool = Boolean;
+Bool.__ename__ = ["Bool"];
+var Class = { __name__ : ["Class"]};
+var Enum = { };
 var __map_reserved = {};
 Sketch.option = new SketchOption();
 Global.MOUSE_DOWN = "mousedown";

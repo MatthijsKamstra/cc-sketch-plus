@@ -8,6 +8,7 @@ import cc.util.GridUtil;
 import cc.util.MathUtil.*;
 import cc.AST;
 import cc.util.ColorUtil.*;
+import Sketch;
 
 class Main {
 	public function new() {
@@ -35,6 +36,9 @@ class Main {
 		// drips and spatter
 		sketchDrips();
 		sketchDripsC();
+		// papertoys
+		sketchPapertoys();
+		sketchPapertoysC();
 	}
 
 	function initDocument() {
@@ -46,6 +50,44 @@ class Main {
 		document.body.appendChild(div1);
 	}
 
+	function sketchPapertoys() {
+		var size = 600; // instagram 1080
+		var elem = document.getElementById('sketcher-svg-papertoys');
+		var params:Settings = new Settings(size, size, 'svg');
+		// params.autostart = true;
+		params.padding = 10;
+		params.scale = true;
+		var sketch = Sketcher.create(params).appendTo(elem);
+
+		var cellWidth = 100;
+		var cellHeight = 100;
+
+		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 1};
+		var sq0 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 2};
+		var sq1 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+
+		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 3};
+		var sq2 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+
+		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 4};
+		var sq3 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		//
+		var cp:cc.Point = {x: Sketch.Global.w / 2 - cellWidth, y: cellHeight * 3};
+		var sq4 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		//
+		var cp:cc.Point = {x: Sketch.Global.w / 2 + cellWidth, y: cellHeight * 3};
+		var sq5 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		//
+		sketch.makeGroup([sq0, sq1, sq2, sq3, sq4, sq5]);
+		// draw
+		sketch.update();
+	}
+
+	function sketchPapertoysC() {
+		var elem = document.getElementById('sketcher-canvas-papertoys');
+	}
+
 	function sketchDrips() {
 		var size = 500; // instagram 1080
 		var elem = document.getElementById('sketcher-svg-drips');
@@ -54,10 +96,6 @@ class Main {
 		params.padding = 10;
 		params.scale = true;
 		var sketch = Sketcher.create(params).appendTo(elem);
-
-		// ughhh probably needs some love (might be better in Sketcher.create?)
-		Sketch.Global.w = params.width;
-		Sketch.Global.h = params.height;
 
 		var grid:GridUtil = new GridUtil();
 		grid.setIsCenterPoint(true);
@@ -123,8 +161,8 @@ class Main {
 
 		var temp = (document.getElementById('animationObject'));
 
-		trace(rect.toString());
-		trace(rect.toObject());
+		// trace(rect.toString());
+		// trace(rect.toObject());
 
 		// Go.to(rect, 1.5).x(600).prop('opacity', 0).onUpdate(onUpdateHandler, [1, 2, 3]).onComplete(onAnimateHandler, ['one', 'two', 'three']);
 		// Go.to(rect,
@@ -230,7 +268,7 @@ class Main {
 		circle2.opacity = 0.5;
 
 		// Groups can take an array of shapes and/or groups.
-		var group = two.makeGroup(circle1, circle2);
+		var group = two.makeGroup([circle1, circle2]);
 		group.rotation = Math.PI;
 		group.scale = 0.75;
 		// text example

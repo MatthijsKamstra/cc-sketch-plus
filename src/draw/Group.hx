@@ -12,22 +12,26 @@ class Group extends Base implements IBase {
 	public var type = 'Group'; // base (get class name?)
 
 	/**
-	 * WIP
-	 * @param obj1
-	 * @param obj2
+	 *
 	 */
-	public function new(obj1:IBase, obj2:IBase) {
+	public function new(arr:Array<IBase>) {
 		// this.x = x;
 		// this.y = y;
-		this.arr = [obj1, obj2];
+		this.arr = arr;
 	}
 
 	public function svg(settings:Settings):String {
 		var xml = Xml.createElement('g');
+		if (this.id != null)
+			xml.set('id', Std.string(this.id));
+		xml.set('fill', 'green');
 		var comment = Xml.createComment('test');
 		xml.addChild(comment);
 		for (i in 0...this.arr.length) {
-			xml.addChild(Xml.createComment(this.arr[i].type));
+			// untyped xml.appendChild(this.arr[i].svg);
+			// xml.addChild(Xml.createComment(this.arr[i].type));
+			var temp = this.arr[i];
+			xml.addChild(Xml.parse(temp.svg(null)));
 		}
 		// xml.set('x', '0');
 		return xml.toString();
@@ -37,6 +41,12 @@ class Group extends Base implements IBase {
 		ctx.beginPath();
 		ctx.fill();
 		ctx.stroke();
+	}
+
+	// ____________________________________ unique functions for this specific class ____________________________________
+
+	public function test() {
+		trace('test');
 	}
 
 	// ____________________________________ getter/setter ____________________________________
