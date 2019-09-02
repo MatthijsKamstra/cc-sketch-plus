@@ -94,17 +94,6 @@ Main.main = function() {
 };
 Main.prototype = {
 	init: function() {
-		this.sketchSVG();
-		this.sketchCanvas();
-		this.sketchRoundedRectSVG();
-		this.sketchRoundedRectCanvas();
-		this.sketchShapes();
-		this.sketchDefaultShapes();
-		this.sketchDefaultShapesC();
-		this.sketchAnimation();
-		this.sketchAnimationC();
-		this.sketchDrips();
-		this.sketchDripsC();
 		this.sketchPapertoys();
 		this.sketchPapertoysC();
 	}
@@ -125,32 +114,70 @@ Main.prototype = {
 		var sketch = Sketcher.create(params).appendTo(elem);
 		var cellWidth = 100;
 		var cellHeight = 100;
+		var dashArray = [5];
 		var cp_y;
 		var cp_x = Global.w / 2;
 		cp_y = cellHeight;
 		var sq0 = sketch.makeRectangle(Math.round(cp_x),Math.round(cp_y),Math.round(cellWidth),Math.round(cellHeight));
+		sq0.set_dash(dashArray);
 		var cp_y1;
 		var cp_x1 = Global.w / 2;
 		cp_y1 = cellHeight * 2;
 		var sq1 = sketch.makeRectangle(Math.round(cp_x1),Math.round(cp_y1),Math.round(cellWidth),Math.round(cellHeight));
+		sq1.set_dash(dashArray);
 		var cp_y2;
 		var cp_x2 = Global.w / 2;
 		cp_y2 = cellHeight * 3;
 		var sq2 = sketch.makeRectangle(Math.round(cp_x2),Math.round(cp_y2),Math.round(cellWidth),Math.round(cellHeight));
+		sq2.set_dash(dashArray);
 		var cp_y3;
 		var cp_x3 = Global.w / 2;
 		cp_y3 = cellHeight * 4;
 		var sq3 = sketch.makeRectangle(Math.round(cp_x3),Math.round(cp_y3),Math.round(cellWidth),Math.round(cellHeight));
+		sq3.set_dash(dashArray);
 		var cp_y4;
 		var cp_x4 = Global.w / 2 - cellWidth;
 		cp_y4 = cellHeight * 3;
 		var sq4 = sketch.makeRectangle(Math.round(cp_x4),Math.round(cp_y4),Math.round(cellWidth),Math.round(cellHeight));
+		sq4.set_dash(dashArray);
+		var p1 = { x : cp_x4 - cellWidth / 2, y : cp_y4 + cellHeight / 2};
+		var p2 = { x : cp_x4 + cellWidth / 2, y : cp_y4 + cellHeight / 2};
+		var polyl0 = sketch.makePolygon(this.paperTab(p1,p2));
+		var polyl1 = sketch.makePolygon(this.paperTab(p1,p2));
+		polyl1.setRotate(90,cp_x4,cp_y4);
+		var polyl2 = sketch.makePolygon(this.paperTab(p1,p2));
+		polyl2.setPosition(0,-cellWidth);
 		var cp_y5;
 		var cp_x5 = Global.w / 2 + cellWidth;
 		cp_y5 = cellHeight * 3;
 		var sq5 = sketch.makeRectangle(Math.round(cp_x5),Math.round(cp_y5),Math.round(cellWidth),Math.round(cellHeight));
-		sketch.makeGroup([sq0,sq1,sq2,sq3,sq4,sq5]);
+		sq5.set_dash(dashArray);
+		var p11 = { x : cp_x5 - cellWidth / 2, y : cp_y5 + cellHeight / 2};
+		var p21 = { x : cp_x5 + cellWidth / 2, y : cp_y5 + cellHeight / 2};
+		var poly0 = sketch.makePolygon(this.paperTab(p11,p21));
+		var poly1 = sketch.makePolygon(this.paperTab(p11,p21));
+		poly1.setRotate(90,cp_x5,cp_y5);
+		poly1.setPosition(0,-cellHeight);
+		var poly2 = sketch.makePolygon(this.paperTab(p11,p21));
+		poly2.setPosition(0,-cellHeight);
+		var polybottom = sketch.makePolygon(this.paperTab(p11,p21));
+		polybottom.set_id("bottom");
+		polybottom.setPosition(-cellWidth,cellHeight);
+		var groupGlue = sketch.makeGroup([polyl0,polyl1,polyl2,poly0,poly1,poly2,polybottom]);
+		groupGlue.set_id("cube glue");
+		groupGlue.set_fill(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.GRAY));
+		groupGlue.set_stroke(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.BLACK));
+		var group = sketch.makeGroup([sq0,sq1,sq2,sq3,sq4,sq5]);
+		group.set_id("cube shape");
+		group.set_fill(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.WHITE));
+		group.set_stroke(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.BLACK));
 		sketch.update();
+		this.setElementClickDownload(elem);
+	}
+	,paperTab: function(p1,p2) {
+		var offset = Math.round(cc_model_constants_Paper.mm2pixel(7));
+		var sideArr = [Math.round(p1.x),Math.round(p1.y),Math.round(p1.x) + offset,Math.round(p1.y) + offset,Math.round(p2.x) - offset,Math.round(p2.y) + offset,Math.round(p2.x),Math.round(p2.y),Math.round(p2.x) - offset,Math.round(p2.y) - offset,Math.round(p1.x) + offset,Math.round(p1.y) - offset,Math.round(p1.x),Math.round(p1.y)];
+		return sideArr;
 	}
 	,sketchPapertoysC: function() {
 		var elem = window.document.getElementById("sketcher-canvas-papertoys");
@@ -241,15 +268,15 @@ Main.prototype = {
 		var svgElement = window.document.getElementById("animationObject");
 	}
 	,onStartHandler: function(arr) {
-		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 183, className : "Main", methodName : "onStartHandler", customParams : [arr]});
+		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 245, className : "Main", methodName : "onStartHandler", customParams : [arr]});
 		var arrr = arr;
-		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 185, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
+		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 247, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
 	}
 	,onUpdateHandler: function(arr) {
-		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 190, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
+		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 252, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
 	}
 	,onAnimateHandler: function(arr) {
-		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 198, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
+		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 260, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
 	}
 	,sketchAnimationC: function() {
 	}
@@ -291,7 +318,6 @@ Main.prototype = {
 		var _x5 = 50 + 5 * xoffset;
 		var poly = two.makePolygon([0,100,50,25,50,75,100,0]);
 		poly.set_id("bliksum");
-		poly.position(_x5 - 50,_y - 50);
 		var _x6 = 50 + 6 * xoffset;
 		var circle1 = two.makeCircle(_x6,_y + 10,25);
 		circle1.set_opacity(0.5);
@@ -310,6 +336,13 @@ Main.prototype = {
 			var x4 = two.makeX(_x7,_y,"green");
 		}
 		two.update();
+		if(elem != null) {
+			elem.onclick = function(e) {
+				Main.downloadTextFile(elem.innerHTML,"" + elem.id + "_" + new Date().getTime() + ".svg");
+			};
+		}
+	}
+	,setElementClickDownload: function(elem) {
 		if(elem != null) {
 			elem.onclick = function(e) {
 				Main.downloadTextFile(elem.innerHTML,"" + elem.id + "_" + new Date().getTime() + ".svg");
@@ -966,7 +999,6 @@ Sketcher.prototype = {
 					continue;
 				}
 				if(base.type == "Group") {
-					haxe_Log.trace("ggggg",{ fileName : "Sketcher.hx", lineNumber : 157, className : "Sketcher", methodName : "update"});
 					(js_Boot.__cast(base , draw_Group)).test();
 				}
 				var draw1 = base.svg(this.settings);
@@ -1906,6 +1938,106 @@ cc_lets_easing_SineEaseOut.prototype = {
 	}
 	,__class__: cc_lets_easing_SineEaseOut
 };
+var cc_model_constants_Paper = function() { };
+cc_model_constants_Paper.__name__ = ["cc","model","constants","Paper"];
+cc_model_constants_Paper.inPixel = function(papersize) {
+	var rectangle = { width : 0, height : 0, x : 0, y : 0};
+	var w;
+	var h;
+	switch(papersize[1]) {
+	case 0:
+		w = 105;
+		h = 148;
+		break;
+	case 1:
+		w = 148;
+		h = 210;
+		break;
+	case 2:
+		w = 210;
+		h = 297;
+		break;
+	case 3:
+		w = 297;
+		h = 420;
+		break;
+	case 4:
+		w = 420;
+		h = 594;
+		break;
+	case 5:
+		w = 594;
+		h = 841;
+		break;
+	}
+	rectangle.width = cc_model_constants_Paper.mm2pixel(w) | 0;
+	rectangle.height = cc_model_constants_Paper.mm2pixel(h) | 0;
+	rectangle.x = 0;
+	rectangle.y = 0;
+	return rectangle;
+};
+cc_model_constants_Paper.inMM = function(papersize) {
+	var w = 0;
+	var h = 0;
+	var _g = papersize.toUpperCase();
+	switch(_g) {
+	case "A1":
+		w = 594;
+		h = 841;
+		break;
+	case "A2":
+		w = 420;
+		h = 594;
+		break;
+	case "A3":
+		w = 297;
+		h = 420;
+		break;
+	case "A4":
+		w = 210;
+		h = 297;
+		break;
+	case "A5":
+		w = 148;
+		h = 210;
+		break;
+	case "A6":
+		w = 105;
+		h = 148;
+		break;
+	default:
+		haxe_Log.trace("case '" + papersize + "': trace ('" + papersize + "');",{ fileName : "Paper.hx", lineNumber : 94, className : "cc.model.constants.Paper", methodName : "inMM"});
+	}
+	var rectangle = { width : w, height : h, x : 0, y : 0};
+	return rectangle;
+};
+cc_model_constants_Paper.mm2pixel = function(value) {
+	var dpi = 72;
+	return value * dpi / 25.4;
+};
+cc_model_constants_Paper.pixel2mm = function(value) {
+	var dpi = 72;
+	return value * 25.4 / dpi;
+};
+cc_model_constants_Paper.convertmm2pixel = function(mm,dpi) {
+	if(dpi == null) {
+		dpi = 72;
+	}
+	return mm * dpi / 25.4;
+};
+var cc_model_constants_PaperSize = { __ename__ : true, __constructs__ : ["A6","A5","A4","A3","A2","A1"] };
+cc_model_constants_PaperSize.A6 = ["A6",0];
+cc_model_constants_PaperSize.A6.__enum__ = cc_model_constants_PaperSize;
+cc_model_constants_PaperSize.A5 = ["A5",1];
+cc_model_constants_PaperSize.A5.__enum__ = cc_model_constants_PaperSize;
+cc_model_constants_PaperSize.A4 = ["A4",2];
+cc_model_constants_PaperSize.A4.__enum__ = cc_model_constants_PaperSize;
+cc_model_constants_PaperSize.A3 = ["A3",3];
+cc_model_constants_PaperSize.A3.__enum__ = cc_model_constants_PaperSize;
+cc_model_constants_PaperSize.A2 = ["A2",4];
+cc_model_constants_PaperSize.A2.__enum__ = cc_model_constants_PaperSize;
+cc_model_constants_PaperSize.A1 = ["A1",5];
+cc_model_constants_PaperSize.A1.__enum__ = cc_model_constants_PaperSize;
 var cc_tool_ExportFile = function() { };
 cc_tool_ExportFile.__name__ = ["cc","tool","ExportFile"];
 cc_tool_ExportFile.downloadImage = function(ctx,isJpg,fileName) {
@@ -2577,10 +2709,45 @@ cc_util_MathUtil.shuffle = function(array) {
 cc_util_MathUtil.clamp = function(value,min,max) {
 	return Math.min(Math.max(value,Math.min(min,max)),Math.max(min,max));
 };
-var draw_Base = function() { };
+var draw_Base = function() {
+	this.transArr = [];
+};
 draw_Base.__name__ = ["draw","Base"];
 draw_Base.prototype = {
-	get_id: function() {
+	setPosition: function(x,y) {
+		var str = "translate(" + x;
+		if(y != null) {
+			str += "," + y;
+		}
+		str += ")";
+		this.transArr.push(str);
+	}
+	,setRotate: function(degree,x,y) {
+		var str = "rotate(" + degree;
+		if(x != null) {
+			str += "," + x;
+		}
+		if(y != null) {
+			str += "," + y;
+		}
+		str += ")";
+		this.transArr.push(str);
+	}
+	,getTransform: function() {
+		var str = "";
+		var _g1 = 0;
+		var _g = this.transArr.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			str += this.transArr[i] + " ";
+		}
+		return str;
+	}
+	,clone: function() {
+		haxe_Log.trace("WIP",{ fileName : "Base.hx", lineNumber : 60, className : "draw.Base", methodName : "clone"});
+		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
+	}
+	,get_id: function() {
 		if(this.id == null) {
 			this.set_id(this.getName() + "_" + draw_Base.COUNT);
 			draw_Base.COUNT++;
@@ -2588,7 +2755,76 @@ draw_Base.prototype = {
 		return this.id;
 	}
 	,set_id: function(value) {
+		this.xml.set("id",value == null ? "null" : "" + value);
 		return this.id = value;
+	}
+	,get_fill: function() {
+		return this.fill;
+	}
+	,set_fill: function(value) {
+		this.xml.set("fill",value == null ? "null" : "" + value);
+		return this.fill = value;
+	}
+	,get_stroke: function() {
+		return this.stroke;
+	}
+	,set_stroke: function(value) {
+		this.xml.set("stroke",value == null ? "null" : "" + value);
+		return this.stroke = value;
+	}
+	,get_linewidth: function() {
+		return this.linewidth;
+	}
+	,set_linewidth: function(value) {
+		this.xml.set("stroke-width",value == null ? "null" : "" + value);
+		return this.linewidth = value;
+	}
+	,get_opacity: function() {
+		return this.opacity;
+	}
+	,set_opacity: function(value) {
+		var v = cc_util_MathUtil.clamp(value,0,1);
+		this.xml.set("fill-opacity",v == null ? "null" : "" + v);
+		this.xml.set("stroke-opacity",v == null ? "null" : "" + v);
+		return this.opacity = v;
+	}
+	,get_y: function() {
+		return this.y;
+	}
+	,set_y: function(value) {
+		return this.y = value;
+	}
+	,get_x: function() {
+		return this.x;
+	}
+	,set_x: function(value) {
+		return this.x = value;
+	}
+	,get_rotate: function() {
+		return this.rotate;
+	}
+	,set_rotate: function(value) {
+		return this.rotate = value;
+	}
+	,get_transform: function() {
+		return this.transform;
+	}
+	,set_transform: function(value) {
+		return this.transform = value;
+	}
+	,get_dash: function() {
+		return this.dash;
+	}
+	,set_dash: function(value) {
+		var str = "";
+		var _g1 = 0;
+		var _g = value.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			str += value[i] + " ";
+		}
+		this.xml.set("stroke-dasharray",str);
+		return this.dash = value;
 	}
 	,getName: function() {
 		var name = Type.getClassName(js_Boot.getClass(this));
@@ -2603,7 +2839,7 @@ draw_Base.prototype = {
 		return "" + name + ": " + Std.string(JSON.parse(JSON.stringify(this)));
 	}
 	,__class__: draw_Base
-	,__properties__: {set_id:"set_id",get_id:"get_id"}
+	,__properties__: {set_dash:"set_dash",get_dash:"get_dash",set_transform:"set_transform",get_transform:"get_transform",set_rotate:"set_rotate",get_rotate:"get_rotate",set_opacity:"set_opacity",get_opacity:"get_opacity",set_linewidth:"set_linewidth",get_linewidth:"get_linewidth",set_stroke:"set_stroke",get_stroke:"get_stroke",set_fill:"set_fill",get_fill:"get_fill",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y",set_id:"set_id",get_id:"get_id"}
 };
 var draw_IBase = function() { };
 draw_IBase.__name__ = ["draw","IBase"];
@@ -2613,9 +2849,7 @@ draw_IBase.prototype = {
 };
 var draw_Circle = function(x,y,radius) {
 	this.type = "circle";
-	this.linewidth = 1;
-	this.stroke = "#000000";
-	this.fill = "#909090";
+	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_radius(radius);
@@ -2633,13 +2867,7 @@ draw_Circle.prototype = $extend(draw_Base.prototype,{
 		xml.set("cx",Std.string(this.get_x()));
 		xml.set("cy",Std.string(this.get_y()));
 		xml.set("r",Std.string(this.get_radius()));
-		xml.set("fill",Std.string(this.get_fill()));
-		xml.set("stroke",Std.string(this.get_stroke()));
 		xml.set("stroke-width",Std.string(this.get_linewidth()));
-		if(this.get_opacity() != null) {
-			xml.set("fill-opacity",Std.string(this.get_opacity()));
-			xml.set("stroke-opacity",Std.string(this.get_opacity()));
-		}
 		return haxe_xml_Printer.print(xml);
 	}
 	,ctx: function(ctx) {
@@ -2657,49 +2885,12 @@ draw_Circle.prototype = $extend(draw_Base.prototype,{
 	,set_radius: function(value) {
 		return this.radius = value;
 	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
-	}
-	,get_fill: function() {
-		return this.fill;
-	}
-	,set_fill: function(value) {
-		return this.fill = value;
-	}
-	,get_stroke: function() {
-		return this.stroke;
-	}
-	,set_stroke: function(value) {
-		return this.stroke = value;
-	}
-	,get_linewidth: function() {
-		return this.linewidth;
-	}
-	,set_linewidth: function(value) {
-		return this.linewidth = value;
-	}
-	,get_opacity: function() {
-		return this.opacity;
-	}
-	,set_opacity: function(value) {
-		return this.opacity = value;
-	}
 	,__class__: draw_Circle
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_opacity:"set_opacity",get_opacity:"get_opacity",set_linewidth:"set_linewidth",get_linewidth:"get_linewidth",set_stroke:"set_stroke",get_stroke:"get_stroke",set_fill:"set_fill",get_fill:"get_fill",set_radius:"set_radius",get_radius:"get_radius",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_radius:"set_radius",get_radius:"get_radius"})
 });
 var draw_Ellipse = function(x,y,rx,ry) {
 	this.type = "Ellipse";
-	this.stroke = "#000000";
-	this.fill = "#909090";
+	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_rx(rx);
@@ -2724,18 +2915,6 @@ draw_Ellipse.prototype = $extend(draw_Base.prototype,{
 		ctx.fill();
 		ctx.stroke();
 	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
-	}
 	,get_ry: function() {
 		return this.ry;
 	}
@@ -2748,45 +2927,33 @@ draw_Ellipse.prototype = $extend(draw_Base.prototype,{
 	,set_rx: function(value) {
 		return this.rx = value;
 	}
-	,get_fill: function() {
-		return this.fill;
-	}
-	,set_fill: function(value) {
-		return this.fill = value;
-	}
-	,get_stroke: function() {
-		return this.stroke;
-	}
-	,set_stroke: function(value) {
-		return this.stroke = value;
-	}
 	,__class__: draw_Ellipse
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_rx:"set_rx",get_rx:"get_rx",set_ry:"set_ry",get_ry:"get_ry",set_stroke:"set_stroke",get_stroke:"get_stroke",set_fill:"set_fill",get_fill:"get_fill",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_rx:"set_rx",get_rx:"get_rx",set_ry:"set_ry",get_ry:"get_ry"})
 });
 var draw_Group = function(arr) {
 	this.type = "Group";
+	draw_Base.call(this);
 	this.set_arr(arr);
+	this.xml = Xml.createElement("g");
 };
 draw_Group.__name__ = ["draw","Group"];
 draw_Group.__interfaces__ = [draw_IBase];
 draw_Group.__super__ = draw_Base;
 draw_Group.prototype = $extend(draw_Base.prototype,{
 	svg: function(settings) {
-		var xml = Xml.createElement("g");
-		if(this.get_id() != null) {
-			xml.set("id",Std.string(this.get_id()));
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
 		}
-		xml.set("fill","green");
-		var comment = Xml.createComment("test");
-		xml.addChild(comment);
+		var comment = Xml.createComment("Group");
+		this.xml.addChild(comment);
 		var _g1 = 0;
 		var _g = this.get_arr().length;
 		while(_g1 < _g) {
 			var i = _g1++;
 			var temp = this.get_arr()[i];
-			xml.addChild(Xml.parse(temp.svg(null)));
+			this.xml.addChild(Xml.parse(temp.svg(null)));
 		}
-		return haxe_xml_Printer.print(xml);
+		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
 		ctx.beginPath();
@@ -2794,19 +2961,7 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 		ctx.stroke();
 	}
 	,test: function() {
-		haxe_Log.trace("test",{ fileName : "Group.hx", lineNumber : 49, className : "draw.Group", methodName : "test"});
-	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
+		haxe_Log.trace("test if casting works",{ fileName : "Group.hx", lineNumber : 44, className : "draw.Group", methodName : "test"});
 	}
 	,get_scale: function() {
 		return this.scale;
@@ -2827,12 +2982,12 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 		return this.arr = value;
 	}
 	,__class__: draw_Group
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_arr:"set_arr",get_arr:"get_arr",set_rotation:"set_rotation",get_rotation:"get_rotation",set_scale:"set_scale",get_scale:"get_scale",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_arr:"set_arr",get_arr:"get_arr",set_rotation:"set_rotation",get_rotation:"get_rotation",set_scale:"set_scale",get_scale:"get_scale"})
 });
 var draw_Line = function(x,y,x2,y2) {
 	this.type = "Line";
 	this.lineCap = "butt";
-	this.stroke = "#000000";
+	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_x2(x2);
@@ -2862,18 +3017,6 @@ draw_Line.prototype = $extend(draw_Base.prototype,{
 		ctx.fill();
 		ctx.stroke();
 	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
-	}
 	,get_x2: function() {
 		return this.x2;
 	}
@@ -2885,12 +3028,6 @@ draw_Line.prototype = $extend(draw_Base.prototype,{
 	}
 	,set_y2: function(value) {
 		return this.y2 = value;
-	}
-	,get_stroke: function() {
-		return this.stroke;
-	}
-	,set_stroke: function(value) {
-		return this.stroke = value;
 	}
 	,get_lineCap: function() {
 		return this.lineCap;
@@ -2905,21 +3042,19 @@ draw_Line.prototype = $extend(draw_Base.prototype,{
 		return this.lineWeight = value;
 	}
 	,__class__: draw_Line
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_lineWeight:"set_lineWeight",get_lineWeight:"get_lineWeight",set_lineCap:"set_lineCap",get_lineCap:"get_lineCap",set_stroke:"set_stroke",get_stroke:"get_stroke",set_y2:"set_y2",get_y2:"get_y2",set_x2:"set_x2",get_x2:"get_x2",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_lineWeight:"set_lineWeight",get_lineWeight:"get_lineWeight",set_lineCap:"set_lineCap",get_lineCap:"get_lineCap",set_y2:"set_y2",get_y2:"get_y2",set_x2:"set_x2",get_x2:"get_x2"})
 });
 var draw_Polygon = function(arr) {
 	this.type = "Polygon";
+	draw_Base.call(this);
 	this.set_arr(arr);
+	this.xml = Xml.createElement("polygon");
 };
 draw_Polygon.__name__ = ["draw","Polygon"];
 draw_Polygon.__interfaces__ = [draw_IBase];
 draw_Polygon.__super__ = draw_Base;
 draw_Polygon.prototype = $extend(draw_Base.prototype,{
 	svg: function(settings) {
-		var xml = Xml.createElement("polygon");
-		if(this.get_id() != null) {
-			xml.set("id",this.get_id());
-		}
 		var str = "";
 		var _g1 = 0;
 		var _g = this.get_arr().length;
@@ -2928,34 +3063,16 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 			var value = this.get_arr()[i];
 			str += "" + value + " ";
 		}
-		xml.set("points",str);
-		if(this.get_translate() != null) {
-			xml.set("transform","translate(" + this.get_translate()[0] + "," + this.get_translate()[1] + ")");
+		this.xml.set("points",str);
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
 		}
-		return haxe_xml_Printer.print(xml);
+		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
 		ctx.beginPath();
 		ctx.fill();
 		ctx.stroke();
-	}
-	,setTranslate: function(x,y) {
-		this.set_translate([x,y]);
-	}
-	,position: function(x,y) {
-		this.set_translate([x,y]);
-	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
 	}
 	,get_arr: function() {
 		return this.arr;
@@ -2963,27 +3080,19 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 	,set_arr: function(value) {
 		return this.arr = value;
 	}
-	,get_translate: function() {
-		return this.translate;
-	}
-	,set_translate: function(value) {
-		return this.translate = value;
-	}
 	,__class__: draw_Polygon
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_translate:"set_translate",get_translate:"get_translate",set_arr:"set_arr",get_arr:"get_arr",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_arr:"set_arr",get_arr:"get_arr"})
 });
 var draw_Rectangle = function(x,y,width,height) {
 	this.type = "rectangle";
-	this.opacity = 1;
-	this.linewidth = 1;
-	this.stroke = "#000000";
-	this.fill = "#909090";
+	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_width(width);
 	this.set_height(height);
 	this.xpos = this.get_x() - this.get_width() / 2;
 	this.ypos = this.get_y() - this.get_height() / 2;
+	this.xml = Xml.createElement("rect");
 };
 draw_Rectangle.__name__ = ["draw","Rectangle"];
 draw_Rectangle.__interfaces__ = [draw_IBase];
@@ -2994,24 +3103,15 @@ draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		this.set_stroke("transparant");
 	}
 	,svg: function(settings) {
-		var xml = Xml.createElement("rect");
-		if(this.get_id() != null) {
-			xml.set("id",Std.string(this.get_id()));
-		}
-		xml.set("x",Std.string(this.xpos));
-		xml.set("y",Std.string(this.ypos));
-		xml.set("width",Std.string(this.get_width()));
-		xml.set("height",Std.string(this.get_height()));
-		xml.set("stroke",Std.string(this.get_stroke()));
-		xml.set("fill",Std.string(this.get_fill()));
-		xml.set("stroke-width",Std.string(this.get_linewidth()));
-		xml.set("fill-opacity",Std.string(this.get_opacity()));
-		xml.set("stroke-opacity",Std.string(this.get_opacity()));
+		this.xml.set("x",Std.string(this.xpos));
+		this.xml.set("y",Std.string(this.ypos));
+		this.xml.set("width",Std.string(this.get_width()));
+		this.xml.set("height",Std.string(this.get_height()));
 		if(this.get_radius() != null) {
-			xml.set("rx",Std.string(this.get_radius()));
-			xml.set("ry",Std.string(this.get_radius()));
+			this.xml.set("rx",Std.string(this.get_radius()));
+			this.xml.set("ry",Std.string(this.get_radius()));
 		}
-		return haxe_xml_Printer.print(xml);
+		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
 		ctx.fillStyle = this.get_fill();
@@ -3050,9 +3150,9 @@ draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		}
 		var color = { r : _r, g : _g, b : _b, a : _a};
 		ctx.fillStyle = cc_util_ColorUtil.getColourObj(color,this.get_opacity());
-		haxe_Log.trace(cc_util_ColorUtil.getColourObj(color,this.get_opacity()),{ fileName : "Rectangle.hx", lineNumber : 63, className : "draw.Rectangle", methodName : "ctx"});
-		haxe_Log.trace(color,{ fileName : "Rectangle.hx", lineNumber : 64, className : "draw.Rectangle", methodName : "ctx"});
-		haxe_Log.trace(this.get_fill(),{ fileName : "Rectangle.hx", lineNumber : 65, className : "draw.Rectangle", methodName : "ctx"});
+		haxe_Log.trace(cc_util_ColorUtil.getColourObj(color,this.get_opacity()),{ fileName : "Rectangle.hx", lineNumber : 52, className : "draw.Rectangle", methodName : "ctx"});
+		haxe_Log.trace(color,{ fileName : "Rectangle.hx", lineNumber : 53, className : "draw.Rectangle", methodName : "ctx"});
+		haxe_Log.trace(this.get_fill(),{ fileName : "Rectangle.hx", lineNumber : 54, className : "draw.Rectangle", methodName : "ctx"});
 		ctx.beginPath();
 		if(this.get_radius() == null) {
 			ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
@@ -3089,42 +3189,6 @@ draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 	,set_radius: function(value) {
 		return this.radius = value;
 	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
-	}
-	,get_fill: function() {
-		return this.fill;
-	}
-	,set_fill: function(value) {
-		return this.fill = value;
-	}
-	,get_stroke: function() {
-		return this.stroke;
-	}
-	,set_stroke: function(value) {
-		return this.stroke = value;
-	}
-	,get_linewidth: function() {
-		return this.linewidth;
-	}
-	,set_linewidth: function(value) {
-		return this.linewidth = value;
-	}
-	,get_opacity: function() {
-		return this.opacity;
-	}
-	,set_opacity: function(value) {
-		return this.opacity = value;
-	}
 	,get_width: function() {
 		return this.width;
 	}
@@ -3138,10 +3202,11 @@ draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		return this.height = value;
 	}
 	,__class__: draw_Rectangle
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_radius:"set_radius",get_radius:"get_radius",set_opacity:"set_opacity",get_opacity:"get_opacity",set_linewidth:"set_linewidth",get_linewidth:"get_linewidth",set_stroke:"set_stroke",get_stroke:"get_stroke",set_fill:"set_fill",get_fill:"get_fill",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_radius:"set_radius",get_radius:"get_radius",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width"})
 });
 var draw_Text = function(str,x,y) {
 	this.type = "Text";
+	draw_Base.call(this);
 	this.set_str(str);
 	this.set_x(x);
 	this.set_y(y);
@@ -3167,19 +3232,7 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(xml);
 	}
 	,ctx: function(ctx) {
-		haxe_Log.trace("needs work!",{ fileName : "Text.hx", lineNumber : 61, className : "draw.Text", methodName : "ctx"});
-	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
+		haxe_Log.trace("needs work!",{ fileName : "Text.hx", lineNumber : 59, className : "draw.Text", methodName : "ctx"});
 	}
 	,get_str: function() {
 		return this.str;
@@ -3194,7 +3247,7 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 		return this.style = value;
 	}
 	,__class__: draw_Text
-	,__properties__: $extend(draw_Base.prototype.__properties__,{set_style:"set_style",get_style:"get_style",set_str:"set_str",get_str:"get_str",set_x:"set_x",get_x:"get_x",set_y:"set_y",get_y:"get_y"})
+	,__properties__: $extend(draw_Base.prototype.__properties__,{set_style:"set_style",get_style:"get_style",set_str:"set_str",get_str:"get_str"})
 });
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = ["haxe","IMap"];
@@ -4090,6 +4143,13 @@ Xml.DocType = 4;
 Xml.ProcessingInstruction = 5;
 Xml.Document = 6;
 cc_lets_Go._tweens = [];
+cc_model_constants_Paper.A6 = "a6";
+cc_model_constants_Paper.A5 = "a5";
+cc_model_constants_Paper.A4 = "a4";
+cc_model_constants_Paper.A3 = "a3";
+cc_model_constants_Paper.A2 = "a2";
+cc_model_constants_Paper.A1 = "a1";
+cc_model_constants_Paper.ARR = ["a6","a5","a4","a3","a2","a1"];
 cc_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 cc_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
 cc_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};

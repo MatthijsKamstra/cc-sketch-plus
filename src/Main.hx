@@ -20,22 +20,22 @@ class Main {
 
 	function init() {
 		// initDocument(); // if document doesn't have elements with correct id
-		sketchSVG();
-		sketchCanvas();
-		//
-		sketchRoundedRectSVG();
-		sketchRoundedRectCanvas();
-		//
-		sketchShapes();
-		// shape research
-		sketchDefaultShapes();
-		sketchDefaultShapesC(); // (canvas) wip
-		// animation
-		sketchAnimation();
-		sketchAnimationC();
-		// drips and spatter
-		sketchDrips();
-		sketchDripsC();
+		// sketchSVG();
+		// sketchCanvas();
+		// //
+		// sketchRoundedRectSVG();
+		// sketchRoundedRectCanvas();
+		// //
+		// sketchShapes();
+		// // shape research
+		// sketchDefaultShapes();
+		// sketchDefaultShapesC(); // (canvas) wip
+		// // animation
+		// sketchAnimation();
+		// sketchAnimationC();
+		// // drips and spatter
+		// sketchDrips();
+		// sketchDripsC();
 		// papertoys
 		sketchPapertoys();
 		sketchPapertoysC();
@@ -62,26 +62,88 @@ class Main {
 		var cellWidth = 100;
 		var cellHeight = 100;
 
+		var dashArray = [5];
+
 		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 1};
 		var sq0 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		sq0.dash = dashArray;
+		//
 		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 2};
 		var sq1 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		sq1.dash = dashArray;
 
 		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 3};
 		var sq2 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		sq2.dash = dashArray;
 
 		var cp:cc.Point = {x: Sketch.Global.w / 2, y: cellHeight * 4};
 		var sq3 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
-		//
+		sq3.dash = dashArray;
+
+		// Cube left side
 		var cp:cc.Point = {x: Sketch.Global.w / 2 - cellWidth, y: cellHeight * 3};
 		var sq4 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		sq4.dash = dashArray;
+		// sq4.id = 'cube left side';
+
+		// cube right side, tab bottom
+		var p1:cc.Point = {x: cp.x - (cellWidth / 2), y: cp.y + (cellHeight / 2)};
+		var p2:cc.Point = {x: cp.x + (cellWidth / 2), y: cp.y + (cellHeight / 2)};
+		var polyl0 = sketch.makePolygon(paperTab(p1, p2));
+		var polyl1 = sketch.makePolygon(paperTab(p1, p2));
+		polyl1.setRotate(90, cp.x, cp.y);
+		var polyl2 = sketch.makePolygon(paperTab(p1, p2));
+		polyl2.setPosition(0, -cellWidth);
 		//
+		// Cube right side
 		var cp:cc.Point = {x: Sketch.Global.w / 2 + cellWidth, y: cellHeight * 3};
 		var sq5 = sketch.makeRectangle(Math.round(cp.x), Math.round(cp.y), Math.round(cellWidth), Math.round(cellHeight));
+		sq5.dash = dashArray;
+		// cube right side, tab bottom
+		var p1:cc.Point = {x: cp.x - (cellWidth / 2), y: cp.y + (cellHeight / 2)};
+		var p2:cc.Point = {x: cp.x + (cellWidth / 2), y: cp.y + (cellHeight / 2)};
+		var poly0 = sketch.makePolygon(paperTab(p1, p2));
+		var poly1 = sketch.makePolygon(paperTab(p1, p2));
+		poly1.setRotate(90, cp.x, cp.y);
+		poly1.setPosition(0, -cellHeight);
+		var poly2 = sketch.makePolygon(paperTab(p1, p2));
+		poly2.setPosition(0, -cellHeight);
+		// bottom tab
+		var polybottom = sketch.makePolygon(paperTab(p1, p2));
+		polybottom.id = 'bottom';
+		polybottom.setPosition(-cellWidth, cellHeight);
+		// var polyClone = poly.clone();
+		// polyClone.setRotate(-90);
+
+		var groupGlue = sketch.makeGroup([polyl0, polyl1, polyl2, poly0, poly1, poly2, polybottom]);
+		groupGlue.id = 'cube glue';
+		groupGlue.fill = getColourObj(GRAY);
+		groupGlue.stroke = getColourObj(BLACK);
+		// groupGlue.fill = getColourObj(PINK);
+		// groupGlue.stroke = getColourObj(BLACK);
+		// groupGlue.opacity = 0.1;
+
 		//
-		sketch.makeGroup([sq0, sq1, sq2, sq3, sq4, sq5]);
+		var group = sketch.makeGroup([sq0, sq1, sq2, sq3, sq4, sq5]);
+		group.id = 'cube shape';
+		group.fill = getColourObj(WHITE);
+		group.stroke = getColourObj(BLACK);
+		// group.opacity = 0.1;
+
 		// draw
 		sketch.update();
+
+		setElementClickDownload(elem);
+	}
+
+	function paperTab(p1:cc.Point, p2:cc.Point):Array<Int> {
+		var offset = Math.round(cc.model.constants.Paper.mm2pixel(7));
+		var sideArr:Array<Int> = [
+			Math.round(p1.x), Math.round(p1.y), Math.round(p1.x) + offset, Math.round(p1.y) + offset, Math.round(p2.x) - offset, Math.round(p2.y) + offset,
+			Math.round(p2.x), Math.round(p2.y), Math.round(p2.x) - offset, Math.round(p2.y) - offset, Math.round(p1.x) + offset, Math.round(p1.y) - offset,
+			Math.round(p1.x), Math.round(p1.y),
+		];
+		return sideArr;
 	}
 
 	function sketchPapertoysC() {
@@ -256,7 +318,7 @@ class Main {
 		var _x = 50 + (5 * xoffset);
 		var poly = two.makePolygon([0, 100, 50, 25, 50, 75, 100, 0]);
 		poly.id = 'bliksum';
-		poly.position(_x - 50, _y - 50);
+		// poly.position(_x - 50, _y - 50);
 		// poly.fill = '#fab1a0';
 		// poly.stroke = '#ff7675'; // Accepts all valid css color
 
@@ -288,6 +350,16 @@ class Main {
 		// Don't forget to tell two to render everything to the screen
 		two.update();
 
+		if (elem != null) {
+			// [mck] create an automate function for this, is element is null don't
+			elem.onclick = function(e) {
+				// trace(elem.innerHTML);
+				downloadTextFile(elem.innerHTML, '${elem.id}_${Date.now().getTime()}.svg');
+			};
+		}
+	}
+
+	function setElementClickDownload(elem:js.html.Element) {
 		if (elem != null) {
 			// [mck] create an automate function for this, is element is null don't
 			elem.onclick = function(e) {

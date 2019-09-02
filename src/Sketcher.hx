@@ -154,7 +154,7 @@ class Sketcher {
 					continue; // groups do this
 
 				if (base.type == 'Group') {
-					trace('ggggg');
+					// trace('ggggg');
 					cast(base, draw.Group).test();
 				}
 				var draw = base.svg(settings);
