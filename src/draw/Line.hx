@@ -1,14 +1,10 @@
 package draw;
 
 class Line extends Base implements IBase {
-	@:isVar public var y(get, set):Int;
-	@:isVar public var x(get, set):Int;
-
 	@:isVar public var x2(get, set):Int;
 	@:isVar public var y2(get, set):Int;
 
-	@:isVar public var stroke(get, set):String = '#000000';
-
+	// @:isVar public var stroke(get, set):String = '#000000';
 	@:isVar public var lineCap(get, set):String = 'butt';
 
 	@:isVar public var lineWeight(get, set):Int;
@@ -44,22 +40,6 @@ class Line extends Base implements IBase {
 
 	// ____________________________________ getter/setter ____________________________________
 
-	function get_y():Int {
-		return y;
-	}
-
-	function set_y(value:Int):Int {
-		return y = value;
-	}
-
-	function get_x():Int {
-		return x;
-	}
-
-	function set_x(value:Int):Int {
-		return x = value;
-	}
-
 	function get_x2():Int {
 		return x2;
 	}
@@ -74,14 +54,6 @@ class Line extends Base implements IBase {
 
 	function set_y2(value:Int):Int {
 		return y2 = value;
-	}
-
-	function get_stroke():String {
-		return stroke;
-	}
-
-	function set_stroke(value:String):String {
-		return stroke = value;
 	}
 
 	function get_lineCap():String {

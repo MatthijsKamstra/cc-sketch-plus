@@ -3,8 +3,6 @@ package draw;
 using StringTools;
 
 class Text extends Base implements IBase {
-	@:isVar public var y(get, set):Int;
-	@:isVar public var x(get, set):Int;
 	@:isVar public var str(get, set):String;
 	@:isVar public var style(get, set):String;
 
@@ -65,22 +63,6 @@ class Text extends Base implements IBase {
 	}
 
 	// ____________________________________ getter/setter ____________________________________
-
-	function get_y():Int {
-		return y;
-	}
-
-	function set_y(value:Int):Int {
-		return y = value;
-	}
-
-	function get_x():Int {
-		return x;
-	}
-
-	function set_x(value:Int):Int {
-		return x = value;
-	}
 
 	function get_str():String {
 		return str;

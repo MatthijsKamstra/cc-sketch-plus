@@ -1,32 +1,27 @@
 package draw;
 
 class Group extends Base implements IBase {
-	@:isVar public var y(get, set):Int;
-	@:isVar public var x(get, set):Int;
+	public var type = 'Group'; // base (get class name?)
 
 	@:isVar public var scale(get, set):Float;
 	@:isVar public var rotation(get, set):Float;
 
 	@:isVar public var arr(get, set):Array<IBase>;
 
-	public var type = 'Group'; // base (get class name?)
-
 	/**
 	 *
 	 */
 	public function new(arr:Array<IBase>) {
-		// this.x = x;
-		// this.y = y;
 		this.arr = arr;
+		xml = Xml.createElement('g');
 	}
 
 	public function svg(settings:Settings):String {
-		var xml = Xml.createElement('g');
-		if (this.id != null)
-			xml.set('id', Std.string(this.id));
-		xml.set('fill', 'green');
-		var comment = Xml.createComment('test');
-		xml.addChild(comment);
+		if (this.getTransform() != '') {
+			xml.set('transform', this.getTransform());
+		}
+		var comment = Xml.createComment('Group');
+		xml.addChild(comment); // not sure why?
 		for (i in 0...this.arr.length) {
 			// untyped xml.appendChild(this.arr[i].svg);
 			// xml.addChild(Xml.createComment(this.arr[i].type));
@@ -46,26 +41,10 @@ class Group extends Base implements IBase {
 	// ____________________________________ unique functions for this specific class ____________________________________
 
 	public function test() {
-		trace('test');
+		trace('test if casting works');
 	}
 
 	// ____________________________________ getter/setter ____________________________________
-
-	function get_y():Int {
-		return y;
-	}
-
-	function set_y(value:Int):Int {
-		return y = value;
-	}
-
-	function get_x():Int {
-		return x;
-	}
-
-	function set_x(value:Int):Int {
-		return x = value;
-	}
 
 	function get_scale():Float {
 		return scale;
