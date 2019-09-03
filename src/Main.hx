@@ -133,7 +133,72 @@ class Main {
 		// draw
 		sketch.update();
 
-		setElementClickDownload(elem);
+		// setElementClickDownload(elem);
+
+		addDownloadElements(elem);
+	}
+
+	function addDownloadElements(elem:js.html.Element) {
+		var el = document.createDivElement();
+		el.id = "wrapper_download";
+		el.className = 'btn-group';
+
+		el.appendChild(btnCreator('jpg'));
+		el.appendChild(btnCreator('png'));
+		el.appendChild(btnCreator('svg'));
+
+		elem.appendChild(el);
+	}
+
+	function btnCreator(id:String):js.html.AnchorElement {
+		var anchor = document.createAnchorElement();
+		anchor.setAttribute('download-id', '${id}');
+		anchor.className = 'btn btn-dark btn-sm';
+		anchor.href = '#${id}';
+		anchor.onclick = testHandler;
+		anchor.innerHTML = '${id} ';
+		return anchor;
+	}
+
+	function testHandler(e:js.html.MouseEvent) {
+		trace(' testhandler${e} ');
+		trace(cast(e.currentTarget, js.html.AnchorElement).getAttribute('download-id'));
+		var attr = cast(e.currentTarget, js.html.AnchorElement).getAttribute('download-id');
+		var wrapperDiv = (cast(e.currentTarget, js.html.AnchorElement).parentElement.parentElement);
+		var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
+		var filename = '${wrapperDiv.id}_${Date.now().getTime()}';
+		switch (attr) {
+			case 'jpg':
+				svg2Canvas(svg, true, filename);
+			case 'png':
+				svg2Canvas(svg, false, filename);
+			case 'svg':
+				downloadTextFile(svg.outerHTML, '${filename}.svg');
+			default:
+				trace("case '" + attr + "': trace ('" + attr + "');");
+		}
+	}
+
+	function svg2Canvas(svg:js.html.svg.SVGElement, isJpg:Bool = true, filename:String) {
+		var svgW = Std.parseInt(svg.getAttribute('width'));
+		var svgH = Std.parseInt(svg.getAttribute('height'));
+
+		var canvas = document.createCanvasElement();
+		var ctx = canvas.getContext2d();
+		canvas.width = svgW;
+		canvas.height = svgH;
+
+		var image = new js.html.Image();
+		image.onload = function() {
+			if (isJpg) {
+				ctx.fillStyle = "white";
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+			}
+			ctx.drawImage(image, 0, 0, svgW, svgH);
+			cc.tool.ExportFile.downloadImageBg(ctx, isJpg, filename);
+		}
+		image.src = 'data:image/svg+xml,${svg.outerHTML}';
+		// document.body.appendChild(canvas);
 	}
 
 	function paperTab(p1:cc.Point, p2:cc.Point):Array<Int> {
@@ -147,13 +212,13 @@ class Main {
 	}
 
 	function sketchPapertoysC() {
-		var elem = document.getElementById('sketcher-canvas-papertoys');
+		var elem = document.getElementById(' sketcher - canvas - papertoys ');
 	}
 
 	function sketchDrips() {
 		var size = 500; // instagram 1080
-		var elem = document.getElementById('sketcher-svg-drips');
-		var params:Settings = new Settings(size, size, 'svg');
+		var elem = document.getElementById(' sketcher - svg - drips ');
+		var params:Settings = new Settings(size, size, ' svg ');
 		// params.autostart = true;
 		params.padding = 10;
 		params.scale = true;
@@ -174,7 +239,7 @@ class Main {
 			var randomCircleRadius = random(circleRadius / 2, circleRadius);
 			// for-ground
 			var circle = sketch.makeCircle(Math.round(cp.x), Math.round(cp.y), Math.round(randomCircleRadius));
-			circle.fill = 'black';
+			circle.fill = ' black ';
 			circle.noStroke();
 			// border spatter
 			for (i in 0...10) {
@@ -183,7 +248,7 @@ class Main {
 					y: cp.y + random(-randomCircleRadius, randomCircleRadius)
 				};
 				var spatter = sketch.makeCircle(Math.round(rp.x), Math.round(rp.y), Math.round(random(randomCircleRadius / 2)));
-				spatter.fill = rgb(0); // 'black';
+				spatter.fill = rgb(0); // ' black ';
 				spatter.noStroke();
 			}
 			// drip
@@ -196,7 +261,7 @@ class Main {
 				// drip line, straight down
 				var line = sketch.makeLine(Math.round(rp.x), Math.round(rp.y), Math.round(rp.x),
 					Math.round(rp.y + random(randomCircleRadius, randomCircleRadius + 100)));
-				line.lineCap = 'round'; // "butt|round|square";
+				line.lineCap = ' round '; // "butt|round|square";
 				line.stroke = rgb(0);
 				line.lineWeight = dripWeight;
 			}
@@ -207,19 +272,18 @@ class Main {
 	}
 
 	function sketchDripsC() {
-		var elem = document.getElementById('sketcher-canvas-drips');
+		var elem = document.getElementById(' sketcher - canvas - drips ');
 	}
 
 	function sketchAnimation() {
-		var elem = document.getElementById('sketcher-svg-animation');
-		var params:Settings = new Settings(680, 200, 'svg');
+		var elem = document.getElementById(' sketcher - svg - animation ');
+		var params:Settings = new Settings(680, 200, ' svg ');
 		var two = Sketcher.create(params).appendTo(elem);
 
 		var rect = two.makeRectangle(50, 50, 50, 50);
-		rect.id = 'animationObject';
+		rect.id = ' animationObject ';
 
-		// Don't forget to tell two to render everything to the screen
-		two.update();
+		// Don' t forget to tell two to render everything to the screen two.update();
 
 		var temp = (document.getElementById('animationObject'));
 
@@ -350,13 +414,7 @@ class Main {
 		// Don't forget to tell two to render everything to the screen
 		two.update();
 
-		if (elem != null) {
-			// [mck] create an automate function for this, is element is null don't
-			elem.onclick = function(e) {
-				// trace(elem.innerHTML);
-				downloadTextFile(elem.innerHTML, '${elem.id}_${Date.now().getTime()}.svg');
-			};
-		}
+		// setElementClickDownload(elem);
 	}
 
 	function setElementClickDownload(elem:js.html.Element) {

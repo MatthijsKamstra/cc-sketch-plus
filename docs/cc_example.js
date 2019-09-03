@@ -172,7 +172,67 @@ Main.prototype = {
 		group.set_fill(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.WHITE));
 		group.set_stroke(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.BLACK));
 		sketch.update();
-		this.setElementClickDownload(elem);
+		this.addDownloadElements(elem);
+	}
+	,addDownloadElements: function(elem) {
+		var el = window.document.createElement("div");
+		el.id = "wrapper_download";
+		el.className = "btn-group";
+		el.appendChild(this.btnCreator("jpg"));
+		el.appendChild(this.btnCreator("png"));
+		el.appendChild(this.btnCreator("svg"));
+		elem.appendChild(el);
+	}
+	,btnCreator: function(id) {
+		var anchor = window.document.createElement("a");
+		anchor.setAttribute("download-id","" + id);
+		anchor.className = "btn btn-dark btn-sm";
+		anchor.href = "#" + id;
+		anchor.onclick = $bind(this,this.testHandler);
+		anchor.innerHTML = "" + id + " ";
+		return anchor;
+	}
+	,testHandler: function(e) {
+		haxe_Log.trace(" testhandler" + Std.string(e) + " ",{ fileName : "Main.hx", lineNumber : 164, className : "Main", methodName : "testHandler"});
+		haxe_Log.trace((js_Boot.__cast(e.currentTarget , HTMLAnchorElement)).getAttribute("download-id"),{ fileName : "Main.hx", lineNumber : 165, className : "Main", methodName : "testHandler"});
+		var attr = (js_Boot.__cast(e.currentTarget , HTMLAnchorElement)).getAttribute("download-id");
+		var wrapperDiv = (js_Boot.__cast(e.currentTarget , HTMLAnchorElement)).parentElement.parentElement;
+		var svg = wrapperDiv.getElementsByTagName("svg")[0];
+		var filename = "" + wrapperDiv.id + "_" + new Date().getTime();
+		switch(attr) {
+		case "jpg":
+			this.svg2Canvas(svg,true,filename);
+			break;
+		case "png":
+			this.svg2Canvas(svg,false,filename);
+			break;
+		case "svg":
+			Main.downloadTextFile(svg.outerHTML,"" + filename + ".svg");
+			break;
+		default:
+			haxe_Log.trace("case '" + attr + "': trace ('" + attr + "');",{ fileName : "Main.hx", lineNumber : 178, className : "Main", methodName : "testHandler"});
+		}
+	}
+	,svg2Canvas: function(svg,isJpg,filename) {
+		if(isJpg == null) {
+			isJpg = true;
+		}
+		var svgW = Std.parseInt(svg.getAttribute("width"));
+		var svgH = Std.parseInt(svg.getAttribute("height"));
+		var canvas = window.document.createElement("canvas");
+		var ctx = canvas.getContext("2d",null);
+		canvas.width = svgW;
+		canvas.height = svgH;
+		var image = new Image();
+		image.onload = function() {
+			if(isJpg) {
+				ctx.fillStyle = "white";
+				ctx.fillRect(0,0,canvas.width,canvas.height);
+			}
+			ctx.drawImage(image,0,0,svgW,svgH);
+			cc_tool_ExportFile.downloadImageBg(ctx,isJpg,filename);
+		};
+		image.src = "data:image/svg+xml," + svg.outerHTML;
 	}
 	,paperTab: function(p1,p2) {
 		var offset = Math.round(cc_model_constants_Paper.mm2pixel(7));
@@ -180,12 +240,12 @@ Main.prototype = {
 		return sideArr;
 	}
 	,sketchPapertoysC: function() {
-		var elem = window.document.getElementById("sketcher-canvas-papertoys");
+		var elem = window.document.getElementById(" sketcher - canvas - papertoys ");
 	}
 	,sketchDrips: function() {
 		var size = 500;
-		var elem = window.document.getElementById("sketcher-svg-drips");
-		var params = new Settings(size,size,"svg");
+		var elem = window.document.getElementById(" sketcher - svg - drips ");
+		var params = new Settings(size,size," svg ");
 		params.set_padding(10);
 		params.set_scale(true);
 		var sketch = Sketcher.create(params).appendTo(elem);
@@ -201,7 +261,7 @@ Main.prototype = {
 			sketch.makeX(Math.round(cp.x),Math.round(cp.y));
 			var randomCircleRadius = cc_util_MathUtil.random(circleRadius / 2,circleRadius);
 			var circle = sketch.makeCircle(Math.round(cp.x),Math.round(cp.y),Math.round(randomCircleRadius));
-			circle.set_fill("black");
+			circle.set_fill(" black ");
 			circle.noStroke();
 			var _g2 = 0;
 			while(_g2 < 10) {
@@ -221,7 +281,7 @@ Main.prototype = {
 				var rp_x1 = cp.x + cc_util_MathUtil.random(-randomCircleRadius + dripWeight,randomCircleRadius - dripWeight);
 				rp_y1 = cp.y + cc_util_MathUtil.random(-randomCircleRadius + dripWeight,randomCircleRadius - dripWeight);
 				var line = sketch.makeLine(Math.round(rp_x1),Math.round(rp_y1),Math.round(rp_x1),Math.round(rp_y1 + cc_util_MathUtil.random(randomCircleRadius,randomCircleRadius + 100)));
-				line.set_lineCap("round");
+				line.set_lineCap(" round ");
 				line.set_stroke(cc_util_ColorUtil.rgb(0));
 				line.set_lineWeight(dripWeight);
 			}
@@ -229,15 +289,14 @@ Main.prototype = {
 		sketch.update();
 	}
 	,sketchDripsC: function() {
-		var elem = window.document.getElementById("sketcher-canvas-drips");
+		var elem = window.document.getElementById(" sketcher - canvas - drips ");
 	}
 	,sketchAnimation: function() {
-		var elem = window.document.getElementById("sketcher-svg-animation");
-		var params = new Settings(680,200,"svg");
+		var elem = window.document.getElementById(" sketcher - svg - animation ");
+		var params = new Settings(680,200," svg ");
 		var two = Sketcher.create(params).appendTo(elem);
 		var rect = two.makeRectangle(50,50,50,50);
-		rect.set_id("animationObject");
-		two.update();
+		rect.set_id(" animationObject ");
 		var temp = window.document.getElementById("animationObject");
 		var temp1 = rect.toObject();
 		var Go = new cc_lets_Go(rect,1.5);
@@ -268,15 +327,15 @@ Main.prototype = {
 		var svgElement = window.document.getElementById("animationObject");
 	}
 	,onStartHandler: function(arr) {
-		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 245, className : "Main", methodName : "onStartHandler", customParams : [arr]});
+		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 309, className : "Main", methodName : "onStartHandler", customParams : [arr]});
 		var arrr = arr;
-		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 247, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
+		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 311, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
 	}
 	,onUpdateHandler: function(arr) {
-		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 252, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
+		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 316, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
 	}
 	,onAnimateHandler: function(arr) {
-		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 260, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
+		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 324, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
 	}
 	,sketchAnimationC: function() {
 	}
@@ -336,11 +395,6 @@ Main.prototype = {
 			var x4 = two.makeX(_x7,_y,"green");
 		}
 		two.update();
-		if(elem != null) {
-			elem.onclick = function(e) {
-				Main.downloadTextFile(elem.innerHTML,"" + elem.id + "_" + new Date().getTime() + ".svg");
-			};
-		}
 	}
 	,setElementClickDownload: function(elem) {
 		if(elem != null) {
