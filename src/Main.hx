@@ -55,7 +55,7 @@ class Main {
 		var elem = document.getElementById('sketcher-svg-papertoys');
 		var params:Settings = new Settings(size, size, 'svg');
 		// params.autostart = true;
-		params.padding = 10;
+		params.padding = 0;
 		params.scale = true;
 		var sketch = Sketcher.create(params).appendTo(elem);
 

@@ -109,7 +109,7 @@ Main.prototype = {
 		var size = 600;
 		var elem = window.document.getElementById("sketcher-svg-papertoys");
 		var params = new Settings(size,size,"svg");
-		params.set_padding(10);
+		params.set_padding(0);
 		params.set_scale(true);
 		var sketch = Sketcher.create(params).appendTo(elem);
 		var cellWidth = 100;
@@ -889,6 +889,16 @@ var Sketcher = function(settings) {
 	this.settings = settings;
 	Global.w = settings.get_width();
 	Global.h = settings.get_height();
+	if(settings.get_scale() == true) {
+		var node = window.document.createElement("style");
+		node.innerHTML = "svg {width: 100%; height: 100%;}";
+		window.document.body.appendChild(node);
+	}
+	if(settings.get_padding() != null && settings.get_padding() > 0) {
+		var node1 = window.document.createElement("style");
+		node1.innerHTML = "svg {margin: " + settings.get_padding() + "px; }";
+		window.document.body.appendChild(node1);
+	}
 };
 Sketcher.__name__ = ["Sketcher"];
 Sketcher.create = function(settings) {
@@ -987,9 +997,9 @@ Sketcher.prototype = {
 		if(this.element == null) {
 			return;
 		}
-		haxe_Log.trace("type:" + this.settings.get_type() + ", id:" + this.element.id,{ fileName : "Sketcher.hx", lineNumber : 147, className : "Sketcher", methodName : "update"});
+		haxe_Log.trace("type:" + this.settings.get_type() + ", id:" + this.element.id,{ fileName : "Sketcher.hx", lineNumber : 159, className : "Sketcher", methodName : "update"});
 		if(this.settings.get_type() == "svg") {
-			var paper = "<?xml version=\"1.0\" standalone=\"no\"?><svg width=\"" + this.settings.get_width() + "\" height=\"" + this.settings.get_height() + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">";
+			var paper = "<?xml version=\"1.0\" standalone=\"no\"?><svg width=\"" + this.settings.get_width() + "\" height=\"" + this.settings.get_height() + "\" viewBox=\"0 0 " + this.settings.get_width() + " " + this.settings.get_height() + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">";
 			var _g1 = 0;
 			var _g = this.baseArray.length;
 			while(_g1 < _g) {
@@ -1012,7 +1022,7 @@ Sketcher.prototype = {
 			while(_g11 < _g2) {
 				var i1 = _g11++;
 				var base1 = this.baseArray[i1];
-				haxe_Log.trace(base1.type,{ fileName : "Sketcher.hx", lineNumber : 170, className : "Sketcher", methodName : "update"});
+				haxe_Log.trace(base1.type,{ fileName : "Sketcher.hx", lineNumber : 182, className : "Sketcher", methodName : "update"});
 				base1.ctx(Sketcher.ctx);
 			}
 		}
