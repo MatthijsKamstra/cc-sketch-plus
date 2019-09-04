@@ -164,17 +164,22 @@ Main.prototype = {
 		polybottom.set_id("bottom");
 		polybottom.setPosition(-cellWidth,cellHeight);
 		var groupGlue = sketch.makeGroup([polyl0,polyl1,polyl2,poly0,poly1,poly2,polybottom]);
-		groupGlue.set_id("cube glue");
+		groupGlue.set_id("group_cube_glue");
 		groupGlue.set_fill(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.GRAY));
 		groupGlue.set_stroke(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.BLACK));
 		var group = sketch.makeGroup([sq0,sq1,sq2,sq3,sq4,sq5]);
-		group.set_id("cube shape");
+		group.set_id("group_cube_shape");
 		group.set_fill(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.WHITE));
 		group.set_stroke(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.BLACK));
 		sketch.update();
-		this.addDownloadElements(elem);
+		this.addDownloadWrapper(elem);
 	}
-	,addDownloadElements: function(elem) {
+	,paperTab: function(p1,p2) {
+		var offset = Math.round(cc_model_constants_Paper.mm2pixel(7));
+		var sideArr = [Math.round(p1.x),Math.round(p1.y),Math.round(p1.x) + offset,Math.round(p1.y) + offset,Math.round(p2.x) - offset,Math.round(p2.y) + offset,Math.round(p2.x),Math.round(p2.y),Math.round(p2.x) - offset,Math.round(p2.y) - offset,Math.round(p1.x) + offset,Math.round(p1.y) - offset,Math.round(p1.x),Math.round(p1.y)];
+		return sideArr;
+	}
+	,addDownloadWrapper: function(elem) {
 		var el = window.document.createElement("div");
 		el.id = "wrapper_download";
 		el.className = "btn-group";
@@ -188,13 +193,11 @@ Main.prototype = {
 		anchor.setAttribute("download-id","" + id);
 		anchor.className = "btn btn-dark btn-sm";
 		anchor.href = "#" + id;
-		anchor.onclick = $bind(this,this.testHandler);
+		anchor.onclick = $bind(this,this.onButtonClickHandler);
 		anchor.innerHTML = "" + id + " ";
 		return anchor;
 	}
-	,testHandler: function(e) {
-		haxe_Log.trace(" testhandler" + Std.string(e) + " ",{ fileName : "Main.hx", lineNumber : 164, className : "Main", methodName : "testHandler"});
-		haxe_Log.trace((js_Boot.__cast(e.currentTarget , HTMLAnchorElement)).getAttribute("download-id"),{ fileName : "Main.hx", lineNumber : 165, className : "Main", methodName : "testHandler"});
+	,onButtonClickHandler: function(e) {
 		var attr = (js_Boot.__cast(e.currentTarget , HTMLAnchorElement)).getAttribute("download-id");
 		var wrapperDiv = (js_Boot.__cast(e.currentTarget , HTMLAnchorElement)).parentElement.parentElement;
 		var svg = wrapperDiv.getElementsByTagName("svg")[0];
@@ -210,7 +213,7 @@ Main.prototype = {
 			Main.downloadTextFile(svg.outerHTML,"" + filename + ".svg");
 			break;
 		default:
-			haxe_Log.trace("case '" + attr + "': trace ('" + attr + "');",{ fileName : "Main.hx", lineNumber : 178, className : "Main", methodName : "testHandler"});
+			haxe_Log.trace("case '" + attr + "': trace ('" + attr + "');",{ fileName : "Main.hx", lineNumber : 187, className : "Main", methodName : "onButtonClickHandler"});
 		}
 	}
 	,svg2Canvas: function(svg,isJpg,filename) {
@@ -233,11 +236,6 @@ Main.prototype = {
 			cc_tool_ExportFile.downloadImageBg(ctx,isJpg,filename);
 		};
 		image.src = "data:image/svg+xml," + svg.outerHTML;
-	}
-	,paperTab: function(p1,p2) {
-		var offset = Math.round(cc_model_constants_Paper.mm2pixel(7));
-		var sideArr = [Math.round(p1.x),Math.round(p1.y),Math.round(p1.x) + offset,Math.round(p1.y) + offset,Math.round(p2.x) - offset,Math.round(p2.y) + offset,Math.round(p2.x),Math.round(p2.y),Math.round(p2.x) - offset,Math.round(p2.y) - offset,Math.round(p1.x) + offset,Math.round(p1.y) - offset,Math.round(p1.x),Math.round(p1.y)];
-		return sideArr;
 	}
 	,sketchPapertoysC: function() {
 		var elem = window.document.getElementById(" sketcher - canvas - papertoys ");
@@ -327,15 +325,15 @@ Main.prototype = {
 		var svgElement = window.document.getElementById("animationObject");
 	}
 	,onStartHandler: function(arr) {
-		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 309, className : "Main", methodName : "onStartHandler", customParams : [arr]});
+		haxe_Log.trace("onStartHandler: " + Std.string(arr.length),{ fileName : "Main.hx", lineNumber : 310, className : "Main", methodName : "onStartHandler", customParams : [arr]});
 		var arrr = arr;
-		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 311, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
+		haxe_Log.trace("onStartHandler: " + arrr.length,{ fileName : "Main.hx", lineNumber : 312, className : "Main", methodName : "onStartHandler", customParams : [arrr]});
 	}
 	,onUpdateHandler: function(arr) {
-		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 316, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
+		haxe_Log.trace("onUpdateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 317, className : "Main", methodName : "onUpdateHandler", customParams : [arr]});
 	}
 	,onAnimateHandler: function(arr) {
-		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 324, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
+		haxe_Log.trace("onAnimateHandler: " + arr.length,{ fileName : "Main.hx", lineNumber : 325, className : "Main", methodName : "onAnimateHandler", customParams : [arr]});
 	}
 	,sketchAnimationC: function() {
 	}
@@ -1062,11 +1060,8 @@ Sketcher.prototype = {
 				if(base == null) {
 					continue;
 				}
-				if(base.type == "Group") {
-					(js_Boot.__cast(base , draw_Group)).test();
-				}
-				var draw1 = base.svg(this.settings);
-				paper += draw1;
+				var draw = base.svg(this.settings);
+				paper += draw;
 			}
 			paper += "</svg>";
 			this.element.innerHTML = paper;
@@ -2775,6 +2770,8 @@ cc_util_MathUtil.clamp = function(value,min,max) {
 };
 var draw_Base = function() {
 	this.transArr = [];
+	draw_Base.COUNT++;
+	this.set_id(this.get_id());
 };
 draw_Base.__name__ = ["draw","Base"];
 draw_Base.prototype = {
@@ -2808,7 +2805,7 @@ draw_Base.prototype = {
 		return str;
 	}
 	,clone: function() {
-		haxe_Log.trace("WIP",{ fileName : "Base.hx", lineNumber : 60, className : "draw.Base", methodName : "clone"});
+		haxe_Log.trace("WIP",{ fileName : "Base.hx", lineNumber : 65, className : "draw.Base", methodName : "clone"});
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
 	}
 	,get_id: function() {
@@ -2913,10 +2910,10 @@ draw_IBase.prototype = {
 };
 var draw_Circle = function(x,y,radius) {
 	this.type = "circle";
-	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_radius(radius);
+	draw_Base.call(this);
 };
 draw_Circle.__name__ = ["draw","Circle"];
 draw_Circle.__interfaces__ = [draw_IBase];
@@ -2954,11 +2951,11 @@ draw_Circle.prototype = $extend(draw_Base.prototype,{
 });
 var draw_Ellipse = function(x,y,rx,ry) {
 	this.type = "Ellipse";
-	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_rx(rx);
 	this.set_ry(ry);
+	draw_Base.call(this);
 };
 draw_Ellipse.__name__ = ["draw","Ellipse"];
 draw_Ellipse.__interfaces__ = [draw_IBase];
@@ -2996,9 +2993,9 @@ draw_Ellipse.prototype = $extend(draw_Base.prototype,{
 });
 var draw_Group = function(arr) {
 	this.type = "Group";
-	draw_Base.call(this);
 	this.set_arr(arr);
 	this.xml = Xml.createElement("g");
+	draw_Base.call(this);
 };
 draw_Group.__name__ = ["draw","Group"];
 draw_Group.__interfaces__ = [draw_IBase];
@@ -3008,7 +3005,7 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 		if(this.getTransform() != "") {
 			this.xml.set("transform",this.getTransform());
 		}
-		var comment = Xml.createComment("Group");
+		var comment = Xml.createComment("Group: " + this.get_id());
 		this.xml.addChild(comment);
 		var _g1 = 0;
 		var _g = this.get_arr().length;
@@ -3025,7 +3022,7 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 		ctx.stroke();
 	}
 	,test: function() {
-		haxe_Log.trace("test if casting works",{ fileName : "Group.hx", lineNumber : 44, className : "draw.Group", methodName : "test"});
+		haxe_Log.trace("test if casting works",{ fileName : "Group.hx", lineNumber : 45, className : "draw.Group", methodName : "test"});
 	}
 	,get_scale: function() {
 		return this.scale;
@@ -3051,11 +3048,11 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 var draw_Line = function(x,y,x2,y2) {
 	this.type = "Line";
 	this.lineCap = "butt";
-	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_x2(x2);
 	this.set_y2(y2);
+	draw_Base.call(this);
 };
 draw_Line.__name__ = ["draw","Line"];
 draw_Line.__interfaces__ = [draw_IBase];
@@ -3110,9 +3107,9 @@ draw_Line.prototype = $extend(draw_Base.prototype,{
 });
 var draw_Polygon = function(arr) {
 	this.type = "Polygon";
-	draw_Base.call(this);
 	this.set_arr(arr);
 	this.xml = Xml.createElement("polygon");
+	draw_Base.call(this);
 };
 draw_Polygon.__name__ = ["draw","Polygon"];
 draw_Polygon.__interfaces__ = [draw_IBase];
@@ -3149,7 +3146,6 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 });
 var draw_Rectangle = function(x,y,width,height) {
 	this.type = "rectangle";
-	draw_Base.call(this);
 	this.set_x(x);
 	this.set_y(y);
 	this.set_width(width);
@@ -3157,6 +3153,7 @@ var draw_Rectangle = function(x,y,width,height) {
 	this.xpos = this.get_x() - this.get_width() / 2;
 	this.ypos = this.get_y() - this.get_height() / 2;
 	this.xml = Xml.createElement("rect");
+	draw_Base.call(this);
 };
 draw_Rectangle.__name__ = ["draw","Rectangle"];
 draw_Rectangle.__interfaces__ = [draw_IBase];
@@ -3214,9 +3211,9 @@ draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		}
 		var color = { r : _r, g : _g, b : _b, a : _a};
 		ctx.fillStyle = cc_util_ColorUtil.getColourObj(color,this.get_opacity());
-		haxe_Log.trace(cc_util_ColorUtil.getColourObj(color,this.get_opacity()),{ fileName : "Rectangle.hx", lineNumber : 52, className : "draw.Rectangle", methodName : "ctx"});
-		haxe_Log.trace(color,{ fileName : "Rectangle.hx", lineNumber : 53, className : "draw.Rectangle", methodName : "ctx"});
-		haxe_Log.trace(this.get_fill(),{ fileName : "Rectangle.hx", lineNumber : 54, className : "draw.Rectangle", methodName : "ctx"});
+		haxe_Log.trace(cc_util_ColorUtil.getColourObj(color,this.get_opacity()),{ fileName : "Rectangle.hx", lineNumber : 54, className : "draw.Rectangle", methodName : "ctx"});
+		haxe_Log.trace(color,{ fileName : "Rectangle.hx", lineNumber : 55, className : "draw.Rectangle", methodName : "ctx"});
+		haxe_Log.trace(this.get_fill(),{ fileName : "Rectangle.hx", lineNumber : 56, className : "draw.Rectangle", methodName : "ctx"});
 		ctx.beginPath();
 		if(this.get_radius() == null) {
 			ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
@@ -3270,10 +3267,10 @@ draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 });
 var draw_Text = function(str,x,y) {
 	this.type = "Text";
-	draw_Base.call(this);
 	this.set_str(str);
 	this.set_x(x);
 	this.set_y(y);
+	draw_Base.call(this);
 };
 draw_Text.__name__ = ["draw","Text"];
 draw_Text.__interfaces__ = [draw_IBase];
@@ -3296,7 +3293,7 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(xml);
 	}
 	,ctx: function(ctx) {
-		haxe_Log.trace("needs work!",{ fileName : "Text.hx", lineNumber : 59, className : "draw.Text", methodName : "ctx"});
+		haxe_Log.trace("needs work!",{ fileName : "Text.hx", lineNumber : 60, className : "draw.Text", methodName : "ctx"});
 	}
 	,get_str: function() {
 		return this.str;
