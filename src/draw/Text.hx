@@ -20,6 +20,7 @@ class Text extends Base implements IBase {
 		this.str = str;
 		this.x = x;
 		this.y = y;
+		super();
 	}
 
 	public function svg(settings:Settings):String {

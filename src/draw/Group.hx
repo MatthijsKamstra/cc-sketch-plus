@@ -14,13 +14,14 @@ class Group extends Base implements IBase {
 	public function new(arr:Array<IBase>) {
 		this.arr = arr;
 		xml = Xml.createElement('g');
+		super();
 	}
 
 	public function svg(settings:Settings):String {
 		if (this.getTransform() != '') {
 			xml.set('transform', this.getTransform());
 		}
-		var comment = Xml.createComment('Group');
+		var comment = Xml.createComment('Group: ${id}');
 		xml.addChild(comment); // not sure why?
 		for (i in 0...this.arr.length) {
 			// untyped xml.appendChild(this.arr[i].svg);

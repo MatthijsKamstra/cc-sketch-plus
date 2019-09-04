@@ -24,6 +24,11 @@ class Base {
 
 	var transArr:Array<String> = [];
 
+	public function new() {
+		COUNT++;
+		id = get_id();
+	}
+
 	// ____________________________________ functions ____________________________________
 	// public function noStroke() {
 	// 	this.linewidth = 0;

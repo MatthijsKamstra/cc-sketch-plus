@@ -11,6 +11,7 @@ class Ellipse extends Base implements IBase {
 		this.y = y;
 		this.rx = rx;
 		this.ry = ry;
+		super();
 	}
 
 	public function svg(settings:Settings):String {

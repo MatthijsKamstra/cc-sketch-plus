@@ -9,6 +9,7 @@ class Circle extends Base implements IBase {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
+		super();
 	}
 
 	public function noStroke() {

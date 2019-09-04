@@ -21,6 +21,8 @@ class Rectangle extends Base implements IBase {
 		this.xpos = this.x - (this.width / 2);
 		this.ypos = this.y - (this.height / 2);
 		xml = Xml.createElement('rect');
+
+		super();
 	}
 
 	public function noStroke() {

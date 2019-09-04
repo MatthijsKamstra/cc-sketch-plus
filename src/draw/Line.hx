@@ -16,6 +16,7 @@ class Line extends Base implements IBase {
 		this.y = y;
 		this.x2 = x2;
 		this.y2 = y2;
+		super();
 	}
 
 	public function svg(settings:Settings):String {
