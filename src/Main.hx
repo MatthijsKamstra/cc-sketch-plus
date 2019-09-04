@@ -116,7 +116,7 @@ class Main {
 		// polyClone.setRotate(-90);
 
 		var groupGlue = sketch.makeGroup([polyl0, polyl1, polyl2, poly0, poly1, poly2, polybottom]);
-		groupGlue.id = 'cube glue';
+		groupGlue.id = 'group_cube_glue';
 		groupGlue.fill = getColourObj(GRAY);
 		groupGlue.stroke = getColourObj(BLACK);
 		// groupGlue.fill = getColourObj(PINK);
@@ -125,7 +125,7 @@ class Main {
 
 		//
 		var group = sketch.makeGroup([sq0, sq1, sq2, sq3, sq4, sq5]);
-		group.id = 'cube shape';
+		group.id = 'group_cube_shape';
 		group.fill = getColourObj(WHITE);
 		group.stroke = getColourObj(BLACK);
 		// group.opacity = 0.1;
@@ -135,10 +135,20 @@ class Main {
 
 		// setElementClickDownload(elem);
 
-		addDownloadElements(elem);
+		addDownloadWrapper(elem);
 	}
 
-	function addDownloadElements(elem:js.html.Element) {
+	function paperTab(p1:cc.Point, p2:cc.Point):Array<Int> {
+		var offset = Math.round(cc.model.constants.Paper.mm2pixel(7));
+		var sideArr:Array<Int> = [
+			Math.round(p1.x), Math.round(p1.y), Math.round(p1.x) + offset, Math.round(p1.y) + offset, Math.round(p2.x) - offset, Math.round(p2.y) + offset,
+			Math.round(p2.x), Math.round(p2.y), Math.round(p2.x) - offset, Math.round(p2.y) - offset, Math.round(p1.x) + offset, Math.round(p1.y) - offset,
+			Math.round(p1.x), Math.round(p1.y),
+		];
+		return sideArr;
+	}
+
+	function addDownloadWrapper(elem:js.html.Element) {
 		var el = document.createDivElement();
 		el.id = "wrapper_download";
 		el.className = 'btn-group';
@@ -155,14 +165,13 @@ class Main {
 		anchor.setAttribute('download-id', '${id}');
 		anchor.className = 'btn btn-dark btn-sm';
 		anchor.href = '#${id}';
-		anchor.onclick = testHandler;
+		anchor.onclick = onButtonClickHandler;
 		anchor.innerHTML = '${id} ';
 		return anchor;
 	}
 
-	function testHandler(e:js.html.MouseEvent) {
-		trace(' testhandler${e} ');
-		trace(cast(e.currentTarget, js.html.AnchorElement).getAttribute('download-id'));
+	function onButtonClickHandler(e:js.html.MouseEvent) {
+		// trace(cast(e.currentTarget, js.html.AnchorElement).getAttribute('download-id'));
 		var attr = cast(e.currentTarget, js.html.AnchorElement).getAttribute('download-id');
 		var wrapperDiv = (cast(e.currentTarget, js.html.AnchorElement).parentElement.parentElement);
 		var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
@@ -190,6 +199,8 @@ class Main {
 
 		var image = new js.html.Image();
 		image.onload = function() {
+			// downloadImageBg doesn't work... so just fix it here
+			// jpg image has a white background, png can be transparant
 			if (isJpg) {
 				ctx.fillStyle = "white";
 				ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -199,16 +210,6 @@ class Main {
 		}
 		image.src = 'data:image/svg+xml,${svg.outerHTML}';
 		// document.body.appendChild(canvas);
-	}
-
-	function paperTab(p1:cc.Point, p2:cc.Point):Array<Int> {
-		var offset = Math.round(cc.model.constants.Paper.mm2pixel(7));
-		var sideArr:Array<Int> = [
-			Math.round(p1.x), Math.round(p1.y), Math.round(p1.x) + offset, Math.round(p1.y) + offset, Math.round(p2.x) - offset, Math.round(p2.y) + offset,
-			Math.round(p2.x), Math.round(p2.y), Math.round(p2.x) - offset, Math.round(p2.y) - offset, Math.round(p1.x) + offset, Math.round(p1.y) - offset,
-			Math.round(p1.x), Math.round(p1.y),
-		];
-		return sideArr;
 	}
 
 	function sketchPapertoysC() {
