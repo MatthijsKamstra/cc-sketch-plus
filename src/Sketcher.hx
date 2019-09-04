@@ -165,10 +165,10 @@ class Sketcher {
 				if (base == null)
 					continue; // groups do this
 
-				if (base.type == 'Group') {
-					// trace('ggggg');
-					cast(base, draw.Group).test();
-				}
+				// if (base.type == 'Group') {
+				// 	// trace('ggggg');
+				// 	cast(base, draw.Group).test();
+				// }
 				var draw = base.svg(settings);
 				// trace(base.toString());
 				// trace(draw);
