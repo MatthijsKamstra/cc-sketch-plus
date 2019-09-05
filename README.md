@@ -22,3 +22,26 @@ I have gotten some inspiration for this project from
 example can be found <https://matthijskamstra.github.io/cc-sketch-plus/>
 
 ![](img/screenshot.png)
+
+
+## Haxelib
+
+How to install cc-sketch-plus
+
+Use this git repos as a development directory:
+
+```
+haxelib dev cc-sketch-plus path/to/folder
+```
+
+or use this git-repository directly
+
+```
+haxelib git cc-sketch-plus https://github.com/MatthijsKamstra/cc-sketch-plus.git
+```
+
+don't forget to add it to your build file
+
+```
+-lib cc-sketch-plus
+```
