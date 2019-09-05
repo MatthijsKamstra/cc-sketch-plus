@@ -1,5 +1,7 @@
 package draw;
 
+import js.Browser.*;
+
 using StringTools;
 
 class Text extends Base implements IBase {
@@ -41,8 +43,13 @@ class Text extends Base implements IBase {
 			// make sure the styling class is unique...
 			var className = this.str.replace(' ', '').replace('\n', '').toLowerCase();
 			xml.set('class', 'fontstyle_${className}');
-			var style = '<style>.fontstyle_${className} {${this.style}}</style>';
-			xml.addChild(Xml.parse(style));
+			// var style = '<style type="text/css">.fontstyle_${className} {${this.style}}</style>';
+			// xml.addChild(Xml.parse(style));
+
+			// [mck] this doesn't break the svg export to jpg or png, but it doesn't show it in the canvas when rendering
+			var style = document.createElement('style');
+			style.innerHTML = '.fontstyle_${className} {${this.style}}';
+			document.body.appendChild(style);
 		}
 		// xml.set('dx', Std.string(this.y));
 		// xml.set('dy', Std.string(this.y));
