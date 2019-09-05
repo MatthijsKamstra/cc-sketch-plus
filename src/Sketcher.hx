@@ -160,7 +160,7 @@ class Sketcher {
 		trace('type:${settings.type}, id:${element.id}');
 		if (settings.type == 'svg') {
 			// [mck] TODO change string into XML!!!
-			var paper = '<?xml version="1.0" standalone="no"?><svg width="${settings.width}" height="${settings.height}" viewBox="0 0 ${settings.width} ${settings.height}" version="1.1" xmlns="http://www.w3.org/2000/svg">';
+			var paper = '<?xml version="1.0" standalone="no"?><svg width="${settings.width}" height="${settings.height}" viewBox="0 0 ${settings.width} ${settings.height}" version="1.1" id="sketcher" xmlns="http://www.w3.org/2000/svg">';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
 				if (base == null)
