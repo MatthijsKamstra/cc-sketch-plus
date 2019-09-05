@@ -2,12 +2,18 @@
  * https://two.js.org/#documentation
  */
 class Settings {
-	@:isVar public var width(get, set):Int;
 	@:isVar public var type(get, set):String = 'svg';
+	@:isVar public var width(get, set):Int;
 	@:isVar public var height(get, set):Int;
 
 	@:isVar public var padding(get, set):Int;
+	@:isVar public var margin(get, set):Int;
+
 	@:isVar public var scale(get, set):Bool;
+	@:isVar public var autostart(get, set):Bool;
+
+	@:isVar public var element(get, set):js.html.Element;
+	@:isVar public var elementID(get, set):String;
 
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
@@ -54,5 +60,37 @@ class Settings {
 
 	function set_scale(value:Bool):Bool {
 		return scale = value;
+	}
+
+	function get_element():js.html.Element {
+		return element;
+	}
+
+	function set_element(value:js.html.Element):js.html.Element {
+		return element = value;
+	}
+
+	function get_margin():Int {
+		return margin;
+	}
+
+	function set_margin(value:Int):Int {
+		return margin = value;
+	}
+
+	function get_autostart():Bool {
+		return autostart;
+	}
+
+	function set_autostart(value:Bool):Bool {
+		return autostart = value;
+	}
+
+	function get_elementID():String {
+		return elementID;
+	}
+
+	function set_elementID(value:String):String {
+		return elementID = value;
 	}
 }
