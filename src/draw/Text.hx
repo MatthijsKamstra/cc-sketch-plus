@@ -4,6 +4,10 @@ using StringTools;
 
 class Text extends Base implements IBase {
 	@:isVar public var str(get, set):String;
+
+	/**
+	 * test style
+	 */
 	@:isVar public var style(get, set):String;
 
 	public var type = 'Text'; // base (get class name?)
@@ -72,6 +76,10 @@ class Text extends Base implements IBase {
 		return str = value;
 	}
 
+	/**
+	 * test
+	 * @return String
+	 */
 	function get_style():String {
 		return style;
 	}
