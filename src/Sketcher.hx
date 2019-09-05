@@ -97,9 +97,8 @@ class Sketcher {
 	}
 
 	/**
-	 * wip!!!!
-	 * @param one
-	 * @param two
+	 * [Description]
+	 * @param array
 	 * @return Group
 	 */
 	public function makeGroup(array:Array<IBase>):Group {
@@ -146,6 +145,8 @@ class Sketcher {
 
 		return lineX;
 	}
+
+	public function clear() {}
 
 	// ____________________________________ update ____________________________________
 

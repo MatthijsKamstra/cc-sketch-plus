@@ -9,8 +9,7 @@ class Polygon extends Base implements IBase {
 
 	public function new(arr:Array<Int>) {
 		this.arr = arr;
-		xml = Xml.createElement('polygon');
-		super();
+		super('polygon');
 	}
 
 	/**

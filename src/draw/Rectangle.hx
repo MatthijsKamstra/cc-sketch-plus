@@ -20,9 +20,7 @@ class Rectangle extends Base implements IBase {
 		this.height = height;
 		this.xpos = this.x - (this.width / 2);
 		this.ypos = this.y - (this.height / 2);
-		xml = Xml.createElement('rect');
-
-		super();
+		super('rect');
 	}
 
 	public function noStroke() {

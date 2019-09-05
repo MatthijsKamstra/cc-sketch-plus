@@ -32,7 +32,7 @@ class SketcherBase {
 			div0.id = 'sketcher-svg';
 			div0.className = 'svg-wrapper';
 			document.body.appendChild(div0);
-			// 		var elem = document.getElementById('sketcher-svg');
+			// var elem = document.getElementById('sketcher-svg');
 
 			sketch = Sketcher.create(settings).appendTo(div0);
 		}

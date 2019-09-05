@@ -9,7 +9,7 @@ class Circle extends Base implements IBase {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		super();
+		super('circle');
 	}
 
 	public function noStroke() {
@@ -18,12 +18,13 @@ class Circle extends Base implements IBase {
 	}
 
 	public function svg(settings:Settings):String {
-		var xml = Xml.createElement('circle');
+		// var xml = Xml.createElement('circle');
 		xml.set('cx', Std.string(this.x));
 		xml.set('cy', Std.string(this.y));
 		xml.set('r', Std.string(this.radius));
 
-		xml.set('stroke-width', Std.string(this.linewidth));
+		if (this.linewidth != null)
+			xml.set('stroke-width', Std.string(this.linewidth));
 
 		return xml.toString();
 	}
@@ -46,29 +47,4 @@ class Circle extends Base implements IBase {
 	function set_radius(value:Int):Int {
 		return radius = value;
 	}
-
-	// function get_fill():String {
-	// 	return fill;
-	// }
-	// function set_fill(value:String):String {
-	// 	return fill = value;
-	// }
-	// function get_stroke():String {
-	// 	return stroke;
-	// }
-	// function set_stroke(value:String):String {
-	// 	return stroke = value;
-	// }
-	// function get_linewidth():Int {
-	// 	return linewidth;
-	// }
-	// function set_linewidth(value:Int):Int {
-	// 	return linewidth = value;
-	// }
-	// function get_opacity():Float {
-	// 	return opacity;
-	// }
-	// function set_opacity(value:Float):Float {
-	// 	return opacity = value;
-	// }
 }

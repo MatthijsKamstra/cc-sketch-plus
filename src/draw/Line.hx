@@ -16,11 +16,10 @@ class Line extends Base implements IBase {
 		this.y = y;
 		this.x2 = x2;
 		this.y2 = y2;
-		super();
+		super('line');
 	}
 
 	public function svg(settings:Settings):String {
-		var xml = Xml.createElement('line');
 		xml.set('x1', Std.string(this.x));
 		xml.set('y1', Std.string(this.y));
 		xml.set('x2', Std.string(this.x2));

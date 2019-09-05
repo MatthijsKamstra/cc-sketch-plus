@@ -11,11 +11,10 @@ class Ellipse extends Base implements IBase {
 		this.y = y;
 		this.rx = rx;
 		this.ry = ry;
-		super();
+		super('ellipse');
 	}
 
 	public function svg(settings:Settings):String {
-		var xml = Xml.createElement('ellipse');
 		xml.set('cx', Std.string(this.x));
 		xml.set('cy', Std.string(this.y));
 		xml.set('rx', Std.string(this.rx));

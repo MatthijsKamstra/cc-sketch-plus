@@ -13,8 +13,7 @@ class Group extends Base implements IBase {
 	 */
 	public function new(arr:Array<IBase>) {
 		this.arr = arr;
-		xml = Xml.createElement('g');
-		super();
+		super('g');
 	}
 
 	public function svg(settings:Settings):String {

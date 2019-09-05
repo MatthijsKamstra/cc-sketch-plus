@@ -20,7 +20,7 @@ class Text extends Base implements IBase {
 		this.str = str;
 		this.x = x;
 		this.y = y;
-		super();
+		super('text');
 	}
 
 	public function svg(settings:Settings):String {
@@ -28,7 +28,6 @@ class Text extends Base implements IBase {
 		var comment = Xml.createComment('${this.str}');
 		var content = Xml.parse(this.str);
 
-		var xml = Xml.createElement('text');
 		xml.addChild(comment); // strange reason I need to add this comment first otherwise the next line will not work
 		xml.addChild(content);
 		xml.set('x', Std.string(this.x));

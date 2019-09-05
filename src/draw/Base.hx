@@ -24,7 +24,8 @@ class Base {
 
 	var transArr:Array<String> = [];
 
-	public function new() {
+	public function new(name:String) {
+		xml = Xml.createElement(name);
 		COUNT++;
 		id = get_id();
 	}
