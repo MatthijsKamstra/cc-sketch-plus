@@ -77,7 +77,8 @@ class Base {
 	}
 
 	function set_id(value:String):String {
-		xml.set('id', Std.string(value));
+		if (xml != null)
+			xml.set('id', Std.string(value));
 		return id = value;
 	}
 
