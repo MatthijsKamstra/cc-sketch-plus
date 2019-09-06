@@ -26,15 +26,15 @@ class SketcherBase {
 
 		if (settings != null && settings.element != null)
 			trace(settings.element);
-
-		if (settings.elementID != null) {
+		if (settings.elementID != null && document.getElementById(settings.elementID) == null) {
 			var div0 = document.createDivElement();
 			div0.id = 'sketcher-svg';
 			div0.className = 'svg-wrapper';
 			document.body.appendChild(div0);
 			// var elem = document.getElementById('sketcher-svg');
-
 			sketch = Sketcher.create(settings).appendTo(div0);
+		} else {
+			sketch = Sketcher.create(settings).appendTo(document.getElementById(settings.elementID));
 		}
 
 		window.addEventListener(RESIZE, _reset, false);
