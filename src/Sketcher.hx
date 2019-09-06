@@ -146,7 +146,9 @@ class Sketcher {
 		return lineX;
 	}
 
-	public function clear() {}
+	public function clear() {
+		baseArray = [];
+	}
 
 	// ____________________________________ update ____________________________________
 
