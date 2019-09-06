@@ -50,6 +50,9 @@ class Text extends Base implements IBase {
 			var style = document.createElement('style');
 			style.innerHTML = '.fontstyle_${className} {${this.style}}';
 			document.body.appendChild(style);
+
+			// var _svg:js.html.svg.SVGElement = document.getElementsByName('svg')[0];
+			// _svg.insertBefore(_svg.firstChild, style);
 		}
 		// xml.set('dx', Std.string(this.y));
 		// xml.set('dy', Std.string(this.y));
