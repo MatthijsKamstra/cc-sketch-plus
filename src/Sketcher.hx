@@ -65,7 +65,15 @@ class Sketcher {
 		return shape;
 	}
 
-	public function makeRectangle(x, y, width, height):Rectangle {
+	/**
+	 * make a rectangle with the x and y  pos as center point
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @return Rectangle
+	 */
+	public function makeRectangle(x:Int, y:Int, width:Int, height:Int):Rectangle {
 		var shape = new Rectangle(x, y, width, height);
 		baseArray.push(shape);
 		return shape;
@@ -136,12 +144,14 @@ class Sketcher {
 
 		var lineX = new Line(cx - r, cy, cx + r, cy);
 		lineX.stroke = color;
-		baseArray.push(lineX);
+		// baseArray.push(lineX);
 		var lineY = new Line(cx, cy - r, cx, cy + r);
 		lineY.stroke = color;
-		baseArray.push(lineY);
+		// baseArray.push(lineY);
 
-		// var group = two.makeGroup(circle, rect);
+		var group = new Group([lineX, lineY]);
+		group.id = 'registration_marker';
+		baseArray.push(group);
 
 		return lineX;
 	}
