@@ -78,8 +78,10 @@ class Base {
 	}
 
 	function set_id(value:String):String {
-		if (xml != null)
+		if (xml != null) {
 			xml.set('id', Std.string(value));
+			xml.set('data-count', Std.string(COUNT));
+		}
 		return id = value;
 	}
 
