@@ -1,7 +1,11 @@
 package draw;
 
+using StringTools;
+
 class Base {
 	public static var COUNT:Int = 0;
+
+	public var count(get_count, null):Int;
 
 	public var xml:Xml;
 
@@ -78,6 +82,8 @@ class Base {
 	}
 
 	function set_id(value:String):String {
+		// for import in Illustrator its easier to have id that contain no spaces
+		value = value.toLowerCase().replace(" ", "_");
 		if (xml != null) {
 			xml.set('id', Std.string(value));
 			xml.set('data-count', Std.string(COUNT));
@@ -166,6 +172,10 @@ class Base {
 		}
 		xml.set('stroke-dasharray', str);
 		return dash = value;
+	}
+
+	function get_count():Int {
+		return COUNT;
 	}
 
 	// ____________________________________ toString ____________________________________
