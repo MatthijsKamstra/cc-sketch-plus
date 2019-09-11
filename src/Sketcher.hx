@@ -104,6 +104,12 @@ class Sketcher {
 		return shape;
 	}
 
+	public function makePolyLine(sides):PolyLine {
+		var shape = new PolyLine(sides);
+		baseArray.push(shape);
+		return shape;
+	}
+
 	/**
 	 * [Description]
 	 * @param array
@@ -132,28 +138,31 @@ class Sketcher {
 	 * sketch.makeX(10,10);
 	 * ```
 	 *
-	 * @param x		position in x dir
-	 * @param y		position in y dir
+	 * @param x		position in x dir (will automaticly be rounded to Int)
+	 * @param y		position in y dir (will automaticly be rounded to Int)
 	 * @param color	(optional) default color is red
-	 * @return Line 	(weird to return one line????)
+	 * @return PolyLine
 	 */
-	public function makeX(x, y, ?color:String = 'red'):Line {
-		var cx = x;
-		var cy = y;
+	public function makeX(x:Float, y:Float, ?color:String = 'red'):PolyLine {
+		var cx = Math.round(x);
+		var cy = Math.round(y);
 		var r = 5;
 
-		var lineX = new Line(cx - r, cy, cx + r, cy);
-		lineX.stroke = color;
-		// baseArray.push(lineX);
-		var lineY = new Line(cx, cy - r, cx, cy + r);
-		lineY.stroke = color;
-		// baseArray.push(lineY);
-
-		var group = new Group([lineX, lineY]);
-		group.id = 'registration_marker';
-		baseArray.push(group);
-
-		return lineX;
+		var polyline = new PolyLine([
+			    cx,     cy,
+			cx - r,     cy,
+			    cx,     cy,
+			cx + r,     cy,
+			    cx,     cy,
+			    cx, cy - r,
+			    cx,     cy,
+			    cx, cy + r,
+			    cx,     cy,
+		]);
+		polyline.id = 'registration_marker_${polyline.count}';
+		polyline.stroke = color;
+		baseArray.push(polyline);
+		return polyline;
 	}
 
 	public function clear() {
