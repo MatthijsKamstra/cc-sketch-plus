@@ -7,6 +7,13 @@ using StringTools;
 class Text extends Base implements IBase {
 	@:isVar public var str(get, set):String;
 
+	@:isVar public var fontSize(get, set):String;
+	@:isVar public var fontFamily(get, set):String;
+
+	@:isVar public var textAnchor(get, set):String;
+
+	@:isVar public var alignmentBaseline(get, set):String;
+
 	/**
 	 * test style
 	 */
@@ -29,6 +36,17 @@ class Text extends Base implements IBase {
 		super('text');
 	}
 
+	// ____________________________________ func ____________________________________
+	public function align(value:String) {
+		this.textAnchor = value;
+	}
+
+	public function baseline(value:String) {
+		this.alignmentBaseline = value;
+	}
+
+	//  dominant-baseline="middle" text-anchor="middle"
+	// ____________________________________ create ____________________________________
 	public function svg(settings:Settings):String {
 		// var style = '<style>.small {font:italic 13px sans-serif; fill:red;}</style>';
 		var comment = Xml.createComment('${this.str}');
@@ -66,6 +84,10 @@ class Text extends Base implements IBase {
 			</style>
 		 */
 
+		if (this.getTransform() != '') {
+			xml.set('transform', this.getTransform());
+		}
+
 		return xml.toString();
 	}
 
@@ -77,6 +99,43 @@ class Text extends Base implements IBase {
 	}
 
 	// ____________________________________ getter/setter ____________________________________
+
+	function get_fontSize():String {
+		return fontSize;
+	}
+
+	function set_fontSize(value:String):String {
+		xml.set('font-size', value);
+		return fontSize = value;
+	}
+
+	function get_fontFamily():String {
+		return fontFamily;
+	}
+
+	function set_fontFamily(value:String):String {
+		xml.set('font-family', value);
+		return fontFamily = value;
+	}
+
+	function get_textAnchor():String {
+		return textAnchor;
+	}
+
+	function set_textAnchor(value:String):String {
+		xml.set('text-anchor', value);
+		return textAnchor = value;
+	}
+
+	function get_alignmentBaseline():String {
+		return alignmentBaseline;
+	}
+
+	function set_alignmentBaseline(value:String):String {
+		xml.set('alignment-baseline', value);
+		xml.set('dominant-baseline', value);
+		return alignmentBaseline = value;
+	}
 
 	function get_str():String {
 		return str;
