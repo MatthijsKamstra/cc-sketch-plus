@@ -73,13 +73,17 @@ class Sketcher {
 	 * @param height
 	 * @return Rectangle
 	 */
-	public function makeRectangle(x:Int, y:Int, width:Int, height:Int):Rectangle {
+	public function makeRectangle(x:Int, y:Int, width:Int, height:Int, isCenter = true):Rectangle {
 		var shape = new Rectangle(x, y, width, height);
 		baseArray.push(shape);
 		return shape;
 	}
 
-	public function makeRoundedRectangle(x, y, width, height, radius):Rectangle {
+	public function makeRoundedRectangle(x, y, width, height, radius, isCenter = true):Rectangle {
+		if (!isCenter) {
+			x = Math.round(width / 2);
+			y = Math.round(height / 2);
+		}
 		var shape = new Rectangle(x, y, width, height);
 		shape.radius = radius;
 		baseArray.push(shape);
@@ -160,6 +164,7 @@ class Sketcher {
 			    cx,     cy,
 		]);
 		polyline.id = 'registration_marker_${polyline.count}';
+		polyline.desc = 'Registration Marker\nx: ${cx}, y: ${cy}';
 		polyline.stroke = color;
 		baseArray.push(polyline);
 		return polyline;
