@@ -10,8 +10,11 @@ class PolyLine extends Base implements IBase {
 		super('polyline');
 	}
 
-
 	public function svg(settings:Settings):String {
+		if (desc != '') {
+			xml.addChild(Xml.createComment('desc')); // still weird I need to do this
+			xml.addChild(Xml.parse('<desc>${desc}</desc>'));
+		}
 		var str = '';
 		for (i in 0...this.arr.length) {
 			var value = this.arr[i];
@@ -41,5 +44,4 @@ class PolyLine extends Base implements IBase {
 	function set_arr(value:Array<Int>):Array<Int> {
 		return arr = value;
 	}
-
 }

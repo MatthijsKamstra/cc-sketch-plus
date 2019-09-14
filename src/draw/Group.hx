@@ -22,6 +22,7 @@ class Group extends Base implements IBase {
 		}
 		var comment = Xml.createComment('Group: ${id}');
 		xml.addChild(comment); // not sure why?
+		xml.addChild(Xml.parse('<desc>${id}</desc>'));
 		for (i in 0...this.arr.length) {
 			// untyped xml.appendChild(this.arr[i].svg);
 			// xml.addChild(Xml.createComment(this.arr[i].type));

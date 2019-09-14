@@ -5,7 +5,6 @@ class Polygon extends Base implements IBase {
 
 	@:isVar public var arr(get, set):Array<Int>; // collection of points
 
-
 	public function new(arr:Array<Int>) {
 		this.arr = arr;
 		super('polygon');
@@ -32,7 +31,6 @@ class Polygon extends Base implements IBase {
 		ctx.stroke();
 	}
 
-
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_arr():Array<Int> {
@@ -42,5 +40,4 @@ class Polygon extends Base implements IBase {
 	function set_arr(value:Array<Int>):Array<Int> {
 		return arr = value;
 	}
-
 }
