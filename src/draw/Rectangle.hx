@@ -38,6 +38,11 @@ class Rectangle extends Base implements IBase {
 			xml.set('rx', Std.string(this.radius));
 			xml.set('ry', Std.string(this.radius));
 		}
+
+		if (this.getTransform() != '') {
+			xml.set('transform', this.getTransform());
+		}
+
 		return xml.toString();
 	}
 
