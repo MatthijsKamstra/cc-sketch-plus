@@ -26,6 +26,8 @@ class Base {
 
 	@:isVar public var dash(get, set):Array<Int>;
 
+	@:isVar public var desc(get, set):String;
+
 	var transArr:Array<String> = [];
 
 	public function new(name:String) {
@@ -172,6 +174,14 @@ class Base {
 		}
 		xml.set('stroke-dasharray', str);
 		return dash = value;
+	}
+
+	function get_desc():String {
+		return desc;
+	}
+
+	function set_desc(value:String):String {
+		return desc = value;
 	}
 
 	function get_count():Int {
