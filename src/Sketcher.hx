@@ -73,7 +73,13 @@ class Sketcher {
 	 * @param height
 	 * @return Rectangle
 	 */
-	public function makeRectangle(x:Int, y:Int, width:Int, height:Int, isCenter = true):Rectangle {
+	public function makeRectangle(x:Float, y:Float, width:Float, height:Float, isCenter = true):Rectangle {
+		var shape = new Rectangle(x, y, width, height);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	public function makeRectangleInt(x:Int, y:Int, width:Int, height:Int, isCenter = true):Rectangle {
 		var shape = new Rectangle(x, y, width, height);
 		baseArray.push(shape);
 		return shape;
@@ -102,11 +108,17 @@ class Sketcher {
 		return shape;
 	}
 
-	public function makePolygon(sides):Polygon {
+	public function makePolygon(sides:Array<Float>):Polygon {
 		var shape = new Polygon(sides);
 		baseArray.push(shape);
 		return shape;
 	}
+
+	// public function makePolygonInt(sides:Array<Int>):Polygon {
+	// 	var shape = new Polygon(sides);
+	// 	baseArray.push(shape);
+	// 	return shape;
+	// }
 
 	public function makePolyLine(sides):PolyLine {
 		var shape = new PolyLine(sides);

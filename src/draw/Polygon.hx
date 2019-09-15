@@ -3,9 +3,9 @@ package draw;
 class Polygon extends Base implements IBase {
 	public var type = 'Polygon'; // base (get class name?)
 
-	@:isVar public var arr(get, set):Array<Int>; // collection of points
+	@:isVar public var arr(get, set):Array<Float>; // collection of points
 
-	public function new(arr:Array<Int>) {
+	public function new(arr:Array<Float>) {
 		this.arr = arr;
 		super('polygon');
 	}
@@ -33,11 +33,11 @@ class Polygon extends Base implements IBase {
 
 	// ____________________________________ getter/setter ____________________________________
 
-	function get_arr():Array<Int> {
+	function get_arr():Array<Float> {
 		return arr;
 	}
 
-	function set_arr(value:Array<Int>):Array<Int> {
+	function set_arr(value:Array<Float>):Array<Float> {
 		return arr = value;
 	}
 }

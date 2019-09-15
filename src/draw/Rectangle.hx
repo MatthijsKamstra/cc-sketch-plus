@@ -3,8 +3,8 @@ package draw;
 import cc.util.ColorUtil;
 
 class Rectangle extends Base implements IBase {
-	@:isVar public var width(get, set):Int;
-	@:isVar public var height(get, set):Int;
+	@:isVar public var width(get, set):Float;
+	@:isVar public var height(get, set):Float;
 
 	@:isVar public var radius(get, set):Int;
 
@@ -13,7 +13,7 @@ class Rectangle extends Base implements IBase {
 	var xpos:Float;
 	var ypos:Float;
 
-	public function new(x, y, width, height) {
+	public function new(x:Float, y:Float, width:Float, height:Float) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -103,19 +103,19 @@ class Rectangle extends Base implements IBase {
 		return radius = value;
 	}
 
-	function get_width():Int {
+	function get_width():Float {
 		return width;
 	}
 
-	function set_width(value:Int):Int {
+	function set_width(value:Float):Float {
 		return width = value;
 	}
 
-	function get_height():Int {
+	function get_height():Float {
 		return height;
 	}
 
-	function set_height(value:Int):Int {
+	function set_height(value:Float):Float {
 		return height = value;
 	}
 }

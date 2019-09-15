@@ -11,8 +11,8 @@ class Base {
 
 	@:isVar public var id(get, set):String;
 	// position
-	@:isVar public var y(get, set):Int;
-	@:isVar public var x(get, set):Int;
+	@:isVar public var y(get, set):Float;
+	@:isVar public var x(get, set):Float;
 	// colors
 	@:isVar public var fill(get, set):String; // = '#909090';
 	@:isVar public var stroke(get, set):String; // = '#000000';
@@ -20,7 +20,7 @@ class Base {
 	@:isVar public var linewidth(get, set):Int; // = 1;
 	@:isVar public var opacity(get, set):Float; // = 1;
 	// transform
-	@:isVar public var rotate(get, set):Int;
+	@:isVar public var rotate(get, set):Float;
 
 	@:isVar public var transform(get, set):String;
 
@@ -50,7 +50,7 @@ class Base {
 		transArr.push(str);
 	}
 
-	public function setRotate(degree:Int, ?x:Float, ?y:Float) {
+	public function setRotate(degree:Float, ?x:Float, ?y:Float) {
 		var str = 'rotate(${degree}';
 		if (x != null)
 			str += ',${x}';
@@ -131,27 +131,27 @@ class Base {
 		return opacity = v;
 	}
 
-	function get_y():Int {
+	function get_y():Float {
 		return y;
 	}
 
-	function set_y(value:Int):Int {
+	function set_y(value:Float):Float {
 		return y = value;
 	}
 
-	function get_x():Int {
+	function get_x():Float {
 		return x;
 	}
 
-	function set_x(value:Int):Int {
+	function set_x(value:Float):Float {
 		return x = value;
 	}
 
-	function get_rotate():Int {
+	function get_rotate():Float {
 		return rotate;
 	}
 
-	function set_rotate(value:Int):Int {
+	function set_rotate(value:Float):Float {
 		return rotate = value;
 	}
 
