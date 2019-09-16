@@ -2,6 +2,7 @@ package;
 
 import js.Browser.*;
 import draw.*;
+import cc.AST.Point;
 
 class Sketcher {
 	var settings:Settings;
@@ -110,6 +111,22 @@ class Sketcher {
 
 	public function makePolygon(sides:Array<Float>):Polygon {
 		var shape = new Polygon(sides);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
+	 * create polygon with points ( {x:22, y:33} )
+	 * @param sides
+	 * @return Polygon
+	 */
+	public function makePolygonPoint(sides:Array<Point>):Polygon {
+		var _sides:Array<Float> = [];
+		for (i in sides) {
+			_sides.push(i.x);
+			_sides.push(i.y);
+		}
+		var shape = new Polygon(_sides);
 		baseArray.push(shape);
 		return shape;
 	}
