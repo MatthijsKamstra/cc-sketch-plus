@@ -3,9 +3,6 @@ package draw;
 class Group extends Base implements IBase {
 	public var type = 'Group'; // base (get class name?)
 
-	@:isVar public var scale(get, set):Float;
-	@:isVar public var rotation(get, set):Float;
-
 	@:isVar public var arr(get, set):Array<IBase>;
 
 	/**
@@ -46,22 +43,6 @@ class Group extends Base implements IBase {
 	}
 
 	// ____________________________________ getter/setter ____________________________________
-
-	function get_scale():Float {
-		return scale;
-	}
-
-	function set_scale(value:Float):Float {
-		return scale = value;
-	}
-
-	function get_rotation():Float {
-		return rotation;
-	}
-
-	function set_rotation(value:Float):Float {
-		return rotation = value;
-	}
 
 	function get_arr():Array<IBase> {
 		return arr;
