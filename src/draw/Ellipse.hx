@@ -1,8 +1,8 @@
 package draw;
 
 class Ellipse extends Base implements IBase {
-	@:isVar public var ry(get, set):Int;
-	@:isVar public var rx(get, set):Int;
+	@:isVar public var ry(get, set):Float;
+	@:isVar public var rx(get, set):Float;
 
 	public var type = 'Ellipse'; // base (get class name?)
 
@@ -19,8 +19,10 @@ class Ellipse extends Base implements IBase {
 		xml.set('cy', Std.string(this.y));
 		xml.set('rx', Std.string(this.rx));
 		xml.set('ry', Std.string(this.ry));
-		xml.set('stroke', Std.string(this.stroke));
-		xml.set('fill', Std.string(this.fill));
+
+		if (this.getTransform() != '') {
+			xml.set('transform', this.getTransform());
+		}
 		return xml.toString();
 	}
 
@@ -32,19 +34,19 @@ class Ellipse extends Base implements IBase {
 
 	// ____________________________________ getter/setter ____________________________________
 
-	function get_ry():Int {
+	function get_ry():Float {
 		return ry;
 	}
 
-	function set_ry(value:Int):Int {
+	function set_ry(value:Float):Float {
 		return ry = value;
 	}
 
-	function get_rx():Int {
+	function get_rx():Float {
 		return rx;
 	}
 
-	function set_rx(value:Int):Int {
+	function set_rx(value:Float):Float {
 		return rx = value;
 	}
 }
