@@ -54,12 +54,26 @@ class Sketcher {
 
 	// ____________________________________ make something ____________________________________
 
+	/**
+	 * [Description]
+	 * @param str
+	 * @param x
+	 * @param y
+	 * @return Text
+	 */
 	public function makeText(str:String, ?x, ?y):Text {
 		var shape = new Text(str, x, y);
 		baseArray.push(shape);
 		return shape;
 	}
 
+	/**
+	 * [Description]
+	 * @param x
+	 * @param y
+	 * @param radius
+	 * @return Circle
+	 */
 	public function makeCircle(x, y, radius):Circle {
 		var shape = new Circle(x, y, radius);
 		baseArray.push(shape);
@@ -80,12 +94,31 @@ class Sketcher {
 		return shape;
 	}
 
+	/**
+	 * [Description]
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param isCenter = true
+	 * @return Rectangle
+	 */
 	public function makeRectangleInt(x:Int, y:Int, width:Int, height:Int, isCenter = true):Rectangle {
 		var shape = new Rectangle(x, y, width, height);
 		baseArray.push(shape);
 		return shape;
 	}
 
+	/**
+	 * [Description]
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param radius
+	 * @param isCenter = true
+	 * @return Rectangle
+	 */
 	public function makeRoundedRectangle(x, y, width, height, radius, isCenter = true):Rectangle {
 		if (!isCenter) {
 			x = Math.round(width / 2);
@@ -97,18 +130,39 @@ class Sketcher {
 		return shape;
 	}
 
+	/**
+	 * [Description]
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return Line
+	 */
 	public function makeLine(x1, y1, x2, y2):Line {
 		var shape = new Line(x1, y1, x2, y2);
 		baseArray.push(shape);
 		return shape;
 	}
 
+	/**
+	 * [Description]
+	 * @param x
+	 * @param y
+	 * @param rx
+	 * @param ry
+	 * @return Ellipse
+	 */
 	public function makeEllipse(x, y, rx, ry):Ellipse {
 		var shape = new Ellipse(x, y, rx, ry);
 		baseArray.push(shape);
 		return shape;
 	}
 
+	/**
+	 * [Description]
+	 * @param sides
+	 * @return Polygon
+	 */
 	public function makePolygon(sides:Array<Float>):Polygon {
 		var shape = new Polygon(sides);
 		baseArray.push(shape);
@@ -137,6 +191,24 @@ class Sketcher {
 	// 	return shape;
 	// }
 
+	/**
+	 * [Description]
+	 * @param x
+	 * @param y
+	 * @param str
+	 * @return Path
+	 */
+	public function makePath(x, y):Path {
+		var shape = new Path(x, y);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
+	 * [Description]
+	 * @param sides
+	 * @return PolyLine
+	 */
 	public function makePolyLine(sides):PolyLine {
 		var shape = new PolyLine(sides);
 		baseArray.push(shape);
