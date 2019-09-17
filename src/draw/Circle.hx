@@ -3,7 +3,7 @@ package draw;
 class Circle extends Base implements IBase {
 	public var type = 'circle'; // base (get class name?)
 
-	@:isVar public var radius(get, set):Int;
+	@:isVar public var radius(get, set):Float;
 
 	public function new(x, y, radius) {
 		this.x = x;
@@ -23,6 +23,10 @@ class Circle extends Base implements IBase {
 		xml.set('cy', Std.string(this.y));
 		xml.set('r', Std.string(this.radius));
 
+		if (this.getTransform() != '') {
+			xml.set('transform', this.getTransform());
+		}
+
 		if (this.linewidth != null)
 			xml.set('stroke-width', Std.string(this.linewidth));
 
@@ -40,11 +44,11 @@ class Circle extends Base implements IBase {
 	}
 
 	// ____________________________________ getter/setter ____________________________________
-	function get_radius():Int {
+	function get_radius():Float {
 		return radius;
 	}
 
-	function set_radius(value:Int):Int {
+	function set_radius(value:Float):Float {
 		return radius = value;
 	}
 }
