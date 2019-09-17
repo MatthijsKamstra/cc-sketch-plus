@@ -28,6 +28,8 @@ class Base {
 
 	@:isVar public var desc(get, set):String;
 
+	@:isVar public var linecap(get, set):String;
+
 	var transArr:Array<String> = [];
 
 	public function new(name:String) {
@@ -54,6 +56,14 @@ class Base {
 		var str = 'rotate(${degree}';
 		if (x != null)
 			str += ',${x}';
+		if (y != null)
+			str += ',${y}';
+		str += ')';
+		transArr.push(str);
+	}
+
+	public function setScale(x:Float, ?y:Float) {
+		var str = 'scale(${x}';
 		if (y != null)
 			str += ',${y}';
 		str += ')';
@@ -182,6 +192,15 @@ class Base {
 
 	function set_desc(value:String):String {
 		return desc = value;
+	}
+
+	function get_linecap():String {
+		return linecap;
+	}
+
+	function set_linecap(value:String):String {
+		xml.set('stroke-linecap', value);
+		return linecap = value;
 	}
 
 	function get_count():Int {
