@@ -1,5 +1,7 @@
 package draw;
 
+import cc.AST.Point;
+
 class Polygon extends Base implements IBase {
 	public var type = 'Polygon'; // base (get class name?)
 
@@ -29,6 +31,17 @@ class Polygon extends Base implements IBase {
 		ctx.beginPath();
 		ctx.fill();
 		ctx.stroke();
+	}
+
+	// ____________________________________ public functions ____________________________________
+
+	public function getPoint(id:Int):Point {
+		// [mck] do check for total nr
+		if (id * 2 > arr.length) {
+			trace("not in this length");
+		}
+		var p = {x: arr[id * 2], y: arr[(id * 2) + 1]};
+		return p;
 	}
 
 	// ____________________________________ getter/setter ____________________________________

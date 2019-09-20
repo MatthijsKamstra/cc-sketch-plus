@@ -1,6 +1,7 @@
 package draw;
 
 import cc.util.ColorUtil;
+import cc.AST.Point;
 
 class Rectangle extends Base implements IBase {
 	@:isVar public var width(get, set):Float;
@@ -13,6 +14,11 @@ class Rectangle extends Base implements IBase {
 	var xpos:Float;
 	var ypos:Float;
 
+	public var point_top_left:Point;
+	public var point_top_right:Point;
+	public var point_bottom_left:Point;
+	public var point_bottom_right:Point;
+
 	public function new(x:Float, y:Float, width:Float, height:Float) {
 		this.x = x;
 		this.y = y;
@@ -20,6 +26,12 @@ class Rectangle extends Base implements IBase {
 		this.height = height;
 		this.xpos = this.x - (this.width / 2);
 		this.ypos = this.y - (this.height / 2);
+
+		this.point_top_left = {x: this.xpos, y: this.ypos};
+		this.point_top_right = {x: this.xpos + this.width, y: this.ypos};
+		this.point_bottom_left = {x: this.xpos, y: this.ypos + this.height};
+		this.point_bottom_right = {x: this.xpos + this.width, y: this.ypos + this.height};
+
 		super('rect');
 	}
 
