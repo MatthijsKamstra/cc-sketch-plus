@@ -15,6 +15,8 @@ class Settings {
 	@:isVar public var element(get, set):js.html.Element;
 	@:isVar public var elementID(get, set):String;
 
+	@:isVar public var sizeType(get, set):String;
+
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
 		this.height = height;
@@ -92,5 +94,13 @@ class Settings {
 
 	function set_elementID(value:String):String {
 		return elementID = value;
+	}
+
+	function get_sizeType():String {
+		return sizeType;
+	}
+
+	function set_sizeType(value:String):String {
+		return sizeType = value;
 	}
 }
