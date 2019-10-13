@@ -55,10 +55,11 @@ class Sketcher {
 	// ____________________________________ make something ____________________________________
 
 	/**
-	 * [Description]
-	 * @param str
-	 * @param x
-	 * @param y
+	 * Create a text field
+	 *
+	 * @param str		value of the text you want to create
+	 * @param x			(optional?) x position of the text
+	 * @param y			(optional) y position of the text
 	 * @return Text
 	 */
 	public function makeText(str:String, ?x, ?y):Text {
@@ -69,8 +70,8 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param x
-	 * @param y
+	 * @param x			(optional?) x position of the text
+	 * @param y			(optional) y position of the text
 	 * @param radius
 	 * @return Circle
 	 */
@@ -82,8 +83,8 @@ class Sketcher {
 
 	/**
 	 * make a rectangle with the x and y  pos as center point
-	 * @param x
-	 * @param y
+	 * @param x			(optional?) x position of the text
+	 * @param y			(optional) y position of the text
 	 * @param width
 	 * @param height
 	 * @return Rectangle
@@ -96,8 +97,8 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param x
-	 * @param y
+	 * @param x			(optional?) x position of the text
+	 * @param y			(optional) y position of the text
 	 * @param width
 	 * @param height
 	 * @param isCenter = true
@@ -111,8 +112,8 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param x
-	 * @param y
+	 * @param x			(optional?) x position of the text
+	 * @param y			(optional) y position of the text
 	 * @param width
 	 * @param height
 	 * @param radius
@@ -146,8 +147,8 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param x
-	 * @param y
+	 * @param x			(optional?) x position of the text
+	 * @param y			(optional) y position of the text
 	 * @param rx
 	 * @param ry
 	 * @return Ellipse
@@ -193,8 +194,8 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param x
-	 * @param y
+	 * @param x			x position
+	 * @param y			y position
 	 * @param str
 	 * @return Path
 	 */
@@ -273,6 +274,11 @@ class Sketcher {
 
 	public function clear() {
 		baseArray = [];
+		element.innerHTML = '';
+	}
+
+	public function getBaseArray():Array<IBase> {
+		return baseArray;
 	}
 
 	// ____________________________________ update ____________________________________
