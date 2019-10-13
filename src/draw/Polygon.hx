@@ -12,7 +12,7 @@ class Polygon extends Base implements IBase {
 		super('polygon');
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		var str = '';
 		for (i in 0...this.arr.length) {
 			var value = this.arr[i];

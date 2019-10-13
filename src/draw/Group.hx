@@ -13,7 +13,7 @@ class Group extends Base implements IBase {
 		super('g');
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		if (this.getTransform() != '') {
 			xml.set('transform', this.getTransform());
 		}

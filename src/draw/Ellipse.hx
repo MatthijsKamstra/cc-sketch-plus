@@ -14,7 +14,7 @@ class Ellipse extends Base implements IBase {
 		super('ellipse');
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		xml.set('cx', Std.string(this.x));
 		xml.set('cy', Std.string(this.y));
 		xml.set('rx', Std.string(this.rx));

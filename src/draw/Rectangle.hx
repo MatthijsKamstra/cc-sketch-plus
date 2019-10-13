@@ -40,7 +40,7 @@ class Rectangle extends Base implements IBase {
 		this.stroke = 'transparant';
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		xml.set('x', Std.string(this.xpos));
 		xml.set('y', Std.string(this.ypos));
 		xml.set('width', Std.string(this.width));

@@ -17,7 +17,7 @@ class Circle extends Base implements IBase {
 		this.stroke = 'transparant';
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		// var xml = Xml.createElement('circle');
 		xml.set('cx', Std.string(this.x));
 		xml.set('cy', Std.string(this.y));

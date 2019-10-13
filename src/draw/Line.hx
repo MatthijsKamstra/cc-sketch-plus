@@ -16,7 +16,7 @@ class Line extends Base implements IBase {
 		super('line');
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		xml.set('x1', Std.string(this.x));
 		xml.set('y1', Std.string(this.y));
 		xml.set('x2', Std.string(this.x2));

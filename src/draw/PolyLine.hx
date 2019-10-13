@@ -10,7 +10,7 @@ class PolyLine extends Base implements IBase {
 		super('polyline');
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		if (desc != '') {
 			xml.addChild(Xml.createComment('desc')); // still weird I need to do this
 			xml.addChild(Xml.parse('<desc>${desc}</desc>'));

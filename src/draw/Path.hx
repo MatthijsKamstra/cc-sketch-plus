@@ -17,7 +17,7 @@ class Path extends Base implements IBase {
 		super('path');
 	}
 
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		var str = '';
 		for (i in dArray) {
 			str += i;
