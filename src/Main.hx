@@ -1,4 +1,3 @@
-
 package;
 
 import js.Browser.*;
@@ -139,9 +138,9 @@ class Main {
 		addDownloadWrapper(elem);
 	}
 
-	function paperTab(p1:cc.Point, p2:cc.Point):Array<Int> {
+	function paperTab(p1:cc.Point, p2:cc.Point):Array<Float> {
 		var offset = Math.round(cc.model.constants.Paper.mm2pixel(7));
-		var sideArr:Array<Int> = [
+		var sideArr:Array<Float> = [
 			Math.round(p1.x), Math.round(p1.y), Math.round(p1.x) + offset, Math.round(p1.y) + offset, Math.round(p2.x) - offset, Math.round(p2.y) + offset,
 			Math.round(p2.x), Math.round(p2.y), Math.round(p2.x) - offset, Math.round(p2.y) - offset, Math.round(p1.x) + offset, Math.round(p1.y) - offset,
 			Math.round(p1.x), Math.round(p1.y),
