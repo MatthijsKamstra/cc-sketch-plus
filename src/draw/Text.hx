@@ -10,6 +10,8 @@ class Text extends Base implements IBase {
 	@:isVar public var fontSize(get, set):String;
 	@:isVar public var fontFamily(get, set):String;
 
+	@:isVar public var fontWeight(get, set):String;
+
 	@:isVar public var textAnchor(get, set):String;
 
 	@:isVar public var alignmentBaseline(get, set):String;
@@ -29,7 +31,7 @@ class Text extends Base implements IBase {
 	 * @param y
 	 * @source: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
 	 */
-	public function new(str:String, ?x:Int, ?y:Int) {
+	public function new(str:String, ?x:Float, ?y:Float) {
 		this.str = str;
 		this.x = x;
 		this.y = y;
@@ -47,7 +49,7 @@ class Text extends Base implements IBase {
 
 	//  dominant-baseline="middle" text-anchor="middle"
 	// ____________________________________ create ____________________________________
-	public function svg(settings:Settings):String {
+	public function svg(?settings:Settings):String {
 		// var style = '<style>.small {font:italic 13px sans-serif; fill:red;}</style>';
 		var comment = Xml.createComment('${this.str}');
 		var content = Xml.parse(this.str);
@@ -116,6 +118,15 @@ class Text extends Base implements IBase {
 	function set_fontFamily(value:String):String {
 		xml.set('font-family', value);
 		return fontFamily = value;
+	}
+
+	function get_fontWeight():String {
+		return fontWeight;
+	}
+
+	function set_fontWeight(value:String):String {
+		xml.set('font-weight', value);
+		return fontWeight = value;
 	}
 
 	function get_textAnchor():String {
