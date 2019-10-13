@@ -223,4 +223,9 @@ class Base {
 		var name = Type.getClassName(Type.getClass(this));
 		return ('${name}: ' + haxe.Json.parse(haxe.Json.stringify(this)));
 	}
+
+	public function toSvg() {
+		throw "Not implemented yet";
+		// this.svg();
+	}
 }
