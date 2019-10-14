@@ -17,8 +17,11 @@ class Base {
 	@:isVar public var fill(get, set):String; // = '#909090';
 	@:isVar public var stroke(get, set):String; // = '#000000';
 	// weight
-	@:isVar public var linewidth(get, set):Int; // = 1;
+	@:isVar public var linewidth(get, set):Float; // = 1;
 	@:isVar public var opacity(get, set):Float; // = 1;
+	@:isVar public var strokeOpacity(get, set):Float;
+	@:isVar public var fillOpacity(get, set):Float;
+
 	// transform
 	@:isVar public var rotate(get, set):Float;
 
@@ -121,11 +124,11 @@ class Base {
 		return stroke = value;
 	}
 
-	function get_linewidth():Int {
+	function get_linewidth():Float {
 		return linewidth;
 	}
 
-	function set_linewidth(value:Int):Int {
+	function set_linewidth(value:Float):Float {
 		xml.set('stroke-width', Std.string(value));
 		return linewidth = value;
 	}
@@ -139,6 +142,30 @@ class Base {
 		xml.set('fill-opacity', Std.string(v));
 		xml.set('stroke-opacity', Std.string(v));
 		return opacity = v;
+	}
+
+	/**
+	 * [Description]
+	 * @return Float
+	 */
+	function get_strokeOpacity():Float {
+		return strokeOpacity;
+	}
+
+	function set_strokeOpacity(value:Float):Float {
+		var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		xml.set('stroke-opacity', Std.string(v));
+		return strokeOpacity = v;
+	}
+
+	function get_fillOpacity():Float {
+		return fillOpacity;
+	}
+
+	function set_fillOpacity(value:Float):Float {
+		var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		xml.set('fill-opacity', Std.string(v));
+		return fillOpacity = v;
 	}
 
 	function get_y():Float {
