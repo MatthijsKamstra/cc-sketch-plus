@@ -12,6 +12,10 @@ class Sketcher {
 	var svg:String;
 	var canvas:js.html.CanvasElement;
 
+	public var CANVAS_ID:String = "sketcher_canvas";
+	public var SVG_ID:String = "sketcher_svg";
+	public var WRAPPER_ID:String = "sketcher_wrapper";
+
 	public static var ctx:js.html.CanvasRenderingContext2D;
 
 	public function new(settings:Settings) {
@@ -19,6 +23,10 @@ class Sketcher {
 
 		Sketch.Global.w = settings.width;
 		Sketch.Global.h = settings.height;
+
+		if (settings.elementID != null) {
+			WRAPPER_ID = settings.elementID;
+		}
 
 		if (settings.scale == true) {
 			var node = document.createElement('style');
@@ -45,7 +53,7 @@ class Sketcher {
 			canvas = document.createCanvasElement();
 			canvas.width = settings.width;
 			canvas.height = settings.height;
-			canvas.id = 'canvas';
+			canvas.id = CANVAS_ID;
 			ctx = canvas.getContext2d();
 			element.appendChild(canvas);
 		}
@@ -281,6 +289,18 @@ class Sketcher {
 		return baseArray;
 	}
 
+	public function getSVG():String {
+		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
+		var div = document.getElementById(WRAPPER_ID);
+		return div.innerHTML;
+	}
+
+	public function getSVGElement():js.html.svg.SVGElement {
+		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
+		var svg:js.html.svg.SVGElement = cast document.getElementById(SVG_ID);
+		return svg;
+	}
+
 	// ____________________________________ update ____________________________________
 
 	public function update() {
@@ -299,7 +319,7 @@ class Sketcher {
 				svgW += '${settings.sizeType}';
 				svgH += '${settings.sizeType}';
 			}
-			var paper = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="sketcher" xmlns="http://www.w3.org/2000/svg">';
+			var paper = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg">';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
 				if (base == null)
