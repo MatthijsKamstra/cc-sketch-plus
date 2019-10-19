@@ -31,7 +31,7 @@ class Base {
 
 	@:isVar public var desc(get, set):String;
 
-	@:isVar public var linecap(get, set):String;
+	@:isVar public var linecap(get, set):LineCapType; // "butt|round|square";
 
 	var transArr:Array<String> = [];
 
@@ -221,12 +221,14 @@ class Base {
 		return desc = value;
 	}
 
-	function get_linecap():String {
+	// "butt|round|square";
+	function get_linecap():LineCapType {
 		return linecap;
 	}
 
-	function set_linecap(value:String):String {
-		xml.set('stroke-linecap', value);
+	// "butt|round|square";
+	function set_linecap(value:LineCapType):LineCapType {
+		xml.set('stroke-linecap', Std.string(value));
 		return linecap = value;
 	}
 
@@ -235,7 +237,6 @@ class Base {
 	}
 
 	// ____________________________________ toString ____________________________________
-
 	public function getName() {
 		var name = Type.getClassName(Type.getClass(this));
 		return ('${name}');
@@ -255,4 +256,11 @@ class Base {
 		throw "Not implemented yet";
 		// this.svg();
 	}
+}
+
+@:enum
+abstract LineCapType(String) {
+	var Butt = "butt";
+	var Round = 'round';
+	var Square = 'square';
 }

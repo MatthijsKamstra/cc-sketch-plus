@@ -12,9 +12,9 @@ class Text extends Base implements IBase {
 
 	@:isVar public var fontWeight(get, set):String;
 
-	@:isVar public var textAnchor(get, set):String;
+	@:isVar public var textAnchor(get, set):TextAnchorType;
 
-	@:isVar public var alignmentBaseline(get, set):String;
+	@:isVar public var alignmentBaseline(get, set):AlignmentBaselineType;
 
 	/**
 	 * test style
@@ -39,11 +39,11 @@ class Text extends Base implements IBase {
 	}
 
 	// ____________________________________ func ____________________________________
-	public function align(value:String) {
+	public function align(value:TextAnchorType) {
 		this.textAnchor = value;
 	}
 
-	public function baseline(value:String) {
+	public function baseline(value:AlignmentBaselineType) {
 		this.alignmentBaseline = value;
 	}
 
@@ -129,22 +129,22 @@ class Text extends Base implements IBase {
 		return fontWeight = value;
 	}
 
-	function get_textAnchor():String {
+	function get_textAnchor():TextAnchorType {
 		return textAnchor;
 	}
 
-	function set_textAnchor(value:String):String {
-		xml.set('text-anchor', value);
+	function set_textAnchor(value:TextAnchorType):TextAnchorType {
+		xml.set('text-anchor', Std.string(value));
 		return textAnchor = value;
 	}
 
-	function get_alignmentBaseline():String {
+	function get_alignmentBaseline():AlignmentBaselineType {
 		return alignmentBaseline;
 	}
 
-	function set_alignmentBaseline(value:String):String {
-		xml.set('alignment-baseline', value);
-		xml.set('dominant-baseline', value);
+	function set_alignmentBaseline(value:AlignmentBaselineType):AlignmentBaselineType {
+		xml.set('alignment-baseline', Std.string(value));
+		xml.set('dominant-baseline', Std.string(value));
 		return alignmentBaseline = value;
 	}
 
@@ -167,4 +167,28 @@ class Text extends Base implements IBase {
 	function set_style(value:String):String {
 		return style = value;
 	}
+}
+
+@:enum abstract TextAnchorType(String) {
+	var Start = "start";
+	var Middle = "middle";
+	var End = "end";
+}
+
+@:enum abstract AlignmentBaselineType(String) {
+	var Auto = "auto";
+	var Baseline = "baseline";
+	var BeforeEdge = "before-edge";
+	var TextBeforeEdge = "text-before-edge";
+	var Middle = "middle";
+	var Central = "central";
+	var AfterEdge = "after-edge";
+	var TextAfterEdge = "text-after-edge";
+	var Ideographic = "ideographic";
+	var Alphabetic = "alphabetic";
+	var Hanging = "hanging";
+	var Mathematical = "mathematical";
+	var Top = "top";
+	var Center = "center";
+	var Bottom = "bottom";
 }
