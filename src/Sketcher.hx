@@ -95,10 +95,11 @@ class Sketcher {
 	 * @param y			(optional) y position of the text
 	 * @param width
 	 * @param height
+	 * @param isCenter	default is centered true, otherwise x and y are top-left start pos
 	 * @return Rectangle
 	 */
 	public function makeRectangle(x:Float, y:Float, width:Float, height:Float, isCenter = true):Rectangle {
-		var shape = new Rectangle(x, y, width, height);
+		var shape = new Rectangle(x, y, width, height, isCenter);
 		baseArray.push(shape);
 		return shape;
 	}

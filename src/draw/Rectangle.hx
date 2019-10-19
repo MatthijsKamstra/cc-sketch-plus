@@ -13,19 +13,26 @@ class Rectangle extends Base implements IBase {
 
 	var xpos:Float;
 	var ypos:Float;
+	var isCenter:Bool;
 
 	public var point_top_left:Point;
 	public var point_top_right:Point;
 	public var point_bottom_left:Point;
 	public var point_bottom_right:Point;
 
-	public function new(x:Float, y:Float, width:Float, height:Float) {
+	public function new(x:Float, y:Float, width:Float, height:Float, ?isCenter:Bool = true) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.xpos = this.x - (this.width / 2);
 		this.ypos = this.y - (this.height / 2);
+
+		this.isCenter = isCenter;
+		if (!isCenter) {
+			this.xpos = this.x;
+			this.ypos = this.y;
+		}
 
 		this.point_top_left = {x: this.xpos, y: this.ypos};
 		this.point_top_right = {x: this.xpos + this.width, y: this.ypos};
