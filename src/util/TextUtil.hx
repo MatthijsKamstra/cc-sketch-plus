@@ -17,7 +17,7 @@ class TextUtil {
 
 	public var fontFamily:String;
 	public var fontWeight:String;
-	public var fontSize:String;
+	public var fontSize:Float;
 
 	public function new() {
 		createSVG();
@@ -96,6 +96,20 @@ class TextUtil {
 	// 	svg.appendChild(rect);
 	// }
 
+	/**
+	 * Get the bbox of a string
+	 *
+	 * @example
+	 * 		var textUtil = new util.TextUtil();
+	 *		textUtil.fontFamily = _fontFamilie;
+	 *		textUtil.fontWeight = _fontWeight;
+	 *		textUtil.fontSize = _fontSize;
+	 *		// var _fontSize:Float = textUtil.getFittext(value, _maxW);
+	 * 		var rect : js.html.svg.Rect = textUtil.getBboxText(value);
+	 *
+	 * @param str 	value to get the rect grom
+	 * @return js.html.svg.Rect
+	 */
 	public function getBboxText(str:String):js.html.svg.Rect {
 		// trace(str, size);
 
@@ -108,7 +122,7 @@ class TextUtil {
 		svgElement.setAttribute("y", '${_y}');
 		svgElement.setAttribute("font-family", fontFamily);
 		svgElement.setAttribute("font-weight", fontWeight); // 200/300/400/500/600/700
-		svgElement.setAttribute("font-size", fontSize);
+		svgElement.setAttribute("font-size", '${fontSize}px');
 		svgElement.appendChild(data);
 		svg.appendChild(svgElement);
 
@@ -192,5 +206,30 @@ class TextUtil {
 		}
 		lines.push(currentLine.trim());
 		return lines;
+	}
+
+	/**
+	 * @example
+	 * 		var textUtil = new util.TextUtil();
+	 *		textUtil.fontFamily = _fontFamilie;
+	 *		textUtil.fontWeight = _fontWeight;
+	 *		var _fontSize:Float = textUtil.getFittext(value, _maxW);
+	 *
+	 * @param str
+	 * @param maxWidth
+	 * @return Float
+	 */
+	public function getFittext(str:String, maxWidth:Float):Float {
+		var _text = str;
+		fontSize = 10;
+		for (i in 0...100) {
+			fontSize++;
+			var bbox:js.html.svg.Rect = getBboxText(_text);
+			var width = getBboxText(_text).width;
+			if (width >= maxWidth) {
+				break;
+			}
+		}
+		return fontSize;
 	}
 }
