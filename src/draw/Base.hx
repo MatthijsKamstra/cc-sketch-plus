@@ -5,7 +5,7 @@ using StringTools;
 class Base {
 	public static var COUNT:Int = 0;
 
-	public var count(get_count, null):Int;
+	public var count(get, null):Int;
 
 	public var xml:Xml;
 
