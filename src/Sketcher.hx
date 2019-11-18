@@ -141,11 +141,12 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
+	 * Create a line between two points (x, y)
+	 *
+	 * @param x1			first x position
+	 * @param y1			first y position
+	 * @param x2			second x position
+	 * @param y2			second x position
 	 * @return Line
 	 */
 	public function makeLine(x1, y1, x2, y2):Line {
@@ -155,11 +156,12 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
-	 * @param x			(optional?) x position of the text
-	 * @param y			(optional) y position of the text
-	 * @param rx
-	 * @param ry
+	 * Create an ellipse with a radius x and radius y
+	 *
+	 * @param x			x position
+	 * @param y			y position
+	 * @param rx		radius in x dir
+	 * @param ry		radius in y dir
 	 * @return Ellipse
 	 */
 	public function makeEllipse(x, y, rx, ry):Ellipse {
@@ -170,7 +172,9 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param sides
+	 *  (example [10,11,20,21] translates to point 1: (x: 10, y: 11) and point 1: (x: 20, y: 21)
+	 *
+	 * @param sides			an array of x and y position
 	 * @return Polygon
 	 */
 	public function makePolygon(sides:Array<Float>):Polygon {
@@ -180,8 +184,10 @@ class Sketcher {
 	}
 
 	/**
-	 * create polygon with points ( {x:22, y:33} )
-	 * @param sides
+	 * Create polygon with an array of points ( {x:22, y:33} )
+	 * (it's syntatic sugar for makePolygon)
+	 *
+	 * @param sides		an array of points [{x:22, y:33}]
 	 * @return Polygon
 	 */
 	public function makePolygonPoint(sides:Array<Point>):Polygon {
@@ -226,8 +232,11 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
-	 * @param array
+	 * Group is an collection of IBase items
+	 * usefull if you want to rotate/color/stroke-weight a group of items at the same time.
+	 * In Illustrator it will be layer, so usefull to group items to make a more structured file
+	 *
+	 * @param array		array of items (IBase), a collection of shapes
 	 * @return Group
 	 */
 	public function makeGroup(array:Array<IBase>):Group {
@@ -253,9 +262,9 @@ class Sketcher {
 	 * sketch.makeX(10,10);
 	 * ```
 	 *
-	 * @param x		position in x dir (will automaticly be rounded to Int)
-	 * @param y		position in y dir (will automaticly be rounded to Int)
-	 * @param color	(optional) default color is red
+	 * @param x			position in x dir (will automaticly be rounded to Int) but why?
+	 * @param y			position in y dir (will automaticly be rounded to Int)
+	 * @param color		(optional) default color is red
 	 * @return PolyLine
 	 */
 	public function makeX(x:Float, y:Float, ?color:String = 'red'):PolyLine {
@@ -281,21 +290,41 @@ class Sketcher {
 		return polyline;
 	}
 
+	/**
+	 * basic reset
+	 */
 	public function clear() {
 		baseArray = [];
 		element.innerHTML = '';
 	}
 
+	/**
+	 * all elements created in code, are store here,
+	 * this way its possible to add a element (for example a rectangle)
+	 * and later put that rectangle in a group
+	 *
+	 * @return Array<IBase>
+	 */
 	public function getBaseArray():Array<IBase> {
 		return baseArray;
 	}
 
+	/**
+	 * get the SVG (as String) used for this sketch
+	 *
+	 * @return String
+	 */
 	public function getSVG():String {
 		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
 		var div = document.getElementById(WRAPPER_ID);
 		return div.innerHTML;
 	}
 
+	/**
+	 * get the SVGElement used for the sketch
+	 *
+	 * @return js.html.svg.SVGElement
+	 */
 	public function getSVGElement():js.html.svg.SVGElement {
 		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
 		var svg:js.html.svg.SVGElement = cast document.getElementById(SVG_ID);
@@ -324,10 +353,10 @@ class Sketcher {
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
 				if (base == null)
-					continue; // groups do this
+					continue;
 
 				// if (base.type == 'Group') {
-				// 	// trace('ggggg');
+				// 	trace('groups do this');
 				// 	cast(base, draw.Group).test();
 				// }
 				var draw = base.svg(settings);
