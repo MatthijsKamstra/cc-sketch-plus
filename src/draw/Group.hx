@@ -14,9 +14,15 @@ class Group extends Base implements IBase {
 	}
 
 	public function svg(?settings:Settings):String {
+		if (this.x > 0 && this.y > 0) {
+			this.transArr.push('translate(${this.x}, ${this.y})');
+		}
 		if (this.getTransform() != '') {
 			xml.set('transform', this.getTransform());
 		}
+		// xml.set('x', Std.string(this.x));
+		// xml.set('y', Std.string(this.y));
+
 		var comment = Xml.createComment('Group: ${id}');
 		xml.addChild(comment); // not sure why?
 		xml.addChild(Xml.parse('<desc>${id}</desc>'));
@@ -37,6 +43,12 @@ class Group extends Base implements IBase {
 	}
 
 	// ____________________________________ unique functions for this specific class ____________________________________
+
+	public function hide() {
+		// hide this group with
+		// opacity:0
+		opacity = 0;
+	}
 
 	public function test() {
 		trace('test if casting works');
