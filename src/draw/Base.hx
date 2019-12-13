@@ -13,11 +13,28 @@ class Base {
 	// position
 	@:isVar public var y(get, set):Float;
 	@:isVar public var x(get, set):Float;
+
 	// colors
+
+	/**
+	 * fill is the fill color
+	 */
 	@:isVar public var fill(get, set):String; // = '#909090';
+
+	@:isVar public var fillColor(get, set):String;
+
+	/**
+	 * stroke is the stroke color
+	 */
 	@:isVar public var stroke(get, set):String; // = '#000000';
+
+	@:isVar public var strokeColor(get, set):String;
+
 	// weight
 	@:isVar public var linewidth(get, set):Float; // = 1;
+	// strokeWeight
+	@:isVar public var strokeWeight(get, set):Float;
+
 	@:isVar public var opacity(get, set):Float; // = 1;
 	@:isVar public var strokeOpacity(get, set):Float;
 	@:isVar public var fillOpacity(get, set):Float;
@@ -46,6 +63,10 @@ class Base {
 	// 	this.linewidth = 0;
 	// 	this.stroke = 'transparant';
 	// }
+
+	public function setID(id:String) {
+		this.id = id;
+	}
 
 	public function setPosition(x:Float, ?y:Float) {
 		var str = 'translate(${x}';
@@ -115,6 +136,14 @@ class Base {
 		return fill = value;
 	}
 
+	function get_fillColor():String {
+		return fill;
+	}
+
+	function set_fillColor(value:String):String {
+		return fill = value;
+	}
+
 	function get_stroke():String {
 		return stroke;
 	}
@@ -124,12 +153,28 @@ class Base {
 		return stroke = value;
 	}
 
+	function get_strokeColor():String {
+		return stroke;
+	}
+
+	function set_strokeColor(value:String):String {
+		return stroke = value;
+	}
+
 	function get_linewidth():Float {
 		return linewidth;
 	}
 
 	function set_linewidth(value:Float):Float {
 		xml.set('stroke-width', Std.string(value));
+		return linewidth = value;
+	}
+
+	function get_strokeWeight():Float {
+		return linewidth;
+	}
+
+	function set_strokeWeight(value:Float):Float {
 		return linewidth = value;
 	}
 

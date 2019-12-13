@@ -66,8 +66,8 @@ class Sketcher {
 	 * Create a text field
 	 *
 	 * @param str		value of the text you want to create
-	 * @param x			(optional?) x position of the text
-	 * @param y			(optional) y position of the text
+	 * @param x			(optional) x position of the text (default: 0)
+	 * @param y			(optional) y position of the text (default: 0)
 	 * @return Text
 	 */
 	public function makeText(str:String, ?x, ?y):Text {

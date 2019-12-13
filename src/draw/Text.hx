@@ -4,17 +4,52 @@ import js.Browser.*;
 
 using StringTools;
 
+/**
+ * 	// description
+ *	var text = sketch.makeText(this.shapeName, 50, 140);
+ *	text.fontFamily = '"Soft Sugar [plain]", SOFTSUGARPLAIN, sans-serif';
+ *	text.fontSize = '115px';
+ *	text.fill = '#CCCCCC';
+ *
+ *	text.fontWeight = "700";
+ *	text.fontSize = '${_fontSize}px';
+ *	text.fill = getColourObj(BLACK);
+ */
 class Text extends Base implements IBase {
 	@:isVar public var str(get, set):String;
 
 	@:isVar public var fontSize(get, set):String;
+
+	/**
+	 * font-family: family-name|generic-family|initial|inherit;
+	 * @see https://www.w3schools.com/cssref/pr_font_font-family.asp
+	 *
+	 * @example '"Times New Roman", Times, serif;'
+	 */
 	@:isVar public var fontFamily(get, set):String;
 
+	/**
+	 * font-weight: normal|bold|bolder|lighter|number|initial|inherit;
+	 * @see https://www.w3schools.com/cssref/pr_font_weight.asp
+	 */
 	@:isVar public var fontWeight(get, set):String;
 
 	@:isVar public var textAnchor(get, set):TextAnchorType;
 
+	/**
+	 * alignment-baseline: auto | baseline | before-edge | text-before-edge | middle | central | after-edge | text-after-edge | ideographic | alphabetic | hanging | mathematical | inherit
+	 * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/alignment-baseline
+	 */
 	@:isVar public var alignmentBaseline(get, set):AlignmentBaselineType;
+
+	@:isVar public var dominantBaseline(get, set):DominantBaselineType;
+
+	/**
+	 * hacky
+	 */
+	public var _textAlign:String;
+
+	public var _textBaseline:String;
 
 	/**
 	 * test style
@@ -24,14 +59,15 @@ class Text extends Base implements IBase {
 	public var type = 'Text'; // base (get class name?)
 
 	/**
+	 * Create a text element in svg
 	 *
-	 * [Description]
-	 * @param str
-	 * @param x
-	 * @param y
+	 * @param str		string value
+	 * @param x			(optional:default=0) x pos
+	 * @param y			(optional:default=0) y pos
+	 *
 	 * @source: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
 	 */
-	public function new(str:String, ?x:Float, ?y:Float) {
+	public function new(str:String, ?x:Float = 0, ?y:Float = 0) {
 		this.str = str;
 		this.x = x;
 		this.y = y;
@@ -80,6 +116,13 @@ class Text extends Base implements IBase {
 		// xml.set('lengthAdjust', Std.string(this.y));
 		// xml.set('textLength', Std.string(this.y));
 
+		if (this._textAlign != null) {
+			convertTextAlign();
+		}
+		if (this._textBaseline != null) {
+			convertTextBaseline();
+		}
+
 		/**
 			<style>
 			 .small { font: italic 13px sans-serif; }
@@ -98,6 +141,32 @@ class Text extends Base implements IBase {
 		// ctx.beginPath();
 		// ctx.fill();
 		// ctx.stroke();
+	}
+
+	function convertTextAlign() {
+		switch (this._textAlign) {
+			case 'left':
+				this.textAnchor = TextAnchorType.Left;
+			case 'right':
+				this.textAnchor = TextAnchorType.Right;
+			default:
+				this.textAnchor = TextAnchorType.Left;
+				trace("case '" + this._textAlign + "': trace ('" + this._textAlign + "');");
+		}
+	}
+
+	function convertTextBaseline() {
+		switch (this._textBaseline) {
+			case 'top':
+				this.dominantBaseline = DominantBaselineType.Hanging;
+			case 'center':
+				this.dominantBaseline = DominantBaselineType.Middle;
+			case 'bottom':
+				this.dominantBaseline = DominantBaselineType.Baseline;
+			default:
+				this.dominantBaseline = DominantBaselineType.Auto;
+				trace("case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');");
+		}
 	}
 
 	// ____________________________________ getter/setter ____________________________________
@@ -144,8 +213,16 @@ class Text extends Base implements IBase {
 
 	function set_alignmentBaseline(value:AlignmentBaselineType):AlignmentBaselineType {
 		xml.set('alignment-baseline', Std.string(value));
-		xml.set('dominant-baseline', Std.string(value));
 		return alignmentBaseline = value;
+	}
+
+	function get_dominantBaseline():DominantBaselineType {
+		return dominantBaseline;
+	}
+
+	function set_dominantBaseline(value:DominantBaselineType):DominantBaselineType {
+		xml.set('dominant-baseline', Std.string(value));
+		return dominantBaseline = value;
 	}
 
 	function get_str():String {
@@ -173,6 +250,9 @@ class Text extends Base implements IBase {
 	var Start = "start";
 	var Middle = "middle";
 	var End = "end";
+	var Left = "start"; // syntatic sugar
+	var Right = "end"; // syntatic sugar
+	var Center = "middle"; // syntatic sugar
 }
 
 @:enum abstract AlignmentBaselineType(String) {
@@ -191,4 +271,21 @@ class Text extends Base implements IBase {
 	var Top = "top";
 	var Center = "center";
 	var Bottom = "bottom";
+}
+
+@:enum abstract DominantBaselineType(String) { // var Auto = "auto";
+	var Auto = "auto";
+	var Baseline = "baseline";
+	var UseScript = 'use-script';
+	var NoChange = 'no-change';
+	var ResetSize = 'reset-size';
+	var Ideographic = "ideographic";
+	var Alphabetic = "alphabetic";
+	var Hanging = "hanging";
+	var Mathematical = "mathematical";
+	var Central = 'central';
+	var Middle = "middle";
+	var TextAfterEdge = "text-after-edge";
+	var TextBeforeEdge = "text-before-edge";
+	var Inherit = 'inherit';
 }
