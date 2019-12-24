@@ -43,7 +43,7 @@ class Rectangle extends Base implements IBase {
 	}
 
 	public function noStroke() {
-		this.linewidth = 0;
+		this.lineWeight = 0;
 		this.stroke = 'transparant';
 	}
 
@@ -68,7 +68,7 @@ class Rectangle extends Base implements IBase {
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		ctx.fillStyle = this.fill;
 		ctx.strokeStyle = this.stroke;
-		ctx.lineWidth = this.linewidth;
+		ctx.lineWidth = this.lineWeight;
 
 		var color = ColorUtil.assumption(this.fill);
 		ctx.fillStyle = ColorUtil.getColourObj(color, this.opacity);
@@ -105,7 +105,7 @@ class Rectangle extends Base implements IBase {
 		if (this.fill != null) {
 			ctx.fill();
 		}
-		if (this.stroke != null && this.linewidth != 0) {
+		if (this.stroke != null && this.lineWeight != 0) {
 			ctx.stroke();
 		}
 

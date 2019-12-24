@@ -13,7 +13,7 @@ class Circle extends Base implements IBase {
 	}
 
 	public function noStroke() {
-		this.linewidth = 0;
+		this.lineWeight = 0;
 		this.stroke = 'transparant';
 	}
 
@@ -27,8 +27,8 @@ class Circle extends Base implements IBase {
 			xml.set('transform', this.getTransform());
 		}
 
-		if (this.linewidth != null)
-			xml.set('stroke-width', Std.string(this.linewidth));
+		if (this.lineWeight != null)
+			xml.set('stroke-width', Std.string(this.lineWeight));
 
 		return xml.toString();
 	}
@@ -36,7 +36,7 @@ class Circle extends Base implements IBase {
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		ctx.fillStyle = this.fill;
 		ctx.strokeStyle = this.stroke;
-		ctx.lineWidth = this.linewidth;
+		ctx.lineWidth = this.lineWeight;
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
 		ctx.fill();
