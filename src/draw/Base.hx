@@ -31,7 +31,7 @@ class Base {
 	@:isVar public var strokeColor(get, set):String;
 
 	// weight
-	@:isVar public var linewidth(get, set):Float; // = 1;
+	@:isVar public var lineWeight(get, set):Float; // = 1;
 	// strokeWeight
 	@:isVar public var strokeWeight(get, set):Float;
 
@@ -60,7 +60,7 @@ class Base {
 
 	// ____________________________________ functions ____________________________________
 	// public function noStroke() {
-	// 	this.linewidth = 0;
+	// 	this.lineWeight = 0;
 	// 	this.stroke = 'transparant';
 	// }
 
@@ -68,6 +68,12 @@ class Base {
 		this.id = id;
 	}
 
+	/**
+	 * if you really want to change the postions use this .. not rotate
+	 *
+	 * @param x			new position x
+	 * @param y   		(optional) new position y
+	 */
 	public function setPosition(x:Float, ?y:Float) {
 		var str = 'translate(${x}';
 		if (y != null)
@@ -76,6 +82,13 @@ class Base {
 		transArr.push(str);
 	}
 
+	/**
+	 * if you really want to change the rotation use this .. not rotate
+	 *
+	 * @param degree	rotation in degrees
+	 * @param x			(optional) center x
+	 * @param y   		(optional) center y
+	 */
 	public function setRotate(degree:Float, ?x:Float, ?y:Float) {
 		var str = 'rotate(${degree}';
 		if (x != null)
@@ -161,21 +174,21 @@ class Base {
 		return stroke = value;
 	}
 
-	function get_linewidth():Float {
-		return linewidth;
+	function get_lineWeight():Float {
+		return lineWeight;
 	}
 
-	function set_linewidth(value:Float):Float {
+	function set_lineWeight(value:Float):Float {
 		xml.set('stroke-width', Std.string(value));
-		return linewidth = value;
+		return lineWeight = value;
 	}
 
 	function get_strokeWeight():Float {
-		return linewidth;
+		return lineWeight;
 	}
 
 	function set_strokeWeight(value:Float):Float {
-		return linewidth = value;
+		return lineWeight = value;
 	}
 
 	function get_opacity():Float {
@@ -234,6 +247,7 @@ class Base {
 	}
 
 	function set_rotate(value:Float):Float {
+		setRotate(value);
 		return rotate = value;
 	}
 
