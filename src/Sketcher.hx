@@ -291,6 +291,35 @@ class Sketcher {
 	}
 
 	/**
+	 * not sure this is needed, but will leave this here for now
+	 * @param x
+	 * @param y
+	 * @param color
+	 * @return PolyLine
+	 */
+	public function makeXCross(x:Float, y:Float, size:Float):PolyLine {
+		var cx = x;
+		var cy = y;
+		var r = size;
+
+		var polyline = new PolyLine([
+			    cx,     cy,
+			cx - r,     cy,
+			    cx,     cy,
+			cx + r,     cy,
+			    cx,     cy,
+			    cx, cy - r,
+			    cx,     cy,
+			    cx, cy + r,
+			    cx,     cy,
+		]);
+		polyline.id = 'xcross_${polyline.count}';
+		polyline.desc = 'xcross\nx: ${cx}, y: ${cy}, size:${size}';
+		baseArray.push(polyline);
+		return polyline;
+	}
+
+	/**
 	 * basic reset
 	 */
 	public function clear() {
@@ -333,6 +362,11 @@ class Sketcher {
 
 	// ____________________________________ update ____________________________________
 
+	/**
+	 * svg will be generated in array and objects
+	 *
+	 * So to generate the svg, you need to update it!
+	 */
 	public function update() {
 		// trace('WIP update');
 		if (element == null) {
@@ -340,7 +374,7 @@ class Sketcher {
 			// console.warn('element doesn\'t exist in DOM (${element})');
 			return;
 		}
-		trace('type:${settings.type}, id:${element.id}');
+		// trace('type:${settings.type}, id:${element.id}');
 		if (settings.type == 'svg') {
 			// [mck] TODO change string into XML!!!
 			var svgW = '${settings.width}';
