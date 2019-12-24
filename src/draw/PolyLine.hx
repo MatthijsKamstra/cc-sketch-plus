@@ -23,6 +23,7 @@ class PolyLine extends Base implements IBase {
 		xml.set('points', str);
 
 		if (this.getTransform() != '') {
+			trace(this.getTransform());
 			xml.set('transform', this.getTransform());
 		}
 
