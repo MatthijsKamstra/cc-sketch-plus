@@ -34,6 +34,49 @@ class Path extends Base implements IBase {
 
 	// ____________________________________ functions ____________________________________
 
+	/**
+	 * create a rectangular shape with an other rectangular shape punched out
+	 * 	- sort of like a square donut
+	 * 	- window
+	 * 	- passe-partout
+	 *
+	 *
+	 * @example:
+	 * 				var _path = sketch.makePath(0, 0);
+	 *				_path.window(100, 50, 400, 500, 225, 200, 150, 200);
+	 *				_path.fillColor = getColourObj(PINK);
+	 *
+	 * <path d="M100,50V550H500V50ZM375,400H225V200H375Z" style="fill:#fff"/>
+	 *
+	 * @param  x       [description]
+	 * @param  y       [description]
+	 * @param  width   [description]
+	 * @param  height  [description]
+	 * @param  x2      [description]
+	 * @param  y2      [description]
+	 * @param  width2  [description]
+	 * @param  height2 [description]
+	 * @param          [description]
+	 * @return         [description]
+	 */
+	public function window(x:Float, y:Float, width:Float, height:Float, x2:Float, y2:Float, width2:Float, height2:Float) {
+		//  clear dArray
+		dArray = [];
+		this.id = 'passe-partout ${count}';
+		// start drawing
+		dArray.push('M${x},${y}'); // M100,50
+		dArray.push('V${y + height}'); // V550
+		dArray.push('H${x + width}'); // H500
+		dArray.push('V${y}'); // V50
+		dArray.push('Z'); // Z
+		//
+		dArray.push('M${x2 + width2},${y2 + height2}'); // M375,400
+		dArray.push('H${x2}'); // H225
+		dArray.push('V${y2}'); //  V200
+		dArray.push('H${x2 + width2}'); // H375
+		dArray.push('Z'); // Z
+	}
+
 	public function moveTo(x:Float, y:Float) {
 		dArray.push('M${x}, ${y} ');
 	}
