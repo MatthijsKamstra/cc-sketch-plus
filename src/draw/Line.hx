@@ -4,7 +4,9 @@ class Line extends Base implements IBase {
 	@:isVar public var x2(get, set):Float;
 	@:isVar public var y2(get, set):Float;
 
-	@:isVar public var lineWeight(get, set):Float;
+	// @:isVar public var lineWeight(get, set):Float;
+	// TODO: change to enum LineCap
+	@:isVar public var lineCap(get, set):String;
 
 	public var type = 'Line'; // base (get class name?)
 
@@ -54,11 +56,24 @@ class Line extends Base implements IBase {
 		return y2 = value;
 	}
 
-	function get_lineWeight():Float {
-		return lineWeight;
+	// function get_lineWeight():Float {
+	// 	return lineWeight;
+	// }
+	// function set_lineWeight(value:Float):Float {
+	// 	return lineWeight = value;
+	// }
+
+	function get_lineCap():String {
+		return lineCap;
 	}
 
-	function set_lineWeight(value:Float):Float {
-		return lineWeight = value;
+	function set_lineCap(value:String):String {
+		return lineCap = value;
 	}
+}
+
+enum abstract LineCap(String) {
+	var Butt = 'butt';
+	var Round = 'round';
+	var Square = 'square';
 }
