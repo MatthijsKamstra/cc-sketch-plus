@@ -77,9 +77,10 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
-	 * @param x			(optional?) x position of the text
-	 * @param y			(optional) y position of the text
+	 * create a circl with a center point x and y
+	 *
+	 * @param x			x position
+	 * @param y			y position
 	 * @param radius
 	 * @return Circle
 	 */
@@ -90,12 +91,13 @@ class Sketcher {
 	}
 
 	/**
-	 * make a rectangle with the x and y  pos as center point
-	 * @param x			(optional?) x position of the text
-	 * @param y			(optional) y position of the text
-	 * @param width
-	 * @param height
-	 * @param isCenter	default is centered true, otherwise x and y are top-left start pos
+	 * make a rectangle with the x and y  pos as center point (default center)
+	 *
+	 * @param x				x position
+	 * @param y				y position
+	 * @param width			width of the rectangle
+	 * @param height		height of the rectangle
+	 * @param isCenter		default is centered true, otherwise x and y are top-left start pos
 	 * @return Rectangle
 	 */
 	public function makeRectangle(x:Float, y:Float, width:Float, height:Float, isCenter = true):Rectangle {
@@ -105,12 +107,12 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
-	 * @param x			(optional?) x position of the text
-	 * @param y			(optional) y position of the text
-	 * @param width
-	 * @param height
-	 * @param isCenter = true
+	 * Not sure why I made this, but at that time it seemed really important
+	 * @param x				x position
+	 * @param y				y position
+	 * @param width			width of the rectangle
+	 * @param height		height of the rectangle
+	 * @param isCenter		default is centered true, otherwise x and y are top-left start pos
 	 * @return Rectangle
 	 */
 	public function makeRectangleInt(x:Int, y:Int, width:Int, height:Int, isCenter = true):Rectangle {
@@ -121,12 +123,12 @@ class Sketcher {
 
 	/**
 	 * [Description]
-	 * @param x			(optional?) x position of the text
-	 * @param y			(optional) y position of the text
-	 * @param width
-	 * @param height
+	 * @param x				x position
+	 * @param y				y position
+	 * @param width			width of the rectangle
+	 * @param height		height of the rectangle
 	 * @param radius
-	 * @param isCenter = true
+	 * @param isCenter		default is centered true, otherwise x and y are top-left start pos
 	 * @return Rectangle
 	 */
 	public function makeRoundedRectangle(x, y, width, height, radius, isCenter = true):Rectangle {
@@ -236,7 +238,7 @@ class Sketcher {
 	 * usefull if you want to rotate/color/stroke-weight a group of items at the same time.
 	 * In Illustrator it will be layer, so usefull to group items to make a more structured file
 	 *
-	 * @param array		array of items (IBase), a collection of shapes
+	 * @param array		array of items (IBase), a collection of shapes or groups
 	 * @return Group
 	 */
 	public function makeGroup(array:Array<IBase>):Group {
