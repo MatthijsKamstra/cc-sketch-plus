@@ -20,9 +20,8 @@ class TestUtil {
 		var _circlesArray:Array<draw.IBase> = [];
 		for (i in 0...grid.array.length) {
 			var point:Point = grid.array[i];
-			var circle = sketch.makeCircle(point.x, point.y, 1);
+			var circle = sketch.makeCircle(point.x, point.y, 3);
 			circle.fillColor = getColourObj(PINK, 1);
-
 			_circlesArray.push(circle);
 		}
 		var rect = sketch.makeRectangle(grid.x, grid.y, grid.width, grid.height, false);
