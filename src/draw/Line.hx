@@ -1,6 +1,6 @@
 package draw;
 
-class Line extends Base implements IBase {
+class Line extends draw.Base implements IBase {
 	@:isVar public var x2(get, set):Float;
 	@:isVar public var y2(get, set):Float;
 

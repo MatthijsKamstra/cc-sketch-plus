@@ -1,6 +1,6 @@
 package draw;
 
-class Group extends Base implements IBase {
+class Group extends draw.Base implements IBase {
 	public var type = 'Group'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<IBase>;

@@ -223,12 +223,32 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
-	 * @param sides
+	 * The <polyline> element is used to create any shape that consists of only straight lines (that is connected at several points)
+	 *  (example [10,11,20,21] translates to point 1: (x: 10, y: 11) and point 1: (x: 20, y: 21)
+	 *
+	 * @param sides			an array of x and y position
 	 * @return PolyLine
 	 */
-	public function makePolyLine(sides):PolyLine {
+	public function makePolyLine(sides:Array<Float>):PolyLine {
 		var shape = new PolyLine(sides);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
+	 * Create polyline with an array of points ( {x:22, y:33} )
+	 * (it's syntatic sugar for makePolyLine)
+	 *
+	 * @param sides		an array of points [{x:22, y:33}]
+	 * @return polyline
+	 */
+	public function makePolyLinePoint(sides:Array<Point>):PolyLine {
+		var _sides:Array<Float> = [];
+		for (i in sides) {
+			_sides.push(i.x);
+			_sides.push(i.y);
+		}
+		var shape = new PolyLine(_sides);
 		baseArray.push(shape);
 		return shape;
 	}

@@ -2,7 +2,7 @@ package draw;
 
 import cc.AST.Point;
 
-class Polygon extends Base implements IBase {
+class Polygon extends draw.Base implements IBase {
 	public var type = 'Polygon'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<Float>; // collection of points

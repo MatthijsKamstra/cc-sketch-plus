@@ -1,6 +1,10 @@
 package draw;
 
-class PolyLine extends Base implements IBase {
+/**
+ * The <polyline> element is used to create any shape that consists of only straight lines (that is connected at several points):
+ * @source: 	https://www.w3schools.com/graphics/svg_polyline.asp
+ */
+class PolyLine extends draw.Base implements IBase {
 	public var type = 'PolyLine'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<Float>; // collection of points
@@ -12,7 +16,7 @@ class PolyLine extends Base implements IBase {
 
 	public function svg(?settings:Settings):String {
 		if (desc != '') {
-			xml.addChild(Xml.createComment('desc')); // still weird I need to do this
+			// xml.addChild(Xml.createComment('desc')); // still weird I need to do this
 			xml.addChild(Xml.parse('<desc>${desc}</desc>'));
 		}
 		var str = '';

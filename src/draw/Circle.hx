@@ -1,6 +1,6 @@
 package draw;
 
-class Circle extends Base implements IBase {
+class Circle extends draw.Base implements IBase {
 	public var type = 'circle'; // base (get class name?)
 
 	@:isVar public var radius(get, set):Float;

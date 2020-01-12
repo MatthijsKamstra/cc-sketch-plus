@@ -3,7 +3,7 @@ package draw;
 import cc.util.ColorUtil;
 import cc.AST.Point;
 
-class Rectangle extends Base implements IBase {
+class Rectangle extends draw.Base implements IBase {
 	@:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;
 

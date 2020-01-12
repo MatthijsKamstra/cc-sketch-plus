@@ -7,7 +7,7 @@ package draw;
  *
  *
  */
-class Path extends Base implements IBase {
+class Path extends draw.Base implements IBase {
 	public var dArray:Array<String> = [];
 
 	public var type = 'Path'; // base (get class name?)

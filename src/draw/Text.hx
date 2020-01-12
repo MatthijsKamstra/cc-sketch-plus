@@ -15,7 +15,7 @@ using StringTools;
  *	text.fontSize = '${_fontSize}px';
  *	text.fill = getColourObj(BLACK);
  */
-class Text extends Base implements IBase {
+class Text extends draw.Base implements IBase {
 	@:isVar public var str(get, set):String;
 
 	@:isVar public var fontSize(get, set):String;
