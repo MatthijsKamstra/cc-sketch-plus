@@ -1,5 +1,8 @@
 package draw;
 
+import draw.AST.LineCap;
+import draw.AST.LineJoin;
+
 using StringTools;
 
 class Base {
@@ -48,7 +51,8 @@ class Base {
 
 	@:isVar public var desc(get, set):String;
 
-	@:isVar public var linecap(get, set):LineCapType; // "butt|round|square";
+	@:isVar public var lineCap(get, set):LineCap; // "butt|round|square";
+	@:isVar public var lineJoin(get, set):LineJoin; // "arcs|bevel|miter|miter-clip|round";
 
 	var transArr:Array<String> = [];
 
@@ -281,14 +285,25 @@ class Base {
 	}
 
 	// "butt|round|square";
-	function get_linecap():LineCapType {
-		return linecap;
+	function get_lineCap():LineCap {
+		return lineCap;
 	}
 
 	// "butt|round|square";
-	function set_linecap(value:LineCapType):LineCapType {
+	function set_lineCap(value:LineCap):LineCap {
 		xml.set('stroke-linecap', Std.string(value));
-		return linecap = value;
+		return lineCap = value;
+	}
+
+	// // "arcs|bevel|miter|miter-clip|round";
+	function get_lineJoin():LineJoin {
+		return lineJoin;
+	}
+
+	// // "arcs|bevel|miter|miter-clip|round";
+	function set_lineJoin(value:LineJoin):LineJoin {
+		xml.set('stroke-linejoin', Std.string(value));
+		return lineJoin = value;
 	}
 
 	function get_count():Int {
@@ -315,11 +330,4 @@ class Base {
 		throw "Not implemented yet";
 		// this.svg();
 	}
-}
-
-@:enum
-abstract LineCapType(String) {
-	var Butt = "butt";
-	var Round = 'round';
-	var Square = 'square';
 }

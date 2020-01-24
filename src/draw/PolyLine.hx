@@ -1,5 +1,7 @@
 package draw;
 
+import draw.AST.LineCap;
+
 /**
  * The <polyline> element is used to create any shape that consists of only straight lines (that is connected at several points):
  * @source: 	https://www.w3schools.com/graphics/svg_polyline.asp
@@ -7,6 +9,7 @@ package draw;
 class PolyLine extends draw.Base implements IBase {
 	public var type = 'PolyLine'; // base (get class name?)
 
+	// @:isVar public var lineCap(get, set):LineCap;
 	@:isVar public var arr(get, set):Array<Float>; // collection of points
 
 	public function new(arr:Array<Float>) {
@@ -49,4 +52,17 @@ class PolyLine extends draw.Base implements IBase {
 	function set_arr(value:Array<Float>):Array<Float> {
 		return arr = value;
 	}
+
+	// function get_lineCap():LineCap {
+	// 	return lineCap;
+	// }
+	// function set_lineCap(value:LineCap):LineCap {
+	// 	return lineCap = value;
+	// }
 }
+
+// enum abstract LineCap(String) {
+// 	var Butt = 'butt';
+// 	var Round = 'round';
+// 	var Square = 'square';
+// }
