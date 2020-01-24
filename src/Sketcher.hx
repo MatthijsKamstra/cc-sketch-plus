@@ -226,6 +226,8 @@ class Sketcher {
 	 * The <polyline> element is used to create any shape that consists of only straight lines (that is connected at several points)
 	 *  (example [10,11,20,21] translates to point 1: (x: 10, y: 11) and point 1: (x: 20, y: 21)
 	 *
+	 * @example 	var polyline = sketch.makePolyLine([10,11,20,21]);
+	 *
 	 * @param sides			an array of x and y position
 	 * @return PolyLine
 	 */
