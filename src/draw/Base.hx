@@ -27,6 +27,11 @@ class Base {
 	@:isVar public var fillColor(get, set):String;
 
 	/**
+	 * use a gradient as color
+	 */
+	@:isVar public var fillGradientColor(get, set):String;
+
+	/**
 	 * stroke is the stroke color
 	 */
 	@:isVar public var stroke(get, set):String; // = '#000000';
@@ -47,7 +52,7 @@ class Base {
 
 	@:isVar public var transform(get, set):String;
 
-	@:isVar public var dash(get, set):Array<Int>;
+	@:isVar public var dash(get, set):Array<Float>;
 
 	@:isVar public var desc(get, set):String;
 
@@ -161,6 +166,14 @@ class Base {
 		return fill = value;
 	}
 
+	function get_fillGradientColor():String {
+		return fill;
+	}
+
+	function set_fillGradientColor(value:String):String {
+		return fill = 'url(#$value)';
+	}
+
 	function get_stroke():String {
 		return stroke;
 	}
@@ -263,11 +276,11 @@ class Base {
 		return transform = value;
 	}
 
-	function get_dash():Array<Int> {
+	function get_dash():Array<Float> {
 		return dash;
 	}
 
-	function set_dash(value:Array<Int>):Array<Int> {
+	function set_dash(value:Array<Float>):Array<Float> {
 		var str = '';
 		for (i in 0...value.length) {
 			str += value[i] + " ";

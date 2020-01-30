@@ -1,5 +1,6 @@
 package;
 
+// import cc.draw.Gradient;
 import js.Browser.*;
 import draw.*;
 import cc.AST.Point;
@@ -9,8 +10,13 @@ class Sketcher {
 	// var paper:Dynamic;
 	var element:js.html.Element;
 	var baseArray:Array<IBase> = [];
-	var svg:String;
+
 	var canvas:js.html.CanvasElement;
+
+	/**
+	 * the svg string (string injected into dv)
+	 */
+	public var svg:String; // should be the svg
 
 	public var CANVAS_ID:String = "sketcher_canvas";
 	public var SVG_ID:String = "sketcher_svg";
@@ -256,6 +262,16 @@ class Sketcher {
 	}
 
 	/**
+	 * @source 	https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Gradients
+	 * 			https://www.w3schools.com/graphics/svg_grad_linear.asp
+	 */
+	public function makeGradient(color0:String, color1:String, isLinear:Bool = true):Gradient {
+		var shape = new Gradient(color0, color1, isLinear);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
 	 * Group is an collection of IBase items
 	 * usefull if you want to rotate/color/stroke-weight a group of items at the same time.
 	 * In Illustrator it will be layer, so usefull to group items to make a more structured file
@@ -407,7 +423,9 @@ class Sketcher {
 				svgW += '${settings.sizeType}';
 				svgH += '${settings.sizeType}';
 			}
-			var paper = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg">';
+			var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg">';
+			var content = '';
+			var defs = '<defs>';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
 				if (base == null)
@@ -420,10 +438,16 @@ class Sketcher {
 				var draw = base.svg(settings);
 				// trace(base.toString());
 				// trace(draw);
-				paper += draw;
+				if (base.type == 'gradient') {
+					defs += draw;
+				} else {
+					content += draw;
+				}
 			}
-			paper += '</svg>';
-			element.innerHTML = paper;
+			_xml += defs + '</defs>';
+			_xml += content + '</svg>';
+			svg = _xml; // external acces?
+			element.innerHTML = _xml;
 		} else {
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
