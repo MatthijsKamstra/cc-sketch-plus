@@ -396,8 +396,8 @@ class Main {
 
 		// Groups can take an array of shapes and/or groups.
 		var group = two.makeGroup([circle1, circle2]);
-		group.rotation = Math.PI;
-		group.scale = 0.75;
+		group.setRotate(Math.PI);
+		group.setScale(0.75);
 		// text example
 
 		var txt = two.makeText("Saira\nStencil\nOne", 50 + ((arr.length - 1) * xoffset), 100);
@@ -439,7 +439,7 @@ class Main {
 		var rect = two.makeRoundedRectangle(60, 100, 100, 100, 20);
 		rect.fill = '#fab1a0';
 		rect.stroke = '#ff7675'; // Accepts all valid css color
-		rect.linewidth = 3;
+		rect.lineWeight = 3;
 
 		// var line = two.makeLine(0, 0, 100, 100);
 
@@ -458,7 +458,7 @@ class Main {
 			var rect = two.makeRoundedRectangle(60 + (offset * i), 100, 100, 100, i * 10);
 			rect.fill = '#74b9ff';
 			rect.stroke = '#6c5ce7'; // Accepts all valid css color
-			rect.linewidth = i;
+			rect.lineWeight = i;
 		}
 
 		// Don't forget to tell two to render everything to the screen
@@ -476,7 +476,7 @@ class Main {
 			var rect = two.makeRoundedRectangle(60 + (offset * i), 100, 100, 100, i * 10);
 			rect.fill = '#74b9ff';
 			rect.stroke = '#6c5ce7'; // Accepts all valid css color
-			rect.linewidth = i;
+			rect.lineWidth = i;
 		}
 
 		// Don't forget to tell two to render everything to the screen
