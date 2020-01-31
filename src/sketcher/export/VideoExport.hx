@@ -214,6 +214,18 @@ class VideoExport {
 			console.warn('No downloadButtonEl is not created yet');
 		}
 		console.info("Successfully recorded " + blob.size + " bytes of " + blob.type + " media.");
-		console.warn('ffmpeg -y -r 30 -i ${filename}.webm -c:v libx264 -strict -2 -pix_fmt yuv420p -shortest -filter:v "setpts=0.5*PTS" ${filename}_30fps.mp4');
+		console.warn('#!/bin/bash'
+			+ '\n\n'
+			+ '# [mck] for now just convert to mp4 seems the best solution'
+			+ '\n\n'
+			+ 'say "start convert webm to mp4"'
+			+ '\n'
+			+ 'ffmpeg -i ${filename}.webm\n'
+			+ 'ffmpeg -y -i ${filename}.webm ${filename}.mp4\n'
+			+ 'ffmpeg -y -r 30 -i ${filename}.webm -c:v libx264 -strict -2 -pix_fmt yuv420p -shortest -filter:v "setpts=0.5*PTS" ${filename}_30fps.mp4\n'
+			+ 'ffmpeg -y -r 60 -i ${filename}.webm -c:v libx264 -strict -2 -pix_fmt yuv420p -shortest -filter:v "setpts=0.5*PTS" ${filename}_60fps.mp4\n'
+			+ 'ffmpeg -y -r 30 -i ${filename}.mp4 -c:v libx264 -strict -2 -pix_fmt yuv420p -shortest -filter:v "setpts=0.5*PTS" ${filename}_30fps_inputmp4.mp4'
+			+ '\n'
+			+ 'say "end convert webm to mp4"');
 	}
 }
