@@ -28,6 +28,9 @@ class Base {
 
 	/**
 	 * use a gradient as color
+	 * is syntatic sugar for
+	 * 			bg1.fillColor = 'url(#yoda-gradient)'; // works
+	 *			bg1.fillGradientColor = 'yoda-gradient'; // better?
 	 */
 	@:isVar public var fillGradientColor(get, set):String;
 

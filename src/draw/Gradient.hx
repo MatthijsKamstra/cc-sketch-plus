@@ -1,5 +1,11 @@
 package draw;
 
+/**
+ * @source
+ * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/linearGradient
+ * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/radialGradient
+ * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/stop
+ */
 class Gradient extends draw.Base implements IBase {
 	public var type = 'gradient'; // base (get class name?)
 
@@ -22,15 +28,18 @@ class Gradient extends draw.Base implements IBase {
 	public function svg(?settings:Settings):String {
 		// xml.set('id', 'test-gradient');
 		var stop0 = Xml.createElement('stop');
-		stop0.set('offset', '5%');
+		stop0.set('offset', '0%');
 		stop0.set('stop-color', '${this.color0}');
 		var stop1 = Xml.createElement('stop');
-		stop1.set('offset', '95%');
+		stop1.set('offset', '100%');
 		stop1.set('stop-color', '${this.color1}');
-		// xml.set('y1', Std.string(this.y));
+		// var stop2 = Xml.createElement('stop');
+		// stop2.set('offset', '50%');
+		// stop2.set('stop-color', 'pink');
 
 		xml.addChild(stop0);
 		xml.addChild(stop1);
+		// xml.addChild(stop2);
 
 		// if (this.stroke != null)
 		// 	xml.set('stroke', this.stroke);
