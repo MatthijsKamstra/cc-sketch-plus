@@ -64,7 +64,7 @@ var Main = function() {
 	this.radiusSmall = 50;
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-01 22:23:14");
+		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-01 22:42:26");
 		_gthis.init();
 	});
 };
@@ -153,18 +153,22 @@ Main.prototype = {
 		var dashLine = omtrek * pct;
 		var dashNoLine = omtrek - dashLine;
 		var circle1 = sketch.makeCircle(p2.x,p2.y,_r);
+		circle1.set_id("round cap, lime color");
 		circle1.set_lineCap("round");
 		circle1.set_fillOpacity(0);
 		circle1.set_strokeColor(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.LIME));
 		circle1.set_strokeWeight(_stroke);
 		circle1.set_dash([dashLine,dashNoLine]);
 		circle1.setRotate(-90,p2.x,p2.y);
+		circle1.debug();
 		var circle2 = sketch.makeCircle(p2.x,p2.y,_r);
+		circle2.set_id("circle round fuchsia");
 		circle2.set_fillOpacity(0);
 		circle2.set_strokeColor(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.FUCHSIA));
 		circle2.set_strokeWeight(_stroke);
 		circle2.set_strokeOpacity(0.2);
 		circle2.setRotate(-90,p2.x,p2.y);
+		circle2.debug();
 		sketch.update();
 	}
 	,__class__: Main
@@ -1813,7 +1817,7 @@ draw_Gradient.prototype = $extend(draw_Base.prototype,{
 	,__class__: draw_Gradient
 });
 var draw_Group = function(arr) {
-	this.type = "Group";
+	this.type = "group";
 	this.set_arr(arr);
 	draw_Base.call(this,"g");
 };
@@ -3012,6 +3016,7 @@ var sketcher_draw_Circle = function(x,y,radius) {
 	this.set_y(y);
 	this.set_radius(radius);
 	draw_Base.call(this,"circle");
+	this.set_dash([]);
 };
 sketcher_draw_Circle.__name__ = "sketcher.draw.Circle";
 sketcher_draw_Circle.__interfaces__ = [draw_IBase];
@@ -3110,10 +3115,16 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		}
 		var _strokeColor = { r : _r1, g : _g1, b : _b1, a : _a1};
 		ctx.strokeStyle = cc_util_ColorUtil.getColourObj(_strokeColor,this.get_strokeOpacity());
+		if(this.get_dash() != null) {
+			ctx.setLineDash(this.get_dash());
+		}
 		ctx.beginPath();
 		ctx.arc(this.get_x(),this.get_y(),this.get_radius(),0,2 * Math.PI);
 		ctx.fill();
 		ctx.stroke();
+	}
+	,debug: function() {
+		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 80, className : "sketcher.draw.Circle", methodName : "debug"});
 	}
 	,get_radius: function() {
 		return this.radius;
