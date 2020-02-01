@@ -55,7 +55,7 @@ class Base {
 
 	@:isVar public var transform(get, set):String;
 
-	@:isVar public var dash(get, set):Array<Float>;
+	@:isVar public var dash(get, set):Array<Float> = [];
 
 	@:isVar public var desc(get, set):String;
 
@@ -102,6 +102,7 @@ class Base {
 	 * @param y   		(optional) center y
 	 */
 	public function setRotate(degree:Float, ?x:Float, ?y:Float) {
+		rotate = degree;
 		var str = 'rotate(${degree}';
 		if (x != null)
 			str += ',${x}';
@@ -266,7 +267,7 @@ class Base {
 	}
 
 	function set_rotate(value:Float):Float {
-		setRotate(value);
+		// setRotate(value); // recursion error
 		return rotate = value;
 	}
 
