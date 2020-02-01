@@ -3,6 +3,7 @@ package;
 // import cc.draw.Gradient;
 import js.Browser.*;
 import draw.*;
+import sketcher.draw.*;
 import cc.AST.Point;
 
 class Sketcher {
