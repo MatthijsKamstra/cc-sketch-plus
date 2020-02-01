@@ -1,12 +1,16 @@
 package draw;
 
+import js.Browser.*;
+
 class Group extends draw.Base implements IBase {
 	public var type = 'Group'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<IBase>;
 
 	/**
-	 *
+	 * create a group to join a couple of IBase items
+	 * useful in `svg`, not so much in `canvas`
+	 * might be usefull to push all actions into one transform
 	 */
 	public function new(arr:Array<IBase>) {
 		this.arr = arr;
@@ -29,25 +33,35 @@ class Group extends draw.Base implements IBase {
 		for (i in 0...this.arr.length) {
 			// untyped xml.appendChild(this.arr[i].svg);
 			// xml.addChild(Xml.createComment(this.arr[i].type));
-			var temp = this.arr[i];
-			xml.addChild(Xml.parse(temp.svg(null)));
+			var base = this.arr[i];
+			xml.addChild(Xml.parse(base.svg(null)));
 		}
 		// xml.set('x', '0');
 		return xml.toString();
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+		console.warn('The Group changes like transforms/fill/stroke/etc  doesn\'t work with canvas (yet)');
+		// TODO set transforms on group also on individuals
+		for (i in 0...this.arr.length) {
+			var base = this.arr[i];
+			if (base == null)
+				continue;
+			base.ctx(ctx);
+		}
+
+		// ctx.beginPath();
+		// ctx.fill();
+		// ctx.stroke();
 	}
 
 	// ____________________________________ unique functions for this specific class ____________________________________
 
 	public function hide() {
 		// hide this group with
-		// opacity:0
-		opacity = 0;
+		// opacity:0 // old way... doesn't work that well for canvas
+		fillOpacity = 0;
+		strokeOpacity = 0;
 	}
 
 	public function test() {
