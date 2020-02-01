@@ -41,7 +41,7 @@ class Group extends draw.Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		console.warn('The Group changes like transforms/fill/stroke/etc  doesn\'t work with canvas (yet)');
+		console.warn('The Group (${id}) changes like transforms/fill/stroke/etc. doesn\'t work for canvas (yet)');
 		// TODO set transforms on group also on individuals
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];
