@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import cc.util.MathUtil;
 import cc.util.ColorUtil;
 
 class Circle extends draw.Base implements draw.IBase {
@@ -12,7 +13,7 @@ class Circle extends draw.Base implements draw.IBase {
 		this.y = y;
 		this.radius = radius;
 		super('circle');
-		this.dash = []; // reset the dash for canvas?
+		// this.dash = []; // reset the dash for canvas?
 	}
 
 	public function noStroke() {
@@ -69,9 +70,25 @@ class Circle extends draw.Base implements draw.IBase {
 		}
 
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+
+		// rotation
+		if (this.rotate != null) {
+			// trace(this.x, this.y, this.rotate);
+			ctx.save();
+			ctx.translate(this.x, this.y);
+			ctx.rotate(MathUtil.radians(this.rotate));
+
+			ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+
+			ctx.restore();
+		} else {
+			ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+		}
+
 		ctx.fill();
 		ctx.stroke();
+
+		if (this.rotate != null) {}
 	}
 
 	// ____________________________________ debug ____________________________________
