@@ -44,7 +44,7 @@ class Rectangle extends draw.Base implements draw.IBase {
 
 	public function noStroke() {
 		this.lineWeight = 0;
-		this.stroke = 'transparant';
+		this.strokeOpacity = 0;
 	}
 
 	public function svg(?settings:Settings):String {
@@ -66,16 +66,30 @@ class Rectangle extends draw.Base implements draw.IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		ctx.fillStyle = this.fill;
-		ctx.strokeStyle = this.stroke;
 		ctx.lineWidth = this.lineWeight;
+		if (this.fillColor == null) {
+			this.fillColor = '#000000';
+		}
+		if (this.strokeColor == null) {
+			this.strokeColor = '#000000';
+		}
+		if (this.fillOpacity == null) {
+			this.fillOpacity = 1;
+		}
+		if (this.strokeOpacity == null) {
+			this.strokeOpacity = 1;
+		}
 
-		var color = ColorUtil.assumption(this.fill);
-		ctx.fillStyle = ColorUtil.getColourObj(color, this.opacity);
+		// trace('fillColor : ' + this.fillColor);
+		// trace('fillOpacity: ' + this.fillOpacity);
+		// trace('strokeColor : ' + this.strokeColor);
+		// trace('strokeOpacity: ' + this.strokeOpacity);
 
-		trace(ColorUtil.getColourObj(color, this.opacity));
-		trace(color);
-		trace(this.fill);
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _strokeColor = ColorUtil.assumption(this.strokeColor);
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
 
 		ctx.beginPath();
 
