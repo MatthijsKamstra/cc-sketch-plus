@@ -1,6 +1,6 @@
-package draw;
+package sketcher.draw;
 
-class Circle extends draw.Base implements IBase {
+class Circle extends draw.Base implements draw.IBase {
 	public var type = 'circle'; // base (get class name?)
 
 	@:isVar public var radius(get, set):Float;

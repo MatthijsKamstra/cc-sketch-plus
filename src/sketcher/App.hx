@@ -1,9 +1,9 @@
-package model.constants;
+package sketcher;
 
 import haxe.macro.Context;
 
 class App {
-	public static var NAME:String = "[cc-calendar]";
+	public static var NAME:String = "[cc-sketcher]";
 
 	public static inline macro function getBuildDate() {
 		#if !display
