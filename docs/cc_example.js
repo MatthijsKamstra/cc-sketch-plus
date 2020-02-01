@@ -64,7 +64,7 @@ var Main = function() {
 	this.radiusSmall = 50;
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-01 22:42:26");
+		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 00:29:49");
 		_gthis.init();
 	});
 };
@@ -125,7 +125,6 @@ Main.prototype = {
 		circle2.set_strokeColor(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.FUCHSIA));
 		circle2.set_strokeWeight(_stroke);
 		circle2.set_strokeOpacity(0.2);
-		circle2.setRotate(-90,p2.x,p2.y);
 		sketch.update();
 	}
 	,sketchCanvas: function() {
@@ -160,15 +159,12 @@ Main.prototype = {
 		circle1.set_strokeWeight(_stroke);
 		circle1.set_dash([dashLine,dashNoLine]);
 		circle1.setRotate(-90,p2.x,p2.y);
-		circle1.debug();
 		var circle2 = sketch.makeCircle(p2.x,p2.y,_r);
 		circle2.set_id("circle round fuchsia");
 		circle2.set_fillOpacity(0);
 		circle2.set_strokeColor(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.FUCHSIA));
 		circle2.set_strokeWeight(_stroke);
 		circle2.set_strokeOpacity(0.2);
-		circle2.setRotate(-90,p2.x,p2.y);
-		circle2.debug();
 		sketch.update();
 	}
 	,__class__: Main
@@ -1530,6 +1526,7 @@ var draw_AST = function() { };
 draw_AST.__name__ = "draw.AST";
 var draw_Base = function(name) {
 	this.transArr = [];
+	this.dash = [];
 	this.xml = Xml.createElement(name);
 	draw_Base.COUNT++;
 	this.set_id(this.get_id());
@@ -1548,6 +1545,7 @@ draw_Base.prototype = {
 		this.transArr.push(str);
 	}
 	,setRotate: function(degree,x,y) {
+		this.set_rotate(degree);
 		var str = "rotate(" + degree;
 		if(x != null) {
 			str += "," + x;
@@ -1577,7 +1575,7 @@ draw_Base.prototype = {
 		return str;
 	}
 	,clone: function() {
-		haxe_Log.trace("WIP",{ fileName : "src/draw/Base.hx", lineNumber : 131, className : "draw.Base", methodName : "clone"});
+		haxe_Log.trace("WIP",{ fileName : "src/draw/Base.hx", lineNumber : 132, className : "draw.Base", methodName : "clone"});
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
 	}
 	,get_id: function() {
@@ -1672,7 +1670,6 @@ draw_Base.prototype = {
 		return this.rotate;
 	}
 	,set_rotate: function(value) {
-		this.setRotate(value);
 		return this.rotate = value;
 	}
 	,get_transform: function() {
@@ -1845,7 +1842,7 @@ draw_Group.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
-		window.console.warn("The Group changes like transforms/fill/stroke/etc  doesn't work with canvas (yet)");
+		window.console.warn("The Group (" + this.get_id() + ") changes like transforms/fill/stroke/etc. doesn't work for canvas (yet)");
 		var _g = 0;
 		var _g1 = this.get_arr().length;
 		while(_g < _g1) {
@@ -3016,7 +3013,6 @@ var sketcher_draw_Circle = function(x,y,radius) {
 	this.set_y(y);
 	this.set_radius(radius);
 	draw_Base.call(this,"circle");
-	this.set_dash([]);
 };
 sketcher_draw_Circle.__name__ = "sketcher.draw.Circle";
 sketcher_draw_Circle.__interfaces__ = [draw_IBase];
@@ -3119,12 +3115,21 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 			ctx.setLineDash(this.get_dash());
 		}
 		ctx.beginPath();
-		ctx.arc(this.get_x(),this.get_y(),this.get_radius(),0,2 * Math.PI);
+		if(this.get_rotate() != null) {
+			ctx.save();
+			ctx.translate(this.get_x(),this.get_y());
+			ctx.rotate(cc_util_MathUtil.radians(this.get_rotate()));
+			ctx.arc(0,0,this.get_radius(),0,2 * Math.PI);
+			ctx.restore();
+		} else {
+			ctx.arc(this.get_x(),this.get_y(),this.get_radius(),0,2 * Math.PI);
+		}
 		ctx.fill();
 		ctx.stroke();
+		var tmp = this.get_rotate() != null;
 	}
 	,debug: function() {
-		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 80, className : "sketcher.draw.Circle", methodName : "debug"});
+		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 97, className : "sketcher.draw.Circle", methodName : "debug"});
 	}
 	,get_radius: function() {
 		return this.radius;
