@@ -429,6 +429,7 @@ class Sketcher {
 			var defs = '<defs>';
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
+
 				if (base == null)
 					continue;
 
@@ -452,6 +453,10 @@ class Sketcher {
 		} else {
 			for (i in 0...baseArray.length) {
 				var base = baseArray[i];
+
+				if (base == null)
+					continue;
+
 				trace(base.type);
 				base.ctx(ctx);
 			}
