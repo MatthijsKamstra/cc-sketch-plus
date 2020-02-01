@@ -1,5 +1,7 @@
 package sketcher.draw;
 
+import cc.util.ColorUtil;
+
 class Circle extends draw.Base implements draw.IBase {
 	public var type = 'circle'; // base (get class name?)
 
@@ -10,6 +12,7 @@ class Circle extends draw.Base implements draw.IBase {
 		this.y = y;
 		this.radius = radius;
 		super('circle');
+		this.dash = []; // reset the dash for canvas?
 	}
 
 	public function noStroke() {
@@ -34,13 +37,47 @@ class Circle extends draw.Base implements draw.IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		ctx.fillStyle = this.fill;
-		ctx.strokeStyle = this.stroke;
 		ctx.lineWidth = this.lineWeight;
+		if (this.fillColor == null) {
+			this.fillColor = '#000000';
+		}
+		if (this.strokeColor == null) {
+			this.strokeColor = '#000000';
+		}
+		if (this.fillOpacity == null) {
+			this.fillOpacity = 1;
+		}
+		if (this.strokeOpacity == null) {
+			this.strokeOpacity = 1;
+		}
+		if (this.lineCap != null) {
+			ctx.lineCap = cast this.lineCap;
+		}
+		// trace('fillColor : ' + this.fillColor);
+		// trace('fillOpacity: ' + this.fillOpacity);
+		// trace('strokeColor : ' + this.strokeColor);
+		// trace('strokeOpacity: ' + this.strokeOpacity);
+
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _strokeColor = ColorUtil.assumption(this.strokeColor);
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
+
+		if (this.dash != null) {
+			ctx.setLineDash(this.dash);
+		}
+
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.stroke();
+	}
+
+	// ____________________________________ debug ____________________________________
+
+	public function debug() {
+		trace('${toString()}');
 	}
 
 	// ____________________________________ getter/setter ____________________________________
