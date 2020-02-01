@@ -92,7 +92,6 @@ class Main {
 		circle2.strokeColor = getColourObj(FUCHSIA);
 		circle2.strokeWeight = _stroke;
 		circle2.strokeOpacity = 0.2;
-		circle2.setRotate(-90, p.x, p.y); // rotate it 90 degree to start on top
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
@@ -139,7 +138,7 @@ class Main {
 		circle.strokeWeight = _stroke;
 		circle.dash = [dashLine, dashNoLine];
 		circle.setRotate(-90, p.x, p.y); // rotate it 90 degree to start on top
-		circle.debug();
+		// circle.debug();
 
 		var circle2 = sketch.makeCircle(p.x, p.y, _r);
 		circle2.id = "circle round fuchsia";
@@ -147,8 +146,7 @@ class Main {
 		circle2.strokeColor = getColourObj(FUCHSIA);
 		circle2.strokeWeight = _stroke;
 		circle2.strokeOpacity = 0.2;
-		circle2.setRotate(-90, p.x, p.y); // rotate it 90 degree to start on top
-		circle2.debug();
+		// circle2.debug();
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
