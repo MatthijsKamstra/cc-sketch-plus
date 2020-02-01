@@ -1,7 +1,7 @@
 package util;
 
 import cc.util.ColorUtil.*;
-import cc.util.GridUtil;
+import sketcher.util.GridUtil;
 import cc.AST;
 
 class TestUtil {
@@ -22,6 +22,7 @@ class TestUtil {
 			var point:Point = grid.array[i];
 			var circle = sketch.makeCircle(point.x, point.y, 3);
 			circle.fillColor = getColourObj(PINK, 1);
+			circle.strokeOpacity = 0;
 			_circlesArray.push(circle);
 		}
 		var rect = sketch.makeRectangle(grid.x, grid.y, grid.width, grid.height, false);
