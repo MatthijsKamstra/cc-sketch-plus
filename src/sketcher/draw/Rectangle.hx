@@ -1,9 +1,9 @@
-package draw;
+package sketcher.draw;
 
 import cc.util.ColorUtil;
 import cc.AST.Point;
 
-class Rectangle extends draw.Base implements IBase {
+class Rectangle extends draw.Base implements draw.IBase {
 	@:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;
 
