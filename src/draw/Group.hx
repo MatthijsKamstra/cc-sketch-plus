@@ -3,7 +3,7 @@ package draw;
 import js.Browser.*;
 
 class Group extends draw.Base implements IBase {
-	public var type = 'Group'; // base (get class name?)
+	public var type = 'group'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<IBase>;
 

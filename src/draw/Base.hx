@@ -326,6 +326,7 @@ class Base {
 	}
 
 	// ____________________________________ toString ____________________________________
+
 	public function getName() {
 		var name = Type.getClassName(Type.getClass(this));
 		return ('${name}');
