@@ -12,24 +12,24 @@ class MainSVG {
 	var ccTypeArray:Array<Class<Dynamic>> = [
 		// CC004, CC011, CC012, CC017, CC018, CC030, CC031, CC032, CC035, CC045, CC057, CC058, CC059a, CC061, CC062, CC066, CC067, CC069,CC030,
 		// CC032, CC027,	CC031,
-		Calendar,
-		CC004,
-		CC011,
-		CC012,
-		CC017,
-		CC018,
-		CC035Simple,
-		CC045,
-		CC059a,
-		CC062,
-		CC066,
-		CC067,
-		CC069,
-		PMECube2,
-		PMEDots,
-		PMEMorseCode,
-		PMEMorseCodeSquare,
-		PMEPixels,
+		// Calendar,
+		// CC004,
+		// CC011,
+		// CC012,
+		// CC017,
+		// CC018,
+		// CC035Simple,
+		// CC045,
+		// CC059a,
+		// CC062,
+		// CC066,
+		// CC067,
+		// CC069,
+		// PMECube2,
+		// PMEDots,
+		// PMEMorseCode,
+		// PMEMorseCodeSquare,
+		// PMEPixels,
 	];
 
 	// CC027 is an image to vector convert via pixels
@@ -38,7 +38,7 @@ class MainSVG {
 		// console.log('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
 			console.log('${App.NAME} Dom ready');
-			console.log('${model.constants.App.NAME} (SVG) Dom ready :: build: ${model.constants.App.getBuildDate()}');
+			console.log('${sketcher.App.NAME} (SVG) Dom ready :: build: ${sketcher.App.getBuildDate()}');
 
 			// var cc = new svg.Calendar();
 			setupArt();
@@ -69,7 +69,7 @@ class MainSVG {
 		}, false);
 
 		// use cursor key lef and right to switch sketches
-		window.addEventListener(KEY_DOWN, function(e:js.html.KeyboardEvent) {
+		window.addEventListener('KEY_DOWN', function(e:js.html.KeyboardEvent) {
 			switch (e.key) {
 				case 'ArrowRight':
 					count++;
