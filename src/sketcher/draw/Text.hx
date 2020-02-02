@@ -17,6 +17,10 @@ using StringTools;
  *	text.fill = getColourObj(BLACK);
  */
 class Text extends draw.Base implements draw.IBase {
+	public static var ISWARN:Bool;
+
+	public var type = 'Text'; // base (get class name?)
+
 	@:isVar public var str(get, set):String;
 
 	@:isVar public var fontSize(get, set):String;
@@ -58,8 +62,6 @@ class Text extends draw.Base implements draw.IBase {
 	 * test style
 	 */
 	@:isVar public var style(get, set):String;
-
-	public var type = 'Text'; // base (get class name?)
 
 	/**
 	 * Create a text element in svg
