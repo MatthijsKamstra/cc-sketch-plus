@@ -1,8 +1,10 @@
-package draw;
+package sketcher.draw;
 
 import js.Browser.*;
+import draw.IBase;
+import draw.Base;
 
-class Group extends draw.Base implements IBase {
+class Group extends draw.Base implements draw.IBase {
 	public var type = 'group'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<IBase>;
@@ -41,12 +43,27 @@ class Group extends draw.Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		console.warn('The Group (${id}) changes like transforms/fill/stroke/etc. doesn\'t work for canvas (yet)');
+		console.warn('The Group (${id}) changes like transforms/etc. doesn\'t work for canvas (yet)');
+		console.info('strokeOpacity, fillOpacity, fillColor, strokeColor done!');
 		// TODO set transforms on group also on individuals
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];
 			if (base == null)
 				continue;
+
+			if (this.fillOpacity != null) {
+				cast(base, Base).fillOpacity = this.fillOpacity;
+			}
+			if (this.strokeOpacity != null) {
+				cast(base, Base).strokeOpacity = this.strokeOpacity;
+			}
+			if (this.fillColor != null) {
+				cast(base, Base).fillColor = this.fillColor;
+			}
+			if (this.strokeColor != null) {
+				cast(base, Base).strokeColor = this.strokeColor;
+			}
+
 			base.ctx(ctx);
 		}
 
