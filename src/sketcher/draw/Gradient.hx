@@ -1,4 +1,4 @@
-package draw;
+package sketcher.draw;
 
 /**
  * @source
@@ -6,7 +6,7 @@ package draw;
  * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/radialGradient
  * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/stop
  */
-class Gradient extends draw.Base implements IBase {
+class Gradient extends draw.Base implements draw.IBase {
 	public var type = 'gradient'; // base (get class name?)
 
 	var color0:String;
