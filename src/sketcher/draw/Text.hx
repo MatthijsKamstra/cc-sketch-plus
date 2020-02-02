@@ -1,6 +1,7 @@
-package draw;
+package sketcher.draw;
 
 import js.Browser.*;
+import sketcher.util.ColorUtil;
 
 using StringTools;
 
@@ -15,7 +16,7 @@ using StringTools;
  *	text.fontSize = '${_fontSize}px';
  *	text.fill = getColourObj(BLACK);
  */
-class Text extends draw.Base implements IBase {
+class Text extends draw.Base implements draw.IBase {
 	@:isVar public var str(get, set):String;
 
 	@:isVar public var fontSize(get, set):String;
@@ -35,6 +36,8 @@ class Text extends draw.Base implements IBase {
 	@:isVar public var fontWeight(get, set):String;
 
 	@:isVar public var textAnchor(get, set):TextAnchorType;
+
+	@:isVar public var textAlign(get, set):TextAlignType;
 
 	/**
 	 * alignment-baseline: auto | baseline | before-edge | text-before-edge | middle | central | after-edge | text-after-edge | ideographic | alphabetic | hanging | mathematical | inherit
@@ -137,10 +140,23 @@ class Text extends draw.Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		trace("needs work!");
-		// ctx.beginPath();
-		// ctx.fill();
-		// ctx.stroke();
+		useDefaultsCanvas();
+
+		ctx.save(); // save current state
+
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _css = '';
+		ctx.font = '${_css} ${this.fontSize}px ${this.fontFamily}'.ltrim();
+		ctx.textAlign = cast textAlign;
+		ctx.textBaseline = cast alignmentBaseline;
+
+		trace(textAnchor, alignmentBaseline);
+		ctx.fillText(this.str, this.x, this.y);
+
+		// restore canvas to previous position
+		ctx.restore();
 	}
 
 	function convertTextAlign() {
@@ -225,6 +241,14 @@ class Text extends draw.Base implements IBase {
 		return dominantBaseline = value;
 	}
 
+	function get_textAlign():TextAlignType {
+		return textAlign;
+	}
+
+	function set_textAlign(value:TextAlignType):TextAlignType {
+		return textAlign = value;
+	}
+
 	function get_str():String {
 		return str;
 	}
@@ -288,4 +312,13 @@ class Text extends draw.Base implements IBase {
 	var TextAfterEdge = "text-after-edge";
 	var TextBeforeEdge = "text-before-edge";
 	var Inherit = 'inherit';
+}
+
+// canvas?
+enum abstract TextAlignType(String) {
+	var Center = "center";
+	var End = "end";
+	var Left = "left";
+	var Right = "right";
+	var Start = "start";
 }
