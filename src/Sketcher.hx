@@ -291,7 +291,7 @@ class Sketcher {
 			for (i in 0...baseArray.length) {
 				var base:IBase = baseArray[i];
 				if (base == _base) {
-					baseArray[i] = null;
+					baseArray[i] = null; // the reason there is base == null!
 				}
 			}
 		}
@@ -417,6 +417,7 @@ class Sketcher {
 	 */
 	public function update() {
 		// trace('WIP update');
+
 		if (element == null) {
 			// make sure the element exists
 			// console.warn('element doesn\'t exist in DOM (${element})');
@@ -438,7 +439,7 @@ class Sketcher {
 				var base = baseArray[i];
 
 				if (base == null)
-					continue;
+					continue; // with the creation of groups there are base == null
 
 				// if (base.type == 'Group') {
 				// 	trace('groups do this');
@@ -462,7 +463,7 @@ class Sketcher {
 				var base = baseArray[i];
 
 				if (base == null)
-					continue;
+					continue; // with the creation of groups there are base == null
 
 				trace(base.type);
 				base.ctx(ctx);
