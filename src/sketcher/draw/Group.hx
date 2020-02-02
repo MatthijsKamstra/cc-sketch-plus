@@ -43,8 +43,10 @@ class Group extends draw.Base implements draw.IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		console.groupCollapsed('Group (${id})');
 		console.warn('The Group (${id}) changes like transforms/etc. doesn\'t work for canvas (yet)');
-		console.info('strokeOpacity, fillOpacity, fillColor, strokeColor done!');
+		console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor');
+		console.groupEnd();
 		// TODO set transforms on group also on individuals
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];
