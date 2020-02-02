@@ -6,21 +6,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var EReg = function(r,opt) {
-	this.r = new RegExp(r,opt.split("u").join(""));
-};
-EReg.__name__ = "EReg";
-EReg.prototype = {
-	match: function(s) {
-		if(this.r.global) {
-			this.r.lastIndex = 0;
-		}
-		this.r.m = this.r.exec(s);
-		this.r.s = s;
-		return this.r.m != null;
-	}
-	,__class__: EReg
-};
 var HxOverrides = function() { };
 HxOverrides.__name__ = "HxOverrides";
 HxOverrides.cca = function(s,index) {
@@ -64,7 +49,7 @@ var Main = function() {
 	this.radiusSmall = 50;
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 00:29:49");
+		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 13:04:43");
 		_gthis.init();
 	});
 };
@@ -94,7 +79,7 @@ Main.prototype = {
 		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
 		var sketch = Sketcher.create(settings).appendTo(elem);
 		if(this.isDebug) {
-			util_TestUtil.gridDots(sketch,this.grid);
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
 		}
 		var p = this.grid.array[0];
 		var circle = sketch.makeCircle(p.x,p.y,50);
@@ -132,7 +117,7 @@ Main.prototype = {
 		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
 		var sketch = Sketcher.create(settings).appendTo(elem);
 		if(this.isDebug) {
-			util_TestUtil.gridDots(sketch,this.grid);
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
 		}
 		var p = this.grid.array[0];
 		var circle = sketch.makeCircle(p.x,p.y,50);
@@ -243,387 +228,14 @@ Settings.prototype = {
 	}
 	,__class__: Settings
 };
-var SketchOption = function() {
-	this._dpi = 72;
-	this._padding = 20;
-	this._scale = false;
-	this._type = "canvas";
-	this._container = window.document.body;
-	this._autopause = true;
-	this._autostart = true;
-	this._autoclear = true;
-	this._fullscreen = true;
-};
-SketchOption.__name__ = "SketchOption";
-SketchOption.prototype = {
-	get_width: function() {
-		return this._width;
-	}
-	,set_width: function(value) {
-		this._fullscreen = false;
-		if(this._height == null) {
-			this._height = value;
-		}
-		return this._width = value;
-	}
-	,get_height: function() {
-		return this._height;
-	}
-	,set_height: function(value) {
-		this._fullscreen = false;
-		if(this._width == null) {
-			this._width = value;
-		}
-		return this._height = value;
-	}
-	,get_fullscreen: function() {
-		return this._fullscreen;
-	}
-	,set_fullscreen: function(value) {
-		return this._fullscreen = value;
-	}
-	,get_autoclear: function() {
-		return this._autoclear;
-	}
-	,set_autoclear: function(value) {
-		return this._autostart = value;
-	}
-	,get_autostart: function() {
-		return this._autostart;
-	}
-	,set_autostart: function(value) {
-		return this._autostart = value;
-	}
-	,get_autopause: function() {
-		return this._autopause;
-	}
-	,set_autopause: function(value) {
-		return this._autopause = value;
-	}
-	,get_container: function() {
-		return this._container;
-	}
-	,set_container: function(value) {
-		return this._container = value;
-	}
-	,get_type: function() {
-		return this._type;
-	}
-	,set_type: function(value) {
-		return this._type = value;
-	}
-	,get_scale: function() {
-		return this._scale;
-	}
-	,set_scale: function(value) {
-		return this._scale = value;
-	}
-	,get_padding: function() {
-		return this._padding;
-	}
-	,set_padding: function(value) {
-		return this._padding = value;
-	}
-	,get_dpi: function() {
-		return this._dpi;
-	}
-	,set_dpi: function(value) {
-		return this._dpi = value;
-	}
-	,__class__: SketchOption
-};
-var Sketch = function() {
-	this.document = window.document;
-	this.window = window;
-};
-Sketch.__name__ = "Sketch";
-Sketch.create = function(name,opt) {
-	if(opt != null) {
-		Sketch.option = opt;
-	}
-	if(Sketch.option.get_type() == "canvas") {
-		return new Sketch().createCanvas(name);
-	} else {
-		return new Sketch().createGLCanvas(name);
-	}
-};
-Sketch.createHiddenCanvas = function(name,option,isDebug) {
-	if(isDebug == null) {
-		isDebug = false;
-	}
-	if(option == null) {
-		option = new SketchOption();
-	}
-	var body = window.document.querySelector("body");
-	var canvas = window.document.createElement("canvas");
-	body.appendChild(canvas);
-	var __w = Math.min(Global.w * 0.50,option.get_width());
-	canvas.setAttribute("id","hiddencanvas-" + name);
-	canvas.style.position = "absolute";
-	canvas.style.left = "0px";
-	canvas.style.top = "0px";
-	canvas.style.border = "1px solid pink";
-	canvas.style.width = "" + __w + "px";
-	canvas.width = option.get_width();
-	canvas.height = option.get_height();
-	if(!isDebug) {
-		var tmp = option.get_width();
-		canvas.style.left = -(tmp * 1.5) + "px";
-	}
-	var ctx = canvas.getContext("2d");
-	return ctx;
-};
-Sketch.prototype = {
-	createCanvas: function(name) {
-		var body = this.document.querySelector("body");
-		if(this.document.getElementById("canvas-wrapper") != null) {
-			var element = this.document.getElementById("canvas-wrapper");
-			element.parentNode.removeChild(element);
-			this.window.addEventListener(Global.RESIZE,null,false);
-			this.window.addEventListener(Global.MOUSE_MOVE,null,false);
-			this.window.addEventListener(Global.MOUSE_DOWN,null,false);
-			this.window.addEventListener(Global.MOUSE_UP,null,false);
-			this.window.addEventListener(Global.KEY_DOWN,null,false);
-		}
-		var container = this.document.createElement("div");
-		container.setAttribute("id","canvas-wrapper");
-		container.className = "canvas-wrapper-container";
-		this.canvas = this.document.createElement("canvas");
-		this.canvas.setAttribute("id",name);
-		body.appendChild(container);
-		container.appendChild(this.canvas);
-		this.ctx = this.canvas.getContext("2d");
-		new Sketch().init(this.ctx);
-		this.onResizeHandler();
-		this.window.addEventListener(Global.RESIZE,$bind(this,this.onResizeHandler),false);
-		return this.ctx;
-	}
-	,createGLCanvas: function(name) {
-		return null;
-	}
-	,checkForId: function(id) {
-		return true;
-	}
-	,onResizeHandler: function() {
-		var c = this.document.getElementsByTagName("canvas");
-		if(Sketch.option == null) {
-			return;
-		}
-		if(Sketch.option.get_fullscreen()) {
-			Global.w = this.window.innerWidth;
-			Global.h = this.window.innerHeight;
-			Sketch.option.set_width(Global.w);
-			Sketch.option.set_height(Global.h);
-		} else {
-			Global.w = Sketch.option.get_width();
-			Global.h = Sketch.option.get_height();
-		}
-		var _g = 0;
-		var _g1 = c.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var _c = c[i];
-			if(Sketch.option.get_scale()) {
-				var padding = Sketch.option.get_padding();
-				var scaleX = (this.window.innerWidth - 2 * padding) / Global.w;
-				var scaleY = (this.window.innerHeight - 2 * padding) / Global.h;
-				var scale = Math.min(scaleX,scaleY);
-				var tmp = "" + Sketch.option.get_width() * scale;
-				_c.style.width = tmp + "px";
-				var tmp1 = "" + Sketch.option.get_height() * scale;
-				_c.style.height = tmp1 + "px";
-			}
-			if(_c.id.indexOf("hiddencanvas-") != -1) {
-				continue;
-			}
-			_c.width = Global.w;
-			_c.height = Global.h;
-		}
-		window.console.log("RESIZE :: w=" + Global.w + " , h=" + Global.h);
-	}
-	,init: function(ctx) {
-		var _gthis = this;
-		this.window.addEventListener(Global.MOUSE_MOVE,function(e) {
-			Global.mouseX = e.clientX;
-			Global.mouseY = e.clientY;
-			Global.mouseMoved = true;
-		});
-		this.window.addEventListener(Global.MOUSE_DOWN,function(e1) {
-			Global.mouseDown = true;
-		});
-		this.window.addEventListener(Global.MOUSE_UP,function(e2) {
-			Global.mouseDown = false;
-		});
-		this.window.addEventListener(Global.KEY_DOWN,function(e3) {
-			if(e3.metaKey == true && e3.key == "r") {
-				haxe_Log.trace("cmd + r",{ fileName : "Sketch.hx", lineNumber : 197, className : "Sketch", methodName : "init"});
-				window.location.reload();
-			}
-			if(e3.metaKey == true && e3.key == "s" && e3.shiftKey == false) {
-				e3.preventDefault();
-				e3.stopPropagation();
-				haxe_Log.trace("cmd + s",{ fileName : "Sketch.hx", lineNumber : 203, className : "Sketch", methodName : "init"});
-				cc_tool_ExportFile.downloadImageBg(ctx,true);
-			}
-			if(e3.metaKey == true && e3.key == "s" && e3.shiftKey == true) {
-				e3.preventDefault();
-				e3.stopPropagation();
-				haxe_Log.trace("cmd + shift + s",{ fileName : "Sketch.hx", lineNumber : 209, className : "Sketch", methodName : "init"});
-				cc_tool_ExportFile.downloadImage(ctx,false);
-			}
-			if(e3.metaKey == true && (e3.code == "KeyS" && e3.altKey == true)) {
-				e3.preventDefault();
-				e3.stopPropagation();
-				haxe_Log.trace("cmd + alt + s",{ fileName : "Sketch.hx", lineNumber : 215, className : "Sketch", methodName : "init"});
-				cc_tool_ExportFile.onBase64Handler(ctx,true);
-			}
-			if(e3.metaKey == true && e3.key == "f") {
-				if(!Global.isFullscreen) {
-					_gthis.openFullscreen();
-					Global.isFullscreen = true;
-				} else {
-					_gthis.closeFullscreen();
-					Global.isFullscreen = false;
-				}
-			}
-		},false);
-	}
-	,openFullscreen: function() {
-		var elem = this.document.documentElement;
-		if(elem.requestFullscreen != null) {
-			elem.requestFullscreen();
-		} else if(elem.mozRequestFullScreen) {
-			elem.mozRequestFullScreen();
-		} else if(elem.webkitRequestFullscreen) {
-			elem.webkitRequestFullscreen();
-		} else if(elem.msRequestFullscreen) {
-			elem.msRequestFullscreen();
-		}
-	}
-	,closeFullscreen: function() {
-		if(this.document.exitFullscreen != null) {
-			this.document.exitFullscreen();
-		} else if(this.document.mozCancelFullScreen) {
-			this.document.mozCancelFullScreen();
-		} else if(this.document.webkitExitFullscreen) {
-			this.document.webkitExitFullscreen();
-		} else if(this.document.msExitFullscreen) {
-			this.document.msExitFullscreen();
-		}
-	}
-	,__class__: Sketch
-};
-var SketchBase = function(ctx) {
-	this.dpiScale = 1;
-	this.isDebug = false;
-	this.isDrawActive = true;
-	if(this.isDebug) {
-		haxe_Log.trace("START :: " + this.toString(),{ fileName : "Sketch.hx", lineNumber : 514, className : "SketchBase", methodName : "new"});
-	}
-	if(ctx == null) {
-		var option = new SketchOption();
-		option.set_width(1080);
-		option.set_autostart(true);
-		option.set_padding(10);
-		option.set_scale(true);
-		ctx = Sketch.create("creative_code_mck",option);
-	}
-	this.dpiScale = Sketch.option.get_dpi() / 72;
-	this.ctx = ctx;
-	window.addEventListener(Global.RESIZE,$bind(this,this._reset),false);
-	window.addEventListener(Global.KEY_DOWN,$bind(this,this._keyDown),false);
-	window.addEventListener(Global.KEY_UP,$bind(this,this._keyUp),false);
-	this.setup();
-	this._draw();
-};
-SketchBase.__name__ = "SketchBase";
-SketchBase.prototype = {
-	_keyDown: function(e) {
-		if(e.key == " ") {
-			this.draw();
-		}
-	}
-	,_keyUp: function(e) {
-	}
-	,_reset: function() {
-		this.ctx.clearRect(0,0,Global.w,Global.h);
-		this._draw();
-	}
-	,_draw: function(timestamp) {
-		this.draw();
-		this.__export();
-		if(this.isDrawActive) {
-			window.requestAnimationFrame($bind(this,this._draw));
-		}
-	}
-	,setup: function() {
-		if(this.isDebug) {
-			haxe_Log.trace("SETUP :: " + this.toString() + " -> override public function draw()",{ fileName : "Sketch.hx", lineNumber : 577, className : "SketchBase", methodName : "setup"});
-		}
-	}
-	,draw: function() {
-		if(this.isDebug) {
-			haxe_Log.trace("DRAW :: " + this.toString() + " -> override public function draw()",{ fileName : "Sketch.hx", lineNumber : 585, className : "SketchBase", methodName : "draw"});
-		}
-	}
-	,__export: function() {
-	}
-	,pause: function() {
-		this.isDrawActive = !this.isDrawActive;
-	}
-	,stop: function() {
-		this.isDrawActive = false;
-	}
-	,play: function() {
-		this.isDrawActive = true;
-		this._draw();
-	}
-	,start: function() {
-		this.play();
-	}
-	,onKeyDown: function(e) {
-	}
-	,scaled: function(value) {
-		return value * this.dpiScale;
-	}
-	,scaledInt: function(value) {
-		return value * this.dpiScale | 0;
-	}
-	,get_w2: function() {
-		return Global.w / 2;
-	}
-	,get_h2: function() {
-		return Global.h / 2;
-	}
-	,get_w4: function() {
-		return Global.w / 4;
-	}
-	,get_h4: function() {
-		return Global.h / 4;
-	}
-	,get_w3: function() {
-		return Global.w / 3;
-	}
-	,get_h3: function() {
-		return Global.h / 3;
-	}
-	,toString: function() {
-		var c = js_Boot.getClass(this);
-		var className = c.__name__;
-		return className;
-	}
-	,__class__: SketchBase
-};
-var Global = function() { };
-Global.__name__ = "Global";
 var Sketcher = function(settings) {
 	this.WRAPPER_ID = "sketcher_wrapper";
 	this.SVG_ID = "sketcher_svg";
 	this.CANVAS_ID = "sketcher_canvas";
 	this.baseArray = [];
 	this.settings = settings;
-	Global.w = settings.get_width();
-	Global.h = settings.get_height();
+	Globals.w = settings.get_width();
+	Globals.h = settings.get_height();
 	if(settings.get_elementID() != null) {
 		this.WRAPPER_ID = settings.get_elementID();
 	}
@@ -650,7 +262,7 @@ Sketcher.prototype = {
 			return this;
 		}
 		this.element = element;
-		if(this.settings.get_type() == "canvas") {
+		if(this.settings.get_type().toLowerCase() == "canvas") {
 			this.canvas = window.document.createElement("canvas");
 			this.canvas.width = this.settings.get_width();
 			this.canvas.height = this.settings.get_height();
@@ -759,7 +371,7 @@ Sketcher.prototype = {
 		return shape;
 	}
 	,makeGroup: function(array) {
-		var shape = new draw_Group(array);
+		var shape = new sketcher_draw_Group(array);
 		var _g = 0;
 		var _g1 = array.length;
 		while(_g < _g1) {
@@ -804,7 +416,12 @@ Sketcher.prototype = {
 	}
 	,clear: function() {
 		this.baseArray = [];
-		this.element.innerHTML = "";
+		if(this.settings.get_type().toLowerCase() == "svg") {
+			this.element.innerHTML = "";
+		}
+		if(this.settings.get_type().toLowerCase() == "canvas") {
+			Sketcher.ctx.clearRect(0,0,this.settings.get_width(),this.settings.get_height());
+		}
 	}
 	,getBaseArray: function() {
 		return this.baseArray;
@@ -859,13 +476,15 @@ Sketcher.prototype = {
 				if(base1 == null) {
 					continue;
 				}
-				haxe_Log.trace(base1.type,{ fileName : "src/Sketcher.hx", lineNumber : 460, className : "Sketcher", methodName : "update"});
+				console.log("src/Sketcher.hx:467:",base1.type);
 				base1.ctx(Sketcher.ctx);
 			}
 		}
 	}
 	,__class__: Sketcher
 };
+var Globals = function() { };
+Globals.__name__ = "Globals";
 var Std = function() { };
 Std.__name__ = "Std";
 Std.string = function(s) {
@@ -1141,141 +760,6 @@ Xml.prototype = {
 };
 var cc_AST = function() { };
 cc_AST.__name__ = "cc.AST";
-var cc_tool_ExportFile = function() { };
-cc_tool_ExportFile.__name__ = "cc.tool.ExportFile";
-cc_tool_ExportFile.downloadWebGLImage = function(domElement,isJpg,fileName) {
-	if(fileName == null) {
-		fileName = "test";
-	}
-	if(isJpg == null) {
-		isJpg = false;
-	}
-	var imgData;
-	var ext = isJpg ? "jpg" : "png";
-	try {
-		var strDownloadMime = "image/octet-stream";
-		var strMime = "image/jpeg";
-		imgData = domElement.toDataURL(strMime);
-		window.console.log(imgData);
-		cc_tool_ExportFile.saveFile(StringTools.replace(imgData,strMime,strDownloadMime),fileName + ("." + ext));
-	} catch( e ) {
-		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
-		window.console.log("Browser does not support taking screenshot of 3d context");
-		return;
-	}
-};
-cc_tool_ExportFile.saveFile = function(strData,fileName) {
-	var link = window.document.createElement("a");
-	window.document.body.appendChild(link);
-	link.href = strData;
-	link.download = fileName;
-	link.click();
-	window.document.body.removeChild(link);
-};
-cc_tool_ExportFile.downloadImage = function(ctx,isJpg,fileName) {
-	if(isJpg == null) {
-		isJpg = false;
-	}
-	if(fileName == null) {
-		var hash = window.location.hash;
-		hash = StringTools.replace(hash,"#","").toLowerCase();
-		if(hash == "") {
-			hash = "image";
-		}
-		fileName = "" + hash + "-" + new Date().getTime();
-	}
-	var link = window.document.createElement("a");
-	link.href = ctx.canvas.toDataURL(isJpg ? "image/jpeg" : "",1);
-	link.download = fileName;
-	link.click();
-};
-cc_tool_ExportFile.onBase64Handler = function(ctx,isJpg) {
-	if(isJpg == null) {
-		isJpg = false;
-	}
-	var base64 = ctx.canvas.toDataURL(isJpg ? "image/jpeg" : "",1);
-	cc_tool_ExportFile.clipboard(base64);
-};
-cc_tool_ExportFile.downloadTextFile = function(text,fileName) {
-	if(fileName == null) {
-		fileName = "CC-txt-" + new Date().getTime() + ".txt";
-	}
-	var element = window.document.createElement("a");
-	element.setAttribute("href","data:text/plain;charset=utf-8," + encodeURIComponent(text));
-	element.setAttribute("download",fileName);
-	element.style.display = "none";
-	window.document.body.appendChild(element);
-	element.click();
-	window.document.body.removeChild(element);
-};
-cc_tool_ExportFile.clipboard = function(text) {
-	var win = "Ctrl+C";
-	var mac = "Cmd+C";
-	var copyCombo = win;
-	var userAgent = window.navigator.userAgent;
-	var ereg = new EReg("iPhone|iPod|iPad|Android|BlackBerry","i");
-	var ismac = ereg.match(userAgent);
-	if(ismac) {
-		copyCombo = mac;
-	}
-	window.prompt("Copy to clipboard: " + copyCombo + ", Enter",text);
-};
-cc_tool_ExportFile.downloadImageBg = function(ctx,isJpg,fileName,isTransparant) {
-	if(isTransparant == null) {
-		isTransparant = false;
-	}
-	if(isJpg == null) {
-		isJpg = false;
-	}
-	haxe_Log.trace(ctx,{ fileName : "cc/tool/ExportFile.hx", lineNumber : 128, className : "cc.tool.ExportFile", methodName : "downloadImageBg", customParams : [isJpg,fileName,isTransparant]});
-	var canvas = ctx.canvas;
-	var ext = isJpg ? "jpg" : "png";
-	if(fileName == null) {
-		var hash = window.location.hash;
-		hash = StringTools.replace(hash,"#","").toLowerCase();
-		if(hash == "") {
-			hash = "image";
-		}
-		fileName = "" + hash + "-" + new Date().getTime();
-	}
-	var w = canvas.width;
-	var h = canvas.height;
-	var compositeOperation;
-	var data = ctx.getImageData(0,0,w,h);
-	if(!isTransparant) {
-		compositeOperation = ctx.globalCompositeOperation;
-		ctx.globalCompositeOperation = "destination-over";
-		ctx.fillStyle = "#ffffff";
-		ctx.fillRect(0,0,w,h);
-		var imageData = canvas.toDataURL("image/png");
-		ctx.clearRect(0,0,w,h);
-		ctx.putImageData(data,0,0);
-		ctx.globalCompositeOperation = compositeOperation;
-	}
-	var link = window.document.createElement("a");
-	link.style.cssText = "display:none";
-	link.download = fileName + ("." + ext);
-	if(!HTMLCanvasElement.prototype.toBlob) {
-		haxe_Log.trace("There is no blob",{ fileName : "cc/tool/ExportFile.hx", lineNumber : 187, className : "cc.tool.ExportFile", methodName : "downloadImageBg"});
-		link.href = ctx.canvas.toDataURL(isJpg ? "image/jpeg" : "",1);
-		link.click();
-		link.remove();
-	} else {
-		haxe_Log.trace("Attack of the blob",{ fileName : "cc/tool/ExportFile.hx", lineNumber : 193, className : "cc.tool.ExportFile", methodName : "downloadImageBg"});
-		ctx.canvas.toBlob(function(blob) {
-			link.href = URL.createObjectURL(blob);
-			link.click();
-			link.remove();
-		},isJpg ? "image/jpeg" : "",1);
-	}
-	window.document.body.appendChild(link);
-};
-cc_tool_ExportFile.prototype = {
-	toString: function() {
-		return "[ExportFile]";
-	}
-	,__class__: cc_tool_ExportFile
-};
 var cc_util_ColorUtil = function() {
 };
 cc_util_ColorUtil.__name__ = "cc.util.ColorUtil";
@@ -1405,7 +889,7 @@ cc_util_MathUtil.dist = function(x1,y1,x2,y2) {
 };
 cc_util_MathUtil.pythagoreanTheorem = function(a,b,c) {
 	if(a == null && b == null && c == null) {
-		haxe_Log.trace("Really? Perhaps you should use some data",{ fileName : "cc/util/MathUtil.hx", lineNumber : 104, className : "cc.util.MathUtil", methodName : "pythagoreanTheorem"});
+		console.log("cc/util/MathUtil.hx:104:","Really? Perhaps you should use some data");
 		return 0;
 	}
 	var value = 0.0;
@@ -1575,7 +1059,7 @@ draw_Base.prototype = {
 		return str;
 	}
 	,clone: function() {
-		haxe_Log.trace("WIP",{ fileName : "src/draw/Base.hx", lineNumber : 132, className : "draw.Base", methodName : "clone"});
+		console.log("src/draw/Base.hx:137:","WIP");
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
 	}
 	,get_id: function() {
@@ -1637,6 +1121,15 @@ draw_Base.prototype = {
 	}
 	,set_strokeWeight: function(value) {
 		return this.set_lineWeight(value);
+	}
+	,get_opacity: function() {
+		return this.opacity;
+	}
+	,set_opacity: function(value) {
+		var v = cc_util_MathUtil.clamp(value,0,1);
+		this.set_fillOpacity(v);
+		this.set_strokeOpacity(v);
+		return this.opacity = v;
 	}
 	,get_strokeOpacity: function() {
 		return this.strokeOpacity;
@@ -1711,6 +1204,18 @@ draw_Base.prototype = {
 	,set_lineJoin: function(value) {
 		this.xml.set("stroke-linejoin",Std.string(value));
 		return this.lineJoin = value;
+	}
+	,get_isVisible: function() {
+		return this.isVisible;
+	}
+	,set_isVisible: function(value) {
+		var _opacity = 0;
+		if(value) {
+			_opacity = 1;
+		}
+		this.set_fillOpacity(_opacity);
+		this.set_strokeOpacity(_opacity);
+		return this.isVisible = value;
 	}
 	,get_count: function() {
 		return draw_Base.COUNT;
@@ -1812,62 +1317,6 @@ draw_Gradient.prototype = $extend(draw_Base.prototype,{
 		ctx.stroke();
 	}
 	,__class__: draw_Gradient
-});
-var draw_Group = function(arr) {
-	this.type = "group";
-	this.set_arr(arr);
-	draw_Base.call(this,"g");
-};
-draw_Group.__name__ = "draw.Group";
-draw_Group.__interfaces__ = [draw_IBase];
-draw_Group.__super__ = draw_Base;
-draw_Group.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		if(this.get_x() > 0 && this.get_y() > 0) {
-			this.transArr.push("translate(" + this.get_x() + ", " + this.get_y() + ")");
-		}
-		if(this.getTransform() != "") {
-			this.xml.set("transform",this.getTransform());
-		}
-		var comment = Xml.createComment("Group: " + this.get_id());
-		this.xml.addChild(comment);
-		this.xml.addChild(Xml.parse("<desc>" + this.get_id() + "</desc>"));
-		var _g = 0;
-		var _g1 = this.get_arr().length;
-		while(_g < _g1) {
-			var i = _g++;
-			var base = this.get_arr()[i];
-			this.xml.addChild(Xml.parse(base.svg(null)));
-		}
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		window.console.warn("The Group (" + this.get_id() + ") changes like transforms/fill/stroke/etc. doesn't work for canvas (yet)");
-		var _g = 0;
-		var _g1 = this.get_arr().length;
-		while(_g < _g1) {
-			var i = _g++;
-			var base = this.get_arr()[i];
-			if(base == null) {
-				continue;
-			}
-			base.ctx(ctx);
-		}
-	}
-	,hide: function() {
-		this.set_fillOpacity(0);
-		this.set_strokeOpacity(0);
-	}
-	,test: function() {
-		haxe_Log.trace("test if casting works",{ fileName : "src/draw/Group.hx", lineNumber : 68, className : "draw.Group", methodName : "test"});
-	}
-	,get_arr: function() {
-		return this.arr;
-	}
-	,set_arr: function(value) {
-		return this.arr = value;
-	}
-	,__class__: draw_Group
 });
 var draw_Line = function(x,y,x2,y2) {
 	this.type = "Line";
@@ -1997,7 +1446,7 @@ draw_PolyLine.prototype = $extend(draw_Base.prototype,{
 		}
 		this.xml.set("points",str);
 		if(this.getTransform() != "") {
-			haxe_Log.trace(this.getTransform(),{ fileName : "src/draw/PolyLine.hx", lineNumber : 33, className : "draw.PolyLine", methodName : "svg"});
+			console.log("src/draw/PolyLine.hx:33:",this.getTransform());
 			this.xml.set("transform",this.getTransform());
 		}
 		return haxe_xml_Printer.print(this.xml);
@@ -2046,7 +1495,7 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			haxe_Log.trace("not in this length",{ fileName : "src/draw/Polygon.hx", lineNumber : 42, className : "draw.Polygon", methodName : "getPoint"});
+			console.log("src/draw/Polygon.hx:42:","not in this length");
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
@@ -2120,7 +1569,7 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
-		haxe_Log.trace("needs work!",{ fileName : "src/draw/Text.hx", lineNumber : 140, className : "draw.Text", methodName : "ctx"});
+		console.log("src/draw/Text.hx:140:","needs work!");
 	}
 	,convertTextAlign: function() {
 		switch(this._textAlign) {
@@ -2132,7 +1581,7 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 			break;
 		default:
 			this.set_textAnchor("start");
-			haxe_Log.trace("case '" + this._textAlign + "': trace ('" + this._textAlign + "');",{ fileName : "src/draw/Text.hx", lineNumber : 154, className : "draw.Text", methodName : "convertTextAlign"});
+			console.log("src/draw/Text.hx:154:","case '" + this._textAlign + "': trace ('" + this._textAlign + "');");
 		}
 	}
 	,convertTextBaseline: function() {
@@ -2148,7 +1597,7 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 			break;
 		default:
 			this.set_dominantBaseline("auto");
-			haxe_Log.trace("case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');",{ fileName : "src/draw/Text.hx", lineNumber : 168, className : "draw.Text", methodName : "convertTextBaseline"});
+			console.log("src/draw/Text.hx:168:","case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');");
 		}
 	}
 	,get_fontSize: function() {
@@ -2210,31 +1659,6 @@ draw_Text.prototype = $extend(draw_Base.prototype,{
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = "haxe.IMap";
 haxe_IMap.__isInterface__ = true;
-var haxe_Log = function() { };
-haxe_Log.__name__ = "haxe.Log";
-haxe_Log.formatOutput = function(v,infos) {
-	var str = Std.string(v);
-	if(infos == null) {
-		return str;
-	}
-	var pstr = infos.fileName + ":" + infos.lineNumber;
-	if(infos.customParams != null) {
-		var _g = 0;
-		var _g1 = infos.customParams;
-		while(_g < _g1.length) {
-			var v1 = _g1[_g];
-			++_g;
-			str += ", " + Std.string(v1);
-		}
-	}
-	return pstr + ": " + str;
-};
-haxe_Log.trace = function(v,infos) {
-	var str = haxe_Log.formatOutput(v,infos);
-	if(typeof(console) != "undefined" && console.log != null) {
-		console.log(str);
-	}
-};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -3005,8 +2429,36 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
+var sketcher_AST = function() { };
+sketcher_AST.__name__ = "sketcher.AST";
 var sketcher_App = function() { };
 sketcher_App.__name__ = "sketcher.App";
+var sketcher_debug_Grid = function() {
+};
+sketcher_debug_Grid.__name__ = "sketcher.debug.Grid";
+sketcher_debug_Grid.gridDots = function(sketch,grid) {
+	var _circlesArray = [];
+	var _g = 0;
+	var _g1 = grid.array.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var point = grid.array[i];
+		var circle = sketch.makeCircle(point.x,point.y,3);
+		circle.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK,1));
+		circle.set_strokeOpacity(0);
+		_circlesArray.push(circle);
+	}
+	var rect = sketch.makeRectangle(grid.x,grid.y,grid.width,grid.height,false);
+	rect.set_strokeWeight(1);
+	rect.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GRAY,0.5));
+	rect.set_fillOpacity(0);
+	_circlesArray.push(rect);
+	var circleGroup = sketch.makeGroup(_circlesArray);
+	circleGroup.set_id("grid debug layer");
+};
+sketcher_debug_Grid.prototype = {
+	__class__: sketcher_debug_Grid
+};
 var sketcher_draw_Circle = function(x,y,radius) {
 	this.type = "circle";
 	this.set_x(x);
@@ -3035,12 +2487,15 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
-		ctx.lineWidth = this.get_lineWeight();
+		if(this.get_lineWeight() == null) {
+			this.set_lineWeight(0);
+		}
 		if(this.get_fillColor() == null) {
 			this.set_fillColor("#000000");
 		}
 		if(this.get_strokeColor() == null) {
 			this.set_strokeColor("#000000");
+			this.set_strokeOpacity(0);
 		}
 		if(this.get_fillOpacity() == null) {
 			this.set_fillOpacity(1);
@@ -3051,6 +2506,7 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		if(this.get_lineCap() != null) {
 			ctx.lineCap = this.get_lineCap();
 		}
+		ctx.lineWidth = this.get_lineWeight();
 		var value = this.get_fillColor();
 		var _r = 0;
 		var _g = 0;
@@ -3129,7 +2585,7 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		var tmp = this.get_rotate() != null;
 	}
 	,debug: function() {
-		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 97, className : "sketcher.draw.Circle", methodName : "debug"});
+		console.log("src/sketcher/draw/Circle.hx:103:","" + this.toString());
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -3138,6 +2594,75 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		return this.radius = value;
 	}
 	,__class__: sketcher_draw_Circle
+});
+var sketcher_draw_Group = function(arr) {
+	this.type = "group";
+	this.set_arr(arr);
+	draw_Base.call(this,"g");
+};
+sketcher_draw_Group.__name__ = "sketcher.draw.Group";
+sketcher_draw_Group.__interfaces__ = [draw_IBase];
+sketcher_draw_Group.__super__ = draw_Base;
+sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
+	svg: function(settings) {
+		if(this.get_x() > 0 && this.get_y() > 0) {
+			this.transArr.push("translate(" + this.get_x() + ", " + this.get_y() + ")");
+		}
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
+		}
+		var comment = Xml.createComment("Group: " + this.get_id());
+		this.xml.addChild(comment);
+		this.xml.addChild(Xml.parse("<desc>" + this.get_id() + "</desc>"));
+		var _g = 0;
+		var _g1 = this.get_arr().length;
+		while(_g < _g1) {
+			var i = _g++;
+			var base = this.get_arr()[i];
+			this.xml.addChild(Xml.parse(base.svg(null)));
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		window.console.warn("The Group (" + this.get_id() + ") changes like transforms/etc. doesn't work for canvas (yet)");
+		window.console.info("strokeOpacity, fillOpacity, fillColor, strokeColor done!");
+		var _g = 0;
+		var _g1 = this.get_arr().length;
+		while(_g < _g1) {
+			var i = _g++;
+			var base = this.get_arr()[i];
+			if(base == null) {
+				continue;
+			}
+			if(this.get_fillOpacity() != null) {
+				(js_Boot.__cast(base , draw_Base)).set_fillOpacity(this.get_fillOpacity());
+			}
+			if(this.get_strokeOpacity() != null) {
+				(js_Boot.__cast(base , draw_Base)).set_strokeOpacity(this.get_strokeOpacity());
+			}
+			if(this.get_fillColor() != null) {
+				(js_Boot.__cast(base , draw_Base)).set_fillColor(this.get_fillColor());
+			}
+			if(this.get_strokeColor() != null) {
+				(js_Boot.__cast(base , draw_Base)).set_strokeColor(this.get_strokeColor());
+			}
+			base.ctx(ctx);
+		}
+	}
+	,hide: function() {
+		this.set_fillOpacity(0);
+		this.set_strokeOpacity(0);
+	}
+	,test: function() {
+		console.log("src/sketcher/draw/Group.hx:85:","test if casting works");
+	}
+	,get_arr: function() {
+		return this.arr;
+	}
+	,set_arr: function(value) {
+		return this.arr = value;
+	}
+	,__class__: sketcher_draw_Group
 });
 var sketcher_draw_Rectangle = function(x,y,width,height,isCenter) {
 	if(isCenter == null) {
@@ -3303,6 +2828,109 @@ sketcher_draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 	}
 	,__class__: sketcher_draw_Rectangle
 });
+var sketcher_util_ColorUtil = function() {
+};
+sketcher_util_ColorUtil.__name__ = "sketcher.util.ColorUtil";
+sketcher_util_ColorUtil.getColour = function(r,g,b,a) {
+	var c;
+	if(g == null) {
+		c = sketcher_util_ColorUtil.rgb(r,r,r);
+	} else if(b == null && a == null) {
+		c = sketcher_util_ColorUtil.rgba(r,r,r,g);
+	} else if(a == null) {
+		c = sketcher_util_ColorUtil.rgb(r,g,b);
+	} else {
+		c = sketcher_util_ColorUtil.rgba(r,g,b,a);
+	}
+	return c;
+};
+sketcher_util_ColorUtil.getColourObj = function(rgb,a) {
+	return sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,a);
+};
+sketcher_util_ColorUtil.rgb = function(r,g,b) {
+	if(g == null) {
+		g = r;
+	}
+	if(b == null) {
+		b = r;
+	}
+	return "rgb(" + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(g),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(b),0,255) + ")";
+};
+sketcher_util_ColorUtil.rgba = function(r,g,b,a) {
+	if(g == null) {
+		return "rgb(" + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ")";
+	} else if(b == null) {
+		return "rgba(" + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(g,0,1) + ")";
+	} else if(a == null) {
+		return "rgba(" + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(g),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(b),0,255) + ", 1)";
+	} else {
+		return "rgba(" + sketcher_util_MathUtil.clamp(Math.round(r),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(g),0,255) + ", " + sketcher_util_MathUtil.clamp(Math.round(b),0,255) + ", " + sketcher_util_MathUtil.clamp(a,0,1) + ")";
+	}
+};
+sketcher_util_ColorUtil.rgbToHex = function(r,g,b) {
+	return StringTools.hex(r,2) + StringTools.hex(g,2) + StringTools.hex(b,2);
+};
+sketcher_util_ColorUtil.rgb2hex = function(r,g,b,a) {
+	if(a == null) {
+		a = 255;
+	}
+	return a << 24 | r << 16 | g << 8 | b;
+};
+sketcher_util_ColorUtil.randomColour = function() {
+	var r = sketcher_util_MathUtil.randomInt(255);
+	var g = sketcher_util_MathUtil.randomInt(255);
+	var b = sketcher_util_MathUtil.randomInt(255);
+	return sketcher_util_ColorUtil.rgb(r,g,b);
+};
+sketcher_util_ColorUtil.randomColourObject = function() {
+	var r = sketcher_util_MathUtil.randomInt(255);
+	var g = sketcher_util_MathUtil.randomInt(255);
+	var b = sketcher_util_MathUtil.randomInt(255);
+	return { r : r, g : g, b : b};
+};
+sketcher_util_ColorUtil.toRGB = function(int) {
+	return { r : Math.round(int >> 16 & 255), g : Math.round(int >> 8 & 255), b : Math.round(int & 255)};
+};
+sketcher_util_ColorUtil.ttoRGB = function(int) {
+	return { r : int >> 16 & 255, g : int >> 8 & 255, b : int & 255};
+};
+sketcher_util_ColorUtil.assumption = function(value) {
+	var _r = 0;
+	var _g = 0;
+	var _b = 0;
+	var _a = 1;
+	value = StringTools.replace(value," ","");
+	if(value.indexOf("rgba") != -1) {
+		value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+		var arr = value.split(",");
+		_r = arr[0];
+		_g = arr[1];
+		_b = arr[2];
+		_a = arr[3];
+	} else if(value.indexOf("rgb") != -1) {
+		value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+		var arr1 = value.split(",");
+		_r = arr1[0];
+		_g = arr1[1];
+		_b = arr1[2];
+	} else if(value.indexOf("#") != -1) {
+		var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+		var rgb_r = int >> 16 & 255;
+		var rgb_g = int >> 8 & 255;
+		var rgb_b = int & 255;
+		_r = rgb_r;
+		_g = rgb_g;
+		_b = rgb_b;
+	}
+	return { r : _r, g : _g, b : _b, a : _a};
+};
+sketcher_util_ColorUtil.hex2RGB = function(hex) {
+	var int = Std.parseInt(StringTools.replace(hex,"#","0x"));
+	return { r : int >> 16 & 255, g : int >> 8 & 255, b : int & 255};
+};
+sketcher_util_ColorUtil.prototype = {
+	__class__: sketcher_util_ColorUtil
+};
 var sketcher_util_GridUtil = function(w,h) {
 	this._isDebug = false;
 	this._isPosition = false;
@@ -3406,7 +3034,7 @@ sketcher_util_GridUtil.prototype = {
 		return this;
 	}
 	,calc: function() {
-		haxe_Log.trace("WIP",{ fileName : "src/sketcher/util/GridUtil.hx", lineNumber : 263, className : "sketcher.util.GridUtil", methodName : "calc"});
+		console.log("src/sketcher/util/GridUtil.hx:263:","WIP");
 		return this;
 	}
 	,setPosition: function(x,y) {
@@ -3650,41 +3278,153 @@ sketcher_util_GridUtil.prototype = {
 	}
 	,__class__: sketcher_util_GridUtil
 };
-var util_TestUtil = function() {
+var sketcher_util_MathUtil = function() { };
+sketcher_util_MathUtil.__name__ = "sketcher.util.MathUtil";
+sketcher_util_MathUtil.radians = function(deg) {
+	return deg * Math.PI / 180;
 };
-util_TestUtil.__name__ = "util.TestUtil";
-util_TestUtil.gridDots = function(sketch,grid) {
-	var _circlesArray = [];
-	var _g = 0;
-	var _g1 = grid.array.length;
-	while(_g < _g1) {
-		var i = _g++;
-		var point = grid.array[i];
-		var circle = sketch.makeCircle(point.x,point.y,3);
-		circle.set_fillColor(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.PINK,1));
-		circle.set_strokeOpacity(0);
-		_circlesArray.push(circle);
+sketcher_util_MathUtil.degrees = function(rad) {
+	return rad * 180 / Math.PI;
+};
+sketcher_util_MathUtil.degreesToPoint = function(deg,diameter) {
+	var rad = Math.PI * deg / 180;
+	var r = diameter / 2;
+	return { x : r * Math.cos(rad), y : r * Math.sin(rad)};
+};
+sketcher_util_MathUtil.distributeAngles = function(me,total) {
+	return me / total * 360;
+};
+sketcher_util_MathUtil.distance = function(x1,y1,x2,y2) {
+	return sketcher_util_MathUtil.dist(x1,y1,x2,y2);
+};
+sketcher_util_MathUtil.dist = function(x1,y1,x2,y2) {
+	x2 -= x1;
+	y2 -= y1;
+	return Math.sqrt(x2 * x2 + y2 * y2);
+};
+sketcher_util_MathUtil.pythagoreanTheorem = function(a,b,c) {
+	if(a == null && b == null && c == null) {
+		console.log("src/sketcher/util/MathUtil.hx:106:","Really? Perhaps you should use some data");
+		return 0;
 	}
-	var rect = sketch.makeRectangle(grid.x,grid.y,grid.width,grid.height,false);
-	rect.set_strokeWeight(1);
-	rect.set_strokeColor(cc_util_ColorUtil.getColourObj(cc_util_ColorUtil.GRAY,0.5));
-	rect.set_fillOpacity(0);
-	_circlesArray.push(rect);
-	var circleGroup = sketch.makeGroup(_circlesArray);
-	circleGroup.set_id("grid debug layer");
+	var value = 0.0;
+	if(c == null || c == 0) {
+		value = Math.sqrt(a * a + b * b);
+	}
+	if(a == null || a == 0) {
+		value = Math.sqrt(c * c - b * b);
+	}
+	if(b == null || b == 0) {
+		value = Math.sqrt(c * c - a * a);
+	}
+	return value;
 };
-util_TestUtil.prototype = {
-	__class__: util_TestUtil
+sketcher_util_MathUtil.circumferenceCircle = function(radius) {
+	return Math.PI * radius * 2;
 };
-var $_;
-function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
-$global.$haxeUID |= 0;
+sketcher_util_MathUtil.circumference2RadiusCircle = function(circumference) {
+	return circumference / (Math.PI * 2);
+};
+sketcher_util_MathUtil.areaCircle = function(radius) {
+	return Math.PI * Math.sqrt(radius);
+};
+sketcher_util_MathUtil.randomInteger = function(min,max) {
+	if(max == null) {
+		max = min;
+		min = 0;
+	}
+	return Math.floor(Math.random() * (max + 1 - min)) + min;
+};
+sketcher_util_MathUtil.randomInt = function(min,max) {
+	return sketcher_util_MathUtil.randomInteger(min,max);
+};
+sketcher_util_MathUtil.random = function(min,max) {
+	if(min == null) {
+		min = 0;
+		max = 1;
+	} else if(max == null) {
+		max = min;
+		min = 0;
+	}
+	return Math.random() * (max - min) + min;
+};
+sketcher_util_MathUtil.randomP = function(min,max) {
+	if(min == null) {
+		min = 0.1;
+		max = 1;
+	} else if(max == null) {
+		max = min;
+		min = 0.1;
+	}
+	return Math.random() * (max - min) + min;
+};
+sketcher_util_MathUtil.chance = function(value) {
+	if(value > 1) {
+		value /= 100;
+	}
+	return Math.random() < value;
+};
+sketcher_util_MathUtil.posNeg = function() {
+	return sketcher_util_MathUtil.randomInt(0,1) * 2 - 1;
+};
+sketcher_util_MathUtil.flip = function() {
+	return Math.random() < 0.5;
+};
+sketcher_util_MathUtil.angle = function(cx,cy,ex,ey) {
+	var dy = ey - cy;
+	var dx = ex - cx;
+	var theta = Math.atan2(dy,dx);
+	theta *= 180 / Math.PI;
+	if(theta < 0) {
+		theta = 360 + theta;
+	}
+	if(theta == 360) {
+		theta = 0;
+	}
+	return theta;
+};
+sketcher_util_MathUtil.map = function(value,min1,max1,min2,max2,clampResult) {
+	var returnvalue = (value - min1) / (max1 - min1) * (max2 - min2) + min2;
+	if(clampResult) {
+		return sketcher_util_MathUtil.clamp(returnvalue,min2,max2);
+	} else {
+		return returnvalue;
+	}
+};
+sketcher_util_MathUtil.orbit = function(xpos,ypos,angle,radius) {
+	var _xpos = xpos + Math.cos(sketcher_util_MathUtil.radians(angle)) * radius;
+	var _ypos = ypos + Math.sin(sketcher_util_MathUtil.radians(angle)) * radius;
+	return { x : _xpos, y : _ypos};
+};
+sketcher_util_MathUtil.orbitX = function(origin,angle,radius) {
+	return origin + Math.cos(sketcher_util_MathUtil.radians(angle)) * radius;
+};
+sketcher_util_MathUtil.orbitY = function(origin,angle,radius) {
+	return origin + Math.sin(sketcher_util_MathUtil.radians(angle)) * radius;
+};
+sketcher_util_MathUtil.orbitZ = function(origin,angle,radius) {
+	return origin + Math.cos(sketcher_util_MathUtil.radians(angle)) * radius;
+};
+sketcher_util_MathUtil.shuffle = function(array) {
+	var currentIndex = array.length;
+	var temporaryValue;
+	var randomIndex;
+	while(0 != currentIndex) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		--currentIndex;
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+	return array;
+};
+sketcher_util_MathUtil.clamp = function(value,min,max) {
+	return Math.min(Math.max(value,Math.min(min,max)),Math.max(min,max));
+};
 if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.prototype.__class__ = String;
 String.__name__ = "String";
 Array.__name__ = "Array";
-Date.prototype.__class__ = Date;
-Date.__name__ = "Date";
 var Int = { };
 var Dynamic = { };
 var Float = Number;
@@ -3696,17 +3436,16 @@ Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function()
 	return String(this.val);
 }});
 js_Boot.__toStr = ({ }).toString;
-Sketch.option = new SketchOption();
-Global.MOUSE_DOWN = "mousedown";
-Global.MOUSE_UP = "mouseup";
-Global.MOUSE_MOVE = "mousemove";
-Global.KEY_DOWN = "keydown";
-Global.KEY_UP = "keyup";
-Global.RESIZE = "resize";
-Global.mousePressed = 0;
-Global.mouseReleased = 0;
-Global.isFullscreen = false;
-Global.TWO_PI = Math.PI * 2;
+Globals.MOUSE_DOWN = "mousedown";
+Globals.MOUSE_UP = "mouseup";
+Globals.MOUSE_MOVE = "mousemove";
+Globals.KEY_DOWN = "keydown";
+Globals.KEY_UP = "keyup";
+Globals.RESIZE = "resize";
+Globals.mousePressed = 0;
+Globals.mouseReleased = 0;
+Globals.isFullscreen = false;
+Globals.TWO_PI = Math.PI * 2;
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;
@@ -3770,6 +3509,29 @@ haxe_xml_Parser.escapes = (function($this) {
 	return $r;
 }(this));
 sketcher_App.NAME = "[cc-sketcher]";
+sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
+sketcher_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
+sketcher_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};
+sketcher_util_ColorUtil.TEAL = { r : Math.round(57), g : Math.round(204), b : Math.round(204)};
+sketcher_util_ColorUtil.OLIVE = { r : Math.round(61), g : Math.round(153), b : Math.round(112)};
+sketcher_util_ColorUtil.GREEN = { r : Math.round(46), g : Math.round(204), b : Math.round(64)};
+sketcher_util_ColorUtil.LIME = { r : Math.round(1), g : Math.round(255), b : Math.round(112)};
+sketcher_util_ColorUtil.YELLOW = { r : Math.round(255), g : Math.round(220), b : Math.round(0)};
+sketcher_util_ColorUtil.ORANGE = { r : Math.round(255), g : Math.round(133), b : Math.round(27)};
+sketcher_util_ColorUtil.RED = { r : Math.round(255), g : Math.round(65), b : Math.round(54)};
+sketcher_util_ColorUtil.MAROON = { r : Math.round(133), g : Math.round(20), b : Math.round(75)};
+sketcher_util_ColorUtil.FUCHSIA = { r : Math.round(240), g : Math.round(18), b : Math.round(190)};
+sketcher_util_ColorUtil.PURPLE = { r : Math.round(177), g : Math.round(13), b : Math.round(201)};
+sketcher_util_ColorUtil.BLACK = { r : Math.round(17), g : Math.round(17), b : Math.round(17)};
+sketcher_util_ColorUtil.GRAY = { r : Math.round(170), g : Math.round(170), b : Math.round(170)};
+sketcher_util_ColorUtil.SILVER = { r : Math.round(221), g : Math.round(221), b : Math.round(221)};
+sketcher_util_ColorUtil.WHITE = { r : Math.round(255), g : Math.round(255), b : Math.round(255)};
+sketcher_util_ColorUtil.PINK = { r : Math.round(255), g : Math.round(20), b : Math.round(147)};
+sketcher_util_ColorUtil.PINK_DEEP = { r : Math.round(255), g : Math.round(20), b : Math.round(147)};
+sketcher_util_ColorUtil.PINK_HOT = { r : Math.round(255), g : Math.round(105), b : Math.round(180)};
+sketcher_util_ColorUtil.niceColor100 = [["#69d2e7","#a7dbd8","#e0e4cc","#f38630","#fa6900"],["#fe4365","#fc9d9a","#f9cdad","#c8c8a9","#83af9b"],["#ecd078","#d95b43","#c02942","#542437","#53777a"],["#556270","#4ecdc4","#c7f464","#ff6b6b","#c44d58"],["#774f38","#e08e79","#f1d4af","#ece5ce","#c5e0dc"],["#e8ddcb","#cdb380","#036564","#033649","#031634"],["#490a3d","#bd1550","#e97f02","#f8ca00","#8a9b0f"],["#594f4f","#547980","#45ada8","#9de0ad","#e5fcc2"],["#00a0b0","#6a4a3c","#cc333f","#eb6841","#edc951"],["#e94e77","#d68189","#c6a49a","#c6e5d9","#f4ead5"],["#3fb8af","#7fc7af","#dad8a7","#ff9e9d","#ff3d7f"],["#d9ceb2","#948c75","#d5ded9","#7a6a53","#99b2b7"],["#ffffff","#cbe86b","#f2e9e1","#1c140d","#cbe86b"],["#efffcd","#dce9be","#555152","#2e2633","#99173c"],["#343838","#005f6b","#008c9e","#00b4cc","#00dffc"],["#413e4a","#73626e","#b38184","#f0b49e","#f7e4be"],["#ff4e50","#fc913a","#f9d423","#ede574","#e1f5c4"],["#99b898","#fecea8","#ff847c","#e84a5f","#2a363b"],["#655643","#80bca3","#f6f7bd","#e6ac27","#bf4d28"],["#00a8c6","#40c0cb","#f9f2e7","#aee239","#8fbe00"],["#351330","#424254","#64908a","#e8caa4","#cc2a41"],["#554236","#f77825","#d3ce3d","#f1efa5","#60b99a"],["#ff9900","#424242","#e9e9e9","#bcbcbc","#3299bb"],["#5d4157","#838689","#a8caba","#cad7b2","#ebe3aa"],["#8c2318","#5e8c6a","#88a65e","#bfb35a","#f2c45a"],["#fad089","#ff9c5b","#f5634a","#ed303c","#3b8183"],["#ff4242","#f4fad2","#d4ee5e","#e1edb9","#f0f2eb"],["#d1e751","#ffffff","#000000","#4dbce9","#26ade4"],["#f8b195","#f67280","#c06c84","#6c5b7b","#355c7d"],["#1b676b","#519548","#88c425","#bef202","#eafde6"],["#bcbdac","#cfbe27","#f27435","#f02475","#3b2d38"],["#5e412f","#fcebb6","#78c0a8","#f07818","#f0a830"],["#452632","#91204d","#e4844a","#e8bf56","#e2f7ce"],["#eee6ab","#c5bc8e","#696758","#45484b","#36393b"],["#f0d8a8","#3d1c00","#86b8b1","#f2d694","#fa2a00"],["#f04155","#ff823a","#f2f26f","#fff7bd","#95cfb7"],["#2a044a","#0b2e59","#0d6759","#7ab317","#a0c55f"],["#bbbb88","#ccc68d","#eedd99","#eec290","#eeaa88"],["#b9d7d9","#668284","#2a2829","#493736","#7b3b3b"],["#b3cc57","#ecf081","#ffbe40","#ef746f","#ab3e5b"],["#a3a948","#edb92e","#f85931","#ce1836","#009989"],["#67917a","#170409","#b8af03","#ccbf82","#e33258"],["#e8d5b7","#0e2430","#fc3a51","#f5b349","#e8d5b9"],["#aab3ab","#c4cbb7","#ebefc9","#eee0b7","#e8caaf"],["#300030","#480048","#601848","#c04848","#f07241"],["#ab526b","#bca297","#c5ceae","#f0e2a4","#f4ebc3"],["#607848","#789048","#c0d860","#f0f0d8","#604848"],["#a8e6ce","#dcedc2","#ffd3b5","#ffaaa6","#ff8c94"],["#3e4147","#fffedf","#dfba69","#5a2e2e","#2a2c31"],["#b6d8c0","#c8d9bf","#dadabd","#ecdbbc","#fedcba"],["#fc354c","#29221f","#13747d","#0abfbc","#fcf7c5"],["#1c2130","#028f76","#b3e099","#ffeaad","#d14334"],["#edebe6","#d6e1c7","#94c7b6","#403b33","#d3643b"],["#cc0c39","#e6781e","#c8cf02","#f8fcc1","#1693a7"],["#dad6ca","#1bb0ce","#4f8699","#6a5e72","#563444"],["#a7c5bd","#e5ddcb","#eb7b59","#cf4647","#524656"],["#fdf1cc","#c6d6b8","#987f69","#e3ad40","#fcd036"],["#5c323e","#a82743","#e15e32","#c0d23e","#e5f04c"],["#230f2b","#f21d41","#ebebbc","#bce3c5","#82b3ae"],["#b9d3b0","#81bda4","#b28774","#f88f79","#f6aa93"],["#3a111c","#574951","#83988e","#bcdea5","#e6f9bc"],["#5e3929","#cd8c52","#b7d1a3","#dee8be","#fcf7d3"],["#1c0113","#6b0103","#a30006","#c21a01","#f03c02"],["#382f32","#ffeaf2","#fcd9e5","#fbc5d8","#f1396d"],["#e3dfba","#c8d6bf","#93ccc6","#6cbdb5","#1a1f1e"],["#000000","#9f111b","#b11623","#292c37","#cccccc"],["#c1b398","#605951","#fbeec2","#61a6ab","#accec0"],["#8dccad","#988864","#fea6a2","#f9d6ac","#ffe9af"],["#f6f6f6","#e8e8e8","#333333","#990100","#b90504"],["#1b325f","#9cc4e4","#e9f2f9","#3a89c9","#f26c4f"],["#5e9fa3","#dcd1b4","#fab87f","#f87e7b","#b05574"],["#951f2b","#f5f4d7","#e0dfb1","#a5a36c","#535233"],["#413d3d","#040004","#c8ff00","#fa023c","#4b000f"],["#eff3cd","#b2d5ba","#61ada0","#248f8d","#605063"],["#2d2d29","#215a6d","#3ca2a2","#92c7a3","#dfece6"],["#cfffdd","#b4dec1","#5c5863","#a85163","#ff1f4c"],["#4e395d","#827085","#8ebe94","#ccfc8e","#dc5b3e"],["#9dc9ac","#fffec7","#f56218","#ff9d2e","#919167"],["#a1dbb2","#fee5ad","#faca66","#f7a541","#f45d4c"],["#ffefd3","#fffee4","#d0ecea","#9fd6d2","#8b7a5e"],["#a8a7a7","#cc527a","#e8175d","#474747","#363636"],["#ffedbf","#f7803c","#f54828","#2e0d23","#f8e4c1"],["#f8edd1","#d88a8a","#474843","#9d9d93","#c5cfc6"],["#f38a8a","#55443d","#a0cab5","#cde9ca","#f1edd0"],["#4e4d4a","#353432","#94ba65","#2790b0","#2b4e72"],["#0ca5b0","#4e3f30","#fefeeb","#f8f4e4","#a5b3aa"],["#a70267","#f10c49","#fb6b41","#f6d86b","#339194"],["#9d7e79","#ccac95","#9a947c","#748b83","#5b756c"],["#edf6ee","#d1c089","#b3204d","#412e28","#151101"],["#046d8b","#309292","#2fb8ac","#93a42a","#ecbe13"],["#4d3b3b","#de6262","#ffb88c","#ffd0b3","#f5e0d3"],["#fffbb7","#a6f6af","#66b6ab","#5b7c8d","#4f2958"],["#ff003c","#ff8a00","#fabe28","#88c100","#00c176"],["#fcfef5","#e9ffe1","#cdcfb7","#d6e6c3","#fafbe3"],["#9cddc8","#bfd8ad","#ddd9ab","#f7af63","#633d2e"],["#30261c","#403831","#36544f","#1f5f61","#0b8185"],["#d1313d","#e5625c","#f9bf76","#8eb2c5","#615375"],["#ffe181","#eee9e5","#fad3b2","#ffba7f","#ff9c97"],["#aaff00","#ffaa00","#ff00aa","#aa00ff","#00aaff"],["#c2412d","#d1aa34","#a7a844","#a46583","#5a1e4a"]];
+sketcher_util_ColorUtil.niceColor100SortedString = [["#E0E4CC","#A7DBD8","#69D2E7","#F38630","#FA6900"],["#F9CDAD","#C8C8A9","#FC9D9A","#83AF9B","#FE4365"],["#ECD078","#D95B43","#53777A","#C02942","#542437"],["#C7F464","#4ECDC4","#FF6B6B","#C44D58","#556270"],["#ECE5CE","#F1D4AF","#C5E0DC","#E08E79","#774F38"],["#E8DDCB","#CDB380","#036564","#033649","#031634"],["#F8CA00","#E97F02","#8A9B0F","#BD1550","#490A3D"],["#E5FCC2","#9DE0AD","#45ADA8","#547980","#594F4F"],["#EDC951","#EB6841","#00A0B0","#CC333F","#6A4A3C"],["#F4EAD5","#C6E5D9","#C6A49A","#D68189","#E94E77"],["#DAD8A7","#FF9E9D","#7FC7AF","#3FB8AF","#FF3D7F"],["#D5DED9","#D9CEB2","#99B2B7","#948C75","#7A6A53"],["#FFFFFF","#F2E9E1","#CBE86B","#CBE86B","#1C140D"],["#EFFFCD","#DCE9BE","#555152","#99173C","#2E2633"],["#00DFFC","#00B4CC","#008C9E","#005F6B","#343838"],["#F7E4BE","#F0B49E","#B38184","#73626E","#413E4A"],["#E1F5C4","#EDE574","#F9D423","#FC913A","#FF4E50"],["#FECEA8","#99B898","#FF847C","#E84A5F","#2A363B"],["#F6F7BD","#E6AC27","#80BCA3","#BF4D28","#655643"],["#F9F2E7","#AEE239","#40C0CB","#8FBE00","#00A8C6"],["#E8CAA4","#64908A","#CC2A41","#424254","#351330"],["#F1EFA5","#D3CE3D","#60B99A","#F77825","#554236"],["#E9E9E9","#BCBCBC","#FF9900","#3299BB","#424242"],["#EBE3AA","#CAD7B2","#A8CABA","#838689","#5D4157"],["#F2C45A","#BFB35A","#88A65E","#5E8C6A","#8C2318"],["#FAD089","#FF9C5B","#F5634A","#3B8183","#ED303C"],["#F4FAD2","#F0F2EB","#E1EDB9","#D4EE5E","#FF4242"],["#FFFFFF","#D1E751","#4DBCE9","#26ADE4","#000000"],["#F8B195","#F67280","#C06C84","#6C5B7B","#355C7D"],["#EAFDE6","#BEF202","#88C425","#519548","#1B676B"],["#BCBDAC","#CFBE27","#F27435","#F02475","#3B2D38"],["#FCEBB6","#F0A830","#78C0A8","#F07818","#5E412F"],["#E2F7CE","#E8BF56","#E4844A","#91204D","#452632"],["#EEE6AB","#C5BC8E","#696758","#45484B","#36393B"],["#F0D8A8","#F2D694","#86B8B1","#FA2A00","#3D1C00"],["#FFF7BD","#F2F26F","#95CFB7","#FF823A","#F04155"],["#A0C55F","#7AB317","#0D6759","#0B2E59","#2A044A"],["#EEDD99","#EEC290","#CCC68D","#EEAA88","#BBBB88"],["#B9D7D9","#668284","#7B3B3B","#493736","#2A2829"],["#ECF081","#FFBE40","#B3CC57","#EF746F","#AB3E5B"],["#EDB92E","#A3A948","#F85931","#009989","#CE1836"],["#CCBF82","#B8AF03","#67917A","#E33258","#170409"],["#E8D5B9","#E8D5B7","#F5B349","#FC3A51","#0E2430"],["#EBEFC9","#EEE0B7","#E8CAAF","#C4CBB7","#AAB3AB"],["#F07241","#C04848","#601848","#480048","#300030"],["#F4EBC3","#F0E2A4","#C5CEAE","#BCA297","#AB526B"],["#F0F0D8","#C0D860","#789048","#607848","#604848"],["#DCEDC2","#FFD3B5","#A8E6CE","#FFAAA6","#FF8C94"],["#FFFEDF","#DFBA69","#3E4147","#5A2E2E","#2A2C31"],["#FEDCBA","#ECDBBC","#DADABD","#C8D9BF","#B6D8C0"],["#FCF7C5","#0ABFBC","#FC354C","#13747D","#29221F"],["#FFEAAD","#B3E099","#D14334","#028F76","#1C2130"],["#EDEBE6","#D6E1C7","#94C7B6","#D3643B","#403B33"],["#F8FCC1","#C8CF02","#E6781E","#1693A7","#CC0C39"],["#DAD6CA","#1BB0CE","#4F8699","#6A5E72","#563444"],["#E5DDCB","#A7C5BD","#EB7B59","#CF4647","#524656"],["#FDF1CC","#C6D6B8","#FCD036","#E3AD40","#987F69"],["#E5F04C","#C0D23E","#E15E32","#A82743","#5C323E"],["#EBEBBC","#BCE3C5","#82B3AE","#F21D41","#230F2B"],["#B9D3B0","#F6AA93","#F88F79","#81BDA4","#B28774"],["#E6F9BC","#BCDEA5","#83988E","#574951","#3A111C"],["#FCF7D3","#DEE8BE","#B7D1A3","#CD8C52","#5E3929"],["#F03C02","#C21A01","#A30006","#6B0103","#1C0113"],["#FFEAF2","#FCD9E5","#FBC5D8","#F1396D","#382F32"],["#E3DFBA","#C8D6BF","#93CCC6","#6CBDB5","#1A1F1E"],["#CCCCCC","#B11623","#9F111B","#292C37","#000000"],["#FBEEC2","#ACCEC0","#C1B398","#61A6AB","#605951"],["#FFE9AF","#F9D6AC","#FEA6A2","#8DCCAD","#988864"],["#F6F6F6","#E8E8E8","#B90504","#333333","#990100"],["#E9F2F9","#9CC4E4","#F26C4F","#3A89C9","#1B325F"],["#DCD1B4","#FAB87F","#F87E7B","#5E9FA3","#B05574"],["#F5F4D7","#E0DFB1","#A5A36C","#535233","#951F2B"],["#C8FF00","#FA023C","#413D3D","#4B000F","#040004"],["#EFF3CD","#B2D5BA","#61ADA0","#248F8D","#605063"],["#DFECE6","#92C7A3","#3CA2A2","#215A6D","#2D2D29"],["#CFFFDD","#B4DEC1","#A85163","#FF1F4C","#5C5863"],["#CCFC8E","#8EBE94","#DC5B3E","#827085","#4E395D"],["#FFFEC7","#9DC9AC","#FF9D2E","#919167","#F56218"],["#FEE5AD","#FACA66","#A1DBB2","#F7A541","#F45D4C"],["#FFFEE4","#FFEFD3","#D0ECEA","#9FD6D2","#8B7A5E"],["#A8A7A7","#CC527A","#E8175D","#474747","#363636"],["#FFEDBF","#F8E4C1","#F7803C","#F54828","#2E0D23"],["#F8EDD1","#C5CFC6","#D88A8A","#9D9D93","#474843"],["#F1EDD0","#CDE9CA","#A0CAB5","#F38A8A","#55443D"],["#94BA65","#2790B0","#4E4D4A","#2B4E72","#353432"],["#FEFEEB","#F8F4E4","#A5B3AA","#0CA5B0","#4E3F30"],["#F6D86B","#FB6B41","#339194","#F10C49","#A70267"],["#CCAC95","#9A947C","#9D7E79","#748B83","#5B756C"],["#EDF6EE","#D1C089","#B3204D","#412E28","#151101"],["#ECBE13","#93A42A","#2FB8AC","#309292","#046D8B"],["#F5E0D3","#FFD0B3","#FFB88C","#DE6262","#4D3B3B"],["#FFFBB7","#A6F6AF","#66B6AB","#5B7C8D","#4F2958"],["#FABE28","#FF8A00","#88C100","#00C176","#FF003C"],["#FCFEF5","#FAFBE3","#E9FFE1","#D6E6C3","#CDCFB7"],["#DDD9AB","#BFD8AD","#9CDDC8","#F7AF63","#633D2E"],["#0B8185","#1F5F61","#36544F","#403831","#30261C"],["#F9BF76","#8EB2C5","#E5625C","#D1313D","#615375"],["#EEE9E5","#FFE181","#FAD3B2","#FFBA7F","#FF9C97"],["#AAFF00","#FFAA00","#00AAFF","#FF00AA","#AA00FF"],["#D1AA34","#A7A844","#A46583","#C2412D","#5A1E4A"],["#F8F3BF","#DCE4F7","#BFCFF7","#75616B","#D34017"]];
+sketcher_util_ColorUtil.niceColor100SortedInt = [[14738636,11000792,6935271,15959600,16410880],[16371117,13158569,16555418,8630171,16663397],[15519864,14244675,5470074,12593474,5514295],[13104228,5164484,16739179,12864856,5595760],[15525326,15848623,12968156,14716537,7819064],[15261131,13480832,222564,210505,202292],[16304640,15302402,9083663,12391760,4786749],[15072450,10346669,4566440,5536128,5853007],[15583569,15427649,41136,13382463,6965820],[16050901,13034969,13018266,14057865,15289975],[14342311,16752285,8374191,4176047,16727423],[14016217,14274226,10072759,9735285,8022611],[16777215,15919585,13363307,13363307,1840141],[15728589,14477758,5591378,10032956,3024435],[57340,46284,35998,24427,3422264],[16245950,15774878,11764100,7561838,4275786],[14808516,15590772,16372771,16552250,16731728],[16699048,10074264,16745596,15223391,2766395],[16185277,15117351,8436899,12537128,6641219],[16380647,11461177,4243659,9420288,43206],[15256228,6590602,13380161,4342356,3478320],[15855525,13880893,6338970,16218149,5587510],[15329769,12369084,16750848,3316155,4342338],[15459242,13293490,11061946,8619657,6111575],[15909978,12563290,8955486,6196330,9184024],[16437385,16751707,16081738,3899779,15544380],[16054994,15790827,14806457,13954654,16728642],[16777215,13756241,5094633,2534884,0],[16298389,16151168,12610692,7101307,3497085],[15400422,12513794,8963109,5346632,1795947],[12369324,13614631,15889461,15737973,3878200],[16575414,15771696,7913640,15759384,6177071],[14874574,15253334,14976074,9510989,4531762],[15656619,12958862,6907736,4540491,3553595],[15784104,15914644,8829105,16394752,4004864],[16775101,15921775,9818039,16745018,15745365],[10536287,8041239,878425,732761,2753610],[15654297,15647376,13420173,15641224,12303240],[12179417,6718084,8076091,4798262,2762793],[15528065,16760384,11783255,15692911,11222619],[15579438,10725704,16275761,39305,13506614],[13418370,12103427,6787450,14889560,1508361],[15259065,15259063,16102217,16530001,926768],[15462345,15655095,15256239,12897207,11187115],[15757889,12601416,6297672,4718664,3145776],[16051139,15786660,12963502,12362391,11227755],[15790296,12638304,7901256,6322248,6309960],[14478786,16765877,11069134,16755366,16747668],[16776927,14662249,4079943,5910062,2763825],[16702650,15522748,14342845,13162943,11983040],[16578501,704444,16528716,1275005,2695711],[16771757,11788441,13714228,167798,1843504],[15592422,14082503,9750454,13853755,4209459],[16317633,13160194,15104030,1479591,13372473],[14341834,1814734,5211801,6970994,5649476],[15064523,10995133,15432537,13583943,5391958],[16642508,13031096,16568374,14921024,9994089],[15069260,12636734,14769714,11020099,6042174],[15461308,12379077,8565678,15867201,2297643],[12178352,16165523,16289657,8502692,11700084],[15137212,12377765,8624270,5720401,3805468],[16578515,14608574,12046755,13470802,6175017],[15744002,12720641,10682374,7012611,1835283],[16771826,16570853,16500184,15808877,3682098],[14933946,13162175,9686214,7126453,1711902],[13421772,11605539,10424603,2698295,0],[16510658,11325120,12694424,6399659,6314321],[16771503,16373420,16688802,9292973,9996388],[16185078,15263976,12125444,3355443,10027264],[15332089,10274020,15887439,3836361,1782367],[14471604,16431231,16285307,6201251,11556212],[16118999,14737329,10855276,5460531,9772843],[13172480,16384572,4275517,4915215,262148],[15725517,11720122,6401440,2396045,6312035],[14675174,9619363,3973794,2185837,2960681],[13631453,11853505,11030883,16719692,6051939],[13433998,9354900,14441278,8548485,5126493],[16776903,10340780,16751918,9539943,16081432],[16704941,16435814,10607538,16229697,16014668],[16776932,16773075,13692138,10475218,9140830],[11052967,13390458,15210333,4671303,3552822],[16772543,16311489,16220220,16074792,3018019],[16313809,12963782,14191242,10329491,4671555],[15855056,13494730,10537653,15960714,5588029],[9747045,2592944,5131594,2838130,3486770],[16711403,16315620,10859434,828848,5127984],[16177259,16476993,3379604,15797321,10945127],[13413525,10130556,10321529,7637891,5993836],[15595246,13746313,11739213,4271656,1380609],[15515155,9675818,3127468,3183250,290187],[16113875,16765107,16758924,14574178,5061435],[16776119,10942127,6731435,5995661,5187928],[16432680,16747008,8962304,49526,16711740],[16580341,16448483,15335393,14083779,13488055],[14539179,12572845,10280392,16232291,6503726],[754053,2056033,3560527,4208689,3155484],[16367478,9351877,15032924,13709629,6378357],[15657445,16769409,16438194,16759423,16751767],[11206400,16755200,43775,16711850,11141375],[13740596,10987588,10773891,12730669,5905994],[16315327,14476535,12570615,7692651,13844503]];
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
