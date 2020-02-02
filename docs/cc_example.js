@@ -49,7 +49,7 @@ var Main = function() {
 	this.radiusSmall = 50;
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 13:04:43");
+		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 13:34:49");
 		_gthis.init();
 	});
 };
@@ -366,7 +366,7 @@ Sketcher.prototype = {
 		if(isLinear == null) {
 			isLinear = true;
 		}
-		var shape = new draw_Gradient(color0,color1,isLinear);
+		var shape = new sketcher_draw_Gradient(color0,color1,isLinear);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -1286,37 +1286,6 @@ draw_Ellipse.prototype = $extend(draw_Base.prototype,{
 		return this.rx = value;
 	}
 	,__class__: draw_Ellipse
-});
-var draw_Gradient = function(color0,color1,isLinear) {
-	if(isLinear == null) {
-		isLinear = true;
-	}
-	this.type = "gradient";
-	this.color0 = color0;
-	this.color1 = color1;
-	draw_Base.call(this,"linearGradient");
-};
-draw_Gradient.__name__ = "draw.Gradient";
-draw_Gradient.__interfaces__ = [draw_IBase];
-draw_Gradient.__super__ = draw_Base;
-draw_Gradient.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		var stop0 = Xml.createElement("stop");
-		stop0.set("offset","0%");
-		stop0.set("stop-color","" + this.color0);
-		var stop1 = Xml.createElement("stop");
-		stop1.set("offset","100%");
-		stop1.set("stop-color","" + this.color1);
-		this.xml.addChild(stop0);
-		this.xml.addChild(stop1);
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,__class__: draw_Gradient
 });
 var draw_Line = function(x,y,x2,y2) {
 	this.type = "Line";
@@ -2595,6 +2564,40 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 	}
 	,__class__: sketcher_draw_Circle
 });
+var sketcher_draw_Gradient = function(color0,color1,isLinear) {
+	if(isLinear == null) {
+		isLinear = true;
+	}
+	this.type = "gradient";
+	this.color0 = color0;
+	this.color1 = color1;
+	draw_Base.call(this,"linearGradient");
+};
+sketcher_draw_Gradient.__name__ = "sketcher.draw.Gradient";
+sketcher_draw_Gradient.__interfaces__ = [draw_IBase];
+sketcher_draw_Gradient.__super__ = draw_Base;
+sketcher_draw_Gradient.prototype = $extend(draw_Base.prototype,{
+	svg: function(settings) {
+		var stop0 = Xml.createElement("stop");
+		stop0.set("offset","0%");
+		stop0.set("stop-color","" + this.color0);
+		var stop1 = Xml.createElement("stop");
+		stop1.set("offset","100%");
+		stop1.set("stop-color","" + this.color1);
+		this.xml.addChild(stop0);
+		this.xml.addChild(stop1);
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		window.console.log(ctx);
+		var grd = ctx.createLinearGradient(0,0,170,0);
+		grd.addColorStop(0,"black");
+		grd.addColorStop(1,"white");
+		ctx.fillStyle = grd;
+		ctx.fillRect(20,20,150,100);
+	}
+	,__class__: sketcher_draw_Gradient
+});
 var sketcher_draw_Group = function(arr) {
 	this.type = "group";
 	this.set_arr(arr);
@@ -2654,7 +2657,7 @@ sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
 		this.set_strokeOpacity(0);
 	}
 	,test: function() {
-		console.log("src/sketcher/draw/Group.hx:85:","test if casting works");
+		console.log("/Users/matthijs/Documents/GIT/cc-sketch-plus/src/sketcher/draw/Group.hx:85:","test if casting works");
 	}
 	,get_arr: function() {
 		return this.arr;
