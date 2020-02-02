@@ -53,7 +53,7 @@ class Main {
 
 		// quick generate grid
 		if (isDebug) {
-			util.TestUtil.gridDots(sketch, grid);
+			sketcher.debug.Grid.gridDots(sketch, grid);
 		}
 
 		var p = grid.array[0];
@@ -104,7 +104,7 @@ class Main {
 		var sketch = Sketcher.create(settings).appendTo(elem);
 		// quick generate grid
 		if (isDebug) {
-			util.TestUtil.gridDots(sketch, grid);
+			sketcher.debug.Grid.gridDots(sketch, grid);
 		}
 
 		var p = grid.array[0];
