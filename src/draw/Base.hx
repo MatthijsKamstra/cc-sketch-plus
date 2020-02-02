@@ -46,9 +46,14 @@ class Base {
 	// strokeWeight
 	@:isVar public var strokeWeight(get, set):Float;
 
-	// @:isVar public var opacity(get, set):Float; // = 1;
+	@:isVar public var opacity(get, set):Float; // = 1;
 	@:isVar public var strokeOpacity(get, set):Float;
 	@:isVar public var fillOpacity(get, set):Float;
+
+	/**
+	 * probably only usefull for groups (hide everything in this group)
+	 */
+	@:isVar public var isVisible(get, set):Bool;
 
 	// transform
 	@:isVar public var rotate(get, set):Float;
@@ -212,15 +217,18 @@ class Base {
 		return lineWeight = value;
 	}
 
-	// function get_opacity():Float {
-	// 	return opacity;
-	// }
-	// function set_opacity(value:Float):Float {
-	// 	var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
-	// 	xml.set('fill-opacity', Std.string(v));
-	// 	xml.set('stroke-opacity', Std.string(v));
-	// 	return opacity = v;
-	// }
+	function get_opacity():Float {
+		return opacity;
+	}
+
+	function set_opacity(value:Float):Float {
+		var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		fillOpacity = v;
+		strokeOpacity = v;
+		// xml.set('fill-opacity', Std.string(v));
+		// xml.set('stroke-opacity', Std.string(v));
+		return opacity = v;
+	}
 
 	/**
 	 * [Description]
@@ -320,6 +328,20 @@ class Base {
 	function set_lineJoin(value:LineJoin):LineJoin {
 		xml.set('stroke-linejoin', Std.string(value));
 		return lineJoin = value;
+	}
+
+	function get_isVisible():Bool {
+		return isVisible;
+	}
+
+	function set_isVisible(value:Bool):Bool {
+		var _opacity = 0;
+		if (value) {
+			_opacity = 1;
+		}
+		fillOpacity = _opacity;
+		strokeOpacity = _opacity;
+		return isVisible = value;
 	}
 
 	function get_count():Int {
