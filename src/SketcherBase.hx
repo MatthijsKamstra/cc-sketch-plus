@@ -68,8 +68,7 @@ class SketcherBase {
 
 	// trigger when window resize, draw function is still running, so clear canvas and restart with init
 	function _reset() {
-		trace("wip");
-
+		// trace("wip");
 		// ctx.clearRect(0, 0, w, h);
 		_draw();
 	}

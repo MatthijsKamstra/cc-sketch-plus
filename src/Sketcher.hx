@@ -465,7 +465,7 @@ class Sketcher {
 				if (base == null)
 					continue; // with the creation of groups there are base == null
 
-				trace(base.type);
+				// trace(base.type);
 				base.ctx(ctx);
 			}
 		}
