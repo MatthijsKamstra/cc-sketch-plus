@@ -1,5 +1,11 @@
 package sketcher.draw;
 
+import js.Browser.*;
+
+/**
+ * SVG: in svg you create a gradient and place it as a fill over an rectangle/circle/etc
+ * CANVAS: in canvas you don't have that controle, so you create a rectantle and place the gradient over there
+ */
 /**
  * @source
  * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/linearGradient
@@ -12,6 +18,15 @@ class Gradient extends draw.Base implements draw.IBase {
 	var color0:String;
 	var color1:String;
 
+	var canvasGradient:js.html.CanvasGradient;
+	var gradientObj:GradientObj;
+
+	/**
+	 * [Description]
+	 * @param color0
+	 * @param color1
+	 * @param isLinear
+	 */
 	public function new(color0:String, color1:String, isLinear:Bool = true) {
 		this.color0 = color0;
 		this.color1 = color1;
@@ -50,9 +65,38 @@ class Gradient extends draw.Base implements draw.IBase {
 		return xml.toString();
 	}
 
+	/**
+	 * 	currently the svg way of creating gradients doesn't work with canvas
+	 *
+	 * @example:
+	 *			if (settings.type.toLowerCase() == 'canvas') {
+	 *				var gradient = sketch.makeGradient('#B993D6', '#8CA6DB');
+	 *			}
+	 *
+	 * @param ctx
+	 */
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+		console.warn('Gradient doens\'t work the same as svg, use with care');
+
+		var w = ctx.canvas.width;
+		var h = ctx.canvas.height;
+		var grd = ctx.createLinearGradient(0, 0, w, 0);
+		grd.addColorStop(0, '${this.color0}');
+		grd.addColorStop(1, '${this.color1}');
+
+		// [mck] probably use this to get this var in combination with rect?
+		canvasGradient = grd;
+		gradientObj = {
+			id: this.id,
+			canvasGradient: canvasGradient
+		}
+
+		ctx.fillStyle = grd;
+		ctx.fillRect(0, 0, w, h);
 	}
+}
+
+typedef GradientObj = {
+	var id:String;
+	var canvasGradient:js.html.CanvasGradient;
 }
