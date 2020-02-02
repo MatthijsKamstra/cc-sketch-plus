@@ -17,7 +17,7 @@ class Sketcher {
 	/**
 	 * the svg string (string injected into dv)
 	 */
-	public var svg:String; // should be the svg
+	public var svg:String; // should be the svg/xml
 
 	public var CANVAS_ID:String = "sketcher_canvas";
 	public var SVG_ID:String = "sketcher_svg";
@@ -28,8 +28,8 @@ class Sketcher {
 	public function new(settings:Settings) {
 		this.settings = settings;
 
-		Sketch.Global.w = settings.width;
-		Sketch.Global.h = settings.height;
+		Sketcher.Globals.w = settings.width;
+		Sketcher.Globals.h = settings.height;
 
 		if (settings.elementID != null) {
 			WRAPPER_ID = settings.elementID;
@@ -56,13 +56,17 @@ class Sketcher {
 		}
 		this.element = element;
 
-		if (settings.type == 'canvas') {
+		// console.log(settings);
+		// console.log(element);
+
+		if (settings.type.toLowerCase() == 'canvas') {
 			canvas = document.createCanvasElement();
 			canvas.width = settings.width;
 			canvas.height = settings.height;
 			canvas.id = CANVAS_ID;
 			ctx = canvas.getContext2d();
 			element.appendChild(canvas);
+			// console.log(canvas);
 		}
 		return this;
 	}
@@ -365,7 +369,10 @@ class Sketcher {
 	 */
 	public function clear() {
 		baseArray = [];
-		element.innerHTML = '';
+		if (settings.type.toLowerCase() == 'svg')
+			element.innerHTML = '';
+		if (settings.type.toLowerCase() == 'canvas')
+			ctx.clearRect(0, 0, settings.width, settings.height);
 	}
 
 	/**
@@ -469,4 +476,38 @@ class Sketcher {
 		sketcher.baseArray = []; // make sure it's empty
 		return sketcher;
 	}
+}
+
+/**
+ * Sketcher.Globals has values you can access easily
+ *
+ * @usage:
+ * 		import Sketcher.Globals.*;
+ *
+ * @source
+ * 			https://groups.google.com/forum/#!topic/haxelang/CPbyE3WCvnc
+ * 			https://gist.github.com/nadako/5913724
+ */
+class Globals {
+	public static var MOUSE_DOWN:String = 'mousedown';
+	public static var MOUSE_UP:String = 'mouseup';
+	public static var MOUSE_MOVE:String = 'mousemove';
+	public static var KEY_DOWN:String = 'keydown';
+	public static var KEY_UP:String = 'keyup';
+	public static var RESIZE:String = 'resize';
+	public static var mouseX:Int;
+	public static var mouseY:Int;
+	public static var mouseMoved:Bool;
+	public static var mouseDown:Bool;
+	public static var keyDown:Int;
+	public static var keyUp:Int;
+	public static var mousePressed:Int = 0;
+	public static var mouseReleased:Int = 0;
+	public static var isFullscreen:Bool = false;
+	public static var TWO_PI:Float = Math.PI * 2;
+	// allows me global access to canvas and it’s width and height properties
+	public static var w:Int;
+	public static var h:Int;
+	// public static var width:Int;
+	// public static var height:Int;
 }
