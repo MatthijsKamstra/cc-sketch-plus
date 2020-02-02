@@ -5,11 +5,11 @@ import draw.IBase;
 import draw.Base;
 
 class Group extends draw.Base implements draw.IBase {
+	public static var ISWARN:Bool;
+
 	public var type = 'group'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<IBase>;
-
-	public static var ISWARN:Bool;
 
 	/**
 	 * create a group to join a couple of IBase items
@@ -46,8 +46,8 @@ class Group extends draw.Base implements draw.IBase {
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
-			console.groupCollapsed('Group (${id})');
 			console.warn('The Group (${id}) changes like transforms/etc. doesn\'t work for canvas (yet)');
+			console.groupCollapsed('Group (${id})');
 			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor');
 			console.groupEnd();
 			Group.ISWARN = true;
