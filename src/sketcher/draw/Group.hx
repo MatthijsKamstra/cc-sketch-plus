@@ -9,6 +9,8 @@ class Group extends draw.Base implements draw.IBase {
 
 	@:isVar public var arr(get, set):Array<IBase>;
 
+	public static var ISWARN:Bool;
+
 	/**
 	 * create a group to join a couple of IBase items
 	 * useful in `svg`, not so much in `canvas`
@@ -43,10 +45,13 @@ class Group extends draw.Base implements draw.IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		console.groupCollapsed('Group (${id})');
-		console.warn('The Group (${id}) changes like transforms/etc. doesn\'t work for canvas (yet)');
-		console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor');
-		console.groupEnd();
+		if (!ISWARN) {
+			console.groupCollapsed('Group (${id})');
+			console.warn('The Group (${id}) changes like transforms/etc. doesn\'t work for canvas (yet)');
+			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor');
+			console.groupEnd();
+			Group.ISWARN = true;
+		}
 		// TODO set transforms on group also on individuals
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];

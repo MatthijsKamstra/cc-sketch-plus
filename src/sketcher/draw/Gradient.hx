@@ -13,6 +13,8 @@ import js.Browser.*;
  * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/stop
  */
 class Gradient extends draw.Base implements draw.IBase {
+	public static var ISWARN:Bool;
+
 	public var type = 'gradient'; // base (get class name?)
 
 	var color0:String;
@@ -76,7 +78,10 @@ class Gradient extends draw.Base implements draw.IBase {
 	 * @param ctx
 	 */
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		console.warn('Gradient doens\'t work the same as svg, use with care');
+		if (!ISWARN) {
+			console.warn('Gradient doens\'t work the same as svg, use with care');
+			ISWARN = true;
+		}
 
 		var w = ctx.canvas.width;
 		var h = ctx.canvas.height;

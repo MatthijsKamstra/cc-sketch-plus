@@ -4,6 +4,8 @@ import cc.util.MathUtil;
 import cc.util.ColorUtil;
 
 class Circle extends draw.Base implements draw.IBase {
+	public static var ISWARN:Bool;
+
 	public var type = 'circle'; // base (get class name?)
 
 	@:isVar public var radius(get, set):Float;
