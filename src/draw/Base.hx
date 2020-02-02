@@ -138,6 +138,22 @@ class Base {
 		return cast(haxe.Json.parse(haxe.Json.stringify(this)), Base);
 	}
 
+	public function useDefaultsCanvas() {
+		if (this.fillColor == null) {
+			this.fillColor = '#000000';
+		}
+		if (this.strokeColor == null) {
+			this.strokeColor = '#000000';
+			this.strokeOpacity = 0;
+		}
+		if (this.fillOpacity == null) {
+			this.fillOpacity = 1;
+		}
+		if (this.strokeOpacity == null) {
+			this.strokeOpacity = 1;
+		}
+	}
+
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_id():String {
