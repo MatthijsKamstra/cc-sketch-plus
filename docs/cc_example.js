@@ -49,7 +49,7 @@ var Main = function() {
 	this.radiusSmall = 50;
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 13:34:49");
+		window.console.log("" + sketcher_App.NAME + " :: build: " + "2020-02-02 21:09:29");
 		_gthis.init();
 	});
 };
@@ -273,7 +273,7 @@ Sketcher.prototype = {
 		return this;
 	}
 	,makeText: function(str,x,y) {
-		var shape = new draw_Text(str,x,y);
+		var shape = new sketcher_draw_Text(str,x,y);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -476,7 +476,6 @@ Sketcher.prototype = {
 				if(base1 == null) {
 					continue;
 				}
-				console.log("src/Sketcher.hx:467:",base1.type);
 				base1.ctx(Sketcher.ctx);
 			}
 		}
@@ -889,7 +888,7 @@ cc_util_MathUtil.dist = function(x1,y1,x2,y2) {
 };
 cc_util_MathUtil.pythagoreanTheorem = function(a,b,c) {
 	if(a == null && b == null && c == null) {
-		console.log("cc/util/MathUtil.hx:104:","Really? Perhaps you should use some data");
+		haxe_Log.trace("Really? Perhaps you should use some data",{ fileName : "cc/util/MathUtil.hx", lineNumber : 104, className : "cc.util.MathUtil", methodName : "pythagoreanTheorem"});
 		return 0;
 	}
 	var value = 0.0;
@@ -1059,8 +1058,23 @@ draw_Base.prototype = {
 		return str;
 	}
 	,clone: function() {
-		console.log("src/draw/Base.hx:137:","WIP");
+		haxe_Log.trace("WIP",{ fileName : "src/draw/Base.hx", lineNumber : 137, className : "draw.Base", methodName : "clone"});
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
+	}
+	,useDefaultsCanvas: function() {
+		if(this.get_fillColor() == null) {
+			this.set_fillColor("#000000");
+		}
+		if(this.get_strokeColor() == null) {
+			this.set_strokeColor("#000000");
+			this.set_strokeOpacity(0);
+		}
+		if(this.get_fillOpacity() == null) {
+			this.set_fillOpacity(1);
+		}
+		if(this.get_strokeOpacity() == null) {
+			this.set_strokeOpacity(1);
+		}
 	}
 	,get_id: function() {
 		if(this.id == null) {
@@ -1415,7 +1429,7 @@ draw_PolyLine.prototype = $extend(draw_Base.prototype,{
 		}
 		this.xml.set("points",str);
 		if(this.getTransform() != "") {
-			console.log("src/draw/PolyLine.hx:33:",this.getTransform());
+			haxe_Log.trace(this.getTransform(),{ fileName : "src/draw/PolyLine.hx", lineNumber : 33, className : "draw.PolyLine", methodName : "svg"});
 			this.xml.set("transform",this.getTransform());
 		}
 		return haxe_xml_Printer.print(this.xml);
@@ -1464,7 +1478,7 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			console.log("src/draw/Polygon.hx:42:","not in this length");
+			haxe_Log.trace("not in this length",{ fileName : "src/draw/Polygon.hx", lineNumber : 42, className : "draw.Polygon", methodName : "getPoint"});
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
@@ -1489,145 +1503,34 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 	}
 	,__class__: draw_Polygon
 });
-var draw_Text = function(str,x,y) {
-	if(y == null) {
-		y = 0;
-	}
-	if(x == null) {
-		x = 0;
-	}
-	this.type = "Text";
-	this.set_str(str);
-	this.set_x(x);
-	this.set_y(y);
-	draw_Base.call(this,"text");
-};
-draw_Text.__name__ = "draw.Text";
-draw_Text.__interfaces__ = [draw_IBase];
-draw_Text.__super__ = draw_Base;
-draw_Text.prototype = $extend(draw_Base.prototype,{
-	align: function(value) {
-		this.set_textAnchor(value);
-	}
-	,baseline: function(value) {
-		this.set_alignmentBaseline(value);
-	}
-	,svg: function(settings) {
-		var comment = Xml.createComment("" + this.get_str());
-		var content = Xml.parse(this.get_str());
-		this.xml.addChild(comment);
-		this.xml.addChild(content);
-		this.xml.set("x",Std.string(this.get_x()));
-		this.xml.set("y",Std.string(this.get_y()));
-		if(this.get_style() != null) {
-			var className = StringTools.replace(StringTools.replace(this.get_str()," ",""),"\n","").toLowerCase();
-			this.xml.set("class","fontstyle_" + className);
-			var style = window.document.createElement("style");
-			style.innerHTML = ".fontstyle_" + className + " {" + this.get_style() + "}";
-			window.document.body.appendChild(style);
-		}
-		if(this._textAlign != null) {
-			this.convertTextAlign();
-		}
-		if(this._textBaseline != null) {
-			this.convertTextBaseline();
-		}
-		if(this.getTransform() != "") {
-			this.xml.set("transform",this.getTransform());
-		}
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		console.log("src/draw/Text.hx:140:","needs work!");
-	}
-	,convertTextAlign: function() {
-		switch(this._textAlign) {
-		case "left":
-			this.set_textAnchor("start");
-			break;
-		case "right":
-			this.set_textAnchor("end");
-			break;
-		default:
-			this.set_textAnchor("start");
-			console.log("src/draw/Text.hx:154:","case '" + this._textAlign + "': trace ('" + this._textAlign + "');");
-		}
-	}
-	,convertTextBaseline: function() {
-		switch(this._textBaseline) {
-		case "bottom":
-			this.set_dominantBaseline("baseline");
-			break;
-		case "center":
-			this.set_dominantBaseline("middle");
-			break;
-		case "top":
-			this.set_dominantBaseline("hanging");
-			break;
-		default:
-			this.set_dominantBaseline("auto");
-			console.log("src/draw/Text.hx:168:","case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');");
-		}
-	}
-	,get_fontSize: function() {
-		return this.fontSize;
-	}
-	,set_fontSize: function(value) {
-		this.xml.set("font-size",value);
-		return this.fontSize = value;
-	}
-	,get_fontFamily: function() {
-		return this.fontFamily;
-	}
-	,set_fontFamily: function(value) {
-		this.xml.set("font-family",value);
-		return this.fontFamily = value;
-	}
-	,get_fontWeight: function() {
-		return this.fontWeight;
-	}
-	,set_fontWeight: function(value) {
-		this.xml.set("font-weight",value);
-		return this.fontWeight = value;
-	}
-	,get_textAnchor: function() {
-		return this.textAnchor;
-	}
-	,set_textAnchor: function(value) {
-		this.xml.set("text-anchor",Std.string(value));
-		return this.textAnchor = value;
-	}
-	,get_alignmentBaseline: function() {
-		return this.alignmentBaseline;
-	}
-	,set_alignmentBaseline: function(value) {
-		this.xml.set("alignment-baseline",Std.string(value));
-		return this.alignmentBaseline = value;
-	}
-	,get_dominantBaseline: function() {
-		return this.dominantBaseline;
-	}
-	,set_dominantBaseline: function(value) {
-		this.xml.set("dominant-baseline",Std.string(value));
-		return this.dominantBaseline = value;
-	}
-	,get_str: function() {
-		return this.str;
-	}
-	,set_str: function(value) {
-		return this.str = value;
-	}
-	,get_style: function() {
-		return this.style;
-	}
-	,set_style: function(value) {
-		return this.style = value;
-	}
-	,__class__: draw_Text
-});
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = "haxe.IMap";
 haxe_IMap.__isInterface__ = true;
+var haxe_Log = function() { };
+haxe_Log.__name__ = "haxe.Log";
+haxe_Log.formatOutput = function(v,infos) {
+	var str = Std.string(v);
+	if(infos == null) {
+		return str;
+	}
+	var pstr = infos.fileName + ":" + infos.lineNumber;
+	if(infos.customParams != null) {
+		var _g = 0;
+		var _g1 = infos.customParams;
+		while(_g < _g1.length) {
+			var v1 = _g1[_g];
+			++_g;
+			str += ", " + Std.string(v1);
+		}
+	}
+	return pstr + ": " + str;
+};
+haxe_Log.trace = function(v,infos) {
+	var str = haxe_Log.formatOutput(v,infos);
+	if(typeof(console) != "undefined" && console.log != null) {
+		console.log(str);
+	}
+};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -2554,7 +2457,7 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		var tmp = this.get_rotate() != null;
 	}
 	,debug: function() {
-		console.log("src/sketcher/draw/Circle.hx:103:","" + this.toString());
+		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 105, className : "sketcher.draw.Circle", methodName : "debug"});
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -2589,12 +2492,19 @@ sketcher_draw_Gradient.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
-		window.console.log(ctx);
-		var grd = ctx.createLinearGradient(0,0,170,0);
-		grd.addColorStop(0,"black");
-		grd.addColorStop(1,"white");
+		if(!sketcher_draw_Gradient.ISWARN) {
+			window.console.warn("Gradient doens't work the same as svg, use with care");
+			sketcher_draw_Gradient.ISWARN = true;
+		}
+		var w = ctx.canvas.width;
+		var h = ctx.canvas.height;
+		var grd = ctx.createLinearGradient(0,0,w,0);
+		grd.addColorStop(0,"" + this.color0);
+		grd.addColorStop(1,"" + this.color1);
+		this.canvasGradient = grd;
+		this.gradientObj = { id : this.get_id(), canvasGradient : this.canvasGradient};
 		ctx.fillStyle = grd;
-		ctx.fillRect(20,20,150,100);
+		ctx.fillRect(0,0,w,h);
 	}
 	,__class__: sketcher_draw_Gradient
 });
@@ -2627,8 +2537,13 @@ sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
-		window.console.warn("The Group (" + this.get_id() + ") changes like transforms/etc. doesn't work for canvas (yet)");
-		window.console.info("strokeOpacity, fillOpacity, fillColor, strokeColor done!");
+		if(!sketcher_draw_Group.ISWARN) {
+			window.console.groupCollapsed("Group (" + this.get_id() + ")");
+			window.console.warn("The Group (" + this.get_id() + ") changes like transforms/etc. doesn't work for canvas (yet)");
+			window.console.info("the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor");
+			window.console.groupEnd();
+			sketcher_draw_Group.ISWARN = true;
+		}
 		var _g = 0;
 		var _g1 = this.get_arr().length;
 		while(_g < _g1) {
@@ -2657,7 +2572,7 @@ sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
 		this.set_strokeOpacity(0);
 	}
 	,test: function() {
-		console.log("/Users/matthijs/Documents/GIT/cc-sketch-plus/src/sketcher/draw/Group.hx:85:","test if casting works");
+		haxe_Log.trace("test if casting works",{ fileName : "src/sketcher/draw/Group.hx", lineNumber : 92, className : "sketcher.draw.Group", methodName : "test"});
 	}
 	,get_arr: function() {
 		return this.arr;
@@ -2830,6 +2745,186 @@ sketcher_draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		return this.height = value;
 	}
 	,__class__: sketcher_draw_Rectangle
+});
+var sketcher_draw_Text = function(str,x,y) {
+	if(y == null) {
+		y = 0;
+	}
+	if(x == null) {
+		x = 0;
+	}
+	this.type = "Text";
+	this.set_str(str);
+	this.set_x(x);
+	this.set_y(y);
+	draw_Base.call(this,"text");
+};
+sketcher_draw_Text.__name__ = "sketcher.draw.Text";
+sketcher_draw_Text.__interfaces__ = [draw_IBase];
+sketcher_draw_Text.__super__ = draw_Base;
+sketcher_draw_Text.prototype = $extend(draw_Base.prototype,{
+	align: function(value) {
+		this.set_textAnchor(value);
+	}
+	,baseline: function(value) {
+		this.set_alignmentBaseline(value);
+	}
+	,svg: function(settings) {
+		var comment = Xml.createComment("" + this.get_str());
+		var content = Xml.parse(this.get_str());
+		this.xml.addChild(comment);
+		this.xml.addChild(content);
+		this.xml.set("x",Std.string(this.get_x()));
+		this.xml.set("y",Std.string(this.get_y()));
+		if(this.get_style() != null) {
+			var className = StringTools.replace(StringTools.replace(this.get_str()," ",""),"\n","").toLowerCase();
+			this.xml.set("class","fontstyle_" + className);
+			var style = window.document.createElement("style");
+			style.innerHTML = ".fontstyle_" + className + " {" + this.get_style() + "}";
+			window.document.body.appendChild(style);
+		}
+		if(this._textAlign != null) {
+			this.convertTextAlign();
+		}
+		if(this._textBaseline != null) {
+			this.convertTextBaseline();
+		}
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		this.useDefaultsCanvas();
+		ctx.save();
+		var value = this.get_fillColor();
+		var _r = 0;
+		var _g = 0;
+		var _b = 0;
+		var _a = 1;
+		value = StringTools.replace(value," ","");
+		if(value.indexOf("rgba") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+			var arr = value.split(",");
+			_r = arr[0];
+			_g = arr[1];
+			_b = arr[2];
+			_a = arr[3];
+		} else if(value.indexOf("rgb") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+			var arr1 = value.split(",");
+			_r = arr1[0];
+			_g = arr1[1];
+			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			var rgb_r = int >> 16 & 255;
+			var rgb_g = int >> 8 & 255;
+			var rgb_b = int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
+		}
+		var _fillColor = { r : _r, g : _g, b : _b, a : _a};
+		ctx.fillStyle = sketcher_util_ColorUtil.getColourObj(_fillColor,this.get_fillOpacity());
+		var _css = "";
+		ctx.font = StringTools.ltrim("" + _css + " " + this.get_fontSize() + "px " + this.get_fontFamily());
+		ctx.textAlign = this.get_textAlign();
+		ctx.textBaseline = this.get_alignmentBaseline();
+		haxe_Log.trace(this.get_textAnchor(),{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 157, className : "sketcher.draw.Text", methodName : "ctx", customParams : [this.get_alignmentBaseline()]});
+		ctx.fillText(this.get_str(),this.get_x(),this.get_y());
+		ctx.restore();
+	}
+	,convertTextAlign: function() {
+		switch(this._textAlign) {
+		case "left":
+			this.set_textAnchor("start");
+			break;
+		case "right":
+			this.set_textAnchor("end");
+			break;
+		default:
+			this.set_textAnchor("start");
+			haxe_Log.trace("case '" + this._textAlign + "': trace ('" + this._textAlign + "');",{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 172, className : "sketcher.draw.Text", methodName : "convertTextAlign"});
+		}
+	}
+	,convertTextBaseline: function() {
+		switch(this._textBaseline) {
+		case "bottom":
+			this.set_dominantBaseline("baseline");
+			break;
+		case "center":
+			this.set_dominantBaseline("middle");
+			break;
+		case "top":
+			this.set_dominantBaseline("hanging");
+			break;
+		default:
+			this.set_dominantBaseline("auto");
+			haxe_Log.trace("case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');",{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 186, className : "sketcher.draw.Text", methodName : "convertTextBaseline"});
+		}
+	}
+	,get_fontSize: function() {
+		return this.fontSize;
+	}
+	,set_fontSize: function(value) {
+		this.xml.set("font-size",value);
+		return this.fontSize = value;
+	}
+	,get_fontFamily: function() {
+		return this.fontFamily;
+	}
+	,set_fontFamily: function(value) {
+		this.xml.set("font-family",value);
+		return this.fontFamily = value;
+	}
+	,get_fontWeight: function() {
+		return this.fontWeight;
+	}
+	,set_fontWeight: function(value) {
+		this.xml.set("font-weight",value);
+		return this.fontWeight = value;
+	}
+	,get_textAnchor: function() {
+		return this.textAnchor;
+	}
+	,set_textAnchor: function(value) {
+		this.xml.set("text-anchor",Std.string(value));
+		return this.textAnchor = value;
+	}
+	,get_alignmentBaseline: function() {
+		return this.alignmentBaseline;
+	}
+	,set_alignmentBaseline: function(value) {
+		this.xml.set("alignment-baseline",Std.string(value));
+		return this.alignmentBaseline = value;
+	}
+	,get_dominantBaseline: function() {
+		return this.dominantBaseline;
+	}
+	,set_dominantBaseline: function(value) {
+		this.xml.set("dominant-baseline",Std.string(value));
+		return this.dominantBaseline = value;
+	}
+	,get_textAlign: function() {
+		return this.textAlign;
+	}
+	,set_textAlign: function(value) {
+		return this.textAlign = value;
+	}
+	,get_str: function() {
+		return this.str;
+	}
+	,set_str: function(value) {
+		return this.str = value;
+	}
+	,get_style: function() {
+		return this.style;
+	}
+	,set_style: function(value) {
+		return this.style = value;
+	}
+	,__class__: sketcher_draw_Text
 });
 var sketcher_util_ColorUtil = function() {
 };
@@ -3037,7 +3132,7 @@ sketcher_util_GridUtil.prototype = {
 		return this;
 	}
 	,calc: function() {
-		console.log("src/sketcher/util/GridUtil.hx:263:","WIP");
+		haxe_Log.trace("WIP",{ fileName : "src/sketcher/util/GridUtil.hx", lineNumber : 263, className : "sketcher.util.GridUtil", methodName : "calc"});
 		return this;
 	}
 	,setPosition: function(x,y) {
@@ -3307,7 +3402,7 @@ sketcher_util_MathUtil.dist = function(x1,y1,x2,y2) {
 };
 sketcher_util_MathUtil.pythagoreanTheorem = function(a,b,c) {
 	if(a == null && b == null && c == null) {
-		console.log("src/sketcher/util/MathUtil.hx:106:","Really? Perhaps you should use some data");
+		haxe_Log.trace("Really? Perhaps you should use some data",{ fileName : "src/sketcher/util/MathUtil.hx", lineNumber : 106, className : "sketcher.util.MathUtil", methodName : "pythagoreanTheorem"});
 		return 0;
 	}
 	var value = 0.0;
