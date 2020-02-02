@@ -24,12 +24,15 @@ class SketcherBase {
 		if (isDebug)
 			trace('START :: ${toString()}');
 
+		// trace('${settings}');
+
 		if (settings != null && settings.element != null)
 			trace(settings.element);
+
 		if (settings.elementID != null && document.getElementById(settings.elementID) == null) {
 			var div0 = document.createDivElement();
-			div0.id = 'sketcher-svg';
-			div0.className = 'svg-wrapper';
+			div0.id = '${settings.elementID}';
+			div0.className = 'sketcher-wrapper ${settings.type}-wrapper';
 			document.body.appendChild(div0);
 			// var elem = document.getElementById('sketcher-svg');
 			sketch = Sketcher.create(settings).appendTo(div0);
@@ -37,12 +40,17 @@ class SketcherBase {
 			sketch = Sketcher.create(settings).appendTo(document.getElementById(settings.elementID));
 		}
 
+		// sketch = Sketcher.create(settings).appendTo(document.getElementById(settings.elementID));
+
 		window.addEventListener(RESIZE, _reset, false);
 		window.addEventListener(KEY_DOWN, _keyDown, false);
 		window.addEventListener(KEY_UP, _keyUp, false);
 		// window.addEventListener(KEY_DOWN, onKeyDown);
+
 		setup();
 		_draw(); // start draw loop
+
+		// haxe.Timer.delay(function() {}, 500);
 	}
 
 	// ____________________________________ private ____________________________________
