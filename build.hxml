@@ -1,5 +1,5 @@
--lib hxquicksettings
--lib cc-sketch
+# -lib hxquicksettings
+# -lib cc-sketch
 -cp src
 -main Main
 -js docs/cc_example.js
