@@ -2,6 +2,8 @@ package draw;
 
 import draw.AST.LineCap;
 import draw.AST.LineJoin;
+import sketcher.AST;
+import sketcher.util.MathUtil;
 
 using StringTools;
 
@@ -57,13 +59,16 @@ class Base {
 
 	// transform
 	@:isVar public var rotate(get, set):Float;
+	@:isVar public var move(get, set):Point; // move x/y
 
 	@:isVar public var transform(get, set):String;
 
+	// dashed line
 	@:isVar public var dash(get, set):Array<Float> = [];
 
 	@:isVar public var desc(get, set):String;
 
+	// line specific
 	@:isVar public var lineCap(get, set):LineCap; // "butt|round|square";
 	@:isVar public var lineJoin(get, set):LineJoin; // "arcs|bevel|miter|miter-clip|round";
 
@@ -92,6 +97,10 @@ class Base {
 	 * @param y   		(optional) new position y
 	 */
 	public function setPosition(x:Float, ?y:Float) {
+		move = {x: x, y: y};
+		if (y == null)
+			move = {x: x, y: 0}
+
 		var str = 'translate(${x}';
 		if (y != null)
 			str += ',${y}';
@@ -238,7 +247,7 @@ class Base {
 	}
 
 	function set_opacity(value:Float):Float {
-		var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		var v = MathUtil.clamp(value, 0, 1); // should between 0 and 1
 		fillOpacity = v;
 		strokeOpacity = v;
 		// xml.set('fill-opacity', Std.string(v));
@@ -255,7 +264,7 @@ class Base {
 	}
 
 	function set_strokeOpacity(value:Float):Float {
-		var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		var v = MathUtil.clamp(value, 0, 1); // should between 0 and 1
 		xml.set('stroke-opacity', Std.string(v));
 		return strokeOpacity = v;
 	}
@@ -265,7 +274,7 @@ class Base {
 	}
 
 	function set_fillOpacity(value:Float):Float {
-		var v = cc.util.MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		var v = MathUtil.clamp(value, 0, 1); // should between 0 and 1
 		xml.set('fill-opacity', Std.string(v));
 		return fillOpacity = v;
 	}
@@ -293,6 +302,14 @@ class Base {
 	function set_rotate(value:Float):Float {
 		// setRotate(value); // recursion error
 		return rotate = value;
+	}
+
+	function get_move():Point {
+		return move;
+	}
+
+	function set_move(value:Point):Point {
+		return move = value;
 	}
 
 	function get_transform():String {
