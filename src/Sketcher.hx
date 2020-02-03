@@ -4,7 +4,7 @@ package;
 import js.Browser.*;
 import draw.*;
 import sketcher.draw.*;
-import cc.AST.Point;
+import sketcher.AST.Point;
 
 class Sketcher {
 	var settings:Settings;
@@ -12,10 +12,13 @@ class Sketcher {
 	var element:js.html.Element;
 	var baseArray:Array<IBase> = [];
 
-	var canvas:js.html.CanvasElement;
+	/**
+	 * canvas used for graphics
+	 */
+	public var canvas:js.html.CanvasElement;
 
 	/**
-	 * the svg string (string injected into dv)
+	 * the svg string (string injected into div)
 	 */
 	public var svg:String; // should be the svg/xml
 
