@@ -2,7 +2,6 @@ package examples;
 
 import draw.AST.LineCap;
 import js.Browser.*;
-import sketcher.App;
 import sketcher.util.GridUtil;
 import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil.*;
