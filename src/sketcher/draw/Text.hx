@@ -154,7 +154,7 @@ class Text extends draw.Base implements draw.IBase {
 		ctx.textAlign = cast textAlign;
 		ctx.textBaseline = cast alignmentBaseline;
 
-		trace(textAnchor, alignmentBaseline);
+		// trace(textAlign, alignmentBaseline);
 		ctx.fillText(this.str, this.x, this.y);
 
 		// restore canvas to previous position
