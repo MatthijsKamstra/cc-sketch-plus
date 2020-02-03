@@ -85,6 +85,10 @@ class Rectangle extends draw.Base implements draw.IBase {
 		var _strokeColor = ColorUtil.assumption(this.strokeColor);
 		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
 
+		if (this.dash != null) {
+			ctx.setLineDash(this.dash);
+		}
+
 		ctx.beginPath();
 
 		if (this.radius == null) {

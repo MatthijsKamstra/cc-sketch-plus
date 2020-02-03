@@ -109,17 +109,17 @@ class ExRectangle {
 
 		var p = grid.array[7];
 		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 20;
+		circle.lineWeight = 10;
 		circle.fillOpacity = 0;
 		circle.strokeColor = getColourObj(FUCHSIA);
-		circle.dash = [10, 30];
+		circle.dash = [40, 20];
 
 		var p = grid.array[8];
 		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 20;
+		circle.lineWeight = 10;
 		circle.fillOpacity = 0;
 		circle.strokeColor = getColourObj(FUCHSIA);
-		circle.dash = [10, 30];
+		circle.dash = [40, 20];
 		circle.lineCap = LineCap.Round;
 
 		// Don't forget to tell two to render everything to the screen
