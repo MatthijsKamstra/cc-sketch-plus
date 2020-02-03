@@ -1,6 +1,6 @@
 package draw;
 
-import cc.AST.Point;
+import sketcher.AST.Point;
 
 class Polygon extends draw.Base implements IBase {
 	public var type = 'Polygon'; // base (get class name?)
