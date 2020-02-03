@@ -1,7 +1,8 @@
 package sketcher.draw;
 
-import cc.util.MathUtil;
-import cc.util.ColorUtil;
+import sketcher.util.MathUtil;
+import sketcher.util.ColorUtil;
+import js.Browser.*;
 
 class Circle extends draw.Base implements draw.IBase {
 	public static var ISWARN:Bool;
@@ -79,17 +80,23 @@ class Circle extends draw.Base implements draw.IBase {
 
 		ctx.beginPath();
 
-		// rotation
+		// rotation & move...
 		if (this.rotate != null) {
 			// trace(this.x, this.y, this.rotate);
 			ctx.save();
+
 			ctx.translate(this.x, this.y);
 			ctx.rotate(MathUtil.radians(this.rotate));
 
+			if (this.move != null) {
+				ctx.translate(this.move.x, this.move.y);
+			}
 			ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
 
 			ctx.restore();
-		} else {
+		}
+
+		if (this.rotate == null) {
 			ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
 		}
 
