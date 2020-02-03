@@ -1,8 +1,8 @@
 {
-	"wrapping": {
-		"methodChain": {
-			"defaultWrap": "keep",
-			"rules": []
-		}
-	}
+  "wrapping": {
+    "methodChain": {
+      "defaultWrap": "keep",
+      "rules": []
+    }
+  }
 }
