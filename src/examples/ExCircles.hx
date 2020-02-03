@@ -1,6 +1,6 @@
 package examples;
 
-class Circles {
+class ExCircles {
 	public function new() {
 		// your code
 	}

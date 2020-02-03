@@ -7,7 +7,7 @@ import sketcher.util.GridUtil;
 import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil.*;
 
-class All {
+class ExAll {
 	var radiusSmall:Float = 50;
 	//
 	var sketchWidth = 600;
