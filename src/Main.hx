@@ -9,7 +9,7 @@ using StringTools;
 class Main {
 	var count:Int;
 	var hash:String;
-	var ccTypeArray:Array<Class<Dynamic>> = [examples.All];
+	var ccTypeArray:Array<Class<Dynamic>> = [examples.ExAll, examples.ExCircles, examples.ExRectangle,];
 
 	public function new() {
 		// console.log('START :: main');
