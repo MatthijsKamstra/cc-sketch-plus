@@ -1,7 +1,7 @@
 package;
 
 import js.Browser.*;
-import test.*;
+import examples.*;
 import Sketcher.Globals.*;
 
 using StringTools;
@@ -9,12 +9,14 @@ using StringTools;
 class Main {
 	var count:Int;
 	var hash:String;
-	var ccTypeArray:Array<Class<Dynamic>> = [examples.ExAll, examples.ExCircles, examples.ExRectangle,];
+	var ccTypeArray:Array<Class<Dynamic>> = [examples.ExAll, examples.ExCircles, examples.ExRectangle];
 
 	public function new() {
 		// console.log('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
 			console.log('${App.NAME} Dom ready :: build: ${App.getBuildDate()}');
+
+			trace('xxx');
 
 			// var cc = new examples.All();
 			setupArt();
@@ -27,11 +29,14 @@ class Main {
 		hash = js.Browser.location.hash;
 		hash = hash.replace('#', '');
 
-		var clazz = Type.resolveClass('${hash}');
+		var clazz = Type.resolveClass('examples.${hash}');
 		if (clazz == null) {
 			// make sure if it's not in the list, show the latest Sketch
 			clazz = ccTypeArray[ccTypeArray.length - 1];
 		}
+		// trace('hash: ' + hash);
+		// trace('clazz: ' + clazz);
+
 		count = ccTypeArray.indexOf(clazz);
 		var cc = Type.createInstance(clazz, []);
 
