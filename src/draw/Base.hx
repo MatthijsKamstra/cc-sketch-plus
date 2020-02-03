@@ -147,7 +147,13 @@ class Base {
 		return cast(haxe.Json.parse(haxe.Json.stringify(this)), Base);
 	}
 
+	/**
+	 *  set everything to default values
+	 */
 	public function useDefaultsCanvas() {
+		if (this.lineWeight == null) {
+			this.lineWeight = 0;
+		}
 		if (this.fillColor == null) {
 			this.fillColor = '#000000';
 		}
