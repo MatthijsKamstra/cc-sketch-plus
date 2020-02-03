@@ -42,22 +42,8 @@ class Circle extends draw.Base implements draw.IBase {
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
-		if (this.lineWeight == null) {
-			this.lineWeight = 0;
-		}
-		if (this.fillColor == null) {
-			this.fillColor = '#000000';
-		}
-		if (this.strokeColor == null) {
-			this.strokeColor = '#000000';
-			this.strokeOpacity = 0;
-		}
-		if (this.fillOpacity == null) {
-			this.fillOpacity = 1;
-		}
-		if (this.strokeOpacity == null) {
-			this.strokeOpacity = 1;
-		}
+		useDefaultsCanvas();
+
 		if (this.lineCap != null) {
 			ctx.lineCap = cast this.lineCap;
 		}

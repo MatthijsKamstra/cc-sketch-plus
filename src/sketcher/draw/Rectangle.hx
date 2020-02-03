@@ -66,19 +66,13 @@ class Rectangle extends draw.Base implements draw.IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		// set everything to default values
+		useDefaultsCanvas();
+
+		if (this.lineCap != null) {
+			ctx.lineCap = cast this.lineCap;
+		}
 		ctx.lineWidth = this.lineWeight;
-		if (this.fillColor == null) {
-			this.fillColor = '#000000';
-		}
-		if (this.strokeColor == null) {
-			this.strokeColor = '#000000';
-		}
-		if (this.fillOpacity == null) {
-			this.fillOpacity = 1;
-		}
-		if (this.strokeOpacity == null) {
-			this.strokeOpacity = 1;
-		}
 
 		// trace('fillColor : ' + this.fillColor);
 		// trace('fillOpacity: ' + this.fillOpacity);
