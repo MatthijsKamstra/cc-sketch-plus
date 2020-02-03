@@ -48,10 +48,11 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_All];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + App.NAME + " Dom ready :: build: " + "2020-02-03 22:21:58");
+		window.console.log("" + App.NAME + " Dom ready :: build: " + "2020-02-04 00:07:20");
+		console.log("src/Main.hx:19:","xxx");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -65,7 +66,7 @@ Main.prototype = {
 	setupArt: function() {
 		this.hash = window.location.hash;
 		this.hash = StringTools.replace(this.hash,"#","");
-		var name = "" + this.hash;
+		var name = "examples." + this.hash;
 		var clazz = $hxClasses[name];
 		if(clazz == null) {
 			clazz = this.ccTypeArray[this.ccTypeArray.length - 1];
@@ -784,6 +785,9 @@ draw_Base.prototype = {
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
 	}
 	,useDefaultsCanvas: function() {
+		if(this.get_lineWeight() == null) {
+			this.set_lineWeight(0);
+		}
 		if(this.get_fillColor() == null) {
 			this.set_fillColor("#000000");
 		}
@@ -1237,16 +1241,16 @@ draw_Polygon.prototype = $extend(draw_Base.prototype,{
 	}
 	,__class__: draw_Polygon
 });
-var examples_All = function() {
+var examples_ExAll = function() {
 	this.isDebug = true;
 	this.sketchHeight = 400;
 	this.sketchWidth = 600;
 	this.radiusSmall = 50;
 	this.init();
 };
-$hxClasses["examples.All"] = examples_All;
-examples_All.__name__ = "examples.All";
-examples_All.prototype = {
+$hxClasses["examples.ExAll"] = examples_ExAll;
+examples_ExAll.__name__ = "examples.ExAll";
+examples_ExAll.prototype = {
 	init: function() {
 		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
 		this.grid.setNumbered(3,3);
@@ -1341,7 +1345,194 @@ examples_All.prototype = {
 		circle2.set_strokeOpacity(0.2);
 		sketch.update();
 	}
-	,__class__: examples_All
+	,__class__: examples_ExAll
+};
+var examples_ExCircles = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.radiusSmall = 50;
+	this.init();
+};
+$hxClasses["examples.ExCircles"] = examples_ExCircles;
+examples_ExCircles.__name__ = "examples.ExCircles";
+examples_ExCircles.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		window.document.body.appendChild(div0);
+		window.document.body.appendChild(div1);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = sketcher_util_MathUtil.circumferenceCircle(this.radiusSmall);
+		var p = this.grid.array[0];
+		var circle = sketch.makeCircle(p.x,p.y,this.radiusSmall);
+		var p1 = this.grid.array[1];
+		var circle1 = sketch.makeCircle(p1.x,p1.y,this.radiusSmall);
+		circle1.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		var p2 = this.grid.array[2];
+		var circle2 = sketch.makeCircle(p2.x,p2.y,this.radiusSmall);
+		circle2.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		circle2.set_lineWeight(10);
+		var p3 = this.grid.array[3];
+		var circle3 = sketch.makeCircle(p3.x,p3.y,this.radiusSmall);
+		circle3.set_lineWeight(10);
+		circle3.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle3.set_fillOpacity(0.5);
+		var p4 = this.grid.array[4];
+		var circle4 = sketch.makeCircle(p4.x,p4.y,this.radiusSmall);
+		circle4.set_lineWeight(10);
+		circle4.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle4.set_fillOpacity(0.5);
+		circle4.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		var p5 = this.grid.array[5];
+		var circle5 = sketch.makeCircle(p5.x,p5.y,this.radiusSmall);
+		circle5.set_lineWeight(10);
+		circle5.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle5.set_fillOpacity(0.5);
+		circle5.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		circle5.set_strokeOpacity(0.5);
+		var p6 = this.grid.array[6];
+		var circle6 = sketch.makeCircle(p6.x,p6.y,this.radiusSmall);
+		circle6.set_lineWeight(10);
+		circle6.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle6.set_fillOpacity(0);
+		circle6.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.FUCHSIA));
+		var p7 = this.grid.array[7];
+		var circle7 = sketch.makeCircle(p7.x,p7.y,this.radiusSmall);
+		circle7.set_lineWeight(20);
+		circle7.set_fillOpacity(0);
+		circle7.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.FUCHSIA));
+		circle7.set_dash([omtrek / 8]);
+		var p8 = this.grid.array[8];
+		var circle8 = sketch.makeCircle(p8.x,p8.y,this.radiusSmall);
+		circle8.set_lineWeight(20);
+		circle8.set_fillOpacity(0);
+		circle8.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.FUCHSIA));
+		circle8.set_dash([omtrek / 8]);
+		circle8.set_lineCap("round");
+		sketch.update();
+	}
+	,__class__: examples_ExCircles
+};
+var examples_ExRectangle = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.rectH = 50;
+	this.rectW = 100;
+	this.init();
+};
+$hxClasses["examples.ExRectangle"] = examples_ExRectangle;
+examples_ExRectangle.__name__ = "examples.ExRectangle";
+examples_ExRectangle.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		window.document.body.appendChild(div0);
+		window.document.body.appendChild(div1);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = this.rectW * 2 + this.rectH * 2;
+		var p = this.grid.array[0];
+		var circle = sketch.makeRectangle(p.x,p.y,this.rectW,this.rectH);
+		var p1 = this.grid.array[1];
+		var circle1 = sketch.makeRectangle(p1.x,p1.y,this.rectW,this.rectH);
+		circle1.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		var p2 = this.grid.array[2];
+		var circle2 = sketch.makeRectangle(p2.x,p2.y,this.rectW,this.rectH);
+		circle2.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		circle2.set_lineWeight(10);
+		var p3 = this.grid.array[3];
+		var circle3 = sketch.makeRectangle(p3.x,p3.y,this.rectW,this.rectH);
+		circle3.set_lineWeight(10);
+		circle3.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle3.set_fillOpacity(0.5);
+		var p4 = this.grid.array[4];
+		var circle4 = sketch.makeRectangle(p4.x,p4.y,this.rectW,this.rectH);
+		circle4.set_lineWeight(10);
+		circle4.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle4.set_fillOpacity(0.5);
+		circle4.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		var p5 = this.grid.array[5];
+		var circle5 = sketch.makeRectangle(p5.x,p5.y,this.rectW,this.rectH);
+		circle5.set_lineWeight(10);
+		circle5.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle5.set_fillOpacity(0.5);
+		circle5.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		circle5.set_strokeOpacity(0.5);
+		var p6 = this.grid.array[6];
+		var circle6 = sketch.makeRectangle(p6.x,p6.y,this.rectW,this.rectH);
+		circle6.set_lineWeight(10);
+		circle6.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		circle6.set_fillOpacity(0);
+		circle6.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.FUCHSIA));
+		var p7 = this.grid.array[7];
+		var circle7 = sketch.makeRectangle(p7.x,p7.y,this.rectW,this.rectH);
+		circle7.set_lineWeight(10);
+		circle7.set_fillOpacity(0);
+		circle7.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.FUCHSIA));
+		circle7.set_dash([40,20]);
+		var p8 = this.grid.array[8];
+		var circle8 = sketch.makeRectangle(p8.x,p8.y,this.rectW,this.rectH);
+		circle8.set_lineWeight(10);
+		circle8.set_fillOpacity(0);
+		circle8.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.FUCHSIA));
+		circle8.set_dash([40,20]);
+		circle8.set_lineCap("round");
+		sketch.update();
+	}
+	,__class__: examples_ExRectangle
 };
 var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
@@ -2126,9 +2317,6 @@ js_Boot.__resolveNativeClass = function(name) {
 var sketcher_AST = function() { };
 $hxClasses["sketcher.AST"] = sketcher_AST;
 sketcher_AST.__name__ = "sketcher.AST";
-var sketcher_App = function() { };
-$hxClasses["sketcher.App"] = sketcher_App;
-sketcher_App.__name__ = "sketcher.App";
 var sketcher_debug_Grid = function() {
 };
 $hxClasses["sketcher.debug.Grid"] = sketcher_debug_Grid;
@@ -2185,22 +2373,7 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
-		if(this.get_lineWeight() == null) {
-			this.set_lineWeight(0);
-		}
-		if(this.get_fillColor() == null) {
-			this.set_fillColor("#000000");
-		}
-		if(this.get_strokeColor() == null) {
-			this.set_strokeColor("#000000");
-			this.set_strokeOpacity(0);
-		}
-		if(this.get_fillOpacity() == null) {
-			this.set_fillOpacity(1);
-		}
-		if(this.get_strokeOpacity() == null) {
-			this.set_strokeOpacity(1);
-		}
+		this.useDefaultsCanvas();
 		if(this.get_lineCap() != null) {
 			ctx.lineCap = this.get_lineCap();
 		}
@@ -2250,10 +2423,10 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -2287,7 +2460,7 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		var tmp = this.get_rotate() != null;
 	}
 	,debug: function() {
-		console.log("src/sketcher/draw/Circle.hx:112:","" + this.toString());
+		console.log("src/sketcher/draw/Circle.hx:98:","" + this.toString());
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -2460,19 +2633,11 @@ sketcher_draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
+		this.useDefaultsCanvas();
+		if(this.get_lineCap() != null) {
+			ctx.lineCap = this.get_lineCap();
+		}
 		ctx.lineWidth = this.get_lineWeight();
-		if(this.get_fillColor() == null) {
-			this.set_fillColor("#000000");
-		}
-		if(this.get_strokeColor() == null) {
-			this.set_strokeColor("#000000");
-		}
-		if(this.get_fillOpacity() == null) {
-			this.set_fillOpacity(1);
-		}
-		if(this.get_strokeOpacity() == null) {
-			this.set_strokeOpacity(1);
-		}
 		var value = this.get_fillColor();
 		var _r = 0;
 		var _g = 0;
@@ -2518,10 +2683,10 @@ sketcher_draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -2533,6 +2698,9 @@ sketcher_draw_Rectangle.prototype = $extend(draw_Base.prototype,{
 		}
 		var _strokeColor = { r : _r1, g : _g1, b : _b1, a : _a1};
 		ctx.strokeStyle = sketcher_util_ColorUtil.getColourObj(_strokeColor,this.get_strokeOpacity());
+		if(this.get_dash() != null) {
+			ctx.setLineDash(this.get_dash());
+		}
 		ctx.beginPath();
 		if(this.get_radius() == null) {
 			ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
@@ -3422,7 +3590,6 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
-sketcher_App.NAME = "[cc-sketcher]";
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 sketcher_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
 sketcher_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};
