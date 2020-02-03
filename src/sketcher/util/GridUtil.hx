@@ -1,10 +1,10 @@
 package sketcher.util;
 
 // import Sketch.Global.*;
-import cc.AST;
+import sketcher.AST;
 import js.Browser.*;
 import js.html.CanvasRenderingContext2D;
-import cc.util.ColorUtil.RGB;
+import sketcher.util.ColorUtil.RGB;
 
 /**
  *
