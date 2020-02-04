@@ -7,9 +7,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var App = function() { };
-$hxClasses["App"] = App;
-App.__name__ = "App";
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
 HxOverrides.__name__ = "HxOverrides";
@@ -51,8 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + App.NAME + " Dom ready :: build: " + "2020-02-04 10:01:32");
-		console.log("src/Main.hx:19:","xxx");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-04 13:47:18");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -1798,6 +1794,9 @@ js_Boot.__resolveNativeClass = function(name) {
 var sketcher_AST = function() { };
 $hxClasses["sketcher.AST"] = sketcher_AST;
 sketcher_AST.__name__ = "sketcher.AST";
+var sketcher_App = function() { };
+$hxClasses["sketcher.App"] = sketcher_App;
+sketcher_App.__name__ = "sketcher.App";
 var sketcher_debug_Grid = function() {
 };
 $hxClasses["sketcher.debug.Grid"] = sketcher_debug_Grid;
@@ -3544,7 +3543,6 @@ Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function()
 	return String(this.val);
 }});
 js_Boot.__toStr = ({ }).toString;
-App.NAME = "[cc-sketcher]";
 Globals.MOUSE_DOWN = "mousedown";
 Globals.MOUSE_UP = "mouseup";
 Globals.MOUSE_MOVE = "mousemove";
@@ -3593,6 +3591,7 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
+sketcher_App.NAME = "[cc-sketcher]";
 sketcher_draw_Base.COUNT = 0;
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 sketcher_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
