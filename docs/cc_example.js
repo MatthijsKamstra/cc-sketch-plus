@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-04 13:47:18");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-04 21:28:07");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -916,6 +916,74 @@ examples_ExCircles.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExCircles
+};
+var examples_ExLine = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.radiusSmall = 50;
+	this.init();
+};
+$hxClasses["examples.ExLine"] = examples_ExLine;
+examples_ExLine.__name__ = "examples.ExLine";
+examples_ExLine.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		window.document.body.appendChild(div0);
+		window.document.body.appendChild(div1);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = sketcher_util_MathUtil.circumferenceCircle(this.radiusSmall);
+		var p = this.grid.array[0];
+		var line = sketch.makeLine(p.x,p.y,p.x + this.radiusSmall,p.y + this.radiusSmall);
+		line.set_strokeWeight(10);
+		line.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.RED));
+		var p1 = this.grid.array[1];
+		var line1 = sketch.makeLine(p1.x,p1.y,p1.x + this.radiusSmall,p1.y + this.radiusSmall);
+		line1.set_strokeWeight(10);
+		line1.set_lineCap("round");
+		line1.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		var p2 = this.grid.array[2];
+		var line2 = sketch.makeLine(p2.x,p2.y,p2.x + this.radiusSmall,p2.y + this.radiusSmall);
+		line2.set_strokeWeight(10);
+		line2.set_lineCap("round");
+		line2.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		line2.set_dash([20,10]);
+		var p3 = this.grid.array[3];
+		var line3 = sketch.makeLine(p3.x,p3.y,p3.x + this.radiusSmall,p3.y + this.radiusSmall);
+		line3.set_strokeWeight(10);
+		line3.set_lineCap("round");
+		line3.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
+		line3.setRotate(10,p3.x,p3.y);
+		sketch.update();
+	}
+	,__class__: examples_ExLine
 };
 var examples_ExRectangle = function() {
 	this.isDebug = true;
@@ -2411,9 +2479,83 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
+		this.useDefaultsCanvas();
+		if(this.get_lineCap() != null) {
+			ctx.lineCap = this.get_lineCap();
+		}
+		ctx.lineWidth = this.get_lineWeight();
+		var value = this.get_fillColor();
+		var _r = 0;
+		var _g = 0;
+		var _b = 0;
+		var _a = 1;
+		value = StringTools.replace(value," ","");
+		if(value.indexOf("rgba") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+			var arr = value.split(",");
+			_r = arr[0];
+			_g = arr[1];
+			_b = arr[2];
+			_a = arr[3];
+		} else if(value.indexOf("rgb") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+			var arr1 = value.split(",");
+			_r = arr1[0];
+			_g = arr1[1];
+			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			var rgb_r = int >> 16 & 255;
+			var rgb_g = int >> 8 & 255;
+			var rgb_b = int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
+		}
+		var _fillColor = { r : _r, g : _g, b : _b, a : _a};
+		ctx.fillStyle = sketcher_util_ColorUtil.getColourObj(_fillColor,this.get_fillOpacity());
+		var value1 = this.get_strokeColor();
+		var _r1 = 0;
+		var _g1 = 0;
+		var _b1 = 0;
+		var _a1 = 1;
+		value1 = StringTools.replace(value1," ","");
+		if(value1.indexOf("rgba") != -1) {
+			value1 = StringTools.replace(StringTools.replace(value1,"rgba(",""),")","");
+			var arr2 = value1.split(",");
+			_r1 = arr2[0];
+			_g1 = arr2[1];
+			_b1 = arr2[2];
+			_a1 = arr2[3];
+		} else if(value1.indexOf("rgb") != -1) {
+			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
+		} else if(value1.indexOf("#") != -1) {
+			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
+			var rgb_r1 = int1 >> 16 & 255;
+			var rgb_g1 = int1 >> 8 & 255;
+			var rgb_b1 = int1 & 255;
+			_r1 = rgb_r1;
+			_g1 = rgb_g1;
+			_b1 = rgb_b1;
+		}
+		var _strokeColor = { r : _r1, g : _g1, b : _b1, a : _a1};
+		ctx.strokeStyle = sketcher_util_ColorUtil.getColourObj(_strokeColor,this.get_strokeOpacity());
+		if(this.get_dash() != null) {
+			ctx.setLineDash(this.get_dash());
+		}
 		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+		ctx.moveTo(this.get_x(),this.get_y());
+		ctx.lineTo(this.get_x2(),this.get_y2());
+		if(this.get_fill() != null) {
+			ctx.fill();
+		}
+		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
+			ctx.stroke();
+		}
 	}
 	,get_x2: function() {
 		return this.x2;

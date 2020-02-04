@@ -8,7 +8,16 @@ using StringTools;
 class Main {
 	var count:Int;
 	var hash:String;
-	var ccTypeArray:Array<Class<Dynamic>> = [examples.ExAll, examples.ExCircles, examples.ExRectangle];
+	var ccTypeArray:Array<Class<Dynamic>> = [
+		//
+		examples.ExAll,
+		//
+		examples.ExCircles,
+		//
+		examples.ExRectangle,
+		//
+		examples.ExLine,
+	];
 
 	public function new() {
 		// console.log('START :: main');
