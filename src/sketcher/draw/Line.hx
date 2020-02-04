@@ -1,5 +1,7 @@
 package sketcher.draw;
 
+import sketcher.util.ColorUtil;
+
 class Line extends Base implements IBase {
 	@:isVar public var x2(get, set):Float;
 	@:isVar public var y2(get, set):Float;
@@ -32,9 +34,41 @@ class Line extends Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		// set everything to default values
+		useDefaultsCanvas();
+
+		if (this.lineCap != null) {
+			ctx.lineCap = cast this.lineCap;
+		}
+		ctx.lineWidth = this.lineWeight;
+
+		// trace('fillColor : ' + this.fillColor);
+		// trace('fillOpacity: ' + this.fillOpacity);
+		// trace('strokeColor : ' + this.strokeColor);
+		// trace('strokeOpacity: ' + this.strokeOpacity);
+
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _strokeColor = ColorUtil.assumption(this.strokeColor);
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
+
+		if (this.dash != null) {
+			ctx.setLineDash(this.dash);
+		}
+
 		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+
+		ctx.moveTo(this.x, this.y);
+		ctx.lineTo(this.x2, this.y2);
+
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null && this.lineWeight != 0) {
+			ctx.stroke();
+		}
+		// ctx.closePath();
 	}
 
 	// ____________________________________ getter/setter ____________________________________
