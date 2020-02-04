@@ -1,11 +1,12 @@
 package;
 
-import Sketch.Global.*;
+import Sketcher.Globals.*;
 import js.Browser.*;
 import js.html.*;
 import js.html.MouseEvent;
 import js.html.CanvasElement;
-import cc.tool.ExportFile;
+
+// import cc.tool.ExportFile;
 
 /**
  * Use extends SketchBase to create a quick base to work with
