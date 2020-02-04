@@ -2,6 +2,7 @@ package sketcher.export;
 
 import js.html.audio.AnalyserNode;
 import js.html.audio.AudioContext;
+import js.html.AudioElement;
 import js.Browser.*;
 
 class AudioAnalyser {
@@ -87,3 +88,4 @@ class AudioAnalyser {
 		analyser.getByteFrequencyData(frequencyData); // default
 		analyser.getByteTimeDomainData(timeDomainData); // <- usuable
 	}
+}
