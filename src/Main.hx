@@ -1,7 +1,6 @@
 package;
 
 import js.Browser.*;
-import examples.*;
 import Sketcher.Globals.*;
 
 using StringTools;
@@ -14,9 +13,7 @@ class Main {
 	public function new() {
 		// console.log('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
-			console.log('${App.NAME} Dom ready :: build: ${App.getBuildDate()}');
-
-			trace('xxx');
+			console.log('${sketcher.App.NAME} Dom ready :: build: ${sketcher.App.getBuildDate()}');
 
 			// var cc = new examples.All();
 			setupArt();
