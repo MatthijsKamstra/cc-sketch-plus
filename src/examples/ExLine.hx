@@ -84,6 +84,13 @@ class ExLine {
 		line.strokeColor = getColourObj(LIME);
 		line.dash = [20, 10];
 
+		var p = grid.array[3];
+		var line = sketch.makeLine(p.x, p.y, p.x + radiusSmall, p.y + radiusSmall);
+		line.strokeWeight = 10;
+		line.lineCap = LineCap.Round;
+		line.strokeColor = getColourObj(PINK);
+		line.setRotate(10, p.x, p.y); // doesn't work for svg or canvas
+
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
 	}
