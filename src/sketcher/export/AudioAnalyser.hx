@@ -16,8 +16,8 @@ class AudioAnalyser {
 	public static var FFT_512:Int = 512;
 	public static var FFT_256:Int = 256;
 	public static var FFT_128:Int = 128;
-	public static var FFT_64:Int = 64;
-	public static var FFT_32:Int = 32;
+	public static var FFT_064:Int = 64;
+	public static var FFT_032:Int = 32;
 
 	//
 	public static var FFT_2048:Int = 2048;
