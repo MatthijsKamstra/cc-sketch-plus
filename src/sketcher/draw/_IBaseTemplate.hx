@@ -1,4 +1,4 @@
-package draw;
+package sketcher.draw;
 
 class _IBaseTemplate extends Base implements IBase {
 	@:isVar public var y(get, set):Int;

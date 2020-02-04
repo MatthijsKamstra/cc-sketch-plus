@@ -3,7 +3,7 @@ package sketcher.draw;
 import sketcher.util.ColorUtil;
 import sketcher.AST.Point;
 
-class Rectangle extends draw.Base implements draw.IBase {
+class Rectangle extends Base implements IBase {
 	@:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;
 

@@ -51,7 +51,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + App.NAME + " Dom ready :: build: " + "2020-02-04 00:07:20");
+		window.console.log("" + App.NAME + " Dom ready :: build: " + "2020-02-04 10:01:32");
 		console.log("src/Main.hx:19:","xxx");
 		_gthis.setupArt();
 		_gthis.setupNav();
@@ -265,17 +265,17 @@ Sketcher.prototype = {
 		return shape;
 	}
 	,makeLine: function(x1,y1,x2,y2) {
-		var shape = new draw_Line(x1,y1,x2,y2);
+		var shape = new sketcher_draw_Line(x1,y1,x2,y2);
 		this.baseArray.push(shape);
 		return shape;
 	}
 	,makeEllipse: function(x,y,rx,ry) {
-		var shape = new draw_Ellipse(x,y,rx,ry);
+		var shape = new sketcher_draw_Ellipse(x,y,rx,ry);
 		this.baseArray.push(shape);
 		return shape;
 	}
 	,makePolygon: function(sides) {
-		var shape = new draw_Polygon(sides);
+		var shape = new sketcher_draw_Polygon(sides);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -288,17 +288,17 @@ Sketcher.prototype = {
 			_sides.push(i.x);
 			_sides.push(i.y);
 		}
-		var shape = new draw_Polygon(_sides);
+		var shape = new sketcher_draw_Polygon(_sides);
 		this.baseArray.push(shape);
 		return shape;
 	}
 	,makePath: function(x,y) {
-		var shape = new draw_Path(x,y);
+		var shape = new sketcher_draw_Path(x,y);
 		this.baseArray.push(shape);
 		return shape;
 	}
 	,makePolyLine: function(sides) {
-		var shape = new draw_PolyLine(sides);
+		var shape = new sketcher_draw_PolyLine(sides);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -311,7 +311,7 @@ Sketcher.prototype = {
 			_sides.push(i.x);
 			_sides.push(i.y);
 		}
-		var shape = new draw_PolyLine(_sides);
+		var shape = new sketcher_draw_PolyLine(_sides);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -350,7 +350,7 @@ Sketcher.prototype = {
 		var cx = Math.round(x);
 		var cy = Math.round(y);
 		var r = 5;
-		var polyline = new draw_PolyLine([cx,cy,cx - r,cy,cx,cy,cx + r,cy,cx,cy,cx,cy - r,cx,cy,cx,cy + r,cx,cy]);
+		var polyline = new sketcher_draw_PolyLine([cx,cy,cx - r,cy,cx,cy,cx + r,cy,cx,cy,cx,cy - r,cx,cy,cx,cy + r,cx,cy]);
 		polyline.set_id("registration_marker_" + polyline.get_count());
 		polyline.set_desc("Registration Marker\nx: " + cx + ", y: " + cy);
 		polyline.set_stroke(color);
@@ -361,7 +361,7 @@ Sketcher.prototype = {
 		var cx = x;
 		var cy = y;
 		var r = size;
-		var polyline = new draw_PolyLine([cx,cy,cx - r,cy,cx,cy,cx + r,cy,cx,cy,cx,cy - r,cx,cy,cx,cy + r,cx,cy]);
+		var polyline = new sketcher_draw_PolyLine([cx,cy,cx - r,cy,cx,cy,cx + r,cy,cx,cy,cx,cy - r,cx,cy,cx,cy + r,cx,cy]);
 		polyline.set_id("xcross_" + polyline.get_count());
 		polyline.set_desc("xcross\nx: " + cx + ", y: " + cy + ", size:" + size);
 		this.baseArray.push(polyline);
@@ -722,525 +722,6 @@ Xml.prototype = {
 	}
 	,__class__: Xml
 };
-var draw_AST = function() { };
-$hxClasses["draw.AST"] = draw_AST;
-draw_AST.__name__ = "draw.AST";
-var draw_Base = function(name) {
-	this.transArr = [];
-	this.dash = [];
-	this.xml = Xml.createElement(name);
-	draw_Base.COUNT++;
-	this.set_id(this.get_id());
-};
-$hxClasses["draw.Base"] = draw_Base;
-draw_Base.__name__ = "draw.Base";
-draw_Base.prototype = {
-	setID: function(id) {
-		this.set_id(id);
-	}
-	,setPosition: function(x,y) {
-		this.set_move({ x : x, y : y});
-		if(y == null) {
-			this.set_move({ x : x, y : 0});
-		}
-		var str = "translate(" + x;
-		if(y != null) {
-			str += "," + y;
-		}
-		str += ")";
-		this.transArr.push(str);
-	}
-	,setRotate: function(degree,x,y) {
-		this.set_rotate(degree);
-		var str = "rotate(" + degree;
-		if(x != null) {
-			str += "," + x;
-		}
-		if(y != null) {
-			str += "," + y;
-		}
-		str += ")";
-		this.transArr.push(str);
-	}
-	,setScale: function(x,y) {
-		var str = "scale(" + x;
-		if(y != null) {
-			str += "," + y;
-		}
-		str += ")";
-		this.transArr.push(str);
-	}
-	,getTransform: function() {
-		var str = "";
-		var _g = 0;
-		var _g1 = this.transArr.length;
-		while(_g < _g1) {
-			var i = _g++;
-			str += this.transArr[i] + " ";
-		}
-		return str;
-	}
-	,clone: function() {
-		console.log("src/draw/Base.hx:146:","WIP");
-		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , draw_Base);
-	}
-	,useDefaultsCanvas: function() {
-		if(this.get_lineWeight() == null) {
-			this.set_lineWeight(0);
-		}
-		if(this.get_fillColor() == null) {
-			this.set_fillColor("#000000");
-		}
-		if(this.get_strokeColor() == null) {
-			this.set_strokeColor("#000000");
-			this.set_strokeOpacity(0);
-		}
-		if(this.get_fillOpacity() == null) {
-			this.set_fillOpacity(1);
-		}
-		if(this.get_strokeOpacity() == null) {
-			this.set_strokeOpacity(1);
-		}
-	}
-	,get_id: function() {
-		if(this.id == null) {
-			this.set_id(this.getName() + "_" + draw_Base.COUNT);
-			draw_Base.COUNT++;
-		}
-		return this.id;
-	}
-	,set_id: function(value) {
-		value = StringTools.replace(value.toLowerCase()," ","_");
-		if(this.xml != null) {
-			this.xml.set("id",value == null ? "null" : "" + value);
-			this.xml.set("data-count",Std.string(draw_Base.COUNT));
-		}
-		return this.id = value;
-	}
-	,get_fill: function() {
-		return this.fill;
-	}
-	,set_fill: function(value) {
-		this.xml.set("fill",value == null ? "null" : "" + value);
-		return this.fill = value;
-	}
-	,get_fillColor: function() {
-		return this.get_fill();
-	}
-	,set_fillColor: function(value) {
-		return this.set_fill(value);
-	}
-	,get_fillGradientColor: function() {
-		return this.get_fill();
-	}
-	,set_fillGradientColor: function(value) {
-		return this.set_fill("url(#" + value + ")");
-	}
-	,get_stroke: function() {
-		return this.stroke;
-	}
-	,set_stroke: function(value) {
-		this.xml.set("stroke",value == null ? "null" : "" + value);
-		return this.stroke = value;
-	}
-	,get_strokeColor: function() {
-		return this.get_stroke();
-	}
-	,set_strokeColor: function(value) {
-		return this.set_stroke(value);
-	}
-	,get_lineWeight: function() {
-		return this.lineWeight;
-	}
-	,set_lineWeight: function(value) {
-		this.xml.set("stroke-width",value == null ? "null" : "" + value);
-		return this.lineWeight = value;
-	}
-	,get_strokeWeight: function() {
-		return this.get_lineWeight();
-	}
-	,set_strokeWeight: function(value) {
-		return this.set_lineWeight(value);
-	}
-	,get_opacity: function() {
-		return this.opacity;
-	}
-	,set_opacity: function(value) {
-		var v = sketcher_util_MathUtil.clamp(value,0,1);
-		this.set_fillOpacity(v);
-		this.set_strokeOpacity(v);
-		return this.opacity = v;
-	}
-	,get_strokeOpacity: function() {
-		return this.strokeOpacity;
-	}
-	,set_strokeOpacity: function(value) {
-		var v = sketcher_util_MathUtil.clamp(value,0,1);
-		this.xml.set("stroke-opacity",v == null ? "null" : "" + v);
-		return this.strokeOpacity = v;
-	}
-	,get_fillOpacity: function() {
-		return this.fillOpacity;
-	}
-	,set_fillOpacity: function(value) {
-		var v = sketcher_util_MathUtil.clamp(value,0,1);
-		this.xml.set("fill-opacity",v == null ? "null" : "" + v);
-		return this.fillOpacity = v;
-	}
-	,get_y: function() {
-		return this.y;
-	}
-	,set_y: function(value) {
-		return this.y = value;
-	}
-	,get_x: function() {
-		return this.x;
-	}
-	,set_x: function(value) {
-		return this.x = value;
-	}
-	,get_rotate: function() {
-		return this.rotate;
-	}
-	,set_rotate: function(value) {
-		return this.rotate = value;
-	}
-	,get_move: function() {
-		return this.move;
-	}
-	,set_move: function(value) {
-		return this.move = value;
-	}
-	,get_transform: function() {
-		return this.transform;
-	}
-	,set_transform: function(value) {
-		return this.transform = value;
-	}
-	,get_dash: function() {
-		return this.dash;
-	}
-	,set_dash: function(value) {
-		var str = "";
-		var _g = 0;
-		var _g1 = value.length;
-		while(_g < _g1) {
-			var i = _g++;
-			str += value[i] + " ";
-		}
-		this.xml.set("stroke-dasharray",str);
-		return this.dash = value;
-	}
-	,get_desc: function() {
-		return this.desc;
-	}
-	,set_desc: function(value) {
-		return this.desc = value;
-	}
-	,get_lineCap: function() {
-		return this.lineCap;
-	}
-	,set_lineCap: function(value) {
-		this.xml.set("stroke-linecap",Std.string(value));
-		return this.lineCap = value;
-	}
-	,get_lineJoin: function() {
-		return this.lineJoin;
-	}
-	,set_lineJoin: function(value) {
-		this.xml.set("stroke-linejoin",Std.string(value));
-		return this.lineJoin = value;
-	}
-	,get_isVisible: function() {
-		return this.isVisible;
-	}
-	,set_isVisible: function(value) {
-		var _opacity = 0;
-		if(value) {
-			_opacity = 1;
-		}
-		this.set_fillOpacity(_opacity);
-		this.set_strokeOpacity(_opacity);
-		return this.isVisible = value;
-	}
-	,get_count: function() {
-		return draw_Base.COUNT;
-	}
-	,getName: function() {
-		var c = js_Boot.getClass(this);
-		var name = c.__name__;
-		return "" + name;
-	}
-	,toObject: function() {
-		var c = js_Boot.getClass(this);
-		var name = c.__name__;
-		return JSON.parse(JSON.stringify(this));
-	}
-	,toString: function() {
-		var c = js_Boot.getClass(this);
-		var name = c.__name__;
-		return "" + name + ": " + Std.string(JSON.parse(JSON.stringify(this)));
-	}
-	,toSvg: function() {
-		throw new js__$Boot_HaxeError("Not implemented yet");
-	}
-	,__class__: draw_Base
-};
-var draw_IBase = function() { };
-$hxClasses["draw.IBase"] = draw_IBase;
-draw_IBase.__name__ = "draw.IBase";
-draw_IBase.__isInterface__ = true;
-draw_IBase.prototype = {
-	__class__: draw_IBase
-};
-var draw_Ellipse = function(x,y,rx,ry) {
-	this.type = "Ellipse";
-	this.set_x(x);
-	this.set_y(y);
-	this.set_rx(rx);
-	this.set_ry(ry);
-	draw_Base.call(this,"ellipse");
-};
-$hxClasses["draw.Ellipse"] = draw_Ellipse;
-draw_Ellipse.__name__ = "draw.Ellipse";
-draw_Ellipse.__interfaces__ = [draw_IBase];
-draw_Ellipse.__super__ = draw_Base;
-draw_Ellipse.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		this.xml.set("cx",Std.string(this.get_x()));
-		this.xml.set("cy",Std.string(this.get_y()));
-		this.xml.set("rx",Std.string(this.get_rx()));
-		this.xml.set("ry",Std.string(this.get_ry()));
-		if(this.getTransform() != "") {
-			this.xml.set("transform",this.getTransform());
-		}
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,get_ry: function() {
-		return this.ry;
-	}
-	,set_ry: function(value) {
-		return this.ry = value;
-	}
-	,get_rx: function() {
-		return this.rx;
-	}
-	,set_rx: function(value) {
-		return this.rx = value;
-	}
-	,__class__: draw_Ellipse
-});
-var draw_Line = function(x,y,x2,y2) {
-	this.type = "Line";
-	this.set_x(x);
-	this.set_y(y);
-	this.set_x2(x2);
-	this.set_y2(y2);
-	draw_Base.call(this,"line");
-};
-$hxClasses["draw.Line"] = draw_Line;
-draw_Line.__name__ = "draw.Line";
-draw_Line.__interfaces__ = [draw_IBase];
-draw_Line.__super__ = draw_Base;
-draw_Line.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		this.xml.set("x1",Std.string(this.get_x()));
-		this.xml.set("y1",Std.string(this.get_y()));
-		this.xml.set("x2",Std.string(this.get_x2()));
-		this.xml.set("y2",Std.string(this.get_y2()));
-		if(this.get_stroke() != null) {
-			this.xml.set("stroke",this.get_stroke());
-		}
-		if(this.get_lineWeight() != null) {
-			this.xml.set("stroke-width",Std.string(this.get_lineWeight()));
-		}
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,get_x2: function() {
-		return this.x2;
-	}
-	,set_x2: function(value) {
-		return this.x2 = value;
-	}
-	,get_y2: function() {
-		return this.y2;
-	}
-	,set_y2: function(value) {
-		return this.y2 = value;
-	}
-	,__class__: draw_Line
-});
-var draw_Path = function(x,y) {
-	this.type = "Path";
-	this.dArray = [];
-	this.moveTo(x,y);
-	draw_Base.call(this,"path");
-};
-$hxClasses["draw.Path"] = draw_Path;
-draw_Path.__name__ = "draw.Path";
-draw_Path.__interfaces__ = [draw_IBase];
-draw_Path.__super__ = draw_Base;
-draw_Path.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		var str = "";
-		var _g = 0;
-		var _g1 = this.dArray;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			str += i;
-		}
-		this.xml.set("d",str);
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,window: function(x,y,width,height,x2,y2,width2,height2) {
-		this.dArray = [];
-		this.set_id("passe-partout " + this.get_count());
-		this.dArray.push("M" + x + "," + y);
-		this.dArray.push("V" + (y + height));
-		this.dArray.push("H" + (x + width));
-		this.dArray.push("V" + y);
-		this.dArray.push("Z");
-		this.dArray.push("M" + (x2 + width2) + "," + (y2 + height2));
-		this.dArray.push("H" + x2);
-		this.dArray.push("V" + y2);
-		this.dArray.push("H" + (x2 + width2));
-		this.dArray.push("Z");
-	}
-	,moveTo: function(x,y) {
-		this.dArray.push("M" + x + ", " + y + " ");
-	}
-	,lineTo: function(x,y) {
-		this.dArray.push("L" + x + ", " + y + " ");
-	}
-	,horizontalLineTo: function(x) {
-		this.dArray.push("H" + x + " ");
-	}
-	,verticalLineTo: function(y) {
-		this.dArray.push("V" + y + " ");
-	}
-	,curveto: function(x1,y1,x2,y2,x,y) {
-		this.dArray.push("C" + x1 + ", " + y1 + " " + x2 + ", " + y2 + " " + x + ", " + y + " ");
-	}
-	,closepath: function() {
-		this.dArray.push("Z ");
-	}
-	,__class__: draw_Path
-});
-var draw_PolyLine = function(arr) {
-	this.type = "PolyLine";
-	this.set_arr(arr);
-	draw_Base.call(this,"polyline");
-};
-$hxClasses["draw.PolyLine"] = draw_PolyLine;
-draw_PolyLine.__name__ = "draw.PolyLine";
-draw_PolyLine.__interfaces__ = [draw_IBase];
-draw_PolyLine.__super__ = draw_Base;
-draw_PolyLine.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		if(this.get_desc() != "") {
-			this.xml.addChild(Xml.parse("<desc>" + this.get_desc() + "</desc>"));
-		}
-		var str = "";
-		var _g = 0;
-		var _g1 = this.get_arr().length;
-		while(_g < _g1) {
-			var i = _g++;
-			var value = this.get_arr()[i];
-			str += "" + value + " ";
-		}
-		this.xml.set("points",str);
-		if(this.getTransform() != "") {
-			console.log("src/draw/PolyLine.hx:33:",this.getTransform());
-			this.xml.set("transform",this.getTransform());
-		}
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,get_arr: function() {
-		return this.arr;
-	}
-	,set_arr: function(value) {
-		return this.arr = value;
-	}
-	,__class__: draw_PolyLine
-});
-var draw_Polygon = function(arr) {
-	this.type = "Polygon";
-	this.set_arr(arr);
-	draw_Base.call(this,"polygon");
-};
-$hxClasses["draw.Polygon"] = draw_Polygon;
-draw_Polygon.__name__ = "draw.Polygon";
-draw_Polygon.__interfaces__ = [draw_IBase];
-draw_Polygon.__super__ = draw_Base;
-draw_Polygon.prototype = $extend(draw_Base.prototype,{
-	svg: function(settings) {
-		var str = "";
-		var _g = 0;
-		var _g1 = this.get_arr().length;
-		while(_g < _g1) {
-			var i = _g++;
-			var value = this.get_arr()[i];
-			str += "" + value + " ";
-		}
-		this.xml.set("points",str);
-		if(this.getTransform() != "") {
-			this.xml.set("transform",this.getTransform());
-		}
-		return haxe_xml_Printer.print(this.xml);
-	}
-	,ctx: function(ctx) {
-		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
-	}
-	,getPoint: function(id) {
-		if(id * 2 > this.get_arr().length) {
-			console.log("src/draw/Polygon.hx:42:","not in this length");
-		}
-		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
-		return p;
-	}
-	,sides: function(x,y,sides,size) {
-		this.set_arr([]);
-		var _g = 0;
-		var _g1 = sides;
-		while(_g < _g1) {
-			var i = _g++;
-			var _x = x + size * Math.cos(i * (2 * Math.PI) / sides);
-			var _y = y + size * Math.sin(i * (2 * Math.PI) / sides);
-			this.get_arr().push(_x);
-			this.get_arr().push(_y);
-		}
-	}
-	,get_arr: function() {
-		return this.arr;
-	}
-	,set_arr: function(value) {
-		return this.arr = value;
-	}
-	,__class__: draw_Polygon
-});
 var examples_ExAll = function() {
 	this.isDebug = true;
 	this.sketchHeight = 400;
@@ -2344,18 +1825,289 @@ sketcher_debug_Grid.gridDots = function(sketch,grid) {
 sketcher_debug_Grid.prototype = {
 	__class__: sketcher_debug_Grid
 };
+var sketcher_draw_AST = function() { };
+$hxClasses["sketcher.draw.AST"] = sketcher_draw_AST;
+sketcher_draw_AST.__name__ = "sketcher.draw.AST";
+var sketcher_draw_Base = function(name) {
+	this.transArr = [];
+	this.dash = [];
+	this.xml = Xml.createElement(name);
+	sketcher_draw_Base.COUNT++;
+	this.set_id(this.get_id());
+};
+$hxClasses["sketcher.draw.Base"] = sketcher_draw_Base;
+sketcher_draw_Base.__name__ = "sketcher.draw.Base";
+sketcher_draw_Base.prototype = {
+	setID: function(id) {
+		this.set_id(id);
+	}
+	,setPosition: function(x,y) {
+		this.set_move({ x : x, y : y});
+		if(y == null) {
+			this.set_move({ x : x, y : 0});
+		}
+		var str = "translate(" + x;
+		if(y != null) {
+			str += "," + y;
+		}
+		str += ")";
+		this.transArr.push(str);
+	}
+	,setRotate: function(degree,x,y) {
+		this.set_rotate(degree);
+		var str = "rotate(" + degree;
+		if(x != null) {
+			str += "," + x;
+		}
+		if(y != null) {
+			str += "," + y;
+		}
+		str += ")";
+		this.transArr.push(str);
+	}
+	,setScale: function(x,y) {
+		var str = "scale(" + x;
+		if(y != null) {
+			str += "," + y;
+		}
+		str += ")";
+		this.transArr.push(str);
+	}
+	,getTransform: function() {
+		var str = "";
+		var _g = 0;
+		var _g1 = this.transArr.length;
+		while(_g < _g1) {
+			var i = _g++;
+			str += this.transArr[i] + " ";
+		}
+		return str;
+	}
+	,clone: function() {
+		console.log("src/sketcher/draw/Base.hx:146:","WIP");
+		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
+	}
+	,useDefaultsCanvas: function() {
+		if(this.get_lineWeight() == null) {
+			this.set_lineWeight(0);
+		}
+		if(this.get_fillColor() == null) {
+			this.set_fillColor("#000000");
+		}
+		if(this.get_strokeColor() == null) {
+			this.set_strokeColor("#000000");
+			this.set_strokeOpacity(0);
+		}
+		if(this.get_fillOpacity() == null) {
+			this.set_fillOpacity(1);
+		}
+		if(this.get_strokeOpacity() == null) {
+			this.set_strokeOpacity(1);
+		}
+	}
+	,get_id: function() {
+		if(this.id == null) {
+			this.set_id(this.getName() + "_" + sketcher_draw_Base.COUNT);
+			sketcher_draw_Base.COUNT++;
+		}
+		return this.id;
+	}
+	,set_id: function(value) {
+		value = StringTools.replace(value.toLowerCase()," ","_");
+		if(this.xml != null) {
+			this.xml.set("id",value == null ? "null" : "" + value);
+			this.xml.set("data-count",Std.string(sketcher_draw_Base.COUNT));
+		}
+		return this.id = value;
+	}
+	,get_fill: function() {
+		return this.fill;
+	}
+	,set_fill: function(value) {
+		this.xml.set("fill",value == null ? "null" : "" + value);
+		return this.fill = value;
+	}
+	,get_fillColor: function() {
+		return this.get_fill();
+	}
+	,set_fillColor: function(value) {
+		return this.set_fill(value);
+	}
+	,get_fillGradientColor: function() {
+		return this.get_fill();
+	}
+	,set_fillGradientColor: function(value) {
+		return this.set_fill("url(#" + value + ")");
+	}
+	,get_stroke: function() {
+		return this.stroke;
+	}
+	,set_stroke: function(value) {
+		this.xml.set("stroke",value == null ? "null" : "" + value);
+		return this.stroke = value;
+	}
+	,get_strokeColor: function() {
+		return this.get_stroke();
+	}
+	,set_strokeColor: function(value) {
+		return this.set_stroke(value);
+	}
+	,get_lineWeight: function() {
+		return this.lineWeight;
+	}
+	,set_lineWeight: function(value) {
+		this.xml.set("stroke-width",value == null ? "null" : "" + value);
+		return this.lineWeight = value;
+	}
+	,get_strokeWeight: function() {
+		return this.get_lineWeight();
+	}
+	,set_strokeWeight: function(value) {
+		return this.set_lineWeight(value);
+	}
+	,get_opacity: function() {
+		return this.opacity;
+	}
+	,set_opacity: function(value) {
+		var v = sketcher_util_MathUtil.clamp(value,0,1);
+		this.set_fillOpacity(v);
+		this.set_strokeOpacity(v);
+		return this.opacity = v;
+	}
+	,get_strokeOpacity: function() {
+		return this.strokeOpacity;
+	}
+	,set_strokeOpacity: function(value) {
+		var v = sketcher_util_MathUtil.clamp(value,0,1);
+		this.xml.set("stroke-opacity",v == null ? "null" : "" + v);
+		return this.strokeOpacity = v;
+	}
+	,get_fillOpacity: function() {
+		return this.fillOpacity;
+	}
+	,set_fillOpacity: function(value) {
+		var v = sketcher_util_MathUtil.clamp(value,0,1);
+		this.xml.set("fill-opacity",v == null ? "null" : "" + v);
+		return this.fillOpacity = v;
+	}
+	,get_y: function() {
+		return this.y;
+	}
+	,set_y: function(value) {
+		return this.y = value;
+	}
+	,get_x: function() {
+		return this.x;
+	}
+	,set_x: function(value) {
+		return this.x = value;
+	}
+	,get_rotate: function() {
+		return this.rotate;
+	}
+	,set_rotate: function(value) {
+		return this.rotate = value;
+	}
+	,get_move: function() {
+		return this.move;
+	}
+	,set_move: function(value) {
+		return this.move = value;
+	}
+	,get_transform: function() {
+		return this.transform;
+	}
+	,set_transform: function(value) {
+		return this.transform = value;
+	}
+	,get_dash: function() {
+		return this.dash;
+	}
+	,set_dash: function(value) {
+		var str = "";
+		var _g = 0;
+		var _g1 = value.length;
+		while(_g < _g1) {
+			var i = _g++;
+			str += value[i] + " ";
+		}
+		this.xml.set("stroke-dasharray",str);
+		return this.dash = value;
+	}
+	,get_desc: function() {
+		return this.desc;
+	}
+	,set_desc: function(value) {
+		return this.desc = value;
+	}
+	,get_lineCap: function() {
+		return this.lineCap;
+	}
+	,set_lineCap: function(value) {
+		this.xml.set("stroke-linecap",Std.string(value));
+		return this.lineCap = value;
+	}
+	,get_lineJoin: function() {
+		return this.lineJoin;
+	}
+	,set_lineJoin: function(value) {
+		this.xml.set("stroke-linejoin",Std.string(value));
+		return this.lineJoin = value;
+	}
+	,get_isVisible: function() {
+		return this.isVisible;
+	}
+	,set_isVisible: function(value) {
+		var _opacity = 0;
+		if(value) {
+			_opacity = 1;
+		}
+		this.set_fillOpacity(_opacity);
+		this.set_strokeOpacity(_opacity);
+		return this.isVisible = value;
+	}
+	,get_count: function() {
+		return sketcher_draw_Base.COUNT;
+	}
+	,getName: function() {
+		var c = js_Boot.getClass(this);
+		var name = c.__name__;
+		return "" + name;
+	}
+	,toObject: function() {
+		var c = js_Boot.getClass(this);
+		var name = c.__name__;
+		return JSON.parse(JSON.stringify(this));
+	}
+	,toString: function() {
+		var c = js_Boot.getClass(this);
+		var name = c.__name__;
+		return "" + name + ": " + Std.string(JSON.parse(JSON.stringify(this)));
+	}
+	,toSvg: function() {
+		throw new js__$Boot_HaxeError("Not implemented yet");
+	}
+	,__class__: sketcher_draw_Base
+};
+var sketcher_draw_IBase = function() { };
+$hxClasses["sketcher.draw.IBase"] = sketcher_draw_IBase;
+sketcher_draw_IBase.__name__ = "sketcher.draw.IBase";
+sketcher_draw_IBase.__isInterface__ = true;
+sketcher_draw_IBase.prototype = {
+	__class__: sketcher_draw_IBase
+};
 var sketcher_draw_Circle = function(x,y,radius) {
 	this.type = "circle";
 	this.set_x(x);
 	this.set_y(y);
 	this.set_radius(radius);
-	draw_Base.call(this,"circle");
+	sketcher_draw_Base.call(this,"circle");
 };
 $hxClasses["sketcher.draw.Circle"] = sketcher_draw_Circle;
 sketcher_draw_Circle.__name__ = "sketcher.draw.Circle";
-sketcher_draw_Circle.__interfaces__ = [draw_IBase];
-sketcher_draw_Circle.__super__ = draw_Base;
-sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
+sketcher_draw_Circle.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Circle.__super__ = sketcher_draw_Base;
+sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 	noStroke: function() {
 		this.set_lineWeight(0);
 		this.set_stroke("transparant");
@@ -2455,12 +2207,16 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 		if(this.get_rotate() == null) {
 			ctx.arc(this.get_x(),this.get_y(),this.get_radius(),0,2 * Math.PI);
 		}
-		ctx.fill();
-		ctx.stroke();
+		if(this.get_fill() != null) {
+			ctx.fill();
+		}
+		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
+			ctx.stroke();
+		}
 		var tmp = this.get_rotate() != null;
 	}
 	,debug: function() {
-		console.log("src/sketcher/draw/Circle.hx:98:","" + this.toString());
+		console.log("src/sketcher/draw/Circle.hx:106:","" + this.toString());
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -2470,6 +2226,48 @@ sketcher_draw_Circle.prototype = $extend(draw_Base.prototype,{
 	}
 	,__class__: sketcher_draw_Circle
 });
+var sketcher_draw_Ellipse = function(x,y,rx,ry) {
+	this.type = "Ellipse";
+	this.set_x(x);
+	this.set_y(y);
+	this.set_rx(rx);
+	this.set_ry(ry);
+	sketcher_draw_Base.call(this,"ellipse");
+};
+$hxClasses["sketcher.draw.Ellipse"] = sketcher_draw_Ellipse;
+sketcher_draw_Ellipse.__name__ = "sketcher.draw.Ellipse";
+sketcher_draw_Ellipse.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Ellipse.__super__ = sketcher_draw_Base;
+sketcher_draw_Ellipse.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		this.xml.set("cx",Std.string(this.get_x()));
+		this.xml.set("cy",Std.string(this.get_y()));
+		this.xml.set("rx",Std.string(this.get_rx()));
+		this.xml.set("ry",Std.string(this.get_ry()));
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,get_ry: function() {
+		return this.ry;
+	}
+	,set_ry: function(value) {
+		return this.ry = value;
+	}
+	,get_rx: function() {
+		return this.rx;
+	}
+	,set_rx: function(value) {
+		return this.rx = value;
+	}
+	,__class__: sketcher_draw_Ellipse
+});
 var sketcher_draw_Gradient = function(color0,color1,isLinear) {
 	if(isLinear == null) {
 		isLinear = true;
@@ -2477,13 +2275,13 @@ var sketcher_draw_Gradient = function(color0,color1,isLinear) {
 	this.type = "gradient";
 	this.color0 = color0;
 	this.color1 = color1;
-	draw_Base.call(this,"linearGradient");
+	sketcher_draw_Base.call(this,"linearGradient");
 };
 $hxClasses["sketcher.draw.Gradient"] = sketcher_draw_Gradient;
 sketcher_draw_Gradient.__name__ = "sketcher.draw.Gradient";
-sketcher_draw_Gradient.__interfaces__ = [draw_IBase];
-sketcher_draw_Gradient.__super__ = draw_Base;
-sketcher_draw_Gradient.prototype = $extend(draw_Base.prototype,{
+sketcher_draw_Gradient.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Gradient.__super__ = sketcher_draw_Base;
+sketcher_draw_Gradient.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
 		var stop0 = Xml.createElement("stop");
 		stop0.set("offset","0%");
@@ -2515,13 +2313,13 @@ sketcher_draw_Gradient.prototype = $extend(draw_Base.prototype,{
 var sketcher_draw_Group = function(arr) {
 	this.type = "group";
 	this.set_arr(arr);
-	draw_Base.call(this,"g");
+	sketcher_draw_Base.call(this,"g");
 };
 $hxClasses["sketcher.draw.Group"] = sketcher_draw_Group;
 sketcher_draw_Group.__name__ = "sketcher.draw.Group";
-sketcher_draw_Group.__interfaces__ = [draw_IBase];
-sketcher_draw_Group.__super__ = draw_Base;
-sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
+sketcher_draw_Group.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Group.__super__ = sketcher_draw_Base;
+sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
 		if(this.get_x() > 0 && this.get_y() > 0) {
 			this.transArr.push("translate(" + this.get_x() + ", " + this.get_y() + ")");
@@ -2558,16 +2356,16 @@ sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
 				continue;
 			}
 			if(this.get_fillOpacity() != null) {
-				(js_Boot.__cast(base , draw_Base)).set_fillOpacity(this.get_fillOpacity());
+				(js_Boot.__cast(base , sketcher_draw_Base)).set_fillOpacity(this.get_fillOpacity());
 			}
 			if(this.get_strokeOpacity() != null) {
-				(js_Boot.__cast(base , draw_Base)).set_strokeOpacity(this.get_strokeOpacity());
+				(js_Boot.__cast(base , sketcher_draw_Base)).set_strokeOpacity(this.get_strokeOpacity());
 			}
 			if(this.get_fillColor() != null) {
-				(js_Boot.__cast(base , draw_Base)).set_fillColor(this.get_fillColor());
+				(js_Boot.__cast(base , sketcher_draw_Base)).set_fillColor(this.get_fillColor());
 			}
 			if(this.get_strokeColor() != null) {
-				(js_Boot.__cast(base , draw_Base)).set_strokeColor(this.get_strokeColor());
+				(js_Boot.__cast(base , sketcher_draw_Base)).set_strokeColor(this.get_strokeColor());
 			}
 			base.ctx(ctx);
 		}
@@ -2577,7 +2375,7 @@ sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
 		this.set_strokeOpacity(0);
 	}
 	,test: function() {
-		console.log("src/sketcher/draw/Group.hx:92:","test if casting works");
+		console.log("src/sketcher/draw/Group.hx:90:","test if casting works");
 	}
 	,get_arr: function() {
 		return this.arr;
@@ -2586,6 +2384,212 @@ sketcher_draw_Group.prototype = $extend(draw_Base.prototype,{
 		return this.arr = value;
 	}
 	,__class__: sketcher_draw_Group
+});
+var sketcher_draw_Line = function(x,y,x2,y2) {
+	this.type = "Line";
+	this.set_x(x);
+	this.set_y(y);
+	this.set_x2(x2);
+	this.set_y2(y2);
+	sketcher_draw_Base.call(this,"line");
+};
+$hxClasses["sketcher.draw.Line"] = sketcher_draw_Line;
+sketcher_draw_Line.__name__ = "sketcher.draw.Line";
+sketcher_draw_Line.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Line.__super__ = sketcher_draw_Base;
+sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		this.xml.set("x1",Std.string(this.get_x()));
+		this.xml.set("y1",Std.string(this.get_y()));
+		this.xml.set("x2",Std.string(this.get_x2()));
+		this.xml.set("y2",Std.string(this.get_y2()));
+		if(this.get_stroke() != null) {
+			this.xml.set("stroke",this.get_stroke());
+		}
+		if(this.get_lineWeight() != null) {
+			this.xml.set("stroke-width",Std.string(this.get_lineWeight()));
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,get_x2: function() {
+		return this.x2;
+	}
+	,set_x2: function(value) {
+		return this.x2 = value;
+	}
+	,get_y2: function() {
+		return this.y2;
+	}
+	,set_y2: function(value) {
+		return this.y2 = value;
+	}
+	,__class__: sketcher_draw_Line
+});
+var sketcher_draw_Path = function(x,y) {
+	this.type = "Path";
+	this.dArray = [];
+	this.moveTo(x,y);
+	sketcher_draw_Base.call(this,"path");
+};
+$hxClasses["sketcher.draw.Path"] = sketcher_draw_Path;
+sketcher_draw_Path.__name__ = "sketcher.draw.Path";
+sketcher_draw_Path.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Path.__super__ = sketcher_draw_Base;
+sketcher_draw_Path.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		var str = "";
+		var _g = 0;
+		var _g1 = this.dArray;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			str += i;
+		}
+		this.xml.set("d",str);
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,window: function(x,y,width,height,x2,y2,width2,height2) {
+		this.dArray = [];
+		this.set_id("passe-partout " + this.get_count());
+		this.dArray.push("M" + x + "," + y);
+		this.dArray.push("V" + (y + height));
+		this.dArray.push("H" + (x + width));
+		this.dArray.push("V" + y);
+		this.dArray.push("Z");
+		this.dArray.push("M" + (x2 + width2) + "," + (y2 + height2));
+		this.dArray.push("H" + x2);
+		this.dArray.push("V" + y2);
+		this.dArray.push("H" + (x2 + width2));
+		this.dArray.push("Z");
+	}
+	,moveTo: function(x,y) {
+		this.dArray.push("M" + x + ", " + y + " ");
+	}
+	,lineTo: function(x,y) {
+		this.dArray.push("L" + x + ", " + y + " ");
+	}
+	,horizontalLineTo: function(x) {
+		this.dArray.push("H" + x + " ");
+	}
+	,verticalLineTo: function(y) {
+		this.dArray.push("V" + y + " ");
+	}
+	,curveto: function(x1,y1,x2,y2,x,y) {
+		this.dArray.push("C" + x1 + ", " + y1 + " " + x2 + ", " + y2 + " " + x + ", " + y + " ");
+	}
+	,closepath: function() {
+		this.dArray.push("Z ");
+	}
+	,__class__: sketcher_draw_Path
+});
+var sketcher_draw_PolyLine = function(arr) {
+	this.type = "PolyLine";
+	this.set_arr(arr);
+	sketcher_draw_Base.call(this,"polyline");
+};
+$hxClasses["sketcher.draw.PolyLine"] = sketcher_draw_PolyLine;
+sketcher_draw_PolyLine.__name__ = "sketcher.draw.PolyLine";
+sketcher_draw_PolyLine.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_PolyLine.__super__ = sketcher_draw_Base;
+sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		if(this.get_desc() != "") {
+			this.xml.addChild(Xml.parse("<desc>" + this.get_desc() + "</desc>"));
+		}
+		var str = "";
+		var _g = 0;
+		var _g1 = this.get_arr().length;
+		while(_g < _g1) {
+			var i = _g++;
+			var value = this.get_arr()[i];
+			str += "" + value + " ";
+		}
+		this.xml.set("points",str);
+		if(this.getTransform() != "") {
+			console.log("src/sketcher/draw/PolyLine.hx:33:",this.getTransform());
+			this.xml.set("transform",this.getTransform());
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,get_arr: function() {
+		return this.arr;
+	}
+	,set_arr: function(value) {
+		return this.arr = value;
+	}
+	,__class__: sketcher_draw_PolyLine
+});
+var sketcher_draw_Polygon = function(arr) {
+	this.type = "Polygon";
+	this.set_arr(arr);
+	sketcher_draw_Base.call(this,"polygon");
+};
+$hxClasses["sketcher.draw.Polygon"] = sketcher_draw_Polygon;
+sketcher_draw_Polygon.__name__ = "sketcher.draw.Polygon";
+sketcher_draw_Polygon.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Polygon.__super__ = sketcher_draw_Base;
+sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		var str = "";
+		var _g = 0;
+		var _g1 = this.get_arr().length;
+		while(_g < _g1) {
+			var i = _g++;
+			var value = this.get_arr()[i];
+			str += "" + value + " ";
+		}
+		this.xml.set("points",str);
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		ctx.beginPath();
+		ctx.fill();
+		ctx.stroke();
+	}
+	,getPoint: function(id) {
+		if(id * 2 > this.get_arr().length) {
+			console.log("src/sketcher/draw/Polygon.hx:42:","not in this length");
+		}
+		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
+		return p;
+	}
+	,sides: function(x,y,sides,size) {
+		this.set_arr([]);
+		var _g = 0;
+		var _g1 = sides;
+		while(_g < _g1) {
+			var i = _g++;
+			var _x = x + size * Math.cos(i * (2 * Math.PI) / sides);
+			var _y = y + size * Math.sin(i * (2 * Math.PI) / sides);
+			this.get_arr().push(_x);
+			this.get_arr().push(_y);
+		}
+	}
+	,get_arr: function() {
+		return this.arr;
+	}
+	,set_arr: function(value) {
+		return this.arr = value;
+	}
+	,__class__: sketcher_draw_Polygon
 });
 var sketcher_draw_Rectangle = function(x,y,width,height,isCenter) {
 	if(isCenter == null) {
@@ -2607,13 +2611,13 @@ var sketcher_draw_Rectangle = function(x,y,width,height,isCenter) {
 	this.point_top_right = { x : this.xpos + this.get_width(), y : this.ypos};
 	this.point_bottom_left = { x : this.xpos, y : this.ypos + this.get_height()};
 	this.point_bottom_right = { x : this.xpos + this.get_width(), y : this.ypos + this.get_height()};
-	draw_Base.call(this,"rect");
+	sketcher_draw_Base.call(this,"rect");
 };
 $hxClasses["sketcher.draw.Rectangle"] = sketcher_draw_Rectangle;
 sketcher_draw_Rectangle.__name__ = "sketcher.draw.Rectangle";
-sketcher_draw_Rectangle.__interfaces__ = [draw_IBase];
-sketcher_draw_Rectangle.__super__ = draw_Base;
-sketcher_draw_Rectangle.prototype = $extend(draw_Base.prototype,{
+sketcher_draw_Rectangle.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Rectangle.__super__ = sketcher_draw_Base;
+sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 	noStroke: function() {
 		this.set_lineWeight(0);
 		this.set_strokeOpacity(0);
@@ -2758,13 +2762,13 @@ var sketcher_draw_Text = function(str,x,y) {
 	this.set_str(str);
 	this.set_x(x);
 	this.set_y(y);
-	draw_Base.call(this,"text");
+	sketcher_draw_Base.call(this,"text");
 };
 $hxClasses["sketcher.draw.Text"] = sketcher_draw_Text;
 sketcher_draw_Text.__name__ = "sketcher.draw.Text";
-sketcher_draw_Text.__interfaces__ = [draw_IBase];
-sketcher_draw_Text.__super__ = draw_Base;
-sketcher_draw_Text.prototype = $extend(draw_Base.prototype,{
+sketcher_draw_Text.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Text.__super__ = sketcher_draw_Base;
+sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 	align: function(value) {
 		this.set_textAnchor(value);
 	}
@@ -3558,7 +3562,6 @@ Xml.Comment = 3;
 Xml.DocType = 4;
 Xml.ProcessingInstruction = 5;
 Xml.Document = 6;
-draw_Base.COUNT = 0;
 haxe_xml_Parser.escapes = (function($this) {
 	var $r;
 	var h = new haxe_ds_StringMap();
@@ -3590,6 +3593,7 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
+sketcher_draw_Base.COUNT = 0;
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 sketcher_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
 sketcher_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};

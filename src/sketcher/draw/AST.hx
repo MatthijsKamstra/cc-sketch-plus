@@ -1,4 +1,4 @@
-package draw;
+package sketcher.draw;
 
 class AST {}
 
@@ -9,7 +9,6 @@ enum abstract LineCap(String) {
 	var Square = 'square';
 }
 
-
 // arcs | bevel |miter | miter-clip | round
 // // import draw.AST.LineJoin;
 enum abstract LineJoin(String) {
@@ -19,4 +18,3 @@ enum abstract LineJoin(String) {
 	var MiterClip = 'miter-clip';
 	var Round = 'round';
 }
-

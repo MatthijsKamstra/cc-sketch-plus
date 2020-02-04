@@ -16,7 +16,7 @@ using StringTools;
  *	text.fontSize = '${_fontSize}px';
  *	text.fill = getColourObj(BLACK);
  */
-class Text extends draw.Base implements draw.IBase {
+class Text extends Base implements IBase {
 	public static var ISWARN:Bool;
 
 	public var type = 'Text'; // base (get class name?)

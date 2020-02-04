@@ -1,7 +1,7 @@
-package draw;
+package sketcher.draw;
 
-import draw.AST.LineCap;
-import draw.AST.LineJoin;
+import sketcher.draw.AST.LineCap;
+import sketcher.draw.AST.LineJoin;
 import sketcher.AST;
 import sketcher.util.MathUtil;
 

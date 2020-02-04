@@ -1,6 +1,6 @@
-package draw;
+package sketcher.draw;
 
-class Ellipse extends draw.Base implements IBase {
+class Ellipse extends Base implements IBase {
 	@:isVar public var ry(get, set):Float;
 	@:isVar public var rx(get, set):Float;
 

@@ -1,10 +1,8 @@
 package sketcher.draw;
 
 import js.Browser.*;
-import draw.IBase;
-import draw.Base;
 
-class Group extends draw.Base implements draw.IBase {
+class Group extends Base implements IBase {
 	public static var ISWARN:Bool;
 
 	public var type = 'group'; // base (get class name?)

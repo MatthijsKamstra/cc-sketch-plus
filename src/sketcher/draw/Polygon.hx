@@ -1,8 +1,8 @@
-package draw;
+package sketcher.draw;
 
 import sketcher.AST.Point;
 
-class Polygon extends draw.Base implements IBase {
+class Polygon extends Base implements IBase {
 	public var type = 'Polygon'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<Float>; // collection of points

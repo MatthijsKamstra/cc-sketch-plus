@@ -3,8 +3,9 @@ package sketcher.draw;
 import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil;
 import js.Browser.*;
+import sketcher.*;
 
-class Circle extends draw.Base implements draw.IBase {
+class Circle extends Base implements IBase {
 	public static var ISWARN:Bool;
 
 	public var type = 'circle'; // base (get class name?)
@@ -86,8 +87,15 @@ class Circle extends draw.Base implements draw.IBase {
 			ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
 		}
 
-		ctx.fill();
-		ctx.stroke();
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null && this.lineWeight != 0) {
+			ctx.stroke();
+		}
+
+		// ctx.fill();
+		// ctx.stroke();
 
 		if (this.rotate != null) {}
 	}

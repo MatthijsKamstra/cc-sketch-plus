@@ -12,7 +12,7 @@ import js.Browser.*;
  * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/radialGradient
  * 		https://developer.mozilla.org/en-US/docs/Web/SVG/Element/stop
  */
-class Gradient extends draw.Base implements draw.IBase {
+class Gradient extends Base implements IBase {
 	public static var ISWARN:Bool;
 
 	public var type = 'gradient'; // base (get class name?)

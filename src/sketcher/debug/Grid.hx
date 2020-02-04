@@ -3,6 +3,7 @@ package sketcher.debug;
 import sketcher.util.ColorUtil.*;
 import sketcher.util.GridUtil;
 import sketcher.AST;
+import sketcher.draw.IBase;
 
 class Grid {
 	public function new() {}
@@ -17,7 +18,7 @@ class Grid {
 	 * 			}
 	 */
 	static public function gridDots(sketch:Sketcher, grid:GridUtil) {
-		var _circlesArray:Array<draw.IBase> = [];
+		var _circlesArray:Array<IBase> = [];
 		for (i in 0...grid.array.length) {
 			var point:Point = grid.array[i];
 			var circle = sketch.makeCircle(point.x, point.y, 3);

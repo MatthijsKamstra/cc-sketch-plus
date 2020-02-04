@@ -1,4 +1,4 @@
-package draw;
+package sketcher.draw;
 
 /**
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
@@ -7,7 +7,7 @@ package draw;
  *
  *
  */
-class Path extends draw.Base implements IBase {
+class Path extends Base implements IBase {
 	public var dArray:Array<String> = [];
 
 	public var type = 'Path'; // base (get class name?)

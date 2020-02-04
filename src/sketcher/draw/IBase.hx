@@ -1,4 +1,4 @@
-package draw;
+package sketcher.draw;
 
 interface IBase {
 	public var type:String;
