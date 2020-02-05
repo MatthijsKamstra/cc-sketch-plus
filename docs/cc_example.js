@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-05 11:03:52");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-05 21:58:42");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -745,12 +745,16 @@ examples_ExAll.prototype = {
 		this.sketchCanvas();
 	}
 	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
 		var div0 = window.document.createElement("div");
 		div0.id = "sketcher-svg";
 		var div1 = window.document.createElement("div");
 		div1.id = "sketcher-canvas";
-		window.document.body.appendChild(div0);
-		window.document.body.appendChild(div1);
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -851,12 +855,16 @@ examples_ExCircles.prototype = {
 		this.sketchCanvas();
 	}
 	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
 		var div0 = window.document.createElement("div");
 		div0.id = "sketcher-svg";
 		var div1 = window.document.createElement("div");
 		div1.id = "sketcher-canvas";
-		window.document.body.appendChild(div0);
-		window.document.body.appendChild(div1);
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -943,12 +951,16 @@ examples_ExImage.prototype = {
 		this.sketchCanvas();
 	}
 	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
 		var div0 = window.document.createElement("div");
 		div0.id = "sketcher-svg";
 		var div1 = window.document.createElement("div");
 		div1.id = "sketcher-canvas";
-		window.document.body.appendChild(div0);
-		window.document.body.appendChild(div1);
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -969,7 +981,13 @@ examples_ExImage.prototype = {
 		var p = this.grid.array[0];
 		var image = sketch.makeImage(p.x,p.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",100,100);
 		var p1 = this.grid.array[1];
-		var image1 = sketch.makeImage(p1.x,p1.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",100,100,true);
+		var image1 = sketch.makeImage(p1.x,p1.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",100,100);
+		image1.setRotate(90,p1.x,p1.y);
+		var p2 = this.grid.array[3];
+		var image2 = sketch.makeImage(p2.x,p2.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",50,50,true);
+		var p3 = this.grid.array[4];
+		var image3 = sketch.makeImage(p3.x,p3.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",50,50,true);
+		image3.setRotate(90,p3.x,p3.y);
 		sketch.update();
 	}
 	,__class__: examples_ExImage
@@ -993,12 +1011,16 @@ examples_ExLine.prototype = {
 		this.sketchCanvas();
 	}
 	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
 		var div0 = window.document.createElement("div");
 		div0.id = "sketcher-svg";
 		var div1 = window.document.createElement("div");
 		div1.id = "sketcher-canvas";
-		window.document.body.appendChild(div0);
-		window.document.body.appendChild(div1);
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -1062,12 +1084,16 @@ examples_ExRectangle.prototype = {
 		this.sketchCanvas();
 	}
 	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
 		var div0 = window.document.createElement("div");
 		div0.id = "sketcher-svg";
 		var div1 = window.document.createElement("div");
 		div1.id = "sketcher-canvas";
-		window.document.body.appendChild(div0);
-		window.document.body.appendChild(div1);
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -2299,10 +2325,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -2545,19 +2571,45 @@ sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 	,ctx: function(ctx) {
 		var _gthis = this;
 		this.useDefaultsCanvas();
+		ctx.imageSmoothingEnabled = true;
+		ctx.imageSmoothingQuality = "high";
 		var img = new Image();
 		img.onload = function() {
-			console.log("src/sketcher/draw/Image.hx:63:",img.width);
-			console.log("src/sketcher/draw/Image.hx:64:",img.height);
 			var prop = img.height / img.width;
 			if(img.width < img.height) {
 				prop = img.width / img.height;
 			}
-			var tmp = _gthis.get_x();
-			var tmp1 = _gthis.get_y();
-			var tmp2 = _gthis.get_width();
-			var tmp3 = _gthis.get_height() * prop;
-			ctx.drawImage(img,tmp,tmp1,tmp2,tmp3);
+			if(_gthis.get_rotate() != null) {
+				ctx.save();
+				var tmp = _gthis.get_x();
+				var tmp1 = _gthis.get_y();
+				ctx.translate(tmp,tmp1);
+				var tmp2 = sketcher_util_MathUtil.radians(_gthis.get_rotate());
+				ctx.rotate(tmp2);
+				if(_gthis.get_move() != null) {
+					var tmp3 = _gthis.get_move().x;
+					ctx.translate(tmp3,_gthis.get_move().y);
+				}
+				if(_gthis.get_isCenter()) {
+					var tmp4 = -(_gthis.get_width() * 0);
+					var tmp5 = -(_gthis.get_height() * prop);
+					var tmp6 = _gthis.get_width();
+					var tmp7 = _gthis.get_height() * prop;
+					ctx.drawImage(img,tmp4,tmp5,tmp6,tmp7);
+				} else {
+					var tmp8 = _gthis.get_width();
+					var tmp9 = _gthis.get_height() * prop;
+					ctx.drawImage(img,0,0,tmp8,tmp9);
+				}
+				ctx.restore();
+			}
+			if(_gthis.get_rotate() == null) {
+				var tmp10 = _gthis.get_x();
+				var tmp11 = _gthis.get_y();
+				var tmp12 = _gthis.get_width();
+				var tmp13 = _gthis.get_height() * prop;
+				ctx.drawImage(img,tmp10,tmp11,tmp12,tmp13);
+			}
 		};
 		img.onerror = function(e) {
 			window.console.warn(e);
@@ -2673,10 +2725,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
