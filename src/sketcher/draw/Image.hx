@@ -60,11 +60,13 @@ class Image extends Base implements IBase {
 		var img = new js.html.Image(); // Create new img element
 		img.onload = function() {
 			// execute drawImage statements here
-			trace(img.width); // 600
-			trace(img.height); // 529
+			// trace(img.width); // 600
+			// trace(img.height); // 529
 			var prop = img.height / img.width;
 			if (img.width < img.height)
 				prop = img.width / img.height;
+
+			ctx.imageSmoothingEnabled = true;
 			ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
 		};
 		img.onerror = function(e) {
