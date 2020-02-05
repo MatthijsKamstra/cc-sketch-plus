@@ -56,6 +56,9 @@ class Image extends Base implements IBase {
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
 		useDefaultsCanvas();
+
+		ctx.imageSmoothingEnabled = true; // default true
+		untyped ctx.imageSmoothingQuality = 'high';
 		// trace('canvas image');
 		var img = new js.html.Image(); // Create new img element
 		img.onload = function() {
@@ -66,8 +69,29 @@ class Image extends Base implements IBase {
 			if (img.width < img.height)
 				prop = img.width / img.height;
 
-			ctx.imageSmoothingEnabled = true;
-			ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
+			// rotation & move...
+			if (this.rotate != null) {
+				// trace(this.x, this.y, this.rotate);
+				ctx.save();
+
+				ctx.translate(this.x, this.y);
+				ctx.rotate(MathUtil.radians(this.rotate));
+
+				if (this.move != null) {
+					ctx.translate(this.move.x, this.move.y);
+				}
+
+				if (isCenter) {
+					ctx.drawImage(img, -(this.width * 0), -(this.height * prop), this.width, this.height * prop);
+				} else {
+					ctx.drawImage(img, 0, 0, this.width, this.height * prop);
+				}
+
+				ctx.restore();
+			}
+			if (this.rotate == null) {
+				ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
+			}
 		};
 		img.onerror = function(e) {
 			console.warn(e);

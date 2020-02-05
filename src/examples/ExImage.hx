@@ -65,7 +65,15 @@ class ExImage {
 		var image = sketch.makeImage(p.x, p.y, "https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png", 100, 100);
 
 		var p = grid.array[1];
-		var image = sketch.makeImage(p.x, p.y, "https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png", 100, 100, true);
+		var image = sketch.makeImage(p.x, p.y, "https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png", 100, 100);
+		image.setRotate(90, p.x, p.y);
+
+		var p = grid.array[3];
+		var image = sketch.makeImage(p.x, p.y, "https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png", 50, 50, true);
+
+		var p = grid.array[4];
+		var image = sketch.makeImage(p.x, p.y, "https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png", 50, 50, true);
+		image.setRotate(90, p.x, p.y);
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
