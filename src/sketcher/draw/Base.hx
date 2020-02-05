@@ -15,9 +15,11 @@ class Base {
 	public var xml:Xml;
 
 	@:isVar public var id(get, set):String;
-	// position
-	@:isVar public var y(get, set):Float;
+
+	// Positions the shape horizontally from the origin.
 	@:isVar public var x(get, set):Float;
+	// Positions the shape vertically from the origin.
+	@:isVar public var y(get, set):Float;
 
 	// colors
 
