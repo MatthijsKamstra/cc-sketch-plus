@@ -17,6 +17,7 @@ class Main {
 		examples.ExRectangle,
 		//
 		examples.ExLine,
+		examples.ExImage,
 	];
 
 	public function new() {

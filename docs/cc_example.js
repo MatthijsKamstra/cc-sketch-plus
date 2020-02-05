@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-04 21:28:07");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-05 10:59:57");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -316,6 +316,14 @@ Sketcher.prototype = {
 			isLinear = true;
 		}
 		var shape = new sketcher_draw_Gradient(color0,color1,isLinear);
+		this.baseArray.push(shape);
+		return shape;
+	}
+	,makeImage: function(x,y,href,width,height,isCenter) {
+		if(isCenter == null) {
+			isCenter = false;
+		}
+		var shape = new sketcher_draw_Image(x,y,href,width,height,isCenter);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -916,6 +924,55 @@ examples_ExCircles.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExCircles
+};
+var examples_ExImage = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.init();
+};
+$hxClasses["examples.ExImage"] = examples_ExImage;
+examples_ExImage.__name__ = "examples.ExImage";
+examples_ExImage.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		window.document.body.appendChild(div0);
+		window.document.body.appendChild(div1);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var p = this.grid.array[0];
+		var image = sketch.makeImage(p.x,p.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",100,100);
+		var p1 = this.grid.array[1];
+		var image1 = sketch.makeImage(p1.x,p1.y,"https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png",100,100,true);
+		sketch.update();
+	}
+	,__class__: examples_ExImage
 };
 var examples_ExLine = function() {
 	this.isDebug = true;
@@ -1951,7 +2008,7 @@ sketcher_draw_Base.prototype = {
 		return str;
 	}
 	,clone: function() {
-		console.log("src/sketcher/draw/Base.hx:146:","WIP");
+		console.log("src/sketcher/draw/Base.hx:148:","WIP");
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
 	}
 	,useDefaultsCanvas: function() {
@@ -2242,10 +2299,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -2283,7 +2340,7 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 		var tmp = this.get_rotate() != null;
 	}
 	,debug: function() {
-		console.log("src/sketcher/draw/Circle.hx:106:","" + this.toString());
+		console.log("src/sketcher/draw/Circle.hx:104:","" + this.toString());
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -2452,6 +2509,90 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,__class__: sketcher_draw_Group
 });
+var sketcher_draw_Image = function(x,y,href,width,height,isCenter) {
+	if(isCenter == null) {
+		isCenter = false;
+	}
+	this.type = "image";
+	this.set_x(x);
+	this.set_y(y);
+	this.set_href(href);
+	this.set_width(width);
+	this.set_height(height);
+	this.set_isCenter(isCenter);
+	if(isCenter) {
+		this.set_x(this.get_x() - this.get_width() / 2);
+		this.set_y(this.get_y() - this.get_height() / 2);
+	}
+	sketcher_draw_Base.call(this,"image");
+};
+$hxClasses["sketcher.draw.Image"] = sketcher_draw_Image;
+sketcher_draw_Image.__name__ = "sketcher.draw.Image";
+sketcher_draw_Image.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Image.__super__ = sketcher_draw_Base;
+sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		this.xml.set("x",Std.string(this.get_x()));
+		this.xml.set("y",Std.string(this.get_y()));
+		this.xml.set("href",Std.string(this.get_href()));
+		this.xml.set("width",Std.string(this.get_width()));
+		this.xml.set("height",Std.string(this.get_height()));
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		var _gthis = this;
+		this.useDefaultsCanvas();
+		console.log("src/sketcher/draw/Image.hx:59:","canvas image");
+		var img = new Image();
+		img.onload = function() {
+			console.log("src/sketcher/draw/Image.hx:63:",img.width);
+			console.log("src/sketcher/draw/Image.hx:64:",img.height);
+			var tmp = _gthis.get_x();
+			var tmp1 = _gthis.get_y();
+			var tmp2 = _gthis.get_width();
+			var tmp3 = _gthis.get_height();
+			ctx.drawImage(img,tmp,tmp1,tmp2,tmp3);
+		};
+		img.onerror = function(e) {
+			window.console.warn(e);
+		};
+		img.src = this.get_href();
+	}
+	,get_href: function() {
+		return this.href;
+	}
+	,set_href: function(value) {
+		return this.href = value;
+	}
+	,get_width: function() {
+		return this.width;
+	}
+	,set_width: function(value) {
+		return this.width = value;
+	}
+	,get_height: function() {
+		return this.height;
+	}
+	,set_height: function(value) {
+		return this.height = value;
+	}
+	,get_isCenter: function() {
+		return this.isCenter;
+	}
+	,set_isCenter: function(value) {
+		return this.isCenter = value;
+	}
+	,get_preserveAspectRatio: function() {
+		return this.preserveAspectRatio;
+	}
+	,set_preserveAspectRatio: function(value) {
+		return this.preserveAspectRatio = value;
+	}
+	,__class__: sketcher_draw_Image
+});
 var sketcher_draw_Line = function(x,y,x2,y2) {
 	this.type = "Line";
 	this.set_x(x);
@@ -2529,10 +2670,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
