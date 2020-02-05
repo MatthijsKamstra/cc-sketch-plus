@@ -280,6 +280,25 @@ class Sketcher {
 	}
 
 	/**
+	 * add an image
+	 *
+	 * @source 	https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image
+	 *
+	 * @param x				Positions the image horizontally from the origin
+	 * @param y				Positions the image vertically from the origin.
+	 * @param href			Points at a URL for the image file.
+	 * @param width			The width the image renders at. Unlike HTML's <img>, this attribute is required.
+	 * @param height		The height the image renders at. Unlike HTML's <img>, this attribute is required.
+	 * @param isCenter
+	 * @return Image
+	 */
+	public function makeImage(x:Float, y:Float, href:String, width:Float, height:Float, ?isCenter:Bool = false):Image {
+		var shape = new Image(x, y, href, width, height, isCenter);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
 	 * Group is an collection of IBase items
 	 * usefull if you want to rotate/color/stroke-weight a group of items at the same time.
 	 * In Illustrator it will be layer, so usefull to group items to make a more structured file
