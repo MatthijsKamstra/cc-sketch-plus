@@ -1,9 +1,7 @@
 package sketcher.draw;
 
-import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil;
-import js.Browser.*;
-import sketcher.*;
+import sketcher.util.MathUtil;
 
 class Circle extends Base implements IBase {
 	public static var ISWARN:Bool;
