@@ -32,12 +32,19 @@ class ExLine {
 	}
 
 	function initDocument() {
+		var wrapper = document.createDivElement();
+		wrapper.id = 'sketcher-wrapper';
+		wrapper.className = 'container';
+
 		var div0 = document.createDivElement();
 		div0.id = 'sketcher-svg';
+
 		var div1 = document.createDivElement();
 		div1.id = 'sketcher-canvas';
-		document.body.appendChild(div0);
-		document.body.appendChild(div1);
+
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		document.body.appendChild(wrapper);
 	}
 
 	function sketchSVG() {
