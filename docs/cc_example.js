@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-05 10:59:57");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-05 11:03:52");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -2545,15 +2545,18 @@ sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 	,ctx: function(ctx) {
 		var _gthis = this;
 		this.useDefaultsCanvas();
-		console.log("src/sketcher/draw/Image.hx:59:","canvas image");
 		var img = new Image();
 		img.onload = function() {
 			console.log("src/sketcher/draw/Image.hx:63:",img.width);
 			console.log("src/sketcher/draw/Image.hx:64:",img.height);
+			var prop = img.height / img.width;
+			if(img.width < img.height) {
+				prop = img.width / img.height;
+			}
 			var tmp = _gthis.get_x();
 			var tmp1 = _gthis.get_y();
 			var tmp2 = _gthis.get_width();
-			var tmp3 = _gthis.get_height();
+			var tmp3 = _gthis.get_height() * prop;
 			ctx.drawImage(img,tmp,tmp1,tmp2,tmp3);
 		};
 		img.onerror = function(e) {
