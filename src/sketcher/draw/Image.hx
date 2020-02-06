@@ -62,7 +62,10 @@ class Image extends Base implements IBase {
 		// trace('canvas image');
 		var img = new js.html.Image(); // Create new img element
 		img.onload = function() {
+			trace('image.onload');
+
 			// execute drawImage statements here
+
 			// trace(img.width); // 600
 			// trace(img.height); // 529
 			var prop = img.height / img.width;
@@ -98,6 +101,8 @@ class Image extends Base implements IBase {
 		}
 		// img.crossOrigin = "Anonymous"; ???
 		img.src = this.href; // Set source path
+
+		// trace(this.href, this.width, this.height);
 
 		// var testImg = document.createImageElement();
 		// testImg.src = this.href;
