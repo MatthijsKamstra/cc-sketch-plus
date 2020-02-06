@@ -1,5 +1,7 @@
 package sketcher.draw;
 
+import sketcher.util.ColorUtil;
+import sketcher.AST.Point;
 import sketcher.draw.AST.LineCap;
 
 /**
@@ -38,9 +40,53 @@ class PolyLine extends Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		// set everything to default values
+		useDefaultsCanvas();
+
+		if (this.lineCap != null) {
+			ctx.lineCap = cast this.lineCap;
+		}
+		ctx.lineWidth = this.lineWeight;
+
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _strokeColor = ColorUtil.assumption(this.strokeColor);
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
+
+		if (this.dash != null) {
+			ctx.setLineDash(this.dash);
+		}
+
 		ctx.beginPath();
-		ctx.fill();
+
+		var _pointArray = convertArr();
+		// trace(this.pointArray);
+		// trace('----');
+		// trace(_pointArray);
+
+		for (i in 0..._pointArray.length) {
+			var p = _pointArray[i];
+			if (i == 0) {
+				ctx.moveTo(p.x, p.y);
+			} else {
+				ctx.lineTo(p.x, p.y);
+			}
+		}
+
 		ctx.stroke();
+	}
+
+	function convertArr():Array<Point> {
+		var _pointArray = [];
+		for (i in 0...this.arr.length) {
+			if (i % 2 == 0) {
+				var x = this.arr[i];
+				var y = this.arr[i + 1];
+				_pointArray.push({x: x, y: y});
+			}
+		}
+		return _pointArray;
 	}
 
 	// ____________________________________ getter/setter ____________________________________
@@ -52,17 +98,4 @@ class PolyLine extends Base implements IBase {
 	function set_arr(value:Array<Float>):Array<Float> {
 		return arr = value;
 	}
-
-	// function get_lineCap():LineCap {
-	// 	return lineCap;
-	// }
-	// function set_lineCap(value:LineCap):LineCap {
-	// 	return lineCap = value;
-	// }
 }
-
-// enum abstract LineCap(String) {
-// 	var Butt = 'butt';
-// 	var Round = 'round';
-// 	var Square = 'square';
-// }
