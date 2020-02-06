@@ -1,9 +1,10 @@
 package sketcher.export;
 
+import js.Browser.*;
+import js.html.AudioElement;
 import js.html.audio.AnalyserNode;
 import js.html.audio.AudioContext;
-import js.html.AudioElement;
-import js.Browser.*;
+import sketcher.util.MathUtil;
 
 class AudioAnalyser {
 	/**
@@ -42,6 +43,14 @@ class AudioAnalyser {
 	public var timeDomainData:js.lib.Uint8Array;
 
 	/**
+	 * @source
+	 * 			 https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/smoothingTimeConstant
+	 *
+	 * A double within the range 0 to 1 (0 meaning no time averaging). The default value is 0.8.
+	 */
+	@:isVar public var smoothingTimeConstant(get, set):Float;
+
+	/**
 	 * [Description]
 	 *
 	 * @example
@@ -65,6 +74,8 @@ class AudioAnalyser {
 
 		// analyser
 		analyser = audioContext.createAnalyser();
+		if (smoothingTimeConstant != null)
+			analyser.smoothingTimeConstant = smoothingTimeConstant;
 		analyser.fftSize = fftSize; // default 1024 data points // The fftSize must be set to a power of two
 
 		// data
@@ -87,5 +98,16 @@ class AudioAnalyser {
 		// console.info('update');
 		analyser.getByteFrequencyData(frequencyData); // default
 		analyser.getByteTimeDomainData(timeDomainData); // <- usuable
+	}
+
+	// ____________________________________ getter/setter ____________________________________
+
+	function get_smoothingTimeConstant():Float {
+		return smoothingTimeConstant;
+	}
+
+	function set_smoothingTimeConstant(value:Float):Float {
+		var v = MathUtil.clamp(value, 0, 1); // should between 0 and 1
+		return smoothingTimeConstant = v;
 	}
 }
