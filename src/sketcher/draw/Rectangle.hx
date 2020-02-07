@@ -1,9 +1,13 @@
 package sketcher.draw;
 
-import sketcher.util.ColorUtil;
+import js.Browser.*;
+import js.html.webgl.RenderingContext;
 import sketcher.AST.Point;
+import sketcher.util.ColorUtil;
 
 class Rectangle extends Base implements IBase {
+	public static var ISWARN:Bool;
+
 	@:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;
 
@@ -125,7 +129,30 @@ class Rectangle extends Base implements IBase {
 		// ctx.stroke();
 	}
 
-	public function gl(gl:js.html.webgl.RenderingContext) {}
+	public function gl(gl:js.html.webgl.RenderingContext) {
+		if (!ISWARN) {
+			console.warn('webgl is not implemented yet');
+			ISWARN = true;
+		}
+
+		var c = '#ff3333';
+
+		var rgba = ColorUtil.assumption(c);
+		// trace(rgba);
+		// Set clear color to black, fully opaque
+		// gl.clearColor(rgba.r, rgba.g, rgba.b, rgba.a);
+		// Clear the color buffer with specified clear color
+		// gl.clear(gl.COLOR_BUFFER_BIT);
+		// gl.clear(0);
+
+		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+		// Set the clear color to darkish green.
+		gl.clearColor(rgba.r / 255, rgba.g / 255, rgba.b / 255, rgba.a);
+		// gl.clearColor(0.0, 0.5, 0.0, 1.0);
+		// Clear the context with the newly set color. This is
+		// the function call that actually does the drawing.
+		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
+	}
 
 	// ____________________________________ getter/setter ____________________________________
 	function get_radius():Int {

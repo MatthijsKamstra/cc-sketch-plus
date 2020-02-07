@@ -29,6 +29,7 @@ class Sketcher {
 	public var svg:String; // should be the svg/xml
 
 	public var CANVAS_ID:String = "sketcher_canvas";
+	public var WEBGL_ID:String = "sketcher_canvas_webgl";
 	public var SVG_ID:String = "sketcher_svg";
 	public var WRAPPER_ID:String = "sketcher_wrapper";
 
@@ -83,7 +84,17 @@ class Sketcher {
 				canvas = document.createCanvasElement();
 				canvas.width = settings.width;
 				canvas.height = settings.height;
-				canvas.id = CANVAS_ID;
+				canvas.id = WEBGL_ID;
+
+				// gl = canvas.getContext("webgl");
+
+				// // Only continue if WebGL is available and working
+				// if (gl == null) {
+				// 	alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+				// } else {
+				// 	trace(gl);
+				// }
+
 				gl = canvas.getContextWebGL();
 				element.appendChild(canvas);
 			default:

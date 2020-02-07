@@ -71,10 +71,6 @@ class Group extends Base implements IBase {
 
 			base.ctx(ctx);
 		}
-
-		// ctx.beginPath();
-		// ctx.fill();
-		// ctx.stroke();
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
