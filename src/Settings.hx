@@ -20,7 +20,7 @@ class Settings {
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
 		this.height = height;
-		this.type = type;
+		this.type = type.toLowerCase(); // make sure to user lowercase
 	}
 
 	// ____________________________________ getter/setter ____________________________________
