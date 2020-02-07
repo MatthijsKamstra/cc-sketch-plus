@@ -68,6 +68,8 @@ class Sketcher {
 		// console.log(element);
 
 		switch (settings.type) {
+			case 'svg':
+			// trace('svg');
 			case 'canvas':
 				// trace('canvas');
 				canvas = document.createCanvasElement();
@@ -77,8 +79,6 @@ class Sketcher {
 				ctx = canvas.getContext2d();
 				element.appendChild(canvas);
 			// console.log(canvas);
-			case 'svg':
-			// trace('svg');
 			case 'webgl':
 				// trace('webgl');
 				canvas = document.createCanvasElement();
