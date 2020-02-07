@@ -30,6 +30,7 @@ class ExRectangle {
 		initDocument(); // if document doesn't have elements with correct id
 		sketchSVG();
 		sketchCanvas();
+		sketchWebgl();
 	}
 
 	function initDocument() {
@@ -43,8 +44,13 @@ class ExRectangle {
 		var div1 = document.createDivElement();
 		div1.id = 'sketcher-canvas';
 
+		var div2 = document.createDivElement();
+		div2.id = 'sketcher-canvas-webgl';
+
 		wrapper.appendChild(div0);
 		wrapper.appendChild(div1);
+		wrapper.appendChild(div2);
+
 		document.body.appendChild(wrapper);
 	}
 
@@ -61,6 +67,15 @@ class ExRectangle {
 		// Make an instance of two and place it on the page.
 		var elem = document.getElementById('sketcher-canvas');
 		var settings:Settings = new Settings(sketchWidth, sketchHeight, 'canvas');
+		var sketch = Sketcher.create(settings).appendTo(elem);
+
+		generateShapes(sketch);
+	}
+
+	function sketchWebgl() {
+		// Make an instance of two and place it on the page.
+		var elem = document.getElementById('sketcher-canvas-webgl');
+		var settings:Settings = new Settings(sketchWidth, sketchHeight, 'webgl');
 		var sketch = Sketcher.create(settings).appendTo(elem);
 
 		generateShapes(sketch);
