@@ -85,16 +85,6 @@ class Sketcher {
 				canvas.width = settings.width;
 				canvas.height = settings.height;
 				canvas.id = WEBGL_ID;
-
-				// gl = canvas.getContext("webgl");
-
-				// // Only continue if WebGL is available and working
-				// if (gl == null) {
-				// 	alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-				// } else {
-				// 	trace(gl);
-				// }
-
 				gl = canvas.getContextWebGL();
 				element.appendChild(canvas);
 			default:

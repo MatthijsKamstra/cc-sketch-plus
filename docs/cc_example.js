@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-07 11:26:18");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-07 11:36:54");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -232,7 +232,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:101:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("src/Sketcher.hx:91:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
 	}
@@ -454,7 +454,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:526:","webgl");
+			console.log("src/Sketcher.hx:516:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -467,7 +467,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:535:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:525:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
