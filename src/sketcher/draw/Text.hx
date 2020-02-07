@@ -173,6 +173,8 @@ class Text extends Base implements IBase {
 		}
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	function convertTextBaseline() {
 		switch (this._textBaseline) {
 			case 'top':

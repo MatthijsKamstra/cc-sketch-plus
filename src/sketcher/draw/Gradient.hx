@@ -99,6 +99,8 @@ class Gradient extends Base implements IBase {
 		ctx.fillStyle = grd;
 		ctx.fillRect(0, 0, w, h);
 	}
+
+	public function gl(gl:js.html.webgl.RenderingContext) {}
 }
 
 typedef GradientObj = {

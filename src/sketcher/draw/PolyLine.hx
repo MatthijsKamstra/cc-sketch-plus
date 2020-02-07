@@ -77,6 +77,8 @@ class PolyLine extends Base implements IBase {
 		ctx.stroke();
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	function convertArr():Array<Point> {
 		var _pointArray = [];
 		for (i in 0...this.arr.length) {

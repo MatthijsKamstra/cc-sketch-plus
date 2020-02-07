@@ -71,6 +71,8 @@ class Line extends Base implements IBase {
 		// ctx.closePath();
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_x2():Float {

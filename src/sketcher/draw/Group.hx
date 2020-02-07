@@ -77,6 +77,8 @@ class Group extends Base implements IBase {
 		// ctx.stroke();
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	// ____________________________________ unique functions for this specific class ____________________________________
 
 	public function hide() {

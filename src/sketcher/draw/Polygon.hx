@@ -33,6 +33,8 @@ class Polygon extends Base implements IBase {
 		ctx.stroke();
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	// ____________________________________ public functions ____________________________________
 	// not sure what this does?????
 	//

@@ -125,6 +125,8 @@ class Rectangle extends Base implements IBase {
 		// ctx.stroke();
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	// ____________________________________ getter/setter ____________________________________
 	function get_radius():Int {
 		return radius;

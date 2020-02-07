@@ -109,6 +109,8 @@ class Image extends Base implements IBase {
 		// document.body.appendChild(testImg);
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_href():String {

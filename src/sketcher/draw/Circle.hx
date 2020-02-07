@@ -98,6 +98,8 @@ class Circle extends Base implements IBase {
 		if (this.rotate != null) {}
 	}
 
+	public function gl(gl:js.html.webgl.RenderingContext) {}
+
 	// ____________________________________ debug ____________________________________
 
 	public function debug() {
