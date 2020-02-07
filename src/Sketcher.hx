@@ -17,6 +17,12 @@ class Sketcher {
 	 */
 	public var canvas:js.html.CanvasElement;
 
+	// canvan context
+	public static var ctx:js.html.CanvasRenderingContext2D;
+
+	// webgl?
+	public static var gl:js.html.webgl.RenderingContext;
+
 	/**
 	 * the svg string (string injected into div)
 	 */
@@ -25,8 +31,6 @@ class Sketcher {
 	public var CANVAS_ID:String = "sketcher_canvas";
 	public var SVG_ID:String = "sketcher_svg";
 	public var WRAPPER_ID:String = "sketcher_wrapper";
-
-	public static var ctx:js.html.CanvasRenderingContext2D;
 
 	public function new(settings:Settings) {
 		this.settings = settings;
@@ -62,15 +66,30 @@ class Sketcher {
 		// console.log(settings);
 		// console.log(element);
 
-		if (settings.type.toLowerCase() == 'canvas') {
-			canvas = document.createCanvasElement();
-			canvas.width = settings.width;
-			canvas.height = settings.height;
-			canvas.id = CANVAS_ID;
-			ctx = canvas.getContext2d();
-			element.appendChild(canvas);
+		switch (settings.type) {
+			case 'canvas':
+				// trace('canvas');
+				canvas = document.createCanvasElement();
+				canvas.width = settings.width;
+				canvas.height = settings.height;
+				canvas.id = CANVAS_ID;
+				ctx = canvas.getContext2d();
+				element.appendChild(canvas);
 			// console.log(canvas);
+			case 'svg':
+			// trace('svg');
+			case 'webgl':
+				// trace('webgl');
+				canvas = document.createCanvasElement();
+				canvas.width = settings.width;
+				canvas.height = settings.height;
+				canvas.id = CANVAS_ID;
+				gl = canvas.getContextWebGL();
+				element.appendChild(canvas);
+			default:
+				trace("case '" + settings.type.toLowerCase() + "': trace ('" + settings.type.toLowerCase() + "');");
 		}
+
 		return this;
 	}
 
@@ -446,50 +465,63 @@ class Sketcher {
 			return;
 		}
 		// trace('type:${settings.type}, id:${element.id}');
-		if (settings.type == 'svg') {
-			// [mck] TODO change string into XML!!!
-			var svgW = '${settings.width}';
-			var svgH = '${settings.height}';
-			if (settings.sizeType != null) {
-				svgW += '${settings.sizeType}';
-				svgH += '${settings.sizeType}';
-			}
-			var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg">';
-			var content = '';
-			var defs = '<defs>';
-			for (i in 0...baseArray.length) {
-				var base = baseArray[i];
 
-				if (base == null)
-					continue; // with the creation of groups there are base == null
-
-				// if (base.type == 'Group') {
-				// 	trace('groups do this');
-				// 	cast(base, draw.Group).test();
-				// }
-				var draw = base.svg(settings);
-				// trace(base.toString());
-				// trace(draw);
-				if (base.type == 'gradient') {
-					defs += draw;
-				} else {
-					content += draw;
+		switch (settings.type) {
+			case 'svg':
+				// trace('svg');
+				// [mck] TODO change string into XML!!!
+				var svgW = '${settings.width}';
+				var svgH = '${settings.height}';
+				if (settings.sizeType != null) {
+					svgW += '${settings.sizeType}';
+					svgH += '${settings.sizeType}';
 				}
-			}
-			_xml += defs + '</defs>';
-			_xml += content + '</svg>';
-			svg = _xml; // external acces?
-			element.innerHTML = _xml;
-		} else {
-			for (i in 0...baseArray.length) {
-				var base = baseArray[i];
+				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg">';
+				var content = '';
+				var defs = '<defs>';
+				for (i in 0...baseArray.length) {
+					var base = baseArray[i];
 
-				if (base == null)
-					continue; // with the creation of groups there are base == null
+					if (base == null)
+						continue; // with the creation of groups there are base == null
 
-				// trace(base.type);
-				base.ctx(ctx);
-			}
+					// if (base.type == 'Group') {
+					// 	trace('groups do this');
+					// 	cast(base, draw.Group).test();
+					// }
+					var draw = base.svg(settings);
+					// trace(base.toString());
+					// trace(draw);
+					if (base.type == 'gradient') {
+						defs += draw;
+					} else {
+						content += draw;
+					}
+				}
+				_xml += defs + '</defs>';
+				_xml += content + '</svg>';
+				svg = _xml; // external acces?
+				element.innerHTML = _xml;
+			case 'canvas':
+				// trace('canvas');
+				for (i in 0...baseArray.length) {
+					var base = baseArray[i];
+					if (base == null)
+						continue; // with the creation of groups there are base == null
+					// trace(base.type);
+					base.ctx(ctx);
+				}
+			case 'webgl':
+				trace('webgl');
+				for (i in 0...baseArray.length) {
+					var base = baseArray[i];
+					if (base == null)
+						continue; // with the creation of groups there are base == null
+					// trace(base.type);
+					base.gl(gl);
+				}
+			default:
+				trace("case '" + settings.type + "': trace ('" + settings.type + "');");
 		}
 	}
 
