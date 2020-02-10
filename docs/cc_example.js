@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-07 11:36:54");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-10 12:08:19");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -2384,10 +2384,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3586,6 +3586,131 @@ sketcher_util_ColorUtil.hex2RGB = function(hex) {
 };
 sketcher_util_ColorUtil.prototype = {
 	__class__: sketcher_util_ColorUtil
+};
+var sketcher_util_EmbedUtil = function() {
+};
+$hxClasses["sketcher.util.EmbedUtil"] = sketcher_util_EmbedUtil;
+sketcher_util_EmbedUtil.__name__ = "sketcher.util.EmbedUtil";
+sketcher_util_EmbedUtil.check = function(id) {
+	if(window.document.getElementById(id) != null) {
+		return true;
+	} else {
+		return false;
+	}
+};
+sketcher_util_EmbedUtil.stats = function() {
+	var script = document.createElement('script');script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);
+};
+sketcher_util_EmbedUtil.script = function(id,src,callback,callbackArray) {
+	var el = window.document.createElement("script");
+	el.id = id;
+	el.src = src;
+	el.crossOrigin = "anonymous";
+	el.onload = function() {
+		if(callback != null) {
+			if(callbackArray == null) {
+				callback.apply(callback,[id]);
+			} else {
+				callback.apply(callback,callbackArray);
+			}
+		}
+	};
+	window.document.body.appendChild(el);
+};
+sketcher_util_EmbedUtil.stylesheet = function(id,src,callback,callbackArray) {
+	var el = window.document.createElement("link");
+	el.id = id;
+	el.rel = "stylesheet";
+	el.href = src;
+	el.onload = function() {
+		if(callback != null) {
+			if(callbackArray == null) {
+				callback.apply(callback,["id"]);
+			} else {
+				callback.apply(callback,callbackArray);
+			}
+		}
+	};
+	window.document.head.appendChild(el);
+};
+sketcher_util_EmbedUtil.bootstrapStylesheet = function(id,src,integrity,callback,callbackArray) {
+	var el = window.document.createElement("link");
+	el.id = id;
+	el.rel = "stylesheet";
+	el.href = src;
+	el.integrity = integrity;
+	el.crossOrigin = "anonymous";
+	el.onload = function() {
+		if(callback != null) {
+			if(callbackArray == null) {
+				callback.apply(callback,[id]);
+			} else {
+				callback.apply(callback,callbackArray);
+			}
+		}
+	};
+	window.document.head.appendChild(el);
+};
+sketcher_util_EmbedUtil.bootstrapScript = function(id,src,integrity,callback,callbackArray) {
+	var el = window.document.createElement("script");
+	el.id = id;
+	el.src = src;
+	el.integrity = integrity;
+	el.crossOrigin = "anonymous";
+	el.onload = function() {
+		if(callback != null) {
+			if(callbackArray == null) {
+				callback.apply(callback,[id]);
+			} else {
+				callback.apply(callback,callbackArray);
+			}
+		}
+	};
+	window.document.head.appendChild(el);
+};
+sketcher_util_EmbedUtil.quicksettings = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.script("quicksettings","https://cdn.jsdelivr.net/quicksettings/3.0.2/quicksettings.min.js",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.datgui = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.script("datgui","https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.sanitize = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.stylesheet("sanitize","https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.css",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.ficons = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.stylesheet("ficons","https://cdn.jsdelivr.net/npm/ficons@1.1.52/dist/ficons/font.css",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.bootstrap = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.bootstrapStylesheet("bootstrap-stylesheet","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css","sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh");
+	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-jquery","https://code.jquery.com/jquery-3.4.1.slim.min.js","sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n");
+	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-popper","https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js","sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo");
+	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-bootstrap","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js","sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6");
+};
+sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray) {
+	var _id = "embededGoogleFonts";
+	var _url = "https://fonts.googleapis.com/css?family=";
+	var link = window.document.getElementById(_id);
+	if(link != null) {
+		var temp = StringTools.replace(link.href,_url,"");
+		family = temp + "|" + family;
+	} else {
+		link = window.document.createElement("link");
+	}
+	if(callbackArray == null) {
+		callbackArray = [family];
+	}
+	link.href = "" + _url + family;
+	link.rel = "stylesheet";
+	link.id = _id;
+	link.onload = function() {
+		if(callback != null) {
+			callback.apply(callback,callbackArray);
+		}
+	};
+	window.document.head.appendChild(link);
+};
+sketcher_util_EmbedUtil.prototype = {
+	__class__: sketcher_util_EmbedUtil
 };
 var sketcher_util_GridUtil = function(w,h) {
 	this._isDebug = false;
