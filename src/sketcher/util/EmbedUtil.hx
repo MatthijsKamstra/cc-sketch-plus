@@ -20,6 +20,30 @@ class EmbedUtil {
 	}
 
 	/**
+	 * @url 	https://github.com/mrdoob/stats.js/
+	 *
+	 * @example
+	 * 				sketcher.util.EmbedUtil.stats();
+	 */
+	public static function stats() {
+		untyped __js__("var script = document.createElement('script');script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);");
+
+		/*
+			var script = document.createElement('script');
+			script.onload = function() {
+				var stats = new Stats();
+				document.body.appendChild(stats.dom);
+				requestAnimationFrame(function loop() {
+					stats.update();
+					requestAnimationFrame(loop)
+				});
+			};
+			script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';
+			document.head.appendChild(script);
+		 */
+	}
+
+	/**
 	 * [Description]
 	 * @param id
 	 * @param src
@@ -113,6 +137,12 @@ class EmbedUtil {
 		script('quicksettings', 'https://cdn.jsdelivr.net/quicksettings/3.0.2/quicksettings.min.js', callback, callbackArray);
 	}
 
+	/**
+	 * @example
+	 * 					sketcher.util.EmbedUtil.datgui();
+	 * @param callback
+	 * @param callbackArray
+	 */
 	public static function datgui(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
 		script('datgui', 'https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js', callback, callbackArray);
 	}
@@ -130,7 +160,14 @@ class EmbedUtil {
 		stylesheet('sanitize', 'https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.css', callback, callbackArray);
 	}
 
-	// <!-- Ficons, A Simple, Open-Source, Drop-In Alternative for Font Awesome Icons  -->
+	/**
+	 * <!-- Ficons, A Simple, Open-Source, Drop-In Alternative for Font Awesome Icons  -->
+	 * @example
+	 * 					sketcher.util.EmbedUtil.ficons();
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 */
 	public static function ficons(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
 		stylesheet('ficons', 'https://cdn.jsdelivr.net/npm/ficons@1.1.52/dist/ficons/font.css', callback, callbackArray);
 	}
@@ -139,6 +176,14 @@ class EmbedUtil {
 	// <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700&display=swap" rel="stylesheet">
 	//
 	// ____________________________________ bootstrap ____________________________________
+
+	/**
+	 * @example
+	 * 						sketcher.util.EmbedUtil.bootstrap();
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 */
 	public static function bootstrap(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
 		bootstrapStylesheet("bootstrap-stylesheet", "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
 			"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh");

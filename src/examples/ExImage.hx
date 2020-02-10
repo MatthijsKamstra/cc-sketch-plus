@@ -1,5 +1,6 @@
 package examples;
 
+import sketcher.util.EmbedUtil;
 import js.Browser.*;
 import sketcher.util.GridUtil;
 import sketcher.util.MathUtil;
@@ -14,11 +15,12 @@ class ExImage {
 	var isDebug:Bool = true;
 
 	public function new() {
-		sketcher.util.EmbedUtil.quicksettings();
-		sketcher.util.EmbedUtil.datgui();
-		sketcher.util.EmbedUtil.sanitize();
-		sketcher.util.EmbedUtil.ficons();
-		sketcher.util.EmbedUtil.bootstrap();
+		// sketcher.util.EmbedUtil.quicksettings();
+		// sketcher.util.EmbedUtil.datgui();
+		// sketcher.util.EmbedUtil.sanitize();
+		// sketcher.util.EmbedUtil.ficons();
+		// sketcher.util.EmbedUtil.bootstrap();
+		// sketcher.util.EmbedUtil.stats();
 		init();
 	}
 
