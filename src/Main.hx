@@ -19,6 +19,7 @@ class Main {
 		examples.ExGroup, //
 		examples.ExText, //
 		examples.ExEllipse, //
+		examples.ExGradient, //
 	];
 
 	public function new() {
