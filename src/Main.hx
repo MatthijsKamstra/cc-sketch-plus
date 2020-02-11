@@ -17,6 +17,7 @@ class Main {
 		examples.ExImage, //
 		examples.ExGui, //
 		examples.ExGroup, //
+		examples.ExText, //
 	];
 
 	public function new() {
