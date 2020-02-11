@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 17:00:27");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 17:20:01");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -232,7 +232,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:91:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			haxe_Log.trace("case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 91, className : "Sketcher", methodName : "appendTo"});
 		}
 		return this;
 	}
@@ -454,7 +454,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:516:","webgl");
+			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 516, className : "Sketcher", methodName : "update"});
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -467,7 +467,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:525:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 525, className : "Sketcher", methodName : "update"});
 		}
 	}
 	,__class__: Sketcher
@@ -1041,7 +1041,7 @@ var examples_ExGui = function() {
 	this.color1 = [0,128,255];
 	this.color0 = "#ffae23";
 	this.explode = function() {
-		console.log("src/examples/ExGui.hx:27:","booom");
+		haxe_Log.trace("booom",{ fileName : "src/examples/ExGui.hx", lineNumber : 27, className : "examples.ExGui", methodName : "explode"});
 	};
 	this.maxSize = 0.8;
 	this.growthSpeed = 0.8;
@@ -1096,7 +1096,7 @@ examples_ExGui.prototype = {
 		gui.addColor(this,"color3");
 		var controller = gui.add(this,"maxSize",0,10);
 		controller.onChange(function(value) {
-			console.log("src/examples/ExGui.hx:92:","value: " + value);
+			haxe_Log.trace("value: " + value,{ fileName : "src/examples/ExGui.hx", lineNumber : 92, className : "examples.ExGui", methodName : "initDatGui"});
 		});
 		controller.onFinishChange(function(value1) {
 			window.alert(Std.string("The new value is " + value1));
@@ -1139,7 +1139,7 @@ examples_ExGui.prototype = {
 };
 var examples_FizzyText = function() {
 	this.explode = function() {
-		console.log("src/examples/ExGui.hx:155:","BOOM");
+		haxe_Log.trace("BOOM",{ fileName : "src/examples/ExGui.hx", lineNumber : 155, className : "examples.FizzyText", methodName : "explode"});
 	};
 	this.displayOutline = false;
 	this.speed = 0.8;
@@ -1394,6 +1394,32 @@ var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
 haxe_IMap.__name__ = "haxe.IMap";
 haxe_IMap.__isInterface__ = true;
+var haxe_Log = function() { };
+$hxClasses["haxe.Log"] = haxe_Log;
+haxe_Log.__name__ = "haxe.Log";
+haxe_Log.formatOutput = function(v,infos) {
+	var str = Std.string(v);
+	if(infos == null) {
+		return str;
+	}
+	var pstr = infos.fileName + ":" + infos.lineNumber;
+	if(infos.customParams != null) {
+		var _g = 0;
+		var _g1 = infos.customParams;
+		while(_g < _g1.length) {
+			var v1 = _g1[_g];
+			++_g;
+			str += ", " + Std.string(v1);
+		}
+	}
+	return pstr + ": " + str;
+};
+haxe_Log.trace = function(v,infos) {
+	var str = haxe_Log.formatOutput(v,infos);
+	if(typeof(console) != "undefined" && console.log != null) {
+		console.log(str);
+	}
+};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -2284,7 +2310,7 @@ sketcher_draw_Base.prototype = {
 		return str;
 	}
 	,clone: function() {
-		console.log("src/sketcher/draw/Base.hx:159:","WIP");
+		haxe_Log.trace("WIP",{ fileName : "src/sketcher/draw/Base.hx", lineNumber : 159, className : "sketcher.draw.Base", methodName : "clone"});
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
 	}
 	,useDefaultsCanvas: function() {
@@ -2618,7 +2644,7 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 	,gl: function(gl) {
 	}
 	,debug: function() {
-		console.log("src/sketcher/draw/Circle.hx:106:","" + this.toString());
+		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 106, className : "sketcher.draw.Circle", methodName : "debug"});
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -2786,7 +2812,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.set_strokeOpacity(0);
 	}
 	,test: function() {
-		console.log("src/sketcher/draw/Group.hx:91:","test if casting works");
+		haxe_Log.trace("test if casting works",{ fileName : "src/sketcher/draw/Group.hx", lineNumber : 91, className : "sketcher.draw.Group", methodName : "test"});
 	}
 	,get_arr: function() {
 		return this.arr;
@@ -2836,7 +2862,7 @@ sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 		ctx.imageSmoothingQuality = "high";
 		var img = new Image();
 		img.onload = function() {
-			console.log("src/sketcher/draw/Image.hx:65:","image.onload");
+			haxe_Log.trace("image.onload",{ fileName : "src/sketcher/draw/Image.hx", lineNumber : 65, className : "sketcher.draw.Image", methodName : "ctx"});
 			var prop = img.height / img.width;
 			if(img.width < img.height) {
 				prop = img.width / img.height;
@@ -3121,7 +3147,7 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 		}
 		this.xml.set("points",str);
 		if(this.getTransform() != "") {
-			console.log("src/sketcher/draw/PolyLine.hx:35:",this.getTransform());
+			haxe_Log.trace(this.getTransform(),{ fileName : "src/sketcher/draw/PolyLine.hx", lineNumber : 35, className : "sketcher.draw.PolyLine", methodName : "svg"});
 			this.xml.set("transform",this.getTransform());
 		}
 		return haxe_xml_Printer.print(this.xml);
@@ -3268,7 +3294,7 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			console.log("src/sketcher/draw/Polygon.hx:44:","not in this length");
+			haxe_Log.trace("not in this length",{ fileName : "src/sketcher/draw/Polygon.hx", lineNumber : 44, className : "sketcher.draw.Polygon", methodName : "getPoint"});
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
@@ -3407,26 +3433,26 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 		if(this.get_dash() != null) {
 			ctx.setLineDash(this.get_dash());
 		}
+		haxe_Log.trace(this.get_rotate(),{ fileName : "src/sketcher/draw/Rectangle.hx", lineNumber : 97, className : "sketcher.draw.Rectangle", methodName : "ctx", customParams : [this.get_move()]});
 		ctx.beginPath();
-		if(this.get_rotate() != null) {
+		if(this.get_rotate() != null && this.get_move() == null) {
+			haxe_Log.trace("rotate but not move",{ fileName : "src/sketcher/draw/Rectangle.hx", lineNumber : 104, className : "sketcher.draw.Rectangle", methodName : "ctx"});
 			ctx.save();
 			ctx.translate(this.xpos,this.ypos);
 			ctx.rotate(sketcher_util_MathUtil.radians(this.get_rotate()));
-			if(this.get_move() != null) {
-				ctx.translate(this.get_move().x,this.get_move().y);
-			}
 			ctx.rect(0,0,this.get_width(),this.get_height());
 			ctx.restore();
 		}
-		if(this.get_rotate() == null) {
-			this.buildCanvasShape(ctx);
-		}
-		if(this.get_move() != null) {
+		if(this.get_move() != null && this.get_rotate() == null) {
+			haxe_Log.trace("move but not rotate",{ fileName : "src/sketcher/draw/Rectangle.hx", lineNumber : 128, className : "sketcher.draw.Rectangle", methodName : "ctx"});
 			ctx.save();
 			ctx.translate(this.xpos,this.ypos);
 			ctx.translate(this.get_move().x,this.get_move().y);
 			ctx.rect(0,0,this.get_width(),this.get_height());
 			ctx.restore();
+		}
+		if(this.get_rotate() == null && this.get_move() == null) {
+			this.buildCanvasShape(ctx);
 		}
 		if(this.get_fill() != null) {
 			ctx.fill();
@@ -3616,7 +3642,7 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 			break;
 		default:
 			this.set_textAnchor("start");
-			console.log("src/sketcher/draw/Text.hx:172:","case '" + this._textAlign + "': trace ('" + this._textAlign + "');");
+			haxe_Log.trace("case '" + this._textAlign + "': trace ('" + this._textAlign + "');",{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 172, className : "sketcher.draw.Text", methodName : "convertTextAlign"});
 		}
 	}
 	,gl: function(gl) {
@@ -3634,7 +3660,7 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 			break;
 		default:
 			this.set_dominantBaseline("auto");
-			console.log("src/sketcher/draw/Text.hx:188:","case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');");
+			haxe_Log.trace("case '" + this._textBaseline + "': trace ('" + this._textBaseline + "');",{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 188, className : "sketcher.draw.Text", methodName : "convertTextBaseline"});
 		}
 	}
 	,get_fontSize: function() {
@@ -4035,7 +4061,7 @@ sketcher_util_GridUtil.prototype = {
 		return this;
 	}
 	,calc: function() {
-		console.log("src/sketcher/util/GridUtil.hx:263:","WIP");
+		haxe_Log.trace("WIP",{ fileName : "src/sketcher/util/GridUtil.hx", lineNumber : 263, className : "sketcher.util.GridUtil", methodName : "calc"});
 		return this;
 	}
 	,setPosition: function(x,y) {
@@ -4306,7 +4332,7 @@ sketcher_util_MathUtil.dist = function(x1,y1,x2,y2) {
 };
 sketcher_util_MathUtil.pythagoreanTheorem = function(a,b,c) {
 	if(a == null && b == null && c == null) {
-		console.log("src/sketcher/util/MathUtil.hx:106:","Really? Perhaps you should use some data");
+		haxe_Log.trace("Really? Perhaps you should use some data",{ fileName : "src/sketcher/util/MathUtil.hx", lineNumber : 106, className : "sketcher.util.MathUtil", methodName : "pythagoreanTheorem"});
 		return 0;
 	}
 	var value = 0.0;
