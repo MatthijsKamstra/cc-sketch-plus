@@ -32,7 +32,7 @@ class PolyLine extends Base implements IBase {
 		xml.set('points', str);
 
 		if (this.getTransform() != '') {
-			trace(this.getTransform());
+			// trace(this.getTransform());
 			xml.set('transform', this.getTransform());
 		}
 
@@ -45,6 +45,9 @@ class PolyLine extends Base implements IBase {
 
 		if (this.lineCap != null) {
 			ctx.lineCap = cast this.lineCap;
+		}
+		if (this.lineJoin != null) {
+			ctx.lineJoin = cast this.lineJoin;
 		}
 		ctx.lineWidth = this.lineWeight;
 
@@ -74,7 +77,12 @@ class PolyLine extends Base implements IBase {
 			}
 		}
 
-		ctx.stroke();
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null && this.lineWeight != 0) {
+			ctx.stroke();
+		}
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}

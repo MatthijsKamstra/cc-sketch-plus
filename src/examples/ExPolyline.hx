@@ -1,5 +1,6 @@
 package examples;
 
+import sketcher.draw.AST.LineJoin;
 import sketcher.draw.AST.LineCap;
 import sketcher.AST.Point;
 import js.Browser.*;
@@ -97,16 +98,31 @@ class ExPolyline {
 		var shape = sketch.makePolyLine(getSides(p));
 		shape.fillColor = getColourObj(PINK_HOT);
 		shape.strokeColor = getColourObj(GREEN);
-		shape.strokeWeight = 5;
-		shape.dash = [10, 20];
+		shape.strokeWeight = 15;
+		shape.dash = [5, 10];
 
 		var p = grid.array[5];
 		var shape = sketch.makePolyLine(getSides(p));
 		shape.fillColor = getColourObj(PINK_HOT);
 		shape.strokeColor = getColourObj(GREEN);
 		shape.strokeWeight = 5;
-		shape.dash = [10, 20];
+		shape.dash = [5, 10];
 		shape.lineCap = LineCap.Round;
+
+		var p = grid.array[6];
+		var shape = sketch.makePolyLine(getSides(p));
+		shape.fillOpacity = 0;
+		shape.strokeColor = getColourObj(MAROON);
+		shape.strokeWeight = 10;
+		shape.lineCap = LineCap.Round;
+
+		var p = grid.array[7];
+		var shape = sketch.makePolyLine(getSides(p));
+		shape.fillOpacity = 0;
+		shape.strokeColor = getColourObj(LIME);
+		shape.strokeWeight = 10;
+		shape.lineCap = LineCap.Round;
+		shape.lineJoin = LineJoin.Round;
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
@@ -114,10 +130,10 @@ class ExPolyline {
 
 	function getSides(p:Point):Array<Float> {
 		var sides:Array<Float> = [
-			  p.x + 0, p.y + 100,
-			 p.x + 50,  p.y + 25,
-			 p.x + 50,  p.y + 75,
-			p.x + 100,   p.y + 0
+			p.x + (-50), p.y + (100 - 50),
+			  p.x + (0),  p.y + (25 - 50),
+			  p.x + (0),  p.y + (75 - 50),
+			 p.x + (50),   p.y + (0 - 50)
 		];
 
 		return sides;

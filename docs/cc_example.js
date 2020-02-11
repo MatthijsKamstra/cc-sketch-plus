@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 22:57:44");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-12 00:11:22");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -1459,19 +1459,32 @@ examples_ExPolyline.prototype = {
 		var shape4 = sketch.makePolyLine(this.getSides(p4));
 		shape4.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_HOT));
 		shape4.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
-		shape4.set_strokeWeight(5);
-		shape4.set_dash([10,20]);
+		shape4.set_strokeWeight(15);
+		shape4.set_dash([5,10]);
 		var p5 = this.grid.array[5];
 		var shape5 = sketch.makePolyLine(this.getSides(p5));
 		shape5.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_HOT));
 		shape5.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
 		shape5.set_strokeWeight(5);
-		shape5.set_dash([10,20]);
+		shape5.set_dash([5,10]);
 		shape5.set_lineCap("round");
+		var p6 = this.grid.array[6];
+		var shape6 = sketch.makePolyLine(this.getSides(p6));
+		shape6.set_fillOpacity(0);
+		shape6.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.MAROON));
+		shape6.set_strokeWeight(10);
+		shape6.set_lineCap("round");
+		var p7 = this.grid.array[7];
+		var shape7 = sketch.makePolyLine(this.getSides(p7));
+		shape7.set_fillOpacity(0);
+		shape7.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		shape7.set_strokeWeight(10);
+		shape7.set_lineCap("round");
+		shape7.set_lineJoin("round");
 		sketch.update();
 	}
 	,getSides: function(p) {
-		var sides = [p.x,p.y + 100,p.x + 50,p.y + 25,p.x + 50,p.y + 75,p.x + 100,p.y];
+		var sides = [p.x + (-50),p.y + 50,p.x,p.y + (-25),p.x,p.y + 25,p.x + 50,p.y + (-50)];
 		return sides;
 	}
 	,__class__: examples_ExPolyline
@@ -2901,10 +2914,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3315,10 +3328,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3447,7 +3460,6 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 		}
 		this.xml.set("points",str);
 		if(this.getTransform() != "") {
-			console.log("src/sketcher/draw/PolyLine.hx:35:",this.getTransform());
 			this.xml.set("transform",this.getTransform());
 		}
 		return haxe_xml_Printer.print(this.xml);
@@ -3456,6 +3468,9 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.useDefaultsCanvas();
 		if(this.get_lineCap() != null) {
 			ctx.lineCap = this.get_lineCap();
+		}
+		if(this.get_lineJoin() != null) {
+			ctx.lineJoin = this.get_lineJoin();
 		}
 		ctx.lineWidth = this.get_lineWeight();
 		var value = this.get_fillColor();
@@ -3534,7 +3549,12 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 				ctx.lineTo(p.x,p.y);
 			}
 		}
-		ctx.stroke();
+		if(this.get_fill() != null) {
+			ctx.fill();
+		}
+		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
+			ctx.stroke();
+		}
 	}
 	,gl: function(gl) {
 	}
@@ -3715,10 +3735,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
