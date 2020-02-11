@@ -1,5 +1,8 @@
 package examples;
 
+import sketcher.draw.Text.TextBaselineType;
+import sketcher.draw.Text.TextAlignType;
+import sketcher.util.EmbedUtil;
 import sketcher.draw.AST.LineCap;
 import js.Browser.*;
 import sketcher.util.GridUtil;
@@ -16,12 +19,12 @@ class ExAll {
 	//
 	var isDebug:Bool = true;
 
+	// font
+	var fontFamly = 'Pacifico';
+
 	public function new() {
-		// document.addEventListener("DOMContentLoaded", function(event) {
-		// 	// DOM ready
-		// 	console.log('${App.NAME} :: build: ${App.getBuildDate()}');
-		// });
-		init();
+		EmbedUtil.embedGoogleFont(fontFamly, init);
+		// init();
 	}
 
 	function init() {
@@ -57,6 +60,25 @@ class ExAll {
 		var settings:Settings = new Settings(sketchWidth, sketchHeight, 'svg');
 		var sketch = Sketcher.create(settings).appendTo(elem);
 
+		generateShapes(sketch);
+
+		// Don't forget to tell two to render everything to the screen
+		sketch.update();
+	}
+
+	function sketchCanvas() {
+		// Make an instance of two and place it on the page.
+		var elem = document.getElementById('sketcher-canvas');
+		var settings:Settings = new Settings(sketchWidth, sketchHeight, 'canvas');
+		var sketch = Sketcher.create(settings).appendTo(elem);
+
+		generateShapes(sketch);
+
+		// Don't forget to tell two to render everything to the screen
+		sketch.update();
+	}
+
+	function generateShapes(sketch:Sketcher) {
 		// quick generate grid
 		if (isDebug) {
 			sketcher.debug.Grid.gridDots(sketch, grid);
@@ -99,62 +121,22 @@ class ExAll {
 		circle2.strokeWeight = _stroke;
 		circle2.strokeOpacity = 0.2;
 
-		// Don't forget to tell two to render everything to the screen
-		sketch.update();
-	}
+		var p = grid.array[3];
+		var shape = sketch.makeText("center", p.x, p.y);
+		shape.fillColor = getColourObj(MAROON);
+		shape.fontSize = '50px';
+		shape.fontFamily = fontFamly;
+		shape.textAlign = TextAlignType.Center;
+		shape.textBaseline = TextBaselineType.Middle;
 
-	function sketchCanvas() {
-		// Make an instance of two and place it on the page.
-		var elem = document.getElementById('sketcher-canvas');
-		var settings:Settings = new Settings(sketchWidth, sketchHeight, 'canvas');
-		var sketch = Sketcher.create(settings).appendTo(elem);
-		// quick generate grid
-		if (isDebug) {
-			sketcher.debug.Grid.gridDots(sketch, grid);
-		}
+		var p = grid.array[4];
+		var image = sketch.makeImage(p.x, p.y, "https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png", 100, 100, true);
 
-		var p = grid.array[0];
-		var circle = sketch.makeCircle(p.x, p.y, 50);
-
-		var p = grid.array[1];
-		var rect = sketch.makeRectangle(p.x, p.y, 100, 100);
-
-		// The object returned has many stylable properties:
-		circle.fillColor = '#FF8000';
-		circle.strokeColor = '#ff4500'; // Accepts all valid css color
-		circle.lineWeight = 5;
-
-		rect.fillColor = 'rgb(0, 200, 255)';
-		rect.fillOpacity = 0.75;
-		rect.noStroke();
-
-		var p = grid.array[2];
-		var pct = .77;
-		var _stroke = 15;
-		var _r = radiusSmall - (_stroke * 0.5);
-		var omtrek = MathUtil.circumferenceCircle(_r);
-		var dashLine = omtrek * pct;
-		var dashNoLine = omtrek - dashLine;
-
-		var circle = sketch.makeCircle(p.x, p.y, _r);
-		circle.id = "round cap, lime color";
-		circle.lineCap = LineCap.Round;
-		circle.fillOpacity = 0;
-		circle.strokeColor = getColourObj(LIME);
-		circle.strokeWeight = _stroke;
-		circle.dash = [dashLine, dashNoLine];
-		circle.setRotate(-90, p.x, p.y); // rotate it 90 degree to start on top
-		// circle.debug();
-
-		var circle2 = sketch.makeCircle(p.x, p.y, _r);
-		circle2.id = "circle round fuchsia";
-		circle2.fillOpacity = 0;
-		circle2.strokeColor = getColourObj(FUCHSIA);
-		circle2.strokeWeight = _stroke;
-		circle2.strokeOpacity = 0.2;
-		// circle2.debug();
-
-		// Don't forget to tell two to render everything to the screen
-		sketch.update();
+		var p = grid.array[5];
+		var line = sketch.makeLine(p.x, p.y, p.x + radiusSmall, p.y + radiusSmall);
+		line.strokeWeight = 10;
+		line.lineCap = LineCap.Round;
+		line.strokeColor = getColourObj(LIME);
+		line.dash = [10, 20];
 	}
 }
