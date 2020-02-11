@@ -94,14 +94,14 @@ class Rectangle extends Base implements IBase {
 			ctx.setLineDash(this.dash);
 		}
 
-		trace(this.rotate, this.move);
+		// trace(this.rotate, this.move);
 
 		ctx.beginPath();
 		// rotation & move...
 		if (this.rotate != null && this.move == null) {
 			// trace(this.x, this.y, this.rotate);
 
-			trace('rotate but not move');
+			// trace('rotate but not move');
 
 			ctx.save();
 
@@ -125,7 +125,7 @@ class Rectangle extends Base implements IBase {
 		}
 
 		if (this.move != null && this.rotate == null) {
-			trace('move but not rotate');
+			// trace('move but not rotate');
 			ctx.save();
 			ctx.translate(this.xpos, this.ypos);
 
