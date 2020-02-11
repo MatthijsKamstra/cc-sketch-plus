@@ -160,6 +160,10 @@ class Base {
 		return cast(haxe.Json.parse(haxe.Json.stringify(this)), Base);
 	}
 
+	function convertID(id:String):String {
+		return id.toLowerCase().replace(" ", "_");
+	}
+
 	/**
 	 *  set everything to default values
 	 */
@@ -194,7 +198,7 @@ class Base {
 
 	function set_id(value:String):String {
 		// for import in Illustrator its easier to have id that contain no spaces
-		value = value.toLowerCase().replace(" ", "_");
+		value = convertID(value);
 		if (xml != null) {
 			xml.set('id', Std.string(value));
 			xml.set('data-count', Std.string(COUNT));
@@ -224,6 +228,7 @@ class Base {
 	}
 
 	function set_fillGradientColor(value:String):String {
+		value = convertID(value);
 		return fill = 'url(#$value)';
 	}
 
