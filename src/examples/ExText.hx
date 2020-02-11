@@ -20,11 +20,10 @@ class ExText {
 	//
 	var isDebug:Bool = true;
 
-	var fontFamilie = 'Lobster';
+	var fontFamly = 'Lobster';
 
 	public function new() {
-		EmbedUtil.embedGoogleFont(fontFamilie, init);
-
+		EmbedUtil.embedGoogleFont(fontFamly, init);
 		// init();
 	}
 
@@ -98,28 +97,28 @@ class ExText {
 		var shape = sketch.makeText("left", p.x, p.y);
 		shape.fillColor = getColourObj(MAROON);
 		shape.fontSize = '50px';
-		shape.fontFamily = fontFamilie.replace("+", " ");
+		shape.fontFamily = fontFamly.replace("+", " ");
 		shape.textAlign = TextAlignType.Left;
 
 		var p = grid.array[4];
 		var shape = sketch.makeText("center", p.x, p.y);
 		shape.fillColor = getColourObj(MAROON);
 		shape.fontSize = '50';
-		shape.fontFamily = fontFamilie.replace("+", " ");
+		shape.fontFamily = fontFamly.replace("+", " ");
 		shape.textAlign = TextAlignType.Center;
 
 		var p = grid.array[5];
 		var shape = sketch.makeText("right", p.x, p.y);
 		shape.fillColor = getColourObj(MAROON);
 		shape.fontSize = '50';
-		shape.fontFamily = fontFamilie.replace("+", " ");
+		shape.fontFamily = fontFamly.replace("+", " ");
 		shape.textAlign = TextAlignType.Right;
 
 		var p = grid.array[6];
 		var shape = sketch.makeText("Right T", p.x, p.y);
 		shape.fillColor = getColourObj(OLIVE);
 		shape.fontSize = '30';
-		shape.fontFamily = fontFamilie.replace("+", " ");
+		shape.fontFamily = fontFamly.replace("+", " ");
 		shape.textAlign = TextAlignType.Right;
 		shape.textBaseline = TextBaselineType.Top;
 
@@ -127,7 +126,7 @@ class ExText {
 		var shape = sketch.makeText("Right M", p.x, p.y);
 		shape.fillColor = getColourObj(OLIVE);
 		shape.fontSize = '30';
-		shape.fontFamily = fontFamilie.replace("+", " ");
+		shape.fontFamily = fontFamly.replace("+", " ");
 		shape.textAlign = TextAlignType.Right;
 		shape.textBaseline = TextBaselineType.Middle;
 
@@ -135,7 +134,7 @@ class ExText {
 		var shape = sketch.makeText("Right B", p.x, p.y);
 		shape.fillColor = getColourObj(OLIVE);
 		shape.fontSize = '30';
-		shape.fontFamily = fontFamilie.replace("+", " ");
+		shape.fontFamily = fontFamly.replace("+", " ");
 		shape.textAlign = TextAlignType.Right;
 		shape.textBaseline = TextBaselineType.Bottom;
 
