@@ -49,7 +49,7 @@ class ExRectangle {
 
 		wrapper.appendChild(div0);
 		wrapper.appendChild(div1);
-		wrapper.appendChild(div2);
+		// wrapper.appendChild(div2);
 
 		document.body.appendChild(wrapper);
 	}
