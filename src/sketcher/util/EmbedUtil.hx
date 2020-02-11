@@ -225,7 +225,7 @@ class EmbedUtil {
 		}
 		if (callbackArray == null)
 			callbackArray = [family];
-		link.href = '${_url}${family}';
+		link.href = '${_url}${family}&display=swap';
 		link.rel = "stylesheet";
 		link.id = _id;
 		link.onload = function() {
