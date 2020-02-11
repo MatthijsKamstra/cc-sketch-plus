@@ -123,6 +123,17 @@ class Rectangle extends Base implements IBase {
 			buildCanvasShape(ctx);
 		}
 
+		if (this.move != null) {
+			ctx.save();
+			ctx.translate(this.xpos, this.ypos);
+
+			ctx.translate(this.move.x, this.move.y);
+
+			ctx.rect(0, 0, this.width, this.height);
+
+			ctx.restore();
+		}
+
 		/**
 			 		ctx.translate(x, y);
 			ctx.rotate(MathUtil.radians(180));
