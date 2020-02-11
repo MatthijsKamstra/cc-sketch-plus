@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import sketcher.util.MathUtil;
 import js.Browser.*;
 import js.html.webgl.RenderingContext;
 import sketcher.AST.Point;
@@ -94,7 +95,54 @@ class Rectangle extends Base implements IBase {
 		}
 
 		ctx.beginPath();
+		// rotation & move...
+		if (this.rotate != null) {
+			// trace(this.x, this.y, this.rotate);
+			ctx.save();
 
+			ctx.translate(this.xpos, this.ypos);
+			ctx.rotate(MathUtil.radians(this.rotate));
+
+			if (this.move != null) {
+				ctx.translate(this.move.x, this.move.y);
+			}
+
+			// if (isCenter) {
+			// 	ctx.rect(this.xpos, this.ypos, this.width, this.height);
+			// } else {
+			// 	ctx.rect(this.xpos, this.ypos, this.width, this.height);
+			// }
+			ctx.rect(0, 0, this.width, this.height);
+
+			// buildCanvasShape(ctx);
+
+			ctx.restore();
+		}
+
+		if (this.rotate == null) {
+			buildCanvasShape(ctx);
+		}
+
+		/**
+			 		ctx.translate(x, y);
+			ctx.rotate(MathUtil.radians(180));
+			fillTriangle(ctx, 0, 0 - sz, 0 + sz, 0 + sz / 2, 0 - sz, 0 + sz / 2);
+			ctx.rotate(MathUtil.radians(-180));
+			ctx.translate(-x, -y);
+		 */
+
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null && this.lineWeight != 0) {
+			ctx.stroke();
+		}
+
+		// ctx.fill();
+		// ctx.stroke();
+	}
+
+	private function buildCanvasShape(ctx:js.html.CanvasRenderingContext2D) {
 		if (this.radius == null) {
 			// normal rectangle
 			ctx.rect(this.xpos, this.ypos, this.width, this.height);
@@ -117,16 +165,6 @@ class Rectangle extends Base implements IBase {
 			ctx.quadraticCurveTo(this.xpos, this.ypos, this.xpos + radius.tl, this.ypos);
 			ctx.closePath();
 		}
-
-		if (this.fill != null) {
-			ctx.fill();
-		}
-		if (this.stroke != null && this.lineWeight != 0) {
-			ctx.stroke();
-		}
-
-		// ctx.fill();
-		// ctx.stroke();
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {

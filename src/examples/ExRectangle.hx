@@ -30,7 +30,7 @@ class ExRectangle {
 		initDocument(); // if document doesn't have elements with correct id
 		sketchSVG();
 		sketchCanvas();
-		sketchWebgl();
+		// sketchWebgl();
 	}
 
 	function initDocument() {
@@ -90,59 +90,62 @@ class ExRectangle {
 		var omtrek = (rectW * 2) + (rectH * 2);
 
 		var p = grid.array[0];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.setRotate(10, p.x, p.y);
 
 		var p = grid.array[1];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.fillColor = getColourObj(LIME);
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.fillColor = getColourObj(LIME);
+		// shape.setScale(1.5, 1.5);
 
 		var p = grid.array[2];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.fillColor = getColourObj(LIME);
-		circle.lineWeight = 10;
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.fillColor = getColourObj(LIME);
+		shape.lineWeight = 10;
 
 		var p = grid.array[3];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 10;
-		circle.fillColor = getColourObj(PINK);
-		circle.fillOpacity = 0.5;
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.lineWeight = 10;
+		shape.fillColor = getColourObj(PINK);
+		shape.fillOpacity = 0.5;
+		shape.setMove(10, 10);
 
 		var p = grid.array[4];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 10;
-		circle.fillColor = getColourObj(PINK);
-		circle.fillOpacity = 0.5;
-		circle.strokeColor = getColourObj(GREEN);
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.lineWeight = 10;
+		shape.fillColor = getColourObj(PINK);
+		shape.fillOpacity = 0.5;
+		shape.strokeColor = getColourObj(GREEN);
 
 		var p = grid.array[5];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 10;
-		circle.fillColor = getColourObj(PINK);
-		circle.fillOpacity = 0.5;
-		circle.strokeColor = getColourObj(GREEN);
-		circle.strokeOpacity = 0.5;
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.lineWeight = 10;
+		shape.fillColor = getColourObj(PINK);
+		shape.fillOpacity = 0.5;
+		shape.strokeColor = getColourObj(GREEN);
+		shape.strokeOpacity = 0.5;
 
 		var p = grid.array[6];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 10;
-		circle.fillColor = getColourObj(PINK);
-		circle.fillOpacity = 0;
-		circle.strokeColor = getColourObj(FUCHSIA);
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.lineWeight = 10;
+		shape.fillColor = getColourObj(PINK);
+		shape.fillOpacity = 0;
+		shape.strokeColor = getColourObj(FUCHSIA);
 
 		var p = grid.array[7];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 10;
-		circle.fillOpacity = 0;
-		circle.strokeColor = getColourObj(FUCHSIA);
-		circle.dash = [40, 20];
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.lineWeight = 10;
+		shape.fillOpacity = 0;
+		shape.strokeColor = getColourObj(FUCHSIA);
+		shape.dash = [40, 20];
 
 		var p = grid.array[8];
-		var circle = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		circle.lineWeight = 10;
-		circle.fillOpacity = 0;
-		circle.strokeColor = getColourObj(FUCHSIA);
-		circle.dash = [40, 20];
-		circle.lineCap = LineCap.Round;
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		shape.lineWeight = 10;
+		shape.fillOpacity = 0;
+		shape.strokeColor = getColourObj(FUCHSIA);
+		shape.dash = [40, 20];
+		shape.lineCap = LineCap.Round;
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
