@@ -44,9 +44,19 @@ class ExGui {
 
 		initDocument(); // if document doesn't have elements with correct id
 		// initDatGui();
-		EmbedUtil.datgui(initDatGui);
+		EmbedUtil.datgui(initDatGui2);
+		// EmbedUtil.datgui(initDatGui);
 		sketchSVG();
 		sketchCanvas();
+	}
+
+	function initDatGui2() {
+		var text = new FizzyText();
+		var gui = new js.dat.gui.GUI();
+		gui.add(text, 'message');
+		gui.add(text, 'speed', -5, 5);
+		gui.add(text, 'displayOutline');
+		gui.add(text, 'explode');
 	}
 
 	function initDatGui() {
@@ -135,4 +145,15 @@ class ExGui {
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
 	}
+}
+
+class FizzyText {
+	public var message = 'dat.gui';
+	public var speed = 0.8;
+	public var displayOutline = false;
+	public var explode = function() {
+		trace("BOOM");
+	};
+
+	public function new() {}
 }
