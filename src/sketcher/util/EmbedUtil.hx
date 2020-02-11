@@ -122,7 +122,7 @@ class EmbedUtil {
 				}
 			}
 		}
-		document.head.appendChild(el);
+		document.body.appendChild(el);
 	}
 
 	// ____________________________________ scripts ____________________________________
@@ -145,6 +145,13 @@ class EmbedUtil {
 	 */
 	public static function datgui(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
 		script('datgui', 'https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js', callback, callbackArray);
+		// normalize.css and bootstrap.css set a `line-height: inherit;`
+		// that makes dat.gui look stange, so inject this style just in case
+		var style = document.createElement('style');
+		style.innerHTML = '.dg .c input[type="text"]{
+			line-height : normal;
+		}';
+		document.head.appendChild(style);
 	}
 
 	//
