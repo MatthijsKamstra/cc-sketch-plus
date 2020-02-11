@@ -1,5 +1,6 @@
 # -lib hxquicksettings
 # -lib cc-sketch
+-lib hxexterns
 -cp src
 -main Main
 -js docs/cc_example.js

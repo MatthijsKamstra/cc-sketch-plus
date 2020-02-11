@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-10 12:08:19");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 14:12:58");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -965,6 +965,100 @@ examples_ExCircles.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExCircles
+};
+var examples_ExGui = function() {
+	this.color3 = { h : 350, s : 0.9, v : 0.3};
+	this.color2 = [0,128,255,0.3];
+	this.color1 = [0,128,255];
+	this.color0 = "#ffae23";
+	this.explode = function() {
+		console.log("src/examples/ExGui.hx:27:","booom");
+	};
+	this.maxSize = 0.8;
+	this.growthSpeed = 0.8;
+	this.noiseStrength = 0.8;
+	this.displayOutline = false;
+	this.speed = 0.8;
+	this.message = "dat.gui";
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.radiusSmall = 50;
+	this.init();
+};
+$hxClasses["examples.ExGui"] = examples_ExGui;
+examples_ExGui.__name__ = "examples.ExGui";
+examples_ExGui.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		sketcher_util_EmbedUtil.datgui($bind(this,this.initDatGui));
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDatGui: function() {
+		var gui = new dat.gui.GUI();
+		gui.add(this,"message");
+		gui.add(this,"speed",-5,5);
+		gui.add(this,"displayOutline");
+		gui.add(this,"explode");
+		var f1 = gui.addFolder("Flow Field");
+		f1.add(this,"speed");
+		f1.add(this,"noiseStrength");
+		var f2 = gui.addFolder("Letters");
+		f2.add(this,"growthSpeed");
+		f2.add(this,"maxSize");
+		f2.add(this,"message");
+		gui.add(this,"message",["pizza","chrome","hooray"]);
+		gui.add(this,"speed",{ Stopped : 0, Slow : 0.1, Fast : 5});
+		gui.addColor(this,"color0");
+		gui.addColor(this,"color1");
+		gui.addColor(this,"color2");
+		gui.addColor(this,"color3");
+		var controller = gui.add(this,"maxSize",0,10);
+		controller.onChange(function(value) {
+			console.log("src/examples/ExGui.hx:82:","value: " + value);
+		});
+		controller.onFinishChange(function(value1) {
+			window.alert(Std.string("The new value is " + value1));
+		});
+	}
+	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = sketcher_util_MathUtil.circumferenceCircle(this.radiusSmall);
+		var p = this.grid.array[0];
+		var circle = sketch.makeCircle(p.x,p.y,this.radiusSmall);
+		sketch.update();
+	}
+	,__class__: examples_ExGui
 };
 var examples_ExImage = function() {
 	this.isDebug = true;
@@ -3195,10 +3289,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3666,13 +3760,16 @@ sketcher_util_EmbedUtil.bootstrapScript = function(id,src,integrity,callback,cal
 			}
 		}
 	};
-	window.document.head.appendChild(el);
+	window.document.body.appendChild(el);
 };
 sketcher_util_EmbedUtil.quicksettings = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("quicksettings","https://cdn.jsdelivr.net/quicksettings/3.0.2/quicksettings.min.js",callback,callbackArray);
 };
 sketcher_util_EmbedUtil.datgui = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("datgui","https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js",callback,callbackArray);
+	var style = window.document.createElement("style");
+	style.innerHTML = ".dg .c input[type=\"text\"]{\n\t\t\tline-height : normal;\n\t\t}";
+	window.document.head.appendChild(style);
 };
 sketcher_util_EmbedUtil.sanitize = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.stylesheet("sanitize","https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.css",callback,callbackArray);
@@ -4204,6 +4301,9 @@ sketcher_util_MathUtil.shuffle = function(array) {
 sketcher_util_MathUtil.clamp = function(value,min,max) {
 	return Math.min(Math.max(value,Math.min(min,max)),Math.max(min,max));
 };
+var $_;
+function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
+$global.$haxeUID |= 0;
 $hxClasses["Math"] = Math;
 if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.prototype.__class__ = $hxClasses["String"] = String;

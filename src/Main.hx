@@ -10,14 +10,12 @@ class Main {
 	var hash:String;
 	var ccTypeArray:Array<Class<Dynamic>> = [
 		//
-		examples.ExAll,
-		//
-		examples.ExCircles,
-		//
-		examples.ExRectangle,
-		//
-		examples.ExLine,
-		examples.ExImage,
+		examples.ExAll, //
+		examples.ExCircles, //
+		examples.ExRectangle, //
+		examples.ExLine, //
+		examples.ExImage, //
+		examples.ExGui,
 	];
 
 	public function new() {
