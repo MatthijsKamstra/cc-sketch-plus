@@ -94,18 +94,23 @@ class Rectangle extends Base implements IBase {
 			ctx.setLineDash(this.dash);
 		}
 
+		trace(this.rotate, this.move);
+
 		ctx.beginPath();
 		// rotation & move...
-		if (this.rotate != null) {
+		if (this.rotate != null && this.move == null) {
 			// trace(this.x, this.y, this.rotate);
+
+			trace('rotate but not move');
+
 			ctx.save();
 
 			ctx.translate(this.xpos, this.ypos);
 			ctx.rotate(MathUtil.radians(this.rotate));
 
-			if (this.move != null) {
-				ctx.translate(this.move.x, this.move.y);
-			}
+			// if (this.move != null) {
+			// 	ctx.translate(this.move.x, this.move.y);
+			// }
 
 			// if (isCenter) {
 			// 	ctx.rect(this.xpos, this.ypos, this.width, this.height);
@@ -119,11 +124,8 @@ class Rectangle extends Base implements IBase {
 			ctx.restore();
 		}
 
-		if (this.rotate == null) {
-			buildCanvasShape(ctx);
-		}
-
-		if (this.move != null) {
+		if (this.move != null && this.rotate == null) {
+			trace('move but not rotate');
 			ctx.save();
 			ctx.translate(this.xpos, this.ypos);
 
@@ -134,12 +136,15 @@ class Rectangle extends Base implements IBase {
 			ctx.restore();
 		}
 
+		if (this.rotate == null && this.move == null) {
+			buildCanvasShape(ctx);
+		}
 		/**
-			 		ctx.translate(x, y);
+			ctx.translate(x, y);
 			ctx.rotate(MathUtil.radians(180));
 			fillTriangle(ctx, 0, 0 - sz, 0 + sz, 0 + sz / 2, 0 - sz, 0 + sz / 2);
-			ctx.rotate(MathUtil.radians(-180));
-			ctx.translate(-x, -y);
+						ctx.rotate(MathUtil.radians(-180));
+						ctx.translate(-x, -y);
 		 */
 
 		if (this.fill != null) {
