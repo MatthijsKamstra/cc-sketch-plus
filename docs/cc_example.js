@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 22:44:49");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 22:57:44");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -1385,6 +1385,96 @@ examples_ExLine.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExLine
+};
+var examples_ExPolyline = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.radiusSmall = 50;
+	this.init();
+};
+$hxClasses["examples.ExPolyline"] = examples_ExPolyline;
+examples_ExPolyline.__name__ = "examples.ExPolyline";
+examples_ExPolyline.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = sketcher_util_MathUtil.circumferenceCircle(this.radiusSmall);
+		var sides_0 = 0;
+		var sides_1 = 100;
+		var sides_2 = 50;
+		var sides_3 = 25;
+		var sides_4 = 50;
+		var sides_5 = 75;
+		var sides_6 = 100;
+		var sides_7 = 0;
+		var p = this.grid.array[0];
+		var shape = sketch.makePolyLine(this.getSides(p));
+		var p1 = this.grid.array[1];
+		var shape1 = sketch.makePolyLine(this.getSides(p1));
+		shape1.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		var p2 = this.grid.array[2];
+		var shape2 = sketch.makePolyLine(this.getSides(p2));
+		shape2.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_HOT));
+		shape2.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		var p3 = this.grid.array[3];
+		var shape3 = sketch.makePolyLine(this.getSides(p3));
+		shape3.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_HOT));
+		shape3.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		shape3.set_strokeWeight(5);
+		var p4 = this.grid.array[4];
+		var shape4 = sketch.makePolyLine(this.getSides(p4));
+		shape4.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_HOT));
+		shape4.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		shape4.set_strokeWeight(5);
+		shape4.set_dash([10,20]);
+		var p5 = this.grid.array[5];
+		var shape5 = sketch.makePolyLine(this.getSides(p5));
+		shape5.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_HOT));
+		shape5.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		shape5.set_strokeWeight(5);
+		shape5.set_dash([10,20]);
+		shape5.set_lineCap("round");
+		sketch.update();
+	}
+	,getSides: function(p) {
+		var sides = [p.x,p.y + 100,p.x + 50,p.y + 25,p.x + 50,p.y + 75,p.x + 100,p.y];
+		return sides;
+	}
+	,__class__: examples_ExPolyline
 };
 var examples_ExRectangle = function() {
 	this.isDebug = true;
