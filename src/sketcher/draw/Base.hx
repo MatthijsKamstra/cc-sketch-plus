@@ -95,6 +95,9 @@ class Base {
 	/**
 	 * if you really want to change the postions use this .. not rotate
 	 *
+	 * might be more clever... it's not really the new position, but the original postion with val
+	 * MOVE?
+	 *
 	 * @param x			new position x
 	 * @param y   		(optional) new position y
 	 */
@@ -108,6 +111,14 @@ class Base {
 			str += ',${y}';
 		str += ')';
 		transArr.push(str);
+	}
+
+	public function setMove(x:Float, ?y:Float) {
+		setPosition(x, y);
+	}
+
+	public function setPlusPosition(x:Float, ?y:Float) {
+		setPosition(x, y);
 	}
 
 	/**
