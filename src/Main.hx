@@ -20,6 +20,7 @@ class Main {
 		examples.ExText, //
 		examples.ExEllipse, //
 		examples.ExGradient, //
+		examples.ExPolyline, //
 	];
 
 	public function new() {
