@@ -124,7 +124,17 @@ class ExPolyline {
 		shape.lineCap = LineCap.Round;
 		shape.lineJoin = LineJoin.Round;
 
+		var p = grid.array[8];
+		var shape = sketch.makePolyLine(getSides(p));
+		shape.fillOpacity = 0;
+		shape.strokeColor = getColourObj(LIME);
+		shape.strokeWeight = 10;
+		shape.lineCap = LineCap.Round;
+		shape.lineJoin = LineJoin.Round;
+		shape.setRotate(45, p.x, p.y);
+
 		// Don't forget to tell two to render everything to the screen
+
 		sketch.update();
 	}
 

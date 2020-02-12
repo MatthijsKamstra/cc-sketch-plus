@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil;
 import sketcher.AST.Point;
 import sketcher.draw.AST.LineCap;
@@ -63,11 +64,13 @@ class PolyLine extends Base implements IBase {
 
 		ctx.beginPath();
 
-		var _pointArray = convertArr();
-		// trace(this.pointArray);
-		// trace('----');
-		// trace(_pointArray);
+		// if (this.rotate != null) {
+		// 	ctx.save();
+		// 	ctx.translate(this.x, this.y);
+		// 	ctx.rotate(MathUtil.radians(this.rotate));
+		// }
 
+		var _pointArray = convertArr();
 		for (i in 0..._pointArray.length) {
 			var p = _pointArray[i];
 			if (i == 0) {
@@ -76,6 +79,10 @@ class PolyLine extends Base implements IBase {
 				ctx.lineTo(p.x, p.y);
 			}
 		}
+
+		// if (this.rotate != null) {
+		// 	ctx.restore();
+		// }
 
 		if (this.fill != null) {
 			ctx.fill();

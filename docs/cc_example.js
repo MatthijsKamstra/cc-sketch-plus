@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-12 00:11:22");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-12 18:10:39");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -1481,6 +1481,14 @@ examples_ExPolyline.prototype = {
 		shape7.set_strokeWeight(10);
 		shape7.set_lineCap("round");
 		shape7.set_lineJoin("round");
+		var p8 = this.grid.array[8];
+		var shape8 = sketch.makePolyLine(this.getSides(p8));
+		shape8.set_fillOpacity(0);
+		shape8.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		shape8.set_strokeWeight(10);
+		shape8.set_lineCap("round");
+		shape8.set_lineJoin("round");
+		shape8.setRotate(45,p8.x,p8.y);
 		sketch.update();
 	}
 	,getSides: function(p) {
@@ -3735,10 +3743,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
