@@ -7,10 +7,13 @@ import sketcher.draw.*;
 import sketcher.AST.Point;
 
 class Sketcher {
-	var settings:Settings;
-	// var paper:Dynamic;
 	var element:js.html.Element;
 	var baseArray:Array<IBase> = [];
+
+	/**
+	 * read the settings if needed
+	 */
+	public var settings:Settings;
 
 	/**
 	 * canvas used for graphics
