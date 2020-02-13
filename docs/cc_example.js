@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 10:57:41");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 11:08:10");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -190,12 +190,12 @@ var Sketcher = function(settings) {
 	}
 	if(settings.get_scale() == true) {
 		var node = window.document.createElement("style");
-		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%;\n\n    height: 100%;\n    padding: 0;\n    margin: 0;\n    display: flex;\n    align-items: center;\n\tjustify-content: center;\n\t\t}\n\n\t\t\tsvg {width: 100%; height: 100%;}\n\t\t\tcanvas{width: 100%; height: 100%;}\n\t\t\t";
+		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {width: 100%; height: 100%;}\n\t\t\tcanvas{width: 100%; height: 100%;}\n\t\t\t";
 		window.document.body.appendChild(node);
 	}
 	if(settings.get_padding() != null && settings.get_padding() > 0) {
 		var node1 = window.document.createElement("style");
-		node1.innerHTML = "svg {margin: " + settings.get_padding() + "px; }\ncanvas {margin: " + settings.get_padding() + "px; }";
+		node1.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {margin: " + settings.get_padding() + "px;}\n\t\t\tcanvas {margin: " + settings.get_padding() + "px;}\n\t\t\t";
 		window.document.body.appendChild(node1);
 	}
 };
@@ -232,7 +232,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:105:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("src/Sketcher.hx:99:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
 	}
@@ -454,7 +454,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:530:","webgl");
+			console.log("src/Sketcher.hx:524:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -467,7 +467,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:539:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:533:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -1606,7 +1606,7 @@ examples_ExRectangle.prototype = {
 	,__class__: examples_ExRectangle
 };
 var examples_ExText = function() {
-	this.fontFamly = "Lobster";
+	this.fontFamly = "Oswald:200,300,400,500,600,700";
 	this.isDebug = true;
 	this.sketchHeight = 400;
 	this.sketchWidth = 600;
@@ -4049,6 +4049,7 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		return this.fontFamily;
 	}
 	,set_fontFamily: function(value) {
+		value = StringTools.replace(value,"+"," ").split(":")[0];
 		this.xml.set("font-family",value);
 		return this.fontFamily = value;
 	}

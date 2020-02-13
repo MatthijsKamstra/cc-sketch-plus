@@ -161,6 +161,10 @@ class Text extends Base implements IBase {
 		if (this.fontSize == null) {
 			this.fontSize = '16px';
 		}
+
+		if (this.fontSizePx != null) {
+			this.fontSize = '${this.fontSizePx}';
+		}
 		// trace(this.fontFamily);
 		// trace(this.fontSize);
 
