@@ -155,6 +155,17 @@ class Base {
 		return str;
 	}
 
+	public function noStroke() {
+		this.lineWeight = 0;
+		this.strokeColor = 'transparant';
+		this.strokeOpacity = 0;
+	}
+
+	public function noFill() {
+		this.fillOpacity = 0;
+		this.fillColor = 'transparant';
+	}
+
 	public function clone():Base {
 		trace("WIP");
 		return cast(haxe.Json.parse(haxe.Json.stringify(this)), Base);

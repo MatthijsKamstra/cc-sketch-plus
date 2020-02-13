@@ -18,11 +18,6 @@ class Circle extends Base implements IBase {
 		// this.dash = []; // reset the dash for canvas?
 	}
 
-	public function noStroke() {
-		this.lineWeight = 0;
-		this.stroke = 'transparant';
-	}
-
 	public function svg(?settings:Settings):String {
 		// var xml = Xml.createElement('circle');
 		xml.set('cx', Std.string(this.x));

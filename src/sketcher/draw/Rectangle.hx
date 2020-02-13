@@ -47,11 +47,6 @@ class Rectangle extends Base implements IBase {
 		super('rect');
 	}
 
-	public function noStroke() {
-		this.lineWeight = 0;
-		this.strokeOpacity = 0;
-	}
-
 	public function svg(?settings:Settings):String {
 		xml.set('x', Std.string(this.xpos));
 		xml.set('y', Std.string(this.ypos));
