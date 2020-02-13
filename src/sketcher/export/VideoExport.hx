@@ -1,5 +1,6 @@
 package sketcher.export;
 
+import sketcher.export.FileExport.ExportFile;
 import js.html.audio.AudioContext;
 import js.html.CanvasElement;
 import js.html.AudioElement;
@@ -15,6 +16,7 @@ class VideoExport {
 	// preview/download (usefull but not needed)
 	var videoEl:VideoElement;
 	var downloadButtonEl:AnchorElement;
+	var bashButtonEl:AnchorElement;
 	// record video/audio stream into one
 	var options:MediaRecorderOptions;
 	var audioRecorder:MediaRecorder;
@@ -29,6 +31,7 @@ class VideoExport {
 	 * 			// videoExport.setSvg(mysvg);
 	 * 			videoExport.setAudio(myaudio);
 	 * 			videoExport.setDownload(myanchorbutton); // optional
+	 * 			// videoExport.setBash(myanchorbutton); // optional
 	 * 			videoExport.setVideo(mypreviewvideo); // optional
 	 * 			videoExport.setup(); // activate everything
 	 */
@@ -62,6 +65,11 @@ class VideoExport {
 	public function setDownload(downloadButton:AnchorElement):Void {
 		this.downloadButtonEl = downloadButton;
 		this.downloadButtonEl.classList.add('disabled');
+	}
+
+	public function setBash(bashloadButton:AnchorElement):Void {
+		this.bashButtonEl = bashloadButton;
+		this.bashButtonEl.classList.add('disabled');
 	}
 
 	public function setOptions(options:MediaRecorderOptions):Void {
@@ -206,22 +214,8 @@ class VideoExport {
 			// console.warn('No videoEl is not created yet');
 		}
 		var filename = 'RecordedVideo_${Date.now().getTime()}';
-		if (downloadButtonEl != null) {
-			downloadButtonEl.href = videoUrl;
-			downloadButtonEl.download = '$filename.webm';
-			downloadButtonEl.classList.remove('disabled');
-		} else {
-			// console.warn('No downloadButtonEl is not created yet');
-			var d = document.createAnchorElement();
-			d.setAttribute('style', 'padding:10px; margin:10px; background-color:silver;');
-			d.innerText = 'Download: $filename.webm (${blob.size} bytes)';
-			d.href = videoUrl;
-			d.download = '$filename.webm';
-			d.classList.remove('disabled');
-			document.body.appendChild(d);
-		}
-		console.info("Successfully recorded " + blob.size + " bytes of " + blob.type + " media.");
-		console.warn('#!/bin/bash'
+		var btnStyle = 'color:black; padding:10px; margin:10px; background-color:silver;display: inline-block;font-weight: 400;text-align: center;white-space: nowrap;vertical-align: middle;';
+		var bash = ('#!/bin/bash'
 			+ '\n\n'
 			+ '# [mck] for now just convert to mp4 seems the best solution'
 			+ '\n\n'
@@ -234,5 +228,35 @@ class VideoExport {
 			+ 'ffmpeg -y -r 30 -i ${filename}.mp4 -c:v libx264 -strict -2 -pix_fmt yuv420p -shortest -filter:v "setpts=0.5*PTS" ${filename}_30fps_inputmp4.mp4'
 			+ '\n'
 			+ 'say "end convert webm to mp4"');
+		if (downloadButtonEl != null) {
+			downloadButtonEl.href = videoUrl;
+			downloadButtonEl.download = '$filename.webm';
+			downloadButtonEl.classList.remove('disabled');
+		} else {
+			// console.warn('No downloadButtonEl is not created yet');
+			var d = document.createAnchorElement();
+			d.setAttribute('style', btnStyle);
+			d.innerText = 'Download: $filename.webm (${blob.size} bytes)';
+			d.href = videoUrl;
+			d.download = '$filename.webm';
+			d.classList.remove('disabled');
+			document.body.appendChild(d);
+		}
+		// text file
+		if (bashButtonEl != null) {
+			bashButtonEl.href = ExportFile.convertStr2Href(bash);
+			bashButtonEl.download = '$filename.sh';
+			bashButtonEl.classList.remove('disabled');
+		} else {
+			// console.warn('No bashButtonEl is not created yet');
+			var d = document.createAnchorElement();
+			d.setAttribute('style', btnStyle);
+			d.innerText = 'Bash: $filename.sh';
+			d.href = ExportFile.convertStr2Href(bash);
+			d.download = '$filename.sh';
+			d.classList.remove('disabled');
+			document.body.appendChild(d);
+		}
+		console.info("Successfully recorded " + blob.size + " bytes of " + blob.type + " media.");
 	}
 }
