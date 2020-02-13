@@ -44,8 +44,7 @@ class Group extends Base implements IBase {
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
-			console.warn('The Group (${id}) changes like transforms/etc. doesn\'t work for canvas (yet)');
-			console.groupCollapsed('Group (${id})');
+			console.groupCollapsed('Group (${id}) info canvas');
 			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight');
 			console.groupEnd();
 			Group.ISWARN = true;
