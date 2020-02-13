@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 11:08:10");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 19:49:48");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -454,7 +454,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:524:","webgl");
+			console.log("src/Sketcher.hx:530:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -467,7 +467,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:533:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:539:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -2922,10 +2922,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3094,8 +3094,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,ctx: function(ctx) {
 		if(!sketcher_draw_Group.ISWARN) {
-			window.console.warn("The Group (" + this.get_id() + ") changes like transforms/etc. doesn't work for canvas (yet)");
-			window.console.groupCollapsed("Group (" + this.get_id() + ")");
+			window.console.groupCollapsed("Group (" + this.get_id() + ") info canvas");
 			window.console.info("the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight");
 			window.console.groupEnd();
 			sketcher_draw_Group.ISWARN = true;
@@ -3133,7 +3132,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.set_strokeOpacity(0);
 	}
 	,test: function() {
-		console.log("src/sketcher/draw/Group.hx:91:","test if casting works");
+		console.log("src/sketcher/draw/Group.hx:90:","test if casting works");
 	}
 	,get_arr: function() {
 		return this.arr;
@@ -3336,10 +3335,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3743,10 +3742,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3955,6 +3954,9 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		}
 		if(this.get_fontSize() == null) {
 			this.set_fontSize("16px");
+		}
+		if(this.get_fontSizePx() != null) {
+			this.set_fontSize("" + this.get_fontSizePx());
 		}
 		var _css = "";
 		var _font = StringTools.ltrim("" + _css + " " + Std.parseInt(this.get_fontSize()) + "px " + this.get_fontFamily());
@@ -4303,6 +4305,14 @@ sketcher_util_EmbedUtil.bootstrap = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-jquery","https://code.jquery.com/jquery-3.4.1.slim.min.js","sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n");
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-popper","https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js","sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo");
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-bootstrap","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js","sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6");
+};
+sketcher_util_EmbedUtil.zip = function(callback,callbackArray) {
+	if(!sketcher_util_EmbedUtil.check("jszip")) {
+		sketcher_util_EmbedUtil.script("jszip","https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js",callback,["jszip"]);
+	}
+	if(!sketcher_util_EmbedUtil.check("jsfilesaver")) {
+		sketcher_util_EmbedUtil.script("jsfilesaver","https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js",callback,["jsfilesaver"]);
+	}
 };
 sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray) {
 	var _id = "embededGoogleFonts";
