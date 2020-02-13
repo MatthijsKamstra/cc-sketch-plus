@@ -20,7 +20,8 @@ class ExText {
 	//
 	var isDebug:Bool = true;
 
-	var fontFamly = 'Lobster';
+	// var fontFamly = 'Lobster';
+	var fontFamly = 'Oswald:200,300,400,500,600,700';
 
 	public function new() {
 		EmbedUtil.embedGoogleFont(fontFamly, init);
