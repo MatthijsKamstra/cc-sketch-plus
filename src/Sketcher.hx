@@ -17,7 +17,7 @@ class Sketcher {
 	 */
 	public var canvas:js.html.CanvasElement;
 
-	// canvan context
+	// canvas context
 	public static var ctx:js.html.CanvasRenderingContext2D;
 
 	// webgl?
@@ -270,7 +270,7 @@ class Sketcher {
 	 *
 	 * @example 	var polyline = sketch.makePolyLine([10,11,20,21]);
 	 *
-	 * @param sides			an array of x and y position
+	 * @param sides			array of x and y position (uneven numbers are x, even number are y)
 	 * @return PolyLine
 	 */
 	public function makePolyLine(sides:Array<Float>):PolyLine {
@@ -283,7 +283,13 @@ class Sketcher {
 	 * Create polyline with an array of points ( {x:22, y:33} )
 	 * (it's syntatic sugar for makePolyLine)
 	 *
-	 * @param sides		an array of points [{x:22, y:33}]
+	 * @example
+	 *			var polyline = sketch.makePolyLinePoint(_pointArray);
+	 *			polyline.strokeWeight = 1;
+	 *			polyline.strokeColor = getColourObj(_color1);
+	 *			polyline.fillOpacity = 0;
+	 *
+	 * @param sides		array of points [{x:22, y:33}]
 	 * @return polyline
 	 */
 	public function makePolyLinePoint(sides:Array<Point>):PolyLine {
