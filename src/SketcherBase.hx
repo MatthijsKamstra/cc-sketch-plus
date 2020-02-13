@@ -25,12 +25,23 @@ class SketcherBase {
 		if (isDebug)
 			trace('START :: ${toString()}');
 
+		if (settings == null) {
+			// use default settings
+			var stageW = 1080; // 1024; // video?
+			var stageH = 1080; // 1024; // video?
+			settings = new Settings(stageW, stageH, 'canvas');
+			settings.autostart = true;
+			settings.padding = 10;
+			settings.scale = false;
+			settings.elementID = 'sketcher-canvas-wrapper';
+		}
 		// trace('${settings}');
 
 		if (settings != null && settings.element != null)
 			trace(settings.element);
 
 		if (settings.elementID != null && document.getElementById(settings.elementID) == null) {
+			// check if html document has this settings.elementID, if not create one
 			var div0 = document.createDivElement();
 			div0.id = '${settings.elementID}';
 			div0.className = 'sketcher-wrapper ${settings.type}-wrapper';

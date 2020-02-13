@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-12 18:10:39");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 10:57:41");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -190,12 +190,12 @@ var Sketcher = function(settings) {
 	}
 	if(settings.get_scale() == true) {
 		var node = window.document.createElement("style");
-		node.innerHTML = "svg {width: 100%; height: 100%;}";
+		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%;\n\n    height: 100%;\n    padding: 0;\n    margin: 0;\n    display: flex;\n    align-items: center;\n\tjustify-content: center;\n\t\t}\n\n\t\t\tsvg {width: 100%; height: 100%;}\n\t\t\tcanvas{width: 100%; height: 100%;}\n\t\t\t";
 		window.document.body.appendChild(node);
 	}
 	if(settings.get_padding() != null && settings.get_padding() > 0) {
 		var node1 = window.document.createElement("style");
-		node1.innerHTML = "svg {margin: " + settings.get_padding() + "px; }";
+		node1.innerHTML = "svg {margin: " + settings.get_padding() + "px; }\ncanvas {margin: " + settings.get_padding() + "px; }";
 		window.document.body.appendChild(node1);
 	}
 };
@@ -232,7 +232,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:91:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("src/Sketcher.hx:105:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
 	}
@@ -454,7 +454,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:516:","webgl");
+			console.log("src/Sketcher.hx:530:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -467,7 +467,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:525:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:539:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -2922,10 +2922,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3336,10 +3336,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;

@@ -45,13 +45,21 @@ class Sketcher {
 
 		if (settings.scale == true) {
 			var node = document.createElement('style');
-			node.innerHTML = 'svg {width: 100%; height: 100%;}';
+			node.innerHTML = '
+			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
+			svg {width: 100%; height: 100%;}
+			canvas{width: 100%; height: 100%;}
+			';
 			document.body.appendChild(node);
 		}
 
 		if (settings.padding != null && settings.padding > 0) {
 			var node = document.createElement('style');
-			node.innerHTML = 'svg {margin: ${settings.padding}px; }';
+			node.innerHTML = '
+			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
+			svg {margin: ${settings.padding}px;}
+			canvas {margin: ${settings.padding}px;}
+			';
 			document.body.appendChild(node);
 		}
 	}
