@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 19:49:48");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-13 22:19:29");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -2626,8 +2626,17 @@ sketcher_draw_Base.prototype = {
 		}
 		return str;
 	}
+	,noStroke: function() {
+		this.set_lineWeight(0);
+		this.set_strokeColor("transparant");
+		this.set_strokeOpacity(0);
+	}
+	,noFill: function() {
+		this.set_fillOpacity(0);
+		this.set_fillColor("transparant");
+	}
 	,clone: function() {
-		console.log("src/sketcher/draw/Base.hx:159:","WIP");
+		console.log("src/sketcher/draw/Base.hx:170:","WIP");
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
 	}
 	,convertID: function(id) {
@@ -2855,11 +2864,7 @@ sketcher_draw_Circle.__name__ = "sketcher.draw.Circle";
 sketcher_draw_Circle.__interfaces__ = [sketcher_draw_IBase];
 sketcher_draw_Circle.__super__ = sketcher_draw_Base;
 sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
-	noStroke: function() {
-		this.set_lineWeight(0);
-		this.set_stroke("transparant");
-	}
-	,svg: function(settings) {
+	svg: function(settings) {
 		this.xml.set("cx",Std.string(this.get_x()));
 		this.xml.set("cy",Std.string(this.get_y()));
 		this.xml.set("r",Std.string(this.get_radius()));
@@ -2965,7 +2970,7 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 	,gl: function(gl) {
 	}
 	,debug: function() {
-		console.log("src/sketcher/draw/Circle.hx:106:","" + this.toString());
+		console.log("src/sketcher/draw/Circle.hx:101:","" + this.toString());
 	}
 	,get_radius: function() {
 		return this.radius;
@@ -3673,11 +3678,7 @@ sketcher_draw_Rectangle.__name__ = "sketcher.draw.Rectangle";
 sketcher_draw_Rectangle.__interfaces__ = [sketcher_draw_IBase];
 sketcher_draw_Rectangle.__super__ = sketcher_draw_Base;
 sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
-	noStroke: function() {
-		this.set_lineWeight(0);
-		this.set_strokeOpacity(0);
-	}
-	,svg: function(settings) {
+	svg: function(settings) {
 		this.xml.set("x",Std.string(this.xpos));
 		this.xml.set("y",Std.string(this.ypos));
 		this.xml.set("width",Std.string(this.get_width()));

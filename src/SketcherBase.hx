@@ -3,10 +3,11 @@ package;
 import Sketcher.Globals.*;
 import js.Browser.*;
 import js.html.*;
-import js.html.MouseEvent;
 import js.html.CanvasElement;
+import js.html.MouseEvent;
+import sketcher.export.FileExport;
 
-// import cc.tool.ExportFile;
+using StringTools;
 
 /**
  * Use extends SketchBase to create a quick base to work with
@@ -15,6 +16,11 @@ class SketcherBase {
 	public var isDrawActive:Bool = true;
 	public var isDebug:Bool = false;
 
+	// only usefull for filename
+	public var patternName = "";
+	public var description = "";
+
+	// public
 	public var sketch:Sketcher;
 
 	/**
@@ -68,6 +74,58 @@ class SketcherBase {
 	// ____________________________________ private ____________________________________
 	// track key functions
 	function _keyDown(e:js.html.KeyboardEvent) {
+		console.groupCollapsed("Default cc-sketcher keyboard shortcuts are activated");
+		console.info('- [cmd + r] = reload page\n- [cmd + s] = save jpg\n- [cmd + shift + s] = save png\n- [cmd + ctrl + s] = save transparant png\n- [cmd + alt + s] = save svg');
+		console.groupEnd();
+		// console.log(e);
+		// console.log('ctrl: ' + e.ctrlKey);
+		// console.log('meta: ' + e.metaKey);
+		if (e.metaKey == true && e.key == 'r') {
+			trace('cmd + r');
+			// reload
+			location.reload();
+		}
+		if (e.metaKey == true && e.key == 's' && e.shiftKey == false && e.ctrlKey == false) {
+			e.preventDefault();
+			e.stopPropagation();
+			trace('cmd + s');
+			// jpg
+			// ExportFile.downloadImageBg(ctx, true); // jpg
+			// svg2Canvas(getSvg(), true, getFileName());
+		}
+		if (e.metaKey == true && e.key == 's' && e.shiftKey == true) {
+			e.preventDefault();
+			e.stopPropagation();
+			trace('cmd + shift + s');
+			// png
+			// svg2Canvas(getSvg(), false, getFileName());
+		}
+		if (e.metaKey == true && e.key == 's' && e.ctrlKey == true) {
+			e.preventDefault();
+			e.stopPropagation();
+			trace('cmd + ctrl + s');
+			// png transparant
+			// svg2Canvas(getSvg(), false, getFileName(), true);
+		}
+		if (e.metaKey == true && untyped e.code == 'KeyS' && e.altKey == true) {
+			e.preventDefault();
+			e.stopPropagation();
+			trace('cmd + alt + s');
+			// svg
+			// ExportFile.onBase64Handler(ctx, true);
+			// downloadTextFile(getSvg().outerHTML, '${getFileName()}.svg');
+			// sketch.getSVG()
+		}
+
+		if (e.metaKey == true && e.key == 'f') {
+			if (!isFullscreen) {
+				openFullscreen();
+				isFullscreen = true;
+			} else {
+				closeFullscreen();
+				isFullscreen = false;
+			}
+		}
 		switch (e.key) {
 			case ' ':
 				draw();
@@ -157,6 +215,37 @@ class SketcherBase {
 		// }
 	}
 
+	// ____________________________________ handlers ____________________________________
+
+	/* View in fullscreen */
+	function openFullscreen() {
+		var elem = document.documentElement;
+		if (elem.requestFullscreen != null) {
+			elem.requestFullscreen();
+		} else if (untyped elem.mozRequestFullScreen) { /* Firefox */
+			untyped elem.mozRequestFullScreen();
+		} else if (untyped elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+			untyped elem.webkitRequestFullscreen();
+		} else if (untyped elem.msRequestFullscreen) { /* IE/Edge */
+			untyped elem.msRequestFullscreen();
+		}
+	}
+
+	/* Close fullscreen */
+	function closeFullscreen() {
+		if (document.exitFullscreen != null) {
+			document.exitFullscreen();
+		} else if (untyped document.mozCancelFullScreen) { /* Firefox */
+			untyped document.mozCancelFullScreen();
+		} else if (untyped document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+			untyped document.webkitExitFullscreen();
+		} else if (untyped document.msExitFullscreen) { /* IE/Edge */
+			untyped document.msExitFullscreen();
+		}
+	}
+
+	// ____________________________________ getter/setter ____________________________________
+
 	/**
 	 * shorthand to get half `w` (width of canvas)
 	 */
@@ -211,10 +300,21 @@ class SketcherBase {
 		return h / 3;
 	}
 
+	// ____________________________________ misc ____________________________________
+
+	function getFileName():String {
+		if (patternName == "" && description == "") {
+			patternName = 'CC-Sketcher - MatthijsKamstra';
+		} else if (patternName == "" && description != "") {
+			patternName = description;
+		}
+		return '${patternName.replace(' ', '_')}-${Date.now().getTime()}';
+	}
+
 	/**
 	 * Get className, with package
 	 * @example:
-	 * 		trace(toString()); // this file would be "art.CCBase"
+	 * 		trace(toString()); // this file would be "SketcherBase"
 	 */
 	public function toString() {
 		var className = Type.getClassName(Type.getClass(this));
