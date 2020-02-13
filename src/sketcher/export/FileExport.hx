@@ -7,7 +7,7 @@ import js.html.CanvasRenderingContext2D;
 
 using StringTools;
 
-class ExportFile {
+class FileExport {
 	/**
 	 * probably only for webgl
 	 * @param domElement
@@ -24,11 +24,42 @@ class ExportFile {
 			imgData = domElement.toDataURL(strMime);
 			console.log(imgData);
 
-			ExportFile.saveFile(imgData.replace(strMime, strDownloadMime), fileName + '.${ext}');
+			FileExport.saveFile(imgData.replace(strMime, strDownloadMime), fileName + '.${ext}');
 		} catch (e:Dynamic) {
 			console.log("Browser does not support taking screenshot of 3d context");
 			return;
 		}
+	}
+
+	/**
+	 * [Description]
+	 * @param svg				source
+	 * @param isJpg				is this a jpg (or png)
+	 * @param filename			file name
+	 * @param isTransparant		only usefull when using png
+	 */
+	public static function svg2Canvas(?svg:js.html.svg.SVGElement, isJpg:Bool = true, filename:String, isTransparant:Bool = false) {
+		var svgW = Std.parseInt(svg.getAttribute('width'));
+		var svgH = Std.parseInt(svg.getAttribute('height'));
+
+		var canvas = document.createCanvasElement();
+		var ctx = canvas.getContext2d();
+		canvas.width = svgW;
+		canvas.height = svgH;
+
+		var image = new js.html.Image();
+		image.onload = function() {
+			// downloadImageBg doesn't work... so just fix it here
+			// jpg image has a white background, png can be transparant
+			if (isJpg) {
+				ctx.fillStyle = "white";
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+			}
+			ctx.drawImage(image, 0, 0, svgW, svgH);
+			FileExport.downloadImageBg(ctx, isJpg, filename, isTransparant);
+		}
+		image.src = 'data:image/svg+xml,${svg.outerHTML}'; // might need to base
+		// document.body.appendChild(canvas);
 	}
 
 	public static function saveFile(strData:String, fileName:String) {
@@ -74,7 +105,7 @@ class ExportFile {
 
 	/**
 	 * Start file download.
-	 * cc.tool.ExportFile.downloadTextFile("This is the content of my file :)", "hello.txt");
+	 * cc.tool.FileExport.downloadTextFile("This is the content of my file :)", "hello.txt");
 	 *
 	 * @param text
 	 * @param fileName
@@ -206,6 +237,6 @@ class ExportFile {
 	// ____________________________________ toString() ____________________________________
 
 	function toString():String {
-		return '[ExportFile]';
+		return '[FileExport]';
 	}
 }
