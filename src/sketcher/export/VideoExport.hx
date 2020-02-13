@@ -1,6 +1,6 @@
 package sketcher.export;
 
-import sketcher.export.FileExport.ExportFile;
+import sketcher.export.FileExport;
 import js.html.audio.AudioContext;
 import js.html.CanvasElement;
 import js.html.AudioElement;
@@ -244,7 +244,7 @@ class VideoExport {
 		}
 		// text file
 		if (bashButtonEl != null) {
-			bashButtonEl.href = ExportFile.convertStr2Href(bash);
+			bashButtonEl.href = FileExport.convertStr2Href(bash);
 			bashButtonEl.download = '$filename.sh';
 			bashButtonEl.classList.remove('disabled');
 		} else {
@@ -252,7 +252,7 @@ class VideoExport {
 			var d = document.createAnchorElement();
 			d.setAttribute('style', btnStyle);
 			d.innerText = 'Bash: $filename.sh';
-			d.href = ExportFile.convertStr2Href(bash);
+			d.href = FileExport.convertStr2Href(bash);
 			d.download = '$filename.sh';
 			d.classList.remove('disabled');
 			document.body.appendChild(d);
