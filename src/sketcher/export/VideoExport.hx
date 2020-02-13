@@ -105,7 +105,7 @@ class VideoExport {
 	// ____________________________________ setup controle Audio ____________________________________
 
 	function startRecording() {
-		console.info('startRecording');
+		// console.info('startRecording');
 		if (audioRecorder != null)
 			audioRecorder.start();
 		videoRecorder.start();
@@ -113,7 +113,7 @@ class VideoExport {
 	}
 
 	function stopRecording() {
-		console.info('stopRecording');
+		// console.info('stopRecording');
 		if (audioRecorder != null)
 			audioRecorder.stop();
 		videoRecorder.stop();
@@ -211,7 +211,14 @@ class VideoExport {
 			downloadButtonEl.download = '$filename.webm';
 			downloadButtonEl.classList.remove('disabled');
 		} else {
-			console.warn('No downloadButtonEl is not created yet');
+			// console.warn('No downloadButtonEl is not created yet');
+			var d = document.createAnchorElement();
+			d.setAttribute('style', 'padding:10px; margin:10px; background-color:silver;');
+			d.innerText = 'Download: $filename.webm (${blob.size} bytes)';
+			d.href = videoUrl;
+			d.download = '$filename.webm';
+			d.classList.remove('disabled');
+			document.body.appendChild(d);
 		}
 		console.info("Successfully recorded " + blob.size + " bytes of " + blob.type + " media.");
 		console.warn('#!/bin/bash'
