@@ -216,65 +216,65 @@ class Main {
 		var elem = document.getElementById(' sketcher - canvas - papertoys ');
 	}
 
-	function sketchDrips() {
-		var size = 500; // instagram 1080
-		var elem = document.getElementById(' sketcher - svg - drips ');
-		var params:Settings = new Settings(size, size, ' svg ');
-		// params.autostart = true;
-		params.padding = 10;
-		params.scale = true;
-		var sketch = Sketcher.create(params).appendTo(elem);
+	// function sketchDrips() {
+	// 	var size = 500; // instagram 1080
+	// 	var elem = document.getElementById(' sketcher - svg - drips ');
+	// 	var params:Settings = new Settings(size, size, ' svg ');
+	// 	// params.autostart = true;
+	// 	params.padding = 10;
+	// 	params.scale = true;
+	// 	var sketch = Sketcher.create(params).appendTo(elem);
 
-		var grid:GridUtil = new GridUtil();
-		grid.setIsCenterPoint(true);
-		grid.setNumbered(3, 3);
+	// 	var grid:GridUtil = new GridUtil();
+	// 	grid.setIsCenterPoint(true);
+	// 	grid.setNumbered(3, 3);
 
-		var circleRadius = 50;
+	// 	var circleRadius = 50;
 
-		for (k in 0...grid.array.length) {
-			// center point
-			var cp:cc.Point = grid.array[k];
-			sketch.makeX(Math.round(cp.x), Math.round(cp.y));
+	// 	for (k in 0...grid.array.length) {
+	// 		// center point
+	// 		var cp:cc.Point = grid.array[k];
+	// 		sketch.makeX(Math.round(cp.x), Math.round(cp.y));
 
-			// random biggest spatter
-			var randomCircleRadius = random(circleRadius / 2, circleRadius);
-			// for-ground
-			var circle = sketch.makeCircle(Math.round(cp.x), Math.round(cp.y), Math.round(randomCircleRadius));
-			circle.fill = ' black ';
-			circle.noStroke();
-			// border spatter
-			for (i in 0...10) {
-				var rp:cc.Point = {
-					x: cp.x + random(-randomCircleRadius, randomCircleRadius),
-					y: cp.y + random(-randomCircleRadius, randomCircleRadius)
-				};
-				var spatter = sketch.makeCircle(Math.round(rp.x), Math.round(rp.y), Math.round(random(randomCircleRadius / 2)));
-				spatter.fill = rgb(0); // ' black ';
-				spatter.noStroke();
-			}
-			// drip
-			for (j in 0...3) {
-				var dripWeight = randomInt(10, Math.round(randomCircleRadius / 2));
-				var rp:cc.Point = {
-					x: cp.x + random(-randomCircleRadius + dripWeight, randomCircleRadius - dripWeight),
-					y: cp.y + random(-randomCircleRadius + dripWeight, randomCircleRadius - dripWeight)
-				};
-				// drip line, straight down
-				var line = sketch.makeLine(Math.round(rp.x), Math.round(rp.y), Math.round(rp.x),
-					Math.round(rp.y + random(randomCircleRadius, randomCircleRadius + 100)));
-				line.lineCap = ' round '; // "butt|round|square";
-				line.stroke = rgb(0);
-				line.lineWeight = dripWeight;
-			}
-		}
+	// 		// random biggest spatter
+	// 		var randomCircleRadius = random(circleRadius / 2, circleRadius);
+	// 		// for-ground
+	// 		var circle = sketch.makeCircle(Math.round(cp.x), Math.round(cp.y), Math.round(randomCircleRadius));
+	// 		circle.fill = ' black ';
+	// 		circle.noStroke();
+	// 		// border spatter
+	// 		for (i in 0...10) {
+	// 			var rp:cc.Point = {
+	// 				x: cp.x + random(-randomCircleRadius, randomCircleRadius),
+	// 				y: cp.y + random(-randomCircleRadius, randomCircleRadius)
+	// 			};
+	// 			var spatter = sketch.makeCircle(Math.round(rp.x), Math.round(rp.y), Math.round(random(randomCircleRadius / 2)));
+	// 			spatter.fill = rgb(0); // ' black ';
+	// 			spatter.noStroke();
+	// 		}
+	// 		// drip
+	// 		for (j in 0...3) {
+	// 			var dripWeight = randomInt(10, Math.round(randomCircleRadius / 2));
+	// 			var rp:cc.Point = {
+	// 				x: cp.x + random(-randomCircleRadius + dripWeight, randomCircleRadius - dripWeight),
+	// 				y: cp.y + random(-randomCircleRadius + dripWeight, randomCircleRadius - dripWeight)
+	// 			};
+	// 			// drip line, straight down
+	// 			var line = sketch.makeLine(Math.round(rp.x), Math.round(rp.y), Math.round(rp.x),
+	// 				Math.round(rp.y + random(randomCircleRadius, randomCircleRadius + 100)));
+	// 			line.lineCap = ' round '; // "butt|round|square";
+	// 			line.stroke = rgb(0);
+	// 			line.lineWeight = dripWeight;
+	// 		}
+	// 	}
 
-		// draw
-		sketch.update();
-	}
+	// 	// draw
+	// 	sketch.update();
+	// }
 
-	function sketchDripsC() {
-		var elem = document.getElementById(' sketcher - canvas - drips ');
-	}
+	// function sketchDripsC() {
+	// 	var elem = document.getElementById(' sketcher - canvas - drips ');
+	// }
 
 	function sketchAnimation() {
 		var elem = document.getElementById(' sketcher - svg - animation ');
