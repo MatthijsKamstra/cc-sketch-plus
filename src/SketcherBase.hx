@@ -69,54 +69,85 @@ class SketcherBase {
 		_draw(); // start draw loop
 
 		// haxe.Timer.delay(function() {}, 500);
+		console.groupCollapsed("Default cc-sketcher keyboard shortcuts are activated");
+		console.info('• [cmd + r] = reload page\n• [cmd + s] = save jpg\n• [cmd + shift + s] = save png\n• [cmd + ctrl + s] = save transparant png\n• [cmd + alt + s] = save svg');
+		console.groupEnd();
 	}
 
 	// ____________________________________ private ____________________________________
 	// track key functions
 	function _keyDown(e:js.html.KeyboardEvent) {
-		console.groupCollapsed("Default cc-sketcher keyboard shortcuts are activated");
-		console.info('- [cmd + r] = reload page\n- [cmd + s] = save jpg\n- [cmd + shift + s] = save png\n- [cmd + ctrl + s] = save transparant png\n- [cmd + alt + s] = save svg');
-		console.groupEnd();
 		// console.log(e);
 		// console.log('ctrl: ' + e.ctrlKey);
 		// console.log('meta: ' + e.metaKey);
 		if (e.metaKey == true && e.key == 'r') {
-			trace('cmd + r');
+			console.log('[cmd + r] = reload page');
 			// reload
 			location.reload();
 		}
 		if (e.metaKey == true && e.key == 's' && e.shiftKey == false && e.ctrlKey == false) {
 			e.preventDefault();
 			e.stopPropagation();
-			trace('cmd + s');
+			console.log('[cmd + s] = save jpg');
 			// jpg
+			if (sketch.settings.type == 'svg') {
+				trace('svg-jpg');
+				FileExport.svg2Canvas(sketch.getSVGElement(), true, getFileName());
+				// FileExport.svg2Canvas(getSvg(), true, getFileName());
+			} else {
+				trace('canvas-jpg');
+				FileExport.downloadImageBg(sketch.canvas.getContext2d(), true, getFileName());
+			}
 			// ExportFile.downloadImageBg(ctx, true); // jpg
-			// svg2Canvas(getSvg(), true, getFileName());
 		}
 		if (e.metaKey == true && e.key == 's' && e.shiftKey == true) {
 			e.preventDefault();
 			e.stopPropagation();
-			trace('cmd + shift + s');
+			console.log('[cmd + shift + s] = save png');
 			// png
 			// svg2Canvas(getSvg(), false, getFileName());
+
+			if (sketch.settings.type == 'svg') {
+				trace('svg-png');
+				FileExport.svg2Canvas(sketch.getSVGElement(), false, getFileName());
+				// FileExport.svg2Canvas(getSvg(), true, getFileName());
+			} else {
+				trace('canvas-png');
+				FileExport.downloadImageBg(sketch.canvas.getContext2d(), false, getFileName());
+			}
 		}
 		if (e.metaKey == true && e.key == 's' && e.ctrlKey == true) {
 			e.preventDefault();
 			e.stopPropagation();
-			trace('cmd + ctrl + s');
+			console.log('[cmd + ctrl + s] = save transparant png');
 			// png transparant
 			// svg2Canvas(getSvg(), false, getFileName(), true);
+			if (sketch.settings.type == 'svg') {
+				trace('svg-png-transparant');
+				FileExport.svg2Canvas(sketch.getSVGElement(), false, getFileName(), true);
+				// FileExport.svg2Canvas(getSvg(), true, getFileName());
+			} else {
+				trace('canvas-png-transparant');
+				FileExport.downloadImageBg(sketch.canvas.getContext2d(), false, getFileName(), true);
+			}
 		}
 		if (e.metaKey == true && untyped e.code == 'KeyS' && e.altKey == true) {
 			e.preventDefault();
 			e.stopPropagation();
-			trace('cmd + alt + s');
+			console.log('[cmd + alt + s] = save svg');
 			// svg
 			// ExportFile.onBase64Handler(ctx, true);
 			// downloadTextFile(getSvg().outerHTML, '${getFileName()}.svg');
 			// sketch.getSVG()
+			if (sketch.settings.type == 'svg') {
+				trace('svg-text');
+				FileExport.downloadTextFile(sketch.svg, '${getFileName()}.svg');
+				// FileExport.svg2Canvas(sketch.getSVGElement(), false, getFileName(), true);
+				// FileExport.svg2Canvas(getSvg(), true, getFileName());
+			} else {
+				trace('no canvas-2-text');
+			}
 		}
-
 		if (e.metaKey == true && e.key == 'f') {
 			if (!isFullscreen) {
 				openFullscreen();
