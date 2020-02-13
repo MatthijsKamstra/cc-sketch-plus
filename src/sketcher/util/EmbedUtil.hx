@@ -203,6 +203,22 @@ class EmbedUtil {
 	}
 
 	/**
+	 * @example
+	 * 						sketcher.util.EmbedUtil.zip();
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 */
+	public static function zip(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		if (!EmbedUtil.check('jszip')) {
+			EmbedUtil.script('jszip', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js', callback, ['jszip']);
+		}
+		if (!EmbedUtil.check('jsfilesaver')) {
+			EmbedUtil.script('jsfilesaver', 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js', callback, ['jsfilesaver',]);
+		}
+	}
+
+	/**
 	 * [Description]
 	 *
 	 * @exampe
