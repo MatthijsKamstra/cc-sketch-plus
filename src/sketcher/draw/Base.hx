@@ -161,13 +161,14 @@ class Base {
 	 * quick way of setting strokeColor, strokeWeight and strokeOpacity
 	 *
 	 * @param color
-	 * @param weight
-	 * @param opacity
+	 * @param weight		default is 1
+	 * @param opacity		default is 1 otherwise a value between 0 and 1
 	 */
-	public function setStroke(color:String, weight:Float, ?opacity:Float = 1) {
+	public function setStroke(color:String, ?weight:Float = 1, ?opacity:Float = 1) {
 		this.strokeColor = color;
 		this.strokeWeight = weight;
 		this.strokeOpacity = opacity;
+		return this;
 	}
 
 	/**
@@ -177,17 +178,19 @@ class Base {
 		this.lineWeight = 0;
 		this.strokeColor = 'transparant';
 		this.strokeOpacity = 0;
+		return this;
 	}
 
 	/**
 	 * quick way of setting fillColor and fillOpacity
 	 *
 	 * @param color
-	 * @param opacity
+	 * @param opacity		default is 1 otherwise a value between 0 and 1
 	 */
 	public function setFill(color:String, ?opacity:Float = 1) {
 		this.fillColor = color;
 		this.fillOpacity = 1;
+		return this;
 	}
 
 	/**
@@ -196,9 +199,23 @@ class Base {
 	public function noFill() {
 		this.fillOpacity = 0;
 		this.fillColor = 'transparant';
+		return this;
+	}
+
+	/**
+	 * (chaining) methode to set lineCaps and lineJoin
+	 *
+	 * @param linecap			default round
+	 * @param linejoin			default round
+	 */
+	public function setLineEnds(?linecap:LineCap = LineCap.Round, ?linejoin:LineJoin = LineJoin.Round) {
+		this.lineCap = linecap;
+		this.lineJoin = linejoin;
+		return this;
 	}
 
 	// ____________________________________ clone ____________________________________
+
 	public function clone():Base {
 		trace("WIP");
 		return cast(haxe.Json.parse(haxe.Json.stringify(this)), Base);
