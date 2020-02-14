@@ -203,6 +203,20 @@ class Sketcher {
 	}
 
 	/**
+	 * Create a line between two points (x, y)
+	 * (it's syntatic sugar for makeLine)
+	 *
+	 * @param p1			starting point
+	 * @param p2			end point
+	 * @return Line
+	 */
+	public function makeLinePoint(p1:Point, p2:Point):Line {
+		var shape = new Line(p1.x, p1.y, p2.x, p2.y);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
 	 * Create an ellipse with a radius x and radius y
 	 *
 	 * @param x			x position
