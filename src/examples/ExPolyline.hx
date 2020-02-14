@@ -25,7 +25,7 @@ class ExPolyline {
 	function init() {
 		// to connected to sketch
 		grid = new GridUtil(sketchWidth, sketchHeight);
-		grid.setNumbered(3, 3); // 3 horizontal, 3 vertical
+		grid.setNumbered(3, 4); // 3 horizontal, 3 vertical
 		grid.setIsCenterPoint(true); // default true, but can be set if needed
 
 		initDocument(); // if document doesn't have elements with correct id
@@ -133,8 +133,14 @@ class ExPolyline {
 		shape.lineJoin = LineJoin.Round;
 		shape.setRotate(45, p.x, p.y);
 
-		// Don't forget to tell two to render everything to the screen
+		var p = grid.array[9];
+		var shape = sketch.makeXCross(p.x, p.y, 25);
+		shape.setFill(getColourObj(PINK_DEEP)).setStroke(getColourObj(PINK_DEEP), 10);
 
+		var p = grid.array[10];
+		var shape = sketch.makeX(p.x, p.y, 'green');
+
+		// Don't forget to tell two to render everything to the screen
 		sketch.update();
 	}
 

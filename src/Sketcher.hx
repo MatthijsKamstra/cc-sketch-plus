@@ -1,6 +1,8 @@
 package;
 
 // import cc.draw.Gradient;
+import sketcher.draw.AST.LineJoin;
+import sketcher.draw.AST.LineCap;
 import js.Browser.*;
 import draw.*;
 import sketcher.draw.*;
@@ -403,13 +405,18 @@ class Sketcher {
 		]);
 		polyline.id = 'registration_marker_${polyline.count}';
 		polyline.desc = 'Registration Marker\nx: ${cx}, y: ${cy}';
-		polyline.stroke = color;
+		polyline.strokeColor = color;
+		polyline.strokeWeight = 1;
+		polyline.fillColor = color;
+		polyline.lineCap = LineCap.Butt;
+		polyline.lineJoin = LineJoin.Miter;
 		baseArray.push(polyline);
 		return polyline;
 	}
 
 	/**
-	 * not sure this is needed, but will leave this here for now
+	 * big ex if needed, don't forget to set the stroke and fill
+	 *
 	 * @param x
 	 * @param y
 	 * @param color
@@ -433,6 +440,8 @@ class Sketcher {
 		]);
 		polyline.id = 'xcross_${polyline.count}';
 		polyline.desc = 'xcross\nx: ${cx}, y: ${cy}, size:${size}';
+		polyline.lineCap = LineCap.Butt;
+		polyline.lineJoin = LineJoin.Bevel;
 		baseArray.push(polyline);
 		return polyline;
 	}
