@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-14 00:21:41");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-14 13:21:59");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -190,12 +190,12 @@ var Sketcher = function(settings) {
 	}
 	if(settings.get_scale() == true) {
 		var node = window.document.createElement("style");
-		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {width: 100%; height: 100%;}\n\t\t\tcanvas{width: 100%; height: 100%;}\n\t\t\t";
+		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {width: 100%; }\n\t\t\tcanvas{width: 100%;}\n\t\t\t";
 		window.document.body.appendChild(node);
 	}
 	if(settings.get_padding() != null && settings.get_padding() > 0) {
 		var node1 = window.document.createElement("style");
-		node1.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {margin: " + settings.get_padding() + "px;}\n\t\t\tcanvas {margin: " + settings.get_padding() + "px;}\n\t\t\t";
+		node1.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {margin: " + settings.get_padding() + "px; width: 100%; }\n\t\t\tcanvas {margin: " + settings.get_padding() + "px; width: 100%; }\n\t\t\t";
 		window.document.body.appendChild(node1);
 	}
 };
@@ -232,7 +232,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:102:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("src/Sketcher.hx:104:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
 	}
@@ -277,6 +277,11 @@ Sketcher.prototype = {
 	}
 	,makeLine: function(x1,y1,x2,y2) {
 		var shape = new sketcher_draw_Line(x1,y1,x2,y2);
+		this.baseArray.push(shape);
+		return shape;
+	}
+	,makeLinePoint: function(p1,p2) {
+		var shape = new sketcher_draw_Line(p1.x,p1.y,p2.x,p2.y);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -372,7 +377,11 @@ Sketcher.prototype = {
 		var polyline = new sketcher_draw_PolyLine([cx,cy,cx - r,cy,cx,cy,cx + r,cy,cx,cy,cx,cy - r,cx,cy,cx,cy + r,cx,cy]);
 		polyline.set_id("registration_marker_" + polyline.get_count());
 		polyline.set_desc("Registration Marker\nx: " + cx + ", y: " + cy);
-		polyline.set_stroke(color);
+		polyline.set_strokeColor(color);
+		polyline.set_strokeWeight(1);
+		polyline.set_fillColor(color);
+		polyline.set_lineCap("butt");
+		polyline.set_lineJoin("miter");
 		this.baseArray.push(polyline);
 		return polyline;
 	}
@@ -383,6 +392,8 @@ Sketcher.prototype = {
 		var polyline = new sketcher_draw_PolyLine([cx,cy,cx - r,cy,cx,cy,cx + r,cy,cx,cy,cx,cy - r,cx,cy,cx,cy + r,cx,cy]);
 		polyline.set_id("xcross_" + polyline.get_count());
 		polyline.set_desc("xcross\nx: " + cx + ", y: " + cy + ", size:" + size);
+		polyline.set_lineCap("butt");
+		polyline.set_lineJoin("bevel");
 		this.baseArray.push(polyline);
 		return polyline;
 	}
@@ -454,7 +465,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:533:","webgl");
+			console.log("src/Sketcher.hx:556:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -467,7 +478,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:542:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:565:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -1398,7 +1409,7 @@ examples_ExPolyline.__name__ = "examples.ExPolyline";
 examples_ExPolyline.prototype = {
 	init: function() {
 		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
-		this.grid.setNumbered(3,3);
+		this.grid.setNumbered(3,4);
 		this.grid.setIsCenterPoint(true);
 		this.initDocument();
 		this.sketchSVG();
@@ -1489,6 +1500,11 @@ examples_ExPolyline.prototype = {
 		shape8.set_lineCap("round");
 		shape8.set_lineJoin("round");
 		shape8.setRotate(45,p8.x,p8.y);
+		var p9 = this.grid.array[9];
+		var shape9 = sketch.makeXCross(p9.x,p9.y,25);
+		shape9.setFill(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_DEEP)).setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK_DEEP),10);
+		var p10 = this.grid.array[10];
+		var shape10 = sketch.makeX(p10.x,p10.y,"green");
 		sketch.update();
 	}
 	,getSides: function(p) {
@@ -2626,17 +2642,50 @@ sketcher_draw_Base.prototype = {
 		}
 		return str;
 	}
+	,setStroke: function(color,weight,opacity) {
+		if(opacity == null) {
+			opacity = 1;
+		}
+		if(weight == null) {
+			weight = 1;
+		}
+		this.set_strokeColor(color);
+		this.set_strokeWeight(weight);
+		this.set_strokeOpacity(opacity);
+		return this;
+	}
 	,noStroke: function() {
 		this.set_lineWeight(0);
 		this.set_strokeColor("transparant");
 		this.set_strokeOpacity(0);
+		return this;
+	}
+	,setFill: function(color,opacity) {
+		if(opacity == null) {
+			opacity = 1;
+		}
+		this.set_fillColor(color);
+		this.set_fillOpacity(1);
+		return this;
 	}
 	,noFill: function() {
 		this.set_fillOpacity(0);
 		this.set_fillColor("transparant");
+		return this;
+	}
+	,setLineEnds: function(linecap,linejoin) {
+		if(linejoin == null) {
+			linejoin = "round";
+		}
+		if(linecap == null) {
+			linecap = "round";
+		}
+		this.set_lineCap(linecap);
+		this.set_lineJoin(linejoin);
+		return this;
 	}
 	,clone: function() {
-		console.log("src/sketcher/draw/Base.hx:170:","WIP");
+		console.log("src/sketcher/draw/Base.hx:220:","WIP");
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
 	}
 	,convertID: function(id) {
@@ -2658,6 +2707,12 @@ sketcher_draw_Base.prototype = {
 		}
 		if(this.get_strokeOpacity() == null) {
 			this.set_strokeOpacity(1);
+		}
+		if(this.get_lineCap() == null) {
+			this.set_lineCap("butt");
+		}
+		if(this.get_lineJoin() == null) {
+			this.set_lineJoin("miter");
 		}
 	}
 	,get_id: function() {
