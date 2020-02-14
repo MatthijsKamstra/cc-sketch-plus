@@ -246,6 +246,13 @@ class Base {
 		if (this.strokeOpacity == null) {
 			this.strokeOpacity = 1;
 		}
+		// make sure the default settings are used for every new shape
+		if (this.lineCap == null) {
+			this.lineCap = LineCap.Butt;
+		}
+		if (this.lineJoin == null) {
+			this.lineJoin = LineJoin.Miter;
+		}
 	}
 
 	// ____________________________________ getter/setter ____________________________________
