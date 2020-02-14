@@ -155,22 +155,56 @@ class Base {
 		return str;
 	}
 
+	// ____________________________________ helpers for quick stroke and fill changes ____________________________________
+
+	/**
+	 * quick way of setting strokeColor, strokeWeight and strokeOpacity
+	 *
+	 * @param color
+	 * @param weight
+	 * @param opacity
+	 */
+	public function setStroke(color:String, weight:Float, ?opacity:Float = 1) {
+		this.strokeColor = color;
+		this.strokeWeight = weight;
+		this.strokeOpacity = opacity;
+	}
+
+	/**
+	 * use no stroke
+	 */
 	public function noStroke() {
 		this.lineWeight = 0;
 		this.strokeColor = 'transparant';
 		this.strokeOpacity = 0;
 	}
 
+	/**
+	 * quick way of setting fillColor and fillOpacity
+	 *
+	 * @param color
+	 * @param opacity
+	 */
+	public function setFill(color:String, ?opacity:Float = 1) {
+		this.fillColor = color;
+		this.fillOpacity = 1;
+	}
+
+	/**
+	 * use no fill
+	 */
 	public function noFill() {
 		this.fillOpacity = 0;
 		this.fillColor = 'transparant';
 	}
 
+	// ____________________________________ clone ____________________________________
 	public function clone():Base {
 		trace("WIP");
 		return cast(haxe.Json.parse(haxe.Json.stringify(this)), Base);
 	}
 
+	// ____________________________________ misc ____________________________________
 	function convertID(id:String):String {
 		return id.toLowerCase().replace(" ", "_");
 	}
