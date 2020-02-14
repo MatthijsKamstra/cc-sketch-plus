@@ -174,44 +174,54 @@ class FileExport {
 		}
 
 		// cache height and width
-		var w = canvas.width;
-		var h = canvas.height;
+		var _w = canvas.width;
+		var _h = canvas.height;
 
-		// // var ctx = canvas.getctx2d();
+		// if (!isTransparant) {
+		// 	trace('dddddd');
+		// 	// get the current ImageData for the canvas.
+		// 	var data = ctx.getImageData(0, 0, _w, _h);
 
-		var data;
-		var compositeOperation:String;
+		// 	// store the current globalCompositeOperation
+		// 	var compositeOperation = ctx.globalCompositeOperation;
 
-		// get the current ImageData for the canvas.
-		data = ctx.getImageData(0, 0, w, h);
+		// 	// set to draw behind current content
+		// 	ctx.globalCompositeOperation = "destination-over";
+
+		// 	// set background color
+		// 	ctx.fillStyle = '#ff3333';
+
+		// 	// draw background / rect on entire canvas
+		// 	ctx.fillRect(0, 0, _w, _h);
+
+		// 	// get the image data from the canvas
+		// 	var imageData = canvas.toDataURL("image/png");
+
+		// 	// clear the canvas
+		// 	ctx.clearRect(0, 0, _w, _h);
+
+		// 	// restore it with original / cached ImageData
+		// 	ctx.putImageData(data, 0, 0);
+
+		// 	// reset the globalCompositeOperation to what it was
+		// 	ctx.globalCompositeOperation = compositeOperation;
+		// 	// return;
+		// }
 
 		if (!isTransparant) {
-			// store the current globalCompositeOperation
-			compositeOperation = ctx.globalCompositeOperation;
-
-			// set to draw behind current content
-			ctx.globalCompositeOperation = "destination-over";
-
-			// set background color
-			ctx.fillStyle = '#ffffff';
-
-			// draw background / rect on entire canvas
-			ctx.fillRect(0, 0, w, h);
-
-			// get the image data from the canvas
-			var imageData = canvas.toDataURL("image/png");
-
-			// clear the canvas
-			ctx.clearRect(0, 0, w, h);
-
-			// restore it with original / cached ImageData
-			ctx.putImageData(data, 0, 0);
-
-			// reset the globalCompositeOperation to what it was
-			ctx.globalCompositeOperation = compositeOperation;
+			// trace('try something else');
+			var currentCanvas:CanvasElement = ctx.canvas;
+			var newCanvas:CanvasElement = untyped currentCanvas.cloneNode(true);
+			var n_ctx = newCanvas.getContext2d();
+			n_ctx.fillStyle = "#FFffff";
+			n_ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+			n_ctx.drawImage(canvas, 0, 0);
+			ctx.drawImage(newCanvas, 0, 0);
+			// return;
 		}
 
 		var link = document.createAnchorElement();
+
 		link.style.cssText = "display:none";
 		link.download = fileName + '.${ext}';
 

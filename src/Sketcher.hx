@@ -50,8 +50,8 @@ class Sketcher {
 			var node = document.createElement('style');
 			node.innerHTML = '
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
-			svg {width: 100%; height: 100%;}
-			canvas{width: 100%; height: 100%;}
+			svg {width: 100%; }
+			canvas{width: 100%;}
 			';
 			document.body.appendChild(node);
 		}
@@ -60,8 +60,8 @@ class Sketcher {
 			var node = document.createElement('style');
 			node.innerHTML = '
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
-			svg {margin: ${settings.padding}px;}
-			canvas {margin: ${settings.padding}px;}
+			svg {margin: ${settings.padding}px; width: 100%; }
+			canvas {margin: ${settings.padding}px; width: 100%; }
 			';
 			document.body.appendChild(node);
 		}
