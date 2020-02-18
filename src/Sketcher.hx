@@ -52,8 +52,8 @@ class Sketcher {
 			var node = document.createElement('style');
 			node.innerHTML = '
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
-			svg {width: 100%; }
-			canvas{width: 100%;}
+			svg {width: 100%; height: 100%; background-color:#ffffff; }
+			canvas{width: 100%; background-color:#ffffff; }
 			';
 			document.body.appendChild(node);
 		}
@@ -62,8 +62,8 @@ class Sketcher {
 			var node = document.createElement('style');
 			node.innerHTML = '
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
-			svg {margin: ${settings.padding}px; width: 100%; }
-			canvas {margin: ${settings.padding}px; width: 100%; }
+			svg {margin: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
+			canvas {margin: ${settings.padding}px; width: 100%; background-color:#ffffff; }
 			';
 			document.body.appendChild(node);
 		}
