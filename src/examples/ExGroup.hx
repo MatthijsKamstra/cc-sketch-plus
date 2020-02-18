@@ -74,11 +74,13 @@ class ExGroup {
 		var p = grid.array[0];
 		var circle = sketch.makeCircle(p.x, p.y, radiusSmall);
 		var g = sketch.makeGroup([circle]);
+		g.id = 'group red circle';
 		g.fillColor = getColourObj(RED);
 
 		var p = grid.array[1];
 		var shape = sketch.makeRectangle(p.x, p.y, 100, 50);
 		var g = sketch.makeGroup([shape]);
+		g.id = 'group red rectangle blue border';
 		g.fillColor = getColourObj(RED);
 		g.strokeColor = getColourObj(BLUE);
 		g.strokeWeight = 3;
@@ -86,6 +88,7 @@ class ExGroup {
 		var p = grid.array[2];
 		var shape = sketch.makeRectangle(p.x, p.y, 100, 50);
 		var g = sketch.makeGroup([shape]);
+		g.id = 'group red rectangle blue border opacity';
 		g.fillColor = getColourObj(RED);
 		g.fillOpacity = 0.7;
 		g.strokeColor = getColourObj(BLUE);
@@ -95,10 +98,36 @@ class ExGroup {
 		var p = grid.array[3];
 		var shape = sketch.makeCircle(p.x, p.y, radiusSmall);
 		var shape2 = sketch.makeCircle(p.x + radiusSmall, p.y, radiusSmall / 2);
-		var g = sketch.makeGroup([shape, shape2]);
+		var shape3 = sketch.makeRectangle(p.x - radiusSmall, p.y, radiusSmall, radiusSmall);
+		var g = sketch.makeGroup([shape, shape2, shape3]);
+		g.id = 'group purple shape rotated';
 		g.noFill();
 		g.setStroke(getColourObj(PURPLE), 10, .3);
 		g.setRotate(45, p.x, p.y);
+
+		var p = grid.array[4];
+		var shape = sketch.makeCircle(p.x, p.y, radiusSmall);
+		var shape2 = sketch.makeCircle(p.x + radiusSmall, p.y, radiusSmall / 2);
+		var shape3 = sketch.makeRectangle(p.x - radiusSmall, p.y, radiusSmall, radiusSmall);
+		shape3.setFill(getColourObj(WHITE));
+		var g = sketch.makeGroup([shape, shape2, shape3]);
+		g.id = 'group purple shape norotated';
+		g.noFill();
+		g.setStroke(getColourObj(MAROON), 10, .3);
+		// g.setRotate(45, p.x, p.y);
+
+		// var p = grid.array[5];
+		// var shape = sketch.makeCircle(p.x, p.y, radiusSmall);
+		// var shape2 = sketch.makeCircle(p.x + radiusSmall, p.y, radiusSmall / 2);
+		// var shape3 = sketch.makeRectangle(p.x - radiusSmall, p.y, radiusSmall, radiusSmall);
+		// shape3.setFill(getColourObj(WHITE));
+		// shape3.setStroke(getColourObj(YELLOW));
+		// var g = sketch.makeGroup([shape, shape2, shape3]);
+		// g.id = 'group purple shape move';
+		// g.noFill();
+		// g.setStroke(getColourObj(LIME), 10, .3);
+		// g.setMove(-50, 0);
+		// g.hide();
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();

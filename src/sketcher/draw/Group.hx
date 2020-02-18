@@ -10,6 +10,8 @@ class Group extends Base implements IBase {
 
 	@:isVar public var arr(get, set):Array<IBase>;
 
+	var isOpacityOverride:Bool = false;
+
 	/**
 	 * create a group to join a couple of IBase items
 	 * useful in `svg`, not so much in `canvas`
@@ -29,7 +31,13 @@ class Group extends Base implements IBase {
 		}
 		// xml.set('x', Std.string(this.x));
 		// xml.set('y', Std.string(this.y));
-
+		if (isOpacityOverride) {
+			xml.set('opacity-override', 'true');
+		}
+		// if (isOpacityOverride) {
+		// 	untyped base.strokeOpacity = 0;
+		// 	untyped base.fillOpacity = 0;
+		// }
 		var comment = Xml.createComment('Group: ${id}');
 		xml.addChild(comment); // not sure why?
 		xml.addChild(Xml.parse('<desc>${id}</desc>'));
@@ -37,6 +45,7 @@ class Group extends Base implements IBase {
 			// untyped xml.appendChild(this.arr[i].svg);
 			// xml.addChild(Xml.createComment(this.arr[i].type));
 			var base = this.arr[i];
+			// untyped base.fillOpacity = 0;
 			xml.addChild(Xml.parse(base.svg(null)));
 		}
 		// xml.set('x', '0');
@@ -46,82 +55,74 @@ class Group extends Base implements IBase {
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.groupCollapsed('Group (${id}) info canvas');
-			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight');
-			console.warn('doesn\'t work\n- rotate\n- move');
+			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight\n- rotate');
+			console.warn('doesn\'t work\n- move');
 			console.groupEnd();
 			Group.ISWARN = true;
 		}
-		// set everything to default values
-		// useDefaultsCanvas();
 
-		// TODO set transforms on group also on individuals
+		// set transforms on group also on individuals
+		// run loop and update elements with group info
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];
 			if (base == null)
 				continue;
 
 			// override the original values if the are not set
-			if (this.fillOpacity != null) {
+			if (this.fillOpacity != null && cast(base, Base).fillOpacity == null) {
 				cast(base, Base).fillOpacity = this.fillOpacity;
 			}
-			if (this.strokeOpacity != null) {
+			if (this.strokeOpacity != null && cast(base, Base).strokeOpacity == null) {
 				cast(base, Base).strokeOpacity = this.strokeOpacity;
 			}
-			if (this.fillColor != null) {
+			if (this.fillColor != null && cast(base, Base).fillColor == null) {
 				cast(base, Base).fillColor = this.fillColor;
 			}
-			if (this.strokeColor != null) {
+			if (this.strokeColor != null && cast(base, Base).strokeColor == null) {
 				cast(base, Base).strokeColor = this.strokeColor;
 			}
 			if (this.strokeWeight != null) {
 				cast(base, Base).strokeWeight = this.strokeWeight;
 			}
-
-			/*
-				if (this.rotate != null) {
-					var __w = ctx.canvas.width;
-					var __h = ctx.canvas.height;
-
-					var image = new js.html.Image();
-					image.src = ctx.canvas.toDataURL("image/png");
-
-					trace(__w, __h);
-					trace(image);
-					trace(this.rx, this.ry);
-
-					// ctx.clearRect(0, 0, __w, __h);
-
-					// save the unrotated context of the canvas so we can restore it later
-					// the alternative is to untranslate & unrotate after drawing
-					ctx.save();
-					// move to the center of the canvas
-					ctx.translate(this.rx, this.ry);
-					// rotate the canvas to the specified degrees
-					ctx.rotate(MathUtil.radians(this.rotate));
-					// draw the image
-					// since the context is rotated, the image will be rotated also
-					// ctx.drawImage(image, -image.width / 2, -image.width / 2);
-
-					cast(base, Base).x = 0;
-					cast(base, Base).y = 0;
-					base.ctx(ctx);
-
-					// we’re done with the rotating so restore the unrotated context
-					ctx.restore();
-				} else {
-					base.ctx(ctx);
-				}
-			 */
-
-			// base.ctx(ctx);
+			if (isOpacityOverride) {
+				// used for g.hide();
+				cast(base, Base).strokeOpacity = this.strokeOpacity;
+				cast(base, Base).fillOpacity = this.fillOpacity;
+			}
 		}
 
+		// create canvas to create shapes into
+		var newCanvas = document.createCanvasElement();
+		newCanvas.width = ctx.canvas.width;
+		newCanvas.height = ctx.canvas.height;
+		var newCtx = newCanvas.getContext2d();
+
+		// run loop again but now with updated info
+		// write in new canvas
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];
 			if (base == null)
 				continue;
-
-			base.ctx(ctx);
+			// console.info(this.id + " --> " + base.type);
+			base.ctx(newCtx);
+			// base.ctx(ctx);
+		}
+		// check if we need to rotate
+		// FIXME: move?
+		if (this.rotate != null) {
+			// the alternative is to untranslate & unrotate after drawing
+			ctx.save();
+			// move to the center of the canvas
+			ctx.translate(this.rx, this.ry);
+			// rotate the canvas to the specified degrees
+			ctx.rotate(MathUtil.radians(this.rotate));
+			// draw the image
+			// since the context is rotated, the image will be rotated also
+			ctx.drawImage(newCanvas, -this.rx, -this.ry);
+			// we’re done with the rotating so restore the unrotated context
+			ctx.restore();
+		} else {
+			ctx.drawImage(newCanvas, 0, 0);
 		}
 	}
 
@@ -134,6 +135,7 @@ class Group extends Base implements IBase {
 		// opacity:0 // old way... doesn't work that well for canvas
 		fillOpacity = 0;
 		strokeOpacity = 0;
+		isOpacityOverride = true;
 	}
 
 	public function test() {
