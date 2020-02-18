@@ -48,7 +48,9 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-14 13:21:59");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-18 14:30:31");
+		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
+		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -94,10 +96,15 @@ Main.prototype = {
 			_gthis.changeHash();
 		},false);
 	}
-	,changeHash: function() {
-		var c = this.ccTypeArray[this.count];
+	,changeHash: function(index) {
+		var _count = index == null ? this.count : index;
+		var c = this.ccTypeArray[_count];
 		var tmp = c.__name__;
 		window.location.hash = StringTools.replace(tmp,"examples.","");
+		this.pulldown.set_selected(_count);
+	}
+	,onSelectHandler: function(e) {
+		this.changeHash(e);
 	}
 	,__class__: Main
 };
@@ -190,12 +197,12 @@ var Sketcher = function(settings) {
 	}
 	if(settings.get_scale() == true) {
 		var node = window.document.createElement("style");
-		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {width: 100%; }\n\t\t\tcanvas{width: 100%;}\n\t\t\t";
+		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {width: 100%; height: 100%; background-color:#ffffff; }\n\t\t\tcanvas{width: 100%; background-color:#ffffff; }\n\t\t\t";
 		window.document.body.appendChild(node);
 	}
 	if(settings.get_padding() != null && settings.get_padding() > 0) {
 		var node1 = window.document.createElement("style");
-		node1.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {margin: " + settings.get_padding() + "px; width: 100%; }\n\t\t\tcanvas {margin: " + settings.get_padding() + "px; width: 100%; }\n\t\t\t";
+		node1.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {margin: " + settings.get_padding() + "px; width: 100%;  height: 100%; background-color:#ffffff; }\n\t\t\tcanvas {margin: " + settings.get_padding() + "px; width: 100%; background-color:#ffffff; }\n\t\t\t";
 		window.document.body.appendChild(node1);
 	}
 };
@@ -1147,6 +1154,13 @@ examples_ExGroup.prototype = {
 		g2.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLUE));
 		g2.set_strokeWeight(10);
 		g2.set_strokeOpacity(0.7);
+		var p3 = this.grid.array[3];
+		var shape2 = sketch.makeCircle(p3.x,p3.y,this.radiusSmall);
+		var shape21 = sketch.makeCircle(p3.x + this.radiusSmall,p3.y,this.radiusSmall / 2);
+		var g3 = sketch.makeGroup([shape2,shape21]);
+		g3.noFill();
+		g3.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PURPLE),10,.3);
+		g3.setRotate(45,p3.x,p3.y);
 		sketch.update();
 	}
 	,__class__: examples_ExGroup
@@ -1725,6 +1739,34 @@ var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
 haxe_IMap.__name__ = "haxe.IMap";
 haxe_IMap.__isInterface__ = true;
+var haxe_Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+$hxClasses["haxe.Timer"] = haxe_Timer;
+haxe_Timer.__name__ = "haxe.Timer";
+haxe_Timer.delay = function(f,time_ms) {
+	var t = new haxe_Timer(time_ms);
+	t.run = function() {
+		t.stop();
+		f();
+	};
+	return t;
+};
+haxe_Timer.prototype = {
+	stop: function() {
+		if(this.id == null) {
+			return;
+		}
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
+	}
+	,__class__: haxe_Timer
+};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -2306,6 +2348,117 @@ haxe_xml_Printer.prototype = {
 	}
 	,__class__: haxe_xml_Printer
 };
+var html_PullDown = function(valueArray,callback,callbackArray) {
+	this.keyDefaultValue = "ccquicknav";
+	this.textArray = [];
+	this.valueArray = [];
+	this.valueArray = valueArray;
+	this.callback = callback;
+	this.callbackArray = callbackArray;
+	this.setup();
+};
+$hxClasses["html.PullDown"] = html_PullDown;
+html_PullDown.__name__ = "html.PullDown";
+html_PullDown.convertClass = function(ccTypeArray) {
+	var arr = [];
+	var _g = 0;
+	var _g1 = ccTypeArray.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var _ccTypeArray = ccTypeArray[i];
+		var name = _ccTypeArray.__name__;
+		arr.push(name);
+	}
+	return arr;
+};
+html_PullDown.prototype = {
+	setup: function() {
+		var _gthis = this;
+		var div = window.document.createElement("div");
+		div.setAttribute("style","position: fixed;display: block;top: 0;");
+		div.id = "ccsketcher";
+		this.select = window.document.createElement("select");
+		this.select.id = "art";
+		var _g = 0;
+		var _g1 = this.valueArray.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _valueArray = this.valueArray[i];
+			var name = _valueArray;
+			var option = window.document.createElement("option");
+			option.value = "" + name;
+			option.text = "" + name;
+			if(name.indexOf(this.get_param()) != -1) {
+				option.selected = true;
+			}
+			this.select.appendChild(option);
+		}
+		div.appendChild(this.select);
+		window.document.body.appendChild(div);
+		this.select.onchange = function(e) {
+			var index = _gthis.select.selectedIndex;
+			var options = _gthis.select.options;
+			_gthis.set_param(_gthis.valueArray[index]);
+			if(_gthis.callback != null) {
+				if(_gthis.callbackArray == null) {
+					_gthis.callback.apply(_gthis.callback,[index]);
+				} else {
+					_gthis.callback.apply(_gthis.callback,_gthis.callbackArray);
+				}
+			}
+		};
+	}
+	,test: function() {
+		window.location.search = "post=1234&action=edit";
+		var urlParams = new URLSearchParams(window.location.search);
+		window.console.log(urlParams.has("post"));
+		window.console.log(urlParams.get("action"));
+		window.console.log(urlParams.getAll("action"));
+		window.console.log(urlParams);
+	}
+	,updateURL: function() {
+		window.console.warn("updateURL");
+		console.log("src/html/PullDown.hx:118:",this.get_param());
+		var urlParams = new URLSearchParams(window.location.search);
+		console.log("src/html/PullDown.hx:120:",urlParams.has(this.keyDefaultValue));
+		if(!urlParams.has(this.keyDefaultValue)) {
+			urlParams.append(this.keyDefaultValue,this.valueArray[0]);
+			this.set_param(this.valueArray[0]);
+			console.log("src/html/PullDown.hx:124:",this.get_param());
+		} else {
+			urlParams.set(this.keyDefaultValue,this.get_param());
+		}
+		console.log("src/html/PullDown.hx:128:",this.get_param());
+	}
+	,setSelected: function(index) {
+		var options = this.select.options;
+		var o = options.item(index);
+		o.selected = true;
+	}
+	,get_param: function() {
+		return this.param;
+	}
+	,set_param: function(value) {
+		return this.param = value;
+	}
+	,get_hash: function() {
+		var _hash = window.location.hash;
+		this.set_hash(StringTools.replace(_hash,"#",""));
+		return this.hash;
+	}
+	,set_hash: function(value) {
+		window.location.hash = value;
+		return this.hash = value;
+	}
+	,get_selected: function() {
+		return this.selected;
+	}
+	,set_selected: function(value) {
+		this.setSelected(value);
+		return this.selected = value;
+	}
+	,__class__: html_PullDown
+};
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
 	this.val = val;
@@ -2612,14 +2765,22 @@ sketcher_draw_Base.prototype = {
 	,setPlusPosition: function(x,y) {
 		this.setPosition(x,y);
 	}
-	,setRotate: function(degree,x,y) {
-		this.set_rotate(degree);
-		var str = "rotate(" + degree;
-		if(x != null) {
-			str += "," + x;
+	,setRotate: function(degree,rx,ry) {
+		if(ry == null) {
+			ry = 0;
 		}
-		if(y != null) {
-			str += "," + y;
+		if(rx == null) {
+			rx = 0;
+		}
+		this.set_rotate(degree);
+		this.set_rx(rx);
+		this.set_ry(ry);
+		var str = "rotate(" + degree;
+		if(rx != 0) {
+			str += "," + rx;
+		}
+		if(ry != 0) {
+			str += "," + ry;
 		}
 		str += ")";
 		this.transArr.push(str);
@@ -2685,7 +2846,7 @@ sketcher_draw_Base.prototype = {
 		return this;
 	}
 	,clone: function() {
-		console.log("src/sketcher/draw/Base.hx:220:","WIP");
+		console.log("src/sketcher/draw/Base.hx:224:","WIP");
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
 	}
 	,convertID: function(id) {
@@ -2818,6 +2979,18 @@ sketcher_draw_Base.prototype = {
 	}
 	,set_rotate: function(value) {
 		return this.rotate = value;
+	}
+	,get_rx: function() {
+		return this.rx;
+	}
+	,set_rx: function(value) {
+		return this.rx = value;
+	}
+	,get_ry: function() {
+		return this.ry;
+	}
+	,set_ry: function(value) {
+		return this.ry = value;
 	}
 	,get_move: function() {
 		return this.move;
@@ -3039,8 +3212,8 @@ var sketcher_draw_Ellipse = function(x,y,rx,ry) {
 	this.type = "Ellipse";
 	this.set_x(x);
 	this.set_y(y);
-	this.set_rx(rx);
-	this.set_ry(ry);
+	this.set_rrx(rx);
+	this.set_rry(ry);
 	sketcher_draw_Base.call(this,"ellipse");
 };
 $hxClasses["sketcher.draw.Ellipse"] = sketcher_draw_Ellipse;
@@ -3051,8 +3224,8 @@ sketcher_draw_Ellipse.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
 		this.xml.set("cx",Std.string(this.get_x()));
 		this.xml.set("cy",Std.string(this.get_y()));
-		this.xml.set("rx",Std.string(this.get_rx()));
-		this.xml.set("ry",Std.string(this.get_ry()));
+		this.xml.set("rx",Std.string(this.get_rrx()));
+		this.xml.set("ry",Std.string(this.get_rry()));
 		if(this.getTransform() != "") {
 			this.xml.set("transform",this.getTransform());
 		}
@@ -3065,17 +3238,17 @@ sketcher_draw_Ellipse.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,gl: function(gl) {
 	}
-	,get_ry: function() {
-		return this.ry;
+	,get_rry: function() {
+		return this.rry;
 	}
-	,set_ry: function(value) {
-		return this.ry = value;
+	,set_rry: function(value) {
+		return this.rry = value;
 	}
-	,get_rx: function() {
-		return this.rx;
+	,get_rrx: function() {
+		return this.rrx;
 	}
-	,set_rx: function(value) {
-		return this.rx = value;
+	,set_rrx: function(value) {
+		return this.rrx = value;
 	}
 	,__class__: sketcher_draw_Ellipse
 });
@@ -3156,6 +3329,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		if(!sketcher_draw_Group.ISWARN) {
 			window.console.groupCollapsed("Group (" + this.get_id() + ") info canvas");
 			window.console.info("the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight");
+			window.console.warn("doesn't work\n- rotate\n- move");
 			window.console.groupEnd();
 			sketcher_draw_Group.ISWARN = true;
 		}
@@ -3182,7 +3356,16 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 			if(this.get_strokeWeight() != null) {
 				(js_Boot.__cast(base , sketcher_draw_Base)).set_strokeWeight(this.get_strokeWeight());
 			}
-			base.ctx(ctx);
+		}
+		var _g2 = 0;
+		var _g3 = this.get_arr().length;
+		while(_g2 < _g3) {
+			var i1 = _g2++;
+			var base1 = this.get_arr()[i1];
+			if(base1 == null) {
+				continue;
+			}
+			base1.ctx(ctx);
 		}
 	}
 	,gl: function(gl) {
@@ -3192,7 +3375,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.set_strokeOpacity(0);
 	}
 	,test: function() {
-		console.log("src/sketcher/draw/Group.hx:90:","test if casting works");
+		console.log("src/sketcher/draw/Group.hx:140:","test if casting works");
 	}
 	,get_arr: function() {
 		return this.arr;
@@ -4388,7 +4571,10 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 	link.id = _id;
 	link.onload = function() {
 		if(callback != null) {
-			callback.apply(callback,callbackArray);
+			haxe_Timer.delay(function() {
+				callback.apply(callback,callbackArray);
+				return;
+			},1);
 		}
 	};
 	window.document.head.appendChild(link);
