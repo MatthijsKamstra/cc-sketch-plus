@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import sketcher.util.MathUtil;
 import js.Browser.*;
 
 class Group extends Base implements IBase {
@@ -46,15 +47,20 @@ class Group extends Base implements IBase {
 		if (!ISWARN) {
 			console.groupCollapsed('Group (${id}) info canvas');
 			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight');
+			console.warn('doesn\'t work\n- rotate\n- move');
 			console.groupEnd();
 			Group.ISWARN = true;
 		}
+		// set everything to default values
+		// useDefaultsCanvas();
+
 		// TODO set transforms on group also on individuals
 		for (i in 0...this.arr.length) {
 			var base = this.arr[i];
 			if (base == null)
 				continue;
 
+			// override the original values if the are not set
 			if (this.fillOpacity != null) {
 				cast(base, Base).fillOpacity = this.fillOpacity;
 			}
@@ -70,6 +76,50 @@ class Group extends Base implements IBase {
 			if (this.strokeWeight != null) {
 				cast(base, Base).strokeWeight = this.strokeWeight;
 			}
+
+			/*
+				if (this.rotate != null) {
+					var __w = ctx.canvas.width;
+					var __h = ctx.canvas.height;
+
+					var image = new js.html.Image();
+					image.src = ctx.canvas.toDataURL("image/png");
+
+					trace(__w, __h);
+					trace(image);
+					trace(this.rx, this.ry);
+
+					// ctx.clearRect(0, 0, __w, __h);
+
+					// save the unrotated context of the canvas so we can restore it later
+					// the alternative is to untranslate & unrotate after drawing
+					ctx.save();
+					// move to the center of the canvas
+					ctx.translate(this.rx, this.ry);
+					// rotate the canvas to the specified degrees
+					ctx.rotate(MathUtil.radians(this.rotate));
+					// draw the image
+					// since the context is rotated, the image will be rotated also
+					// ctx.drawImage(image, -image.width / 2, -image.width / 2);
+
+					cast(base, Base).x = 0;
+					cast(base, Base).y = 0;
+					base.ctx(ctx);
+
+					// we’re done with the rotating so restore the unrotated context
+					ctx.restore();
+				} else {
+					base.ctx(ctx);
+				}
+			 */
+
+			// base.ctx(ctx);
+		}
+
+		for (i in 0...this.arr.length) {
+			var base = this.arr[i];
+			if (base == null)
+				continue;
 
 			base.ctx(ctx);
 		}
