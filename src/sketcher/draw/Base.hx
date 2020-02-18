@@ -16,10 +16,13 @@ class Base {
 
 	@:isVar public var id(get, set):String;
 
-	// Positions the shape horizontally from the origin.
+	// Positions the shape horizontally from the origin // Positions the shape vertically from the origin.
 	@:isVar public var x(get, set):Float;
-	// Positions the shape vertically from the origin.
 	@:isVar public var y(get, set):Float;
+
+	// use rx and ry for ration centers
+	@:isVar public var rx(get, set):Float;
+	@:isVar public var ry(get, set):Float;
 
 	// colors
 
@@ -83,14 +86,12 @@ class Base {
 	}
 
 	// ____________________________________ functions ____________________________________
-	// public function noStroke() {
-	// 	this.lineWeight = 0;
-	// 	this.stroke = 'transparant';
-	// }
 
 	public function setID(id:String) {
 		this.id = id;
 	}
+
+	// ____________________________________ transitions ____________________________________
 
 	/**
 	 * if you really want to change the postions use this .. not rotate
@@ -125,16 +126,19 @@ class Base {
 	 * if you really want to change the rotation use this .. not rotate
 	 *
 	 * @param degree	rotation in degrees
-	 * @param x			(optional) center x
-	 * @param y   		(optional) center y
+	 * @param rx		(optional) center x
+	 * @param ry   		(optional) center y
 	 */
-	public function setRotate(degree:Float, ?x:Float, ?y:Float) {
-		rotate = degree;
+	public function setRotate(degree:Float, ?rx:Float = 0, ?ry:Float = 0) {
+		this.rotate = degree;
+		this.rx = rx;
+		this.ry = ry;
+
 		var str = 'rotate(${degree}';
-		if (x != null)
-			str += ',${x}';
-		if (y != null)
-			str += ',${y}';
+		if (rx != 0)
+			str += ',${rx}';
+		if (ry != 0)
+			str += ',${ry}';
 		str += ')';
 		transArr.push(str);
 	}
@@ -225,6 +229,8 @@ class Base {
 	function convertID(id:String):String {
 		return id.toLowerCase().replace(" ", "_");
 	}
+
+	// ____________________________________ defaults for canvas ____________________________________
 
 	/**
 	 *  set everything to default values
@@ -395,6 +401,22 @@ class Base {
 	function set_rotate(value:Float):Float {
 		// setRotate(value); // recursion error
 		return rotate = value;
+	}
+
+	function get_rx():Float {
+		return rx;
+	}
+
+	function set_rx(value:Float):Float {
+		return rx = value;
+	}
+
+	function get_ry():Float {
+		return ry;
+	}
+
+	function set_ry(value:Float):Float {
+		return ry = value;
 	}
 
 	function get_move():Point {
