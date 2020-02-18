@@ -85,8 +85,8 @@ class Main {
 	function changeHash(?index:Int) {
 		var _count = (index == null) ? count : index;
 		location.hash = Type.getClassName(ccTypeArray[_count]).replace('examples.', '');
-		// if (pulldown != null)
-		pulldown.selected = _count;
+		if (pulldown != null)
+			pulldown.selected = _count;
 	}
 
 	function onSelectHandler(e:Int) {
