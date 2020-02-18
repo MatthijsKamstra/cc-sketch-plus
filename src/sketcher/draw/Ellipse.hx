@@ -1,24 +1,24 @@
 package sketcher.draw;
 
 class Ellipse extends Base implements IBase {
-	@:isVar public var ry(get, set):Float;
-	@:isVar public var rx(get, set):Float;
+	@:isVar public var rry(get, set):Float;
+	@:isVar public var rrx(get, set):Float;
 
 	public var type = 'Ellipse'; // base (get class name?)
 
 	public function new(x, y, rx, ry) {
 		this.x = x;
 		this.y = y;
-		this.rx = rx;
-		this.ry = ry;
+		this.rrx = rx;
+		this.rry = ry;
 		super('ellipse');
 	}
 
 	public function svg(?settings:Settings):String {
 		xml.set('cx', Std.string(this.x));
 		xml.set('cy', Std.string(this.y));
-		xml.set('rx', Std.string(this.rx));
-		xml.set('ry', Std.string(this.ry));
+		xml.set('rx', Std.string(this.rrx));
+		xml.set('ry', Std.string(this.rry));
 
 		if (this.getTransform() != '') {
 			xml.set('transform', this.getTransform());
@@ -36,19 +36,19 @@ class Ellipse extends Base implements IBase {
 
 	// ____________________________________ getter/setter ____________________________________
 
-	function get_ry():Float {
-		return ry;
+	function get_rry():Float {
+		return rry;
 	}
 
-	function set_ry(value:Float):Float {
-		return ry = value;
+	function set_rry(value:Float):Float {
+		return rry = value;
 	}
 
-	function get_rx():Float {
-		return rx;
+	function get_rrx():Float {
+		return rrx;
 	}
 
-	function set_rx(value:Float):Float {
-		return rx = value;
+	function set_rrx(value:Float):Float {
+		return rrx = value;
 	}
 }
