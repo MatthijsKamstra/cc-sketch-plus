@@ -1,5 +1,7 @@
 package sketcher.util;
 
+import haxe.Timer;
+import js.Browser;
 import js.html.DOMParser;
 import js.html.LinkElement;
 import js.Browser.document;
@@ -219,7 +221,8 @@ class EmbedUtil {
 	}
 
 	/**
-	 * [Description]
+	 * It seems that onload can't be used for the first time on the page.
+	 * if the link is cached it works just fine
 	 *
 	 * @exampe
 	 * 		Text.embedGoogleFont('Press+Start+2P', onEmbedHandler);
@@ -246,7 +249,9 @@ class EmbedUtil {
 		link.id = _id;
 		link.onload = function() {
 			if (callback != null)
-				Reflect.callMethod(callback, callback, callbackArray);
+				Timer.delay(() -> {
+					Reflect.callMethod(callback, callback, callbackArray);
+				}, 1); // only works when I delay for a second (1000) but that just is weird
 		}
 		document.head.appendChild(link);
 	}
