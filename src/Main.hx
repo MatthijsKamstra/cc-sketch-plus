@@ -1,5 +1,6 @@
 package;
 
+import html.PullDown;
 import js.Browser.*;
 import Sketcher.Globals.*;
 
@@ -23,10 +24,15 @@ class Main {
 		examples.ExPolyline, //
 	];
 
+	var pulldown:PullDown;
+
 	public function new() {
 		// console.log('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
 			console.log('${sketcher.App.NAME} Dom ready :: build: ${sketcher.App.getBuildDate()}');
+
+			var arr = PullDown.convertClass(ccTypeArray);
+			pulldown = new PullDown(arr, onSelectHandler);
 
 			// var cc = new examples.All();
 			setupArt();
@@ -76,8 +82,15 @@ class Main {
 		}, false);
 	}
 
-	function changeHash() {
-		location.hash = Type.getClassName(ccTypeArray[count]).replace('examples.', '');
+	function changeHash(?index:Int) {
+		var _count = (index == null) ? count : index;
+		location.hash = Type.getClassName(ccTypeArray[_count]).replace('examples.', '');
+		// if (pulldown != null)
+		pulldown.selected = _count;
+	}
+
+	function onSelectHandler(e:Int) {
+		changeHash(e);
 	}
 
 	static public function main() {
