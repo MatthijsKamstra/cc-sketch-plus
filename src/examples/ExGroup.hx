@@ -92,6 +92,14 @@ class ExGroup {
 		g.strokeWeight = 10;
 		g.strokeOpacity = 0.7;
 
+		var p = grid.array[3];
+		var shape = sketch.makeCircle(p.x, p.y, radiusSmall);
+		var shape2 = sketch.makeCircle(p.x + radiusSmall, p.y, radiusSmall / 2);
+		var g = sketch.makeGroup([shape, shape2]);
+		g.noFill();
+		g.setStroke(getColourObj(PURPLE), 10, .3);
+		g.setRotate(45, p.x, p.y);
+
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
 	}
