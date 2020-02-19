@@ -2,9 +2,26 @@ package sketcher.draw;
 
 import js.Browser.*;
 
+// quick gradients: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
+
 /**
  * SVG: in svg you create a gradient and place it as a fill over an rectangle/circle/etc
  * CANVAS: in canvas you don't have that controle, so you create a rectantle and place the gradient over there
+ */
+/**
+	// background gradient
+	var gradient = sketch.makeGradient("#2193b0", "#6dd5ed");
+	gradient.id = 'Sexy Blue';
+
+	var gradient = sketch.makeGradient('#B993D6', '#8CA6DB');
+	gradient.id = 'dirty-fog';
+
+	// background
+	var p = grid.array[0];
+	var bg = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+	bg.id = "gradient sexy blue";
+	// bg.fillColor = 'url(#dirty-fog)'; // works
+	bg.fillGradientColor = 'Sexy Blue';
  */
 /**
  * @source
@@ -24,7 +41,8 @@ class Gradient extends Base implements IBase {
 	var gradientObj:GradientObj;
 
 	/**
-	 * [Description]
+	 * quick way to create an gradient, needs more love
+	 *
 	 * @param color0
 	 * @param color1
 	 * @param isLinear
@@ -35,6 +53,9 @@ class Gradient extends Base implements IBase {
 
 		super('linearGradient');
 	}
+
+	// TODO: add array with colors
+	// TODO: more controle over the gradient, with `stop offset`
 
 	/**
 		<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
