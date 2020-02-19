@@ -58,7 +58,11 @@ class FileExport {
 			ctx.drawImage(image, 0, 0, svgW, svgH);
 			FileExport.downloadImageBg(ctx, isJpg, filename, isTransparant);
 		}
-		image.src = 'data:image/svg+xml,${svg.outerHTML}'; // might need to base
+		image.onerror = function(e) {
+			console.warn(e);
+		}
+		// make it base64
+		image.src = 'data:image/svg+xml;base64,${window.btoa(svg.outerHTML)}';
 		// document.body.appendChild(canvas);
 	}
 
