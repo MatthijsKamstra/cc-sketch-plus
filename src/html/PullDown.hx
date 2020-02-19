@@ -52,8 +52,9 @@ class PullDown {
 		// console.log(param);
 
 		select = document.createSelectElement();
-
+		select.setAttribute('style', 'font-size: small;'); // bootstrap makes it bigger then I want
 		select.id = 'art';
+
 		for (i in 0...valueArray.length) {
 			var _valueArray = valueArray[i];
 			var name = _valueArray;
