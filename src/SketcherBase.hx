@@ -31,6 +31,8 @@ class SketcherBase {
 		if (isDebug)
 			trace('START :: ${toString()}');
 
+		// trace('${settings}');
+
 		if (settings == null) {
 			// use default settings
 			var stageW = 1080; // 1024; // video?
@@ -41,7 +43,6 @@ class SketcherBase {
 			settings.scale = false;
 			settings.elementID = 'sketcher-canvas-wrapper';
 		}
-		// trace('${settings}');
 
 		if (settings != null && settings.element != null)
 			trace(settings.element);

@@ -51,6 +51,7 @@ class Sketcher {
 		if (settings.scale == true) {
 			var node = document.createElement('style');
 			node.innerHTML = '
+			<!-- no padding -->
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
 			svg {width: 100%; height: 100%; background-color:#ffffff; }
 			canvas{width: 100%; background-color:#ffffff; }
@@ -58,9 +59,10 @@ class Sketcher {
 			document.body.appendChild(node);
 		}
 
-		if (settings.padding != null && settings.padding > 0) {
+		if (settings.padding != null && settings.padding >= 0) {
 			var node = document.createElement('style');
 			node.innerHTML = '
+			<!-- with padding -->
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
 			svg {margin: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
 			canvas {margin: ${settings.padding}px; width: 100%; background-color:#ffffff; }
