@@ -76,7 +76,8 @@ class ExBackground {
 		var p = grid.array[1];
 		var c = sketch.makeCircle(p.x, p.y, 50).setFill(getColourObj(MAROON));
 
-		var bg = sketch.makeBackground(getColourObj(GREEN)); // doesn't matter when you add the background, it will automaticly be background
+		// doesn't matter when you add the background, it will automaticly be background
+		var bg = sketch.makeBackground(getColourObj(GREEN));
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
