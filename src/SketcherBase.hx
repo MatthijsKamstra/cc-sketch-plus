@@ -336,7 +336,7 @@ class SketcherBase {
 
 	function getFileName():String {
 		if (patternName == "" && description == "") {
-			patternName = 'CC-Sketcher - MatthijsKamstra';
+			patternName = 'CC-Sketcher-MatthijsKamstra';
 		} else if (patternName == "" && description != "") {
 			patternName = description;
 		}
