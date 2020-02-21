@@ -84,7 +84,8 @@ class Sketcher {
 
 		switch (settings.type) {
 			case 'svg':
-			// trace('svg');
+				// trace('svg');
+				update();
 			case 'canvas':
 				// trace('canvas');
 				canvas = document.createCanvasElement();
@@ -136,6 +137,21 @@ class Sketcher {
 	public function makeCircle(x:Float, y:Float, radius:Float):Circle {
 		var shape = new Circle(x, y, radius);
 		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
+	 * create a rectangle that is first in baseArray
+	 * 		doesn't matter when you add the background, it will automaticly be background
+	 *
+	 * @example			sketch.makeBackground(getColourObj(PINK));
+	 *
+	 * @param color		color string (red, #fff, rgba(0,0,0,1))
+	 * @return Background
+	 */
+	public function makeBackground(color:String):Background {
+		var shape = new Background(color);
+		baseArray.unshift(shape); // make sure this is at the start of the array
 		return shape;
 	}
 
