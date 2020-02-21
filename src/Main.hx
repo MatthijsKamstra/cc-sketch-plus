@@ -22,6 +22,7 @@ class Main {
 		examples.ExEllipse, //
 		examples.ExGradient, //
 		examples.ExPolyline, //
+		examples.ExBackground, //
 	];
 
 	var pulldown:PullDown;

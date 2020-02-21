@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-19 12:15:29");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-21 10:27:26");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -231,6 +231,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		case "svg":
+			this.update();
 			break;
 		case "webgl":
 			this.canvas = window.document.createElement("canvas");
@@ -241,7 +242,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:106:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("src/Sketcher.hx:107:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
 	}
@@ -253,6 +254,11 @@ Sketcher.prototype = {
 	,makeCircle: function(x,y,radius) {
 		var shape = new sketcher_draw_Circle(x,y,radius);
 		this.baseArray.push(shape);
+		return shape;
+	}
+	,makeBackground: function(color) {
+		var shape = new sketcher_draw_Background(color);
+		this.baseArray.unshift(shape);
 		return shape;
 	}
 	,makeRectangle: function(x,y,width,height,isCenter) {
@@ -474,7 +480,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:558:","webgl");
+			console.log("src/Sketcher.hx:574:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -487,7 +493,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:567:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:583:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -874,6 +880,62 @@ examples_ExAll.prototype = {
 		line.set_dash([10,20]);
 	}
 	,__class__: examples_ExAll
+};
+var examples_ExBackground = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.radiusSmall = 50;
+	this.init();
+};
+$hxClasses["examples.ExBackground"] = examples_ExBackground;
+examples_ExBackground.__name__ = "examples.ExBackground";
+examples_ExBackground.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = sketcher_util_MathUtil.circumferenceCircle(this.radiusSmall);
+		var p = this.grid.array[0];
+		var c = sketch.makeCircle(p.x,p.y,50).setFill(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		var p1 = this.grid.array[1];
+		var c1 = sketch.makeCircle(p1.x,p1.y,50).setFill(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.MAROON));
+		var bg = sketch.makeBackground(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GREEN));
+		sketch.update();
+	}
+	,__class__: examples_ExBackground
 };
 var examples_ExCircles = function() {
 	this.isDebug = true;
@@ -2391,7 +2453,7 @@ html_PullDown.prototype = {
 	setup: function() {
 		var _gthis = this;
 		var div = window.document.createElement("div");
-		div.setAttribute("style","position: fixed;display: block;top: 0;");
+		div.setAttribute("style","position: fixed;display: block;top: 0; line-height: 0;");
 		div.id = "ccsketcher";
 		this.select = window.document.createElement("select");
 		this.select.setAttribute("style","font-size: small;");
@@ -3097,6 +3159,109 @@ sketcher_draw_IBase.__isInterface__ = true;
 sketcher_draw_IBase.prototype = {
 	__class__: sketcher_draw_IBase
 };
+var sketcher_draw_Background = function(color) {
+	this.type = "circle";
+	sketcher_draw_Base.call(this,"rect");
+	this.set_fillColor(color);
+	this.set_id("background-layer");
+};
+$hxClasses["sketcher.draw.Background"] = sketcher_draw_Background;
+sketcher_draw_Background.__name__ = "sketcher.draw.Background";
+sketcher_draw_Background.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Background.__super__ = sketcher_draw_Base;
+sketcher_draw_Background.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		this.xml.set("x","0");
+		this.xml.set("y","0");
+		this.xml.set("width",Std.string(Globals.w));
+		this.xml.set("height",Std.string(Globals.h));
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,ctx: function(ctx) {
+		if(!sketcher_draw_Background.ISWARN) {
+			window.console.warn("background for ");
+			sketcher_draw_Background.ISWARN = true;
+		}
+		this.useDefaultsCanvas();
+		var value = this.get_fillColor();
+		var _r = 0;
+		var _g = 0;
+		var _b = 0;
+		var _a = 1;
+		value = StringTools.replace(value," ","");
+		if(value.indexOf("rgba") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+			var arr = value.split(",");
+			_r = arr[0];
+			_g = arr[1];
+			_b = arr[2];
+			_a = arr[3];
+		} else if(value.indexOf("rgb") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+			var arr1 = value.split(",");
+			_r = arr1[0];
+			_g = arr1[1];
+			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			var rgb_r = int >> 16 & 255;
+			var rgb_g = int >> 8 & 255;
+			var rgb_b = int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
+		}
+		var _fillColor = { r : _r, g : _g, b : _b, a : _a};
+		ctx.fillStyle = sketcher_util_ColorUtil.getColourObj(_fillColor,this.get_fillOpacity());
+		ctx.beginPath();
+		ctx.rect(0,0,Globals.w,Globals.h);
+		ctx.fill();
+		ctx.closePath();
+	}
+	,gl: function(gl) {
+		if(!sketcher_draw_Background.ISWARN) {
+			window.console.warn("webgl is not implemented yet");
+			sketcher_draw_Background.ISWARN = true;
+		}
+		var c = "#ff3333";
+		var value = c;
+		var _r = 0;
+		var _g = 0;
+		var _b = 0;
+		var _a = 1;
+		value = StringTools.replace(value," ","");
+		if(value.indexOf("rgba") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+			var arr = value.split(",");
+			_r = arr[0];
+			_g = arr[1];
+			_b = arr[2];
+			_a = arr[3];
+		} else if(value.indexOf("rgb") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+			var arr1 = value.split(",");
+			_r = arr1[0];
+			_g = arr1[1];
+			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			var rgb_r = int >> 16 & 255;
+			var rgb_g = int >> 8 & 255;
+			var rgb_b = int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
+		}
+		var rgba_r = _r;
+		var rgba_g = _g;
+		var rgba_b = _b;
+		var rgba_a = _a;
+		gl.viewport(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight);
+		gl.clearColor(rgba_r / 255,rgba_g / 255,rgba_b / 255,rgba_a);
+		gl.clear(16384);
+	}
+	,__class__: sketcher_draw_Background
+});
 var sketcher_draw_Circle = function(x,y,radius) {
 	this.type = "circle";
 	this.set_x(x);
@@ -3172,10 +3337,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3617,10 +3782,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3807,10 +3972,10 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4020,10 +4185,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
