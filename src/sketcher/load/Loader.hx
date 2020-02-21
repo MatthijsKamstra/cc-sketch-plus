@@ -22,7 +22,7 @@ class Loader {
 	 * create a file loader
 	 *
 	 * @example
-	 * 		import cc.tool.Loader;
+	 * 		import  sketcher.load;
 	 * 		var load = Loader.create().add(filename).load();
 	 *
 	 * @param id  (optional) id of the loader, otherwise an id is created
@@ -86,6 +86,7 @@ class Loader {
 	 *
 	 * 		function onCompleteHandler(completeArray:Array<LoaderObj>) {
 	 *			trace('onCompleteHandler: ' + completeArray.length);
+	 *				var l:LoaderObj = completeArray[0];
 	 *		}
 	 *
 	 * @param func		oncomplete function
@@ -258,7 +259,7 @@ class Loader {
 		}
 		req.onError = function(error:String) {
 			if (_isDebug)
-				trace('error: $error');
+				trace('error: $error, $url');
 			_loadCounter++;
 			loadingHandler();
 		}
@@ -266,7 +267,7 @@ class Loader {
 			if (_isDebug)
 				trace('status: $status');
 		}
-		req.request(true); // false=GET, true=POST
+		req.request(false); // false=GET, true=POST
 	}
 
 	// ____________________________________ getter/setter ____________________________________
