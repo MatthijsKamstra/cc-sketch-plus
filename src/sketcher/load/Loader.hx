@@ -54,6 +54,13 @@ class Loader {
 
 	// ____________________________________ properties ____________________________________
 
+	/**
+	 * @example
+	 * 		var load = Loader.create().add('data/CC-Sketcher-MatthijsKamstra-1582218820239_.json').load().isDebug();
+	 *
+	 * @param isDebug
+	 * @return Loader
+	 */
 	inline public function isDebug(?isDebug:Bool = true):Loader {
 		this._isDebug = isDebug;
 		return this;
@@ -83,6 +90,22 @@ class Loader {
 	}
 
 	/**
+	 * every loader needs this, otherwise the loading won't start
+	 *
+	 * @example
+	 * 		var load = Loader.create().add(filename).load();
+	 *
+	 * @return Loader
+	 */
+	inline public function load():Loader {
+		if (_isDebug)
+			trace('start loading');
+
+		loadingHandler();
+		return this;
+	}
+
+	/**
 	 * when all files are loaded call this function
 	 *
 	 * @example:
@@ -91,6 +114,10 @@ class Loader {
 	 * 		function onCompleteHandler(completeArray:Array<LoaderObj>) {
 	 *			trace('onCompleteHandler: ' + completeArray.length);
 	 *				var l:LoaderObj = completeArray[0];
+	 *				// console.log(l);
+	 *				console.log(l.time);
+	 *				console.log(l.filesize);
+	 *				console.log(l.json.data.length);
 	 *		}
 	 *
 	 * @param func		oncomplete function
@@ -120,16 +147,6 @@ class Loader {
 		this._onErrorParams = arr;
 		return this;
 	}
-
-	inline public function load():Loader {
-		if (_isDebug)
-			trace('start loading');
-
-		loadingHandler();
-		return this;
-	}
-
-	// ____________________________________ needs to load everthing ____________________________________
 
 	/**
 	 * lets start simple
@@ -254,6 +271,7 @@ class Loader {
 				_l.str = data;
 				_l.time.end = Date.now();
 				_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
+				_l.time.durationS = (_l.time.end.getTime() - _l.time.start.getTime()) / 1000;
 				if (_l.type == Json) {
 					_l.json = haxe.Json.parse(data);
 				} else {
@@ -370,4 +388,5 @@ typedef TimeObj = {
 	@:optional var start:Date;
 	@:optional var end:Date;
 	@:optional var durationMS:Float;
+	@:optional var durationS:Float;
 }
