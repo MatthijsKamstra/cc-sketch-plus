@@ -349,6 +349,53 @@ class MathUtil {
 	}
 
 	/**
+	 * @example
+	 * 	 MathUtil.formatByteSizeString(12586); //
+	 * @param bytes
+	 */
+	static public function formatByteSizeString(bytes:Int):String {
+		if (bytes < 1024)
+			return bytes + " bytes";
+		else if (bytes < 1048576)
+			return toFixed((bytes / 1024), 3) + " KiB";
+		else if (bytes < 1073741824)
+			return toFixed((bytes / 1048576), 3) + " MiB";
+		else
+			return toFixed((bytes / 1073741824), 3) + " GiB";
+	};
+
+	/**
+	 * return formatByteSize(sizeOf(obj));
+	 *
+	 * trace(MathUtil.formatByteSize(req.responseBytes.length));
+	 * trace(MathUtil.formatByteSizeString(req.responseBytes.length));
+	 *
+	**/
+	static public function formatByteSize(bytes:Int):Float {
+		if (bytes < 1024)
+			return bytes;
+		else if (bytes < 1048576)
+			return toFixed((bytes / 1024), 3);
+		else if (bytes < 1073741824)
+			return toFixed((bytes / 1048576), 3);
+		else
+			return toFixed((bytes / 1073741824), 3);
+	};
+
+	/**
+	 * Uses Math.round to fix a floating point number to a set precision.
+	 * Taken from Franco Ponticelli's THX library: https://github.com/fponticelli/thx/blob/master/src/Floats.hx#L206
+	 *
+	 * @param number
+	 * @param precision = 2
+	 * @return Float
+	 */
+	public static function toFixed(number:Float, ?precision = 2):Float {
+		number *= Math.pow(10, precision);
+		return Math.round(number) / Math.pow(10, precision);
+	}
+
+	/**
 		function xyz(px, py, pz, pitch, roll, yaw) {
 
 		var cosa = Math.cos(yaw);
