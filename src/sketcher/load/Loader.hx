@@ -1,5 +1,7 @@
 package sketcher.load;
 
+import sketcher.util.MathUtil;
+import js.Browser.*;
 import js.html.Image;
 
 class Loader {
@@ -70,6 +72,8 @@ class Loader {
 		var _obj:LoaderObj = {
 			path: path,
 			type: _type,
+			time: {},
+			filesize: {},
 			func: func
 		};
 		if (_isDebug)
@@ -228,12 +232,28 @@ class Loader {
 
 	function textLoader(_l:LoaderObj) {
 		var url = _l.path;
+		_l.time.start = Date.now();
 		var req = new haxe.Http(url);
 		// req.setHeader('Content-Type', 'application/json');
 		// req.setHeader('auth', '${App.TOKEN}');
+
+		// alert('This file size is: ' + this.files[0].size/1024/1024 + "MB");
+
 		req.onData = function(data:String) {
+			// console.log(req.responseBytes);
+			_l.filesize.bytes = req.responseBytes.length;
+			_l.filesize.KiB = req.responseBytes.length / 1024;
+			_l.filesize.MiB = req.responseBytes.length / 1024 / 1024;
+			_l.filesize.GiB = req.responseBytes.length / 1024 / 1024 / 1024;
+
+			// trace(MathUtil.formatByteSize(req.responseBytes.length));
+			// trace(MathUtil.formatByteSizeString(req.responseBytes.length));
+
 			try {
+				// console.info(data);
 				_l.str = data;
+				_l.time.end = Date.now();
+				_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
 				if (_l.type == Json) {
 					_l.json = haxe.Json.parse(data);
 				} else {
@@ -326,11 +346,28 @@ enum FileType {
 }
 
 typedef LoaderObj = {
+	@:optional var _id:Int;
 	var path:String;
 	var type:FileType;
-	@:optional var _id:Int;
+	@:optional var time:TimeObj;
 	@:optional var image:js.html.Image;
 	@:optional var str:String;
+	@:optional var filesize:FileSizeObj;
 	@:optional var json:Dynamic;
 	@:optional var func:Dynamic;
 };
+
+typedef FileSizeObj = {
+	@:optional var _id:String;
+	@:optional var bytes:Int;
+	@:optional var KiB:Float;
+	@:optional var MiB:Float;
+	@:optional var GiB:Float;
+}
+
+typedef TimeObj = {
+	@:optional var _id:String;
+	@:optional var start:Date;
+	@:optional var end:Date;
+	@:optional var durationMS:Float;
+}
