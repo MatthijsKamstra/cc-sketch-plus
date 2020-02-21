@@ -1,10 +1,10 @@
 package sketcher.draw;
 
-import sketcher.util.MathUtil;
 import js.Browser.*;
 import js.html.webgl.RenderingContext;
 import sketcher.AST.Point;
 import sketcher.util.ColorUtil;
+import sketcher.util.MathUtil;
 
 class Rectangle extends Base implements IBase {
 	public static var ISWARN:Bool;
