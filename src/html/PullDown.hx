@@ -46,7 +46,7 @@ class PullDown {
 
 	function setup() {
 		var div = document.createDivElement();
-		div.setAttribute('style', 'position: fixed;display: block;top: 0;');
+		div.setAttribute('style', 'position: fixed;display: block;top: 0; line-height: 0;'); // reset bootstrap line-height
 		div.id = 'ccsketcher';
 
 		// console.log(param);
