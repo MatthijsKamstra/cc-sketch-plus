@@ -5,6 +5,7 @@ import js.html.*;
 
 class Loading extends CSSinjector {
 	var _id = 'cc-loading';
+
 	var el:js.html.DivElement;
 
 	/**
