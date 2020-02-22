@@ -3,26 +3,34 @@ package html;
 import js.html.Document;
 import js.Browser.*;
 
+using StringTools;
+
 class Container {
-	var _id = 'cc-bootstrap-container';
+	var _id = 'cc-sketcher-bootstrap-container';
 	var layout:String;
 	var isDebug = false;
 
 	static var _count = 0;
 
+	/**
+	 * check for `#` if id and `.` for class
+	 *
+	 * @param str
+	 * @param isClear
+	 */
 	public function new(?str:String = '', ?isClear:Bool = false) {
 		layout = str;
-		var elems = document.body.getElementsByTagName("*");
+		var elems = document.body.getElementsByTagName('div');
 		if (isClear) {
-			// for (i in 0...elems.length) {
-			// 	var _el = elems[i];
-			// 	if (_el == null)
-			// 		return;
-			// 	trace(_el);
-			// 	if (_el.id.toLowerCase().indexOf('cc-') == -1) {
-			// 		_el.parentElement.removeChild(_el);
-			// 	}
-			// }
+			for (i in 0...elems.length) {
+				var _el = elems[i];
+				if (_el == null)
+					return;
+				trace(_el);
+				// if (_el.id.toLowerCase().indexOf('cc-') == -1) {
+				// 	_el.parentElement.removeChild(_el);
+				// }
+			}
 
 			document.body.innerHTML = '';
 		}
@@ -31,11 +39,10 @@ class Container {
 
 	function init() {
 		var div = document.createDivElement();
-		if (_count == 0) {
+		div.id = '${_id}-${_count}';
+		if (_count == 0)
 			div.id = '${_id}';
-		} else {
-			div.id = '${_id}-${_count}';
-		}
+
 		div.className = 'container';
 		// div.innerHTML = '<!-- test -->';
 		document.body.appendChild(div);
@@ -57,7 +64,13 @@ class Container {
 				divRow.appendChild(divCol);
 				if (_col != '') {
 					var c = document.createDivElement();
-					c.id = _col;
+					if (_col.startsWith('#')) {
+						c.id = _col.replace('#', '');
+					} else if (_col.startsWith(".")) {
+						c.className = _col.replace('.', '');
+					} else {
+						c.id = _col;
+					}
 					divCol.appendChild(c);
 				}
 			}
