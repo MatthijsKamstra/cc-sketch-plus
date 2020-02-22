@@ -1,8 +1,12 @@
 package sketcher.load;
 
-import sketcher.util.MathUtil;
+import haxe.Timer;
 import js.Browser.*;
 import js.html.Image;
+import js.html.ProgressEvent;
+import js.html.XMLHttpRequest;
+import js.html.XMLHttpRequestResponseType;
+import sketcher.util.MathUtil;
 
 /**
  * 	var load = Loader.create().add(filePath).isDebug(false)
@@ -156,6 +160,20 @@ class Loader {
 		return this;
 	}
 
+	/**
+	 *
+	 * @example:
+	 * 		var load = Loader.create().add('test.json').onComplete(onCompleteHandler).onProgress(onProgressHandler).load();
+	 *		function onProgressHandler(current:Float, total:Float, pct:Float) {
+	 *			console.log(current);
+	 *			console.log(total);
+	 *			console.log(pct);
+	 *		}
+	 *
+	 * @param func
+	 * @param arr		might be a little weird...
+	 * @return Loader
+	 */
 	inline public function onProgress(func:Dynamic, ?arr:Array<Dynamic>):Loader {
 		this._onProgress = func;
 		this._onProgressParams = arr;
@@ -216,17 +234,20 @@ class Loader {
 			if (_isDebug)
 				trace('length of complete files: ' + completeArray.length);
 			if (Reflect.isFunction(_onComplete))
-				Reflect.callMethod(_onComplete, _onComplete, [completeArray]);
+				Timer.delay(() -> {
+					Reflect.callMethod(_onComplete, _onComplete, [completeArray]);
+				}, 1); // make sure progress is update
 			return;
 		}
 
 		// create the image used
 		var _l:LoaderObj = _loadingArray[_loadCounter];
-
 		switch (_l.type) {
 			case JPEG, JPG, Png, Gif, Img:
 				imageLoader(_l);
-			case Json, Txt, Xml, Svg, Csv:
+			case Json:
+				textLoaderBig(_l);
+			case Txt, Xml, Svg, Csv:
 				textLoader(_l);
 			case _:
 				trace('not sure what this type is?: "${_l.path}"');
@@ -338,17 +359,100 @@ class Loader {
 		req.onStatus = function(status:Int) {
 			if (_isDebug)
 				trace('status: $status');
-
-			// if (Reflect.isFunction(_onProgress))
-			// 	Reflect.callMethod(_onProgress, _onProgress, ['_img']);
 		}
-		// req.onBytes = function(e) {
-		// 	trace(e);
-		// }
 		req.request(false); // false=GET, true=POST
 
 		if (Reflect.isFunction(_onInit))
 			Reflect.callMethod(_onInit, _onInit, ['start loading file']);
+	}
+
+	function textLoaderBig(_l:LoaderObj) {
+		var url = _l.path;
+		_l.time.start = Date.now();
+		var xmlHTTP = new XMLHttpRequest();
+		xmlHTTP.open('GET', url, true);
+		switch (_l.type) {
+			case FileType.JSON, FileType.Json:
+				xmlHTTP.responseType = XMLHttpRequestResponseType.JSON;
+			default:
+				xmlHTTP.responseType = XMLHttpRequestResponseType.TEXT;
+				trace("case '" + _l.type + "': trace ('" + _l.type + "');");
+		}
+		xmlHTTP.onload = function(e) {
+			// console.log('a');
+			var data = xmlHTTP.response;
+			// console.log('b');
+			// console.log(data);
+			// console.log(e);
+			// console.log(e.total);
+			// console.log(e.timeStamp);
+
+			_l.filesize.bytes = e.total;
+			_l.filesize.KiB = e.total / 1024;
+			_l.filesize.MiB = e.total / 1024 / 1024;
+			_l.filesize.GiB = e.total / 1024 / 1024 / 1024;
+
+			// console.log('c');
+			_l.str = data;
+			_l.data = data;
+			_l.time.end = Date.now();
+			_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
+			_l.time.durationS = (_l.time.end.getTime() - _l.time.start.getTime()) / 1000;
+
+			// console.log('d');
+			// with big files this is a blocker... might not be the best place to do this
+			// if (_l.type == Json) {
+			// 	_l.json = haxe.Json.parse(data);
+			// } else {
+			// 	_l.json = '';
+			// }
+			// console.log('e');
+			completeArray.push(_l);
+
+			// console.log('f');
+			if (Reflect.isFunction(_l.func))
+				Reflect.callMethod(_l.func, _l.func, [_l]);
+
+			// console.log('g');
+			if (Reflect.isFunction(_onUpdate))
+				Reflect.callMethod(_onUpdate, _onUpdate, ['_img']);
+
+			// console.log('h');
+			_loadCounter++;
+
+			// console.log('i');
+			loadingHandler();
+			// console.log('j');
+			// var blob = new Blob([this.response]);
+			// thisImg.src = window.URL.createObjectURL(blob);
+		};
+		xmlHTTP.onerror = function(error) {
+			trace(error);
+			if (Reflect.isFunction(_onError))
+				Reflect.callMethod(_onError, _onError, [error]);
+			_loadCounter++;
+			loadingHandler();
+		}
+		xmlHTTP.onprogress = function(e:ProgressEvent) {
+			if (Reflect.isFunction(_onProgress))
+				Reflect.callMethod(this, _onProgress, [e.loaded, e.total, (e.loaded / e.total)]);
+		};
+		xmlHTTP.onloadstart = function() {
+			trace('onloadstart');
+			if (Reflect.isFunction(_onProgress))
+				Reflect.callMethod(_onProgress, _onProgress, [0, 1, 0]);
+
+			if (Reflect.isFunction(_onInit))
+				Reflect.callMethod(_onInit, _onInit, ['init']);
+		};
+		xmlHTTP.onloadend = function() {
+			trace('onloadend');
+			// You can also remove your progress bar here, if you like.
+			if (Reflect.isFunction(_onProgress))
+				Reflect.callMethod(_onProgress, _onProgress, [1, 1, 1]);
+		}
+
+		xmlHTTP.send();
 	}
 
 	// ____________________________________ getter/setter ____________________________________
@@ -413,6 +517,7 @@ typedef LoaderObj = {
 	@:optional var time:TimeObj;
 	@:optional var image:js.html.Image;
 	@:optional var str:String;
+	@:optional var data:Any;
 	@:optional var filesize:FileSizeObj;
 	@:optional var json:Dynamic;
 	@:optional var func:Dynamic;
