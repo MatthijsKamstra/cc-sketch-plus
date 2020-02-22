@@ -39,8 +39,10 @@ class ExContainer {
 		return '
 .col{
     min-height:20px;
-    margin:1px;
-    background-color:silver;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(86,61,124,.15);
+    border: 1px solid rgba(86,61,124,.2);
 }
 .testclass,
 #testid,
