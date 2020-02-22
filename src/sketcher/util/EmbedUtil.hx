@@ -171,6 +171,10 @@ class EmbedUtil {
 
 	/**
 	 * <!-- Ficons, A Simple, Open-Source, Drop-In Alternative for Font Awesome Icons  -->
+	 *
+	 * - https://ficons.fiction.com/
+	 * - https://github.com/fiction-com/ficons
+	 *
 	 * @example
 	 * 					sketcher.util.EmbedUtil.ficons();
 	 *
