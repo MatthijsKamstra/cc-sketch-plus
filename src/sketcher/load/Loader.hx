@@ -4,6 +4,24 @@ import sketcher.util.MathUtil;
 import js.Browser.*;
 import js.html.Image;
 
+/**
+ * 	var load = Loader.create().add(filePath).isDebug(false)
+ * 		.onComplete((e) -> {
+ *			trace(e);
+ *		}).onProgress((e) -> {
+ *			trace(e);
+ *		}).onUpdate((e) -> {
+ *			trace(e);
+ *		}).onError((e) -> {
+ *			trace(e);
+ *		}).onInit((e) -> {
+ *			trace(e);
+ *		});
+ */
+/**
+ *
+ * onprogress doesn't work with text yet
+ */
 class Loader {
 	@:isVar public var _id(get, set):String;
 	@:isVar public var _loadingArray(get, set):Array<LoaderObj> = [];
@@ -412,6 +430,6 @@ typedef TimeObj = {
 	@:optional var _id:String;
 	@:optional var start:Date;
 	@:optional var end:Date;
-	@:optional var durationMS:Float;
 	@:optional var durationS:Float;
+	@:optional var durationMS:Float;
 }
