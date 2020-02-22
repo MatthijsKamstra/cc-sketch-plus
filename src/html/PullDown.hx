@@ -48,7 +48,7 @@ class PullDown {
 
 	function setup() {
 		var div = document.createDivElement();
-		div.setAttribute('style', 'position: fixed;display: block;top: 0; line-height: 0;'); // reset bootstrap line-height
+		div.setAttribute('style', 'position: fixed;display: block;top: 0; line-height: 0; z-index:1'); // reset bootstrap line-height
 		div.id = _id;
 
 		// console.log(param);
