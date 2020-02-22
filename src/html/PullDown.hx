@@ -18,6 +18,8 @@ class PullDown {
 
 	var select:SelectElement;
 
+	var _id = 'cc-sketcher-pulldown';
+
 	final keyDefaultValue = 'ccquicknav';
 
 	@:isVar public var hash(get, set):String;
@@ -47,7 +49,7 @@ class PullDown {
 	function setup() {
 		var div = document.createDivElement();
 		div.setAttribute('style', 'position: fixed;display: block;top: 0; line-height: 0;'); // reset bootstrap line-height
-		div.id = 'ccsketcher';
+		div.id = _id;
 
 		// console.log(param);
 
