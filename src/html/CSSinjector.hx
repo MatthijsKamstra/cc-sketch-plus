@@ -1,12 +1,13 @@
-package cc.html;
+package html;
 
 import js.Browser.*;
 
 class CSSinjector {
-
 	public function new(?styles:String, ?elementID:String) {
-		if (elementID == null) elementID = 'inject-' + Date.now().getTime();
-		if (styles != null) setCSS(styles, elementID);
+		if (elementID == null)
+			elementID = 'inject-' + Date.now().getTime();
+		if (styles != null)
+			setCSS(styles, elementID);
 	}
 
 	/**
@@ -15,7 +16,7 @@ class CSSinjector {
 	 * @param styles 		what styles you want to inject into the file
 	 * @param elementID   	make sure we only inject once...
 	 */
-	function setCSS (styles:String, elementID:String){
+	function setCSS(styles:String, elementID:String) {
 		// trace('. setCSS ($styles, $elementID');
 
 		styles = minify(styles);
@@ -25,8 +26,10 @@ class CSSinjector {
 		css.id = elementID;
 
 		// [mck] it seems that styleSheet isn't in the html externs from Haxe
-		if (untyped css.styleSheet) untyped css.styleSheet.cssText = styles;
-		else css.appendChild(document.createTextNode(styles));
+		if (untyped css.styleSheet)
+			untyped css.styleSheet.cssText = styles;
+		else
+			css.appendChild(document.createTextNode(styles));
 
 		// [mck] maybe check this before adding
 		document.getElementsByTagName("head")[0].appendChild(css);
@@ -34,12 +37,10 @@ class CSSinjector {
 		// trace(document.getElementById(elementID));
 	}
 
-
 	// https://stackoverflow.com/questions/4278739/regular-expression-for-clean-javascript-comments-of-type
-	function minify (css:String) : String {
+	function minify(css:String):String {
 		// var regex =  // /\*(?:[^*]|\*+[^*/])*\*+/ (/* */)
 		// return css.replace('  ', ' ').replace('\t', '').replace('\n', '');
 		return css;
 	}
-
 }
