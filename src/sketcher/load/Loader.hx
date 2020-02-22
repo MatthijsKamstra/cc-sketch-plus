@@ -18,6 +18,8 @@ class Loader {
 	var _onProgressParams:Array<Dynamic>;
 	var _onError:Dynamic;
 	var _onErrorParams:Array<Dynamic>;
+	var _onInit:Dynamic;
+	var _onInitParams:Array<Dynamic>;
 	var _loadCounter = 0;
 
 	/**
@@ -145,6 +147,12 @@ class Loader {
 	inline public function onError(func:Dynamic, ?arr:Array<Dynamic>):Loader {
 		this._onError = func;
 		this._onErrorParams = arr;
+		return this;
+	}
+
+	inline public function onInit(func:Dynamic, ?arr:Array<Dynamic>):Loader {
+		this._onInit = func;
+		this._onInitParams = arr;
 		return this;
 	}
 
@@ -284,12 +292,16 @@ class Loader {
 
 				if (Reflect.isFunction(_onUpdate))
 					Reflect.callMethod(_onUpdate, _onUpdate, ['_img']);
+
 				_loadCounter++;
 
 				loadingHandler();
 			} catch (e:Dynamic) {
 				if (_isDebug)
 					trace(e);
+
+				if (Reflect.isFunction(_onError))
+					Reflect.callMethod(_onError, _onError, [e]);
 
 				_loadCounter++;
 				loadingHandler();
@@ -298,14 +310,27 @@ class Loader {
 		req.onError = function(error:String) {
 			if (_isDebug)
 				trace('error: $error, $url');
+
+			if (Reflect.isFunction(_onError))
+				Reflect.callMethod(_onError, _onError, [error]);
+
 			_loadCounter++;
 			loadingHandler();
 		}
 		req.onStatus = function(status:Int) {
 			if (_isDebug)
 				trace('status: $status');
+
+			// if (Reflect.isFunction(_onProgress))
+			// 	Reflect.callMethod(_onProgress, _onProgress, ['_img']);
 		}
+		// req.onBytes = function(e) {
+		// 	trace(e);
+		// }
 		req.request(false); // false=GET, true=POST
+
+		if (Reflect.isFunction(_onInit))
+			Reflect.callMethod(_onInit, _onInit, ['start loading file']);
 	}
 
 	// ____________________________________ getter/setter ____________________________________
