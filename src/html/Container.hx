@@ -26,7 +26,7 @@ class Container {
 				var _el = elems[i];
 				if (_el == null)
 					return;
-				trace(_el);
+				// trace(_el);
 				// if (_el.id.toLowerCase().indexOf('cc-') == -1) {
 				// 	_el.parentElement.removeChild(_el);
 				// }
