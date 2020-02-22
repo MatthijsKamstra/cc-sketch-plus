@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 18:28:07");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 22:30:25");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -1062,7 +1062,7 @@ examples_ExContainer.prototype = {
 		var container = new html_Container(str);
 	}
 	,css: function() {
-		return "\n.col{\n    min-height:20px;\n    margin:1px;\n    background-color:silver;\n}\n.testclass,\n#testid,\n#testid2,\n#canvas-wrapper,\n#svg-wrapper{\n    width:100%;\n    height:100%;\n    padding:10px;\n}\n\n#canvas-wrapper{\n    background-color: violet;\n}\n#svg-wrapper{\n    background-color: turquoise;\n}\n#svg-wrapper:after{\n    content:\"#svg-wrapper\";\n}\n#canvas-wrapper:after{\n    content:\"#canvas-wrapper\";\n}\n.testclass{\n    background-color: yellowgreen;\n}\n#testid{\n    background-color: tomato;\n}\n#testid2{\n    background-color: red;\n}\n#testid2:after{\n    content:\"#testid2\";\n}\n#testid:after{\n    content:\"#testid\";\n}\n.testclass:after{\n    content:\".testclass\";\n}\n";
+		return "\n.col{\n    min-height:20px;\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    background-color: rgba(86,61,124,.15);\n    border: 1px solid rgba(86,61,124,.2);\n}\n.testclass,\n#testid,\n#testid2,\n#canvas-wrapper,\n#svg-wrapper{\n    width:100%;\n    height:100%;\n    padding:10px;\n}\n\n#canvas-wrapper{\n    background-color: violet;\n}\n#svg-wrapper{\n    background-color: turquoise;\n}\n#svg-wrapper:after{\n    content:\"#svg-wrapper\";\n}\n#canvas-wrapper:after{\n    content:\"#canvas-wrapper\";\n}\n.testclass{\n    background-color: yellowgreen;\n}\n#testid{\n    background-color: tomato;\n}\n#testid2{\n    background-color: red;\n}\n#testid2:after{\n    content:\"#testid2\";\n}\n#testid:after{\n    content:\"#testid\";\n}\n.testclass:after{\n    content:\".testclass\";\n}\n";
 	}
 	,__class__: examples_ExContainer
 };
@@ -2505,7 +2505,6 @@ var html_Container = function(str,isClear) {
 			if(_el == null) {
 				return;
 			}
-			console.log("src/html/Container.hx:29:",_el);
 		}
 		window.document.body.innerHTML = "";
 	}
@@ -3471,10 +3470,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3916,10 +3915,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4106,10 +4105,10 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4319,10 +4318,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
