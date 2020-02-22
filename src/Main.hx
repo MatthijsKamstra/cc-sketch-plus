@@ -34,6 +34,7 @@ class Main {
 		document.addEventListener("DOMContentLoaded", function(event) {
 			console.log('${sketcher.App.NAME} Dom ready :: build: ${sketcher.App.getBuildDate()}');
 
+			// pulldown
 			var arr = PullDown.convertClass(ccTypeArray);
 			pulldown = new PullDown(arr, onSelectHandler);
 

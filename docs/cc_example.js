@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 16:07:48");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 18:28:07");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -583,6 +583,13 @@ StringTools.htmlEscape = function(s,quotes) {
 	}
 	return buf_b;
 };
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return s.lastIndexOf(start,0) == 0;
+	} else {
+		return false;
+	}
+};
 StringTools.isSpace = function(s,pos) {
 	var c = HxOverrides.cca(s,pos);
 	if(!(c > 8 && c < 14)) {
@@ -1035,8 +1042,9 @@ examples_ExCircles.prototype = {
 	,__class__: examples_ExCircles
 };
 var examples_ExContainer = function() {
+	var inject = new html_CSSinjector(this.css());
 	this.fontFamily = sketcher_util_EmbedUtil.fontDisplay(function(e) {
-		console.log("src/examples/ExContainer.hx:10:",e);
+		console.log("src/examples/ExContainer.hx:11:",e);
 		return;
 	});
 	sketcher_util_EmbedUtil.bootstrapStyle($bind(this,this.onEmbedHandler));
@@ -1045,12 +1053,16 @@ $hxClasses["examples.ExContainer"] = examples_ExContainer;
 examples_ExContainer.__name__ = "examples.ExContainer";
 examples_ExContainer.prototype = {
 	onEmbedHandler: function(e) {
-		console.log("src/examples/ExContainer.hx:16:",e);
+		console.log("src/examples/ExContainer.hx:17:",e);
 		this.init();
 	}
 	,init: function() {
-		var str = "|\ncanvas-wrapper|svg-wrapper\n|";
+		var str = ".testclass|testid|#testid2";
+		str += "\n|\ncanvas-wrapper|svg-wrapper\n|\n||||||||||||\n||||||||\n||||\n|||\n||\n|\n\n";
 		var container = new html_Container(str);
+	}
+	,css: function() {
+		return "\n.col{\n    min-height:20px;\n    margin:1px;\n    background-color:silver;\n}\n.testclass,\n#testid,\n#testid2,\n#canvas-wrapper,\n#svg-wrapper{\n    width:100%;\n    height:100%;\n    padding:10px;\n}\n\n#canvas-wrapper{\n    background-color: violet;\n}\n#svg-wrapper{\n    background-color: turquoise;\n}\n#svg-wrapper:after{\n    content:\"#svg-wrapper\";\n}\n#canvas-wrapper:after{\n    content:\"#canvas-wrapper\";\n}\n.testclass{\n    background-color: yellowgreen;\n}\n#testid{\n    background-color: tomato;\n}\n#testid2{\n    background-color: red;\n}\n#testid2:after{\n    content:\"#testid2\";\n}\n#testid:after{\n    content:\"#testid\";\n}\n.testclass:after{\n    content:\".testclass\";\n}\n";
 	}
 	,__class__: examples_ExContainer
 };
@@ -2446,6 +2458,33 @@ haxe_xml_Printer.prototype = {
 	}
 	,__class__: haxe_xml_Printer
 };
+var html_CSSinjector = function(styles,elementID) {
+	if(elementID == null) {
+		elementID = "inject-" + new Date().getTime();
+	}
+	if(styles != null) {
+		this.setCSS(styles,elementID);
+	}
+};
+$hxClasses["html.CSSinjector"] = html_CSSinjector;
+html_CSSinjector.__name__ = "html.CSSinjector";
+html_CSSinjector.prototype = {
+	setCSS: function(styles,elementID) {
+		styles = this.minify(styles);
+		var css = window.document.createElement("style");
+		css.id = elementID;
+		if(css.styleSheet) {
+			css.styleSheet.cssText = styles;
+		} else {
+			css.appendChild(window.document.createTextNode(styles));
+		}
+		window.document.getElementsByTagName("head")[0].appendChild(css);
+	}
+	,minify: function(css) {
+		return css;
+	}
+	,__class__: html_CSSinjector
+};
 var html_Container = function(str,isClear) {
 	if(isClear == null) {
 		isClear = false;
@@ -2454,20 +2493,21 @@ var html_Container = function(str,isClear) {
 		str = "";
 	}
 	this.isDebug = false;
-	this._id = "cc-bootstrap-container";
+	this._id = "cc-sketcher-bootstrap-container";
 	this.layout = str;
-	var elems = window.document.body.getElementsByTagName("*");
+	var elems = window.document.body.getElementsByTagName("div");
 	if(isClear) {
 		var _g = 0;
 		var _g1 = elems.length;
 		while(_g < _g1) {
 			var i = _g++;
 			var _el = elems[i];
-			console.log("src/html/Container.hx:19:",_el);
-			if(_el.id.toLowerCase().indexOf("cc-") == -1) {
-				_el.parentElement.removeChild(_el);
+			if(_el == null) {
+				return;
 			}
+			console.log("src/html/Container.hx:29:",_el);
 		}
+		window.document.body.innerHTML = "";
 	}
 	this.init();
 };
@@ -2476,10 +2516,9 @@ html_Container.__name__ = "html.Container";
 html_Container.prototype = {
 	init: function() {
 		var div = window.document.createElement("div");
+		div.id = "" + this._id + "-" + html_Container._count;
 		if(html_Container._count == 0) {
 			div.id = "" + this._id;
-		} else {
-			div.id = "" + this._id + "-" + html_Container._count;
 		}
 		div.className = "container";
 		window.document.body.appendChild(div);
@@ -2492,7 +2531,7 @@ html_Container.prototype = {
 			var divRow = window.document.createElement("div");
 			divRow.className = "row";
 			if(this.isDebug) {
-				console.log("src/html/Container.hx:47:",row);
+				console.log("src/html/Container.hx:56:",row);
 			}
 			var col = row.split("|");
 			var _g2 = 0;
@@ -2501,14 +2540,20 @@ html_Container.prototype = {
 				var i1 = _g2++;
 				var _col = col[i1];
 				if(this.isDebug) {
-					console.log("src/html/Container.hx:52:",_col);
+					console.log("src/html/Container.hx:61:",_col);
 				}
 				var divCol = window.document.createElement("div");
 				divCol.className = "col";
 				divRow.appendChild(divCol);
 				if(_col != "") {
 					var c = window.document.createElement("div");
-					c.id = _col;
+					if(StringTools.startsWith(_col,"#")) {
+						c.id = StringTools.replace(_col,"#","");
+					} else if(StringTools.startsWith(_col,".")) {
+						c.className = StringTools.replace(_col,".","");
+					} else {
+						c.id = _col;
+					}
 					divCol.appendChild(c);
 				}
 			}
@@ -2546,7 +2591,7 @@ html_PullDown.prototype = {
 	setup: function() {
 		var _gthis = this;
 		var div = window.document.createElement("div");
-		div.setAttribute("style","position: fixed;display: block;top: 0; line-height: 0;");
+		div.setAttribute("style","position: fixed;display: block;top: 0; line-height: 0; z-index:1");
 		div.id = this._id;
 		this.select = window.document.createElement("select");
 		this.select.setAttribute("style","font-size: small;");
@@ -5425,6 +5470,8 @@ String.prototype.__class__ = $hxClasses["String"] = String;
 String.__name__ = "String";
 $hxClasses["Array"] = Array;
 Array.__name__ = "Array";
+Date.prototype.__class__ = $hxClasses["Date"] = Date;
+Date.__name__ = "Date";
 var Int = { };
 var Dynamic = { };
 var Float = Number;
