@@ -146,7 +146,7 @@ class SketcherBase {
 				// FileExport.svg2Canvas(sketch.getSVGElement(), false, getFileName(), true);
 				// FileExport.svg2Canvas(getSvg(), true, getFileName());
 			} else {
-				trace('no canvas-2-text');
+				console.warn('no canvas-2-svg');
 			}
 		}
 		if (e.metaKey == true && e.key == 'f') {
