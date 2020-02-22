@@ -1,5 +1,6 @@
 package;
 
+import examples.ExContainer;
 import html.PullDown;
 import js.Browser.*;
 import Sketcher.Globals.*;
@@ -23,6 +24,7 @@ class Main {
 		examples.ExGradient, //
 		examples.ExPolyline, //
 		examples.ExBackground, //
+		examples.ExContainer, //
 	];
 
 	var pulldown:PullDown;

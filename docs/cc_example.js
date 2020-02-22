@@ -45,13 +45,12 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 12:35:07");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 15:51:39");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
-		var progress = new html_ProgressBar();
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -1034,6 +1033,26 @@ examples_ExCircles.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExCircles
+};
+var examples_ExContainer = function() {
+	this.fontFamily = sketcher_util_EmbedUtil.fontDisplay(function(e) {
+		console.log("src/examples/ExContainer.hx:10:",e);
+		return;
+	});
+	sketcher_util_EmbedUtil.bootstrapStyle($bind(this,this.onEmbedHandler));
+};
+$hxClasses["examples.ExContainer"] = examples_ExContainer;
+examples_ExContainer.__name__ = "examples.ExContainer";
+examples_ExContainer.prototype = {
+	onEmbedHandler: function(e) {
+		console.log("src/examples/ExContainer.hx:16:",e);
+		this.init();
+	}
+	,init: function() {
+		var str = "|\ncanvas-wrapper|svg-wrapper\n|";
+		var container = new html_Container(str);
+	}
+	,__class__: examples_ExContainer
 };
 var examples_ExEllipse = function() {
 	this.isDebug = true;
@@ -2427,29 +2446,53 @@ haxe_xml_Printer.prototype = {
 	}
 	,__class__: haxe_xml_Printer
 };
-var html_ProgressBar = function() {
-	this._id = "cc-progressbar";
-	this.create();
+var html_Container = function(str) {
+	this._id = "cc-bootstrap-container";
+	this.layout = str;
+	this.init();
 };
-$hxClasses["html.ProgressBar"] = html_ProgressBar;
-html_ProgressBar.__name__ = "html.ProgressBar";
-html_ProgressBar.prototype = {
-	create: function() {
-		this.progressEl = window.document.getElementById(this._id);
-		if(this.progressEl == null) {
-			var el = window.document.createElement("progress");
-			el.id = this._id;
-			el.value = 10;
-			el.max = 100;
-			window.document.body.appendChild(el);
-			this.progressEl = el;
+$hxClasses["html.Container"] = html_Container;
+html_Container.__name__ = "html.Container";
+html_Container.prototype = {
+	init: function() {
+		var div = window.document.createElement("div");
+		div.id = "" + this._id + "-" + html_Container._count;
+		div.className = "container";
+		window.document.body.appendChild(div);
+		var _arr = this.layout.split("\n");
+		var _g = 0;
+		var _g1 = _arr.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var row = _arr[i];
+			var divRow = window.document.createElement("div");
+			divRow.className = "row";
+			console.log("src/html/Container.hx:29:",row);
+			var col = row.split("|");
+			var _g2 = 0;
+			var _g11 = col.length;
+			while(_g2 < _g11) {
+				var i1 = _g2++;
+				var _col = col[i1];
+				console.log("src/html/Container.hx:33:",_col);
+				if(_col == "") {
+					var divCol = window.document.createElement("div");
+					divCol.className = "col";
+					divRow.appendChild(divCol);
+				} else {
+					var divCol1 = window.document.createElement("div");
+					divCol1.className = "col";
+					divRow.appendChild(divCol1);
+					var c = window.document.createElement("div");
+					c.id = _col;
+					divCol1.appendChild(c);
+				}
+			}
+			div.appendChild(divRow);
 		}
+		html_Container._count++;
 	}
-	,update: function(currentValue,totalValue) {
-		this.progressEl.value = currentValue;
-		this.progressEl.max = totalValue;
-	}
-	,__class__: html_ProgressBar
+	,__class__: html_Container
 };
 var html_PullDown = function(valueArray,callback,callbackArray) {
 	this.keyDefaultValue = "ccquicknav";
@@ -4515,7 +4558,10 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		return this.fontFamily;
 	}
 	,set_fontFamily: function(value) {
-		value = StringTools.replace(value,"+"," ").split(":")[0];
+		value = StringTools.replace(value,"+"," ");
+		if(value.indexOf(":") != -1) {
+			value = value.split(":")[0];
+		}
 		this.xml.set("font-family",value);
 		return this.fontFamily = value;
 	}
@@ -4770,6 +4816,9 @@ sketcher_util_EmbedUtil.bootstrap = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-popper","https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js","sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo");
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-bootstrap","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js","sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6");
 };
+sketcher_util_EmbedUtil.bootstrapStyle = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.bootstrapStylesheet("bootstrap-stylesheet","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css","sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh",callback,callbackArray);
+};
 sketcher_util_EmbedUtil.zip = function(callback,callbackArray) {
 	if(!sketcher_util_EmbedUtil.check("jszip")) {
 		sketcher_util_EmbedUtil.script("jszip","https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js",callback,["jszip"]);
@@ -4803,6 +4852,21 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 		}
 	};
 	window.document.head.appendChild(link);
+};
+sketcher_util_EmbedUtil.fontMono = function(callback,callbackArray) {
+	var fontFamily = "Source+Code+Pro";
+	sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
+	return "Source Code Pro";
+};
+sketcher_util_EmbedUtil.fontHandwritten = function(callback,callbackArray) {
+	var fontFamily = "Pacifico";
+	sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
+	return fontFamily;
+};
+sketcher_util_EmbedUtil.fontDisplay = function(callback,callbackArray) {
+	var fontFamily = "Bebas+Neue";
+	sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
+	return "Bebas Neue";
 };
 sketcher_util_EmbedUtil.prototype = {
 	__class__: sketcher_util_EmbedUtil
@@ -5395,6 +5459,7 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
+html_Container._count = 0;
 sketcher_App.NAME = "[cc-sketcher]";
 sketcher_draw_Base.COUNT = 0;
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
