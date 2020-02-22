@@ -192,7 +192,7 @@ class EmbedUtil {
 
 	/**
 	 * @example
-	 * 						sketcher.util.EmbedUtil.bootstrap();
+	 * 			sketcher.util.EmbedUtil.bootstrap();
 	 *
 	 * @param callback
 	 * @param callbackArray
@@ -206,6 +206,15 @@ class EmbedUtil {
 			"sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo");
 		bootstrapScript("bootstrap-bootstrap", "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js",
 			"sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6");
+	}
+
+	/**
+	 *
+	 * sketcher.util.EmbedUtil.bootstrapStyle();
+	**/
+	public static function bootstrapStyle(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		bootstrapStylesheet("bootstrap-stylesheet", "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
+			"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh", callback, callbackArray);
 	}
 
 	/**
@@ -229,7 +238,7 @@ class EmbedUtil {
 	 * if the link is cached it works just fine
 	 *
 	 * @exampe
-	 * 		Text.embedGoogleFont('Press+Start+2P', onEmbedHandler);
+	 * 		EmbedUtil.embedGoogleFont('Press+Start+2P', onEmbedHandler);
 	 *
 	 * @param family	name given after `...css?family=` (example: Press+Start+2P)
 	 * @param callback
@@ -258,5 +267,58 @@ class EmbedUtil {
 				}, 1); // only works when I delay for a second (1000) but that just is weird
 		}
 		document.head.appendChild(link);
+	}
+
+	// ____________________________________ quick embedding fonts I use often ____________________________________
+
+	/**
+	 * Source+Code+Pro
+	 * https://fonts.google.com/specimen/Source+Code+Pro
+	 *
+	 * @exampe
+	 * 		var fontFamily = EmbedUtil.fontMono(onEmbedHandler);
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 * @return String
+	 */
+	public static function fontMono(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
+		var fontFamily = 'Source+Code+Pro';
+		EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
+		return 'Source Code Pro';
+	}
+
+	/**
+	 * Pacifico
+	 * https://fonts.google.com/specimen/Pacifico
+	 *
+	 * @exampe
+	 * 		EmbedUtil.fontHandwritten(onEmbedHandler);
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 * @return String
+	 */
+	public static function fontHandwritten(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
+		var fontFamily = 'Pacifico';
+		EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
+		return fontFamily;
+	}
+
+	/**
+	 * Bebas+Neue
+	 * https://fonts.google.com/specimen/Bebas+Neue
+	 *
+	 * @exampe
+	 * 		EmbedUtil.fontDisplay(onEmbedHandler);
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 * @return String
+	 */
+	public static function fontDisplay(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
+		var fontFamily = 'Bebas+Neue';
+		EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
+		return 'Bebas Neue';
 	}
 }
