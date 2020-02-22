@@ -53,7 +53,8 @@ class Loading extends CSSinjector {
 	}
 
 	public function remove() {
-		el.parentElement.removeChild(el);
+		var parent = el.parentElement;
+		parent.removeChild(el);
 	}
 
 	// ____________________________________ inject css code ____________________________________
