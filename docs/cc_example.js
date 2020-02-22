@@ -48,9 +48,10 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-21 10:32:49");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-22 12:35:07");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
+		var progress = new html_ProgressBar();
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -2426,6 +2427,30 @@ haxe_xml_Printer.prototype = {
 	}
 	,__class__: haxe_xml_Printer
 };
+var html_ProgressBar = function() {
+	this._id = "cc-progressbar";
+	this.create();
+};
+$hxClasses["html.ProgressBar"] = html_ProgressBar;
+html_ProgressBar.__name__ = "html.ProgressBar";
+html_ProgressBar.prototype = {
+	create: function() {
+		this.progressEl = window.document.getElementById(this._id);
+		if(this.progressEl == null) {
+			var el = window.document.createElement("progress");
+			el.id = this._id;
+			el.value = 10;
+			el.max = 100;
+			window.document.body.appendChild(el);
+			this.progressEl = el;
+		}
+	}
+	,update: function(currentValue,totalValue) {
+		this.progressEl.value = currentValue;
+		this.progressEl.max = totalValue;
+	}
+	,__class__: html_ProgressBar
+};
 var html_PullDown = function(valueArray,callback,callbackArray) {
 	this.keyDefaultValue = "ccquicknav";
 	this.textArray = [];
@@ -3333,10 +3358,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3778,10 +3803,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -3968,10 +3993,10 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4181,10 +4206,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -5273,6 +5298,35 @@ sketcher_util_MathUtil.shuffle = function(array) {
 };
 sketcher_util_MathUtil.clamp = function(value,min,max) {
 	return Math.min(Math.max(value,Math.min(min,max)),Math.max(min,max));
+};
+sketcher_util_MathUtil.formatByteSizeString = function(bytes) {
+	if(bytes < 1024) {
+		return bytes + " bytes";
+	} else if(bytes < 1048576) {
+		return sketcher_util_MathUtil.toFixed(bytes / 1024,3) + " KiB";
+	} else if(bytes < 1073741824) {
+		return sketcher_util_MathUtil.toFixed(bytes / 1048576,3) + " MiB";
+	} else {
+		return sketcher_util_MathUtil.toFixed(bytes / 1073741824,3) + " GiB";
+	}
+};
+sketcher_util_MathUtil.formatByteSize = function(bytes) {
+	if(bytes < 1024) {
+		return bytes;
+	} else if(bytes < 1048576) {
+		return sketcher_util_MathUtil.toFixed(bytes / 1024,3);
+	} else if(bytes < 1073741824) {
+		return sketcher_util_MathUtil.toFixed(bytes / 1048576,3);
+	} else {
+		return sketcher_util_MathUtil.toFixed(bytes / 1073741824,3);
+	}
+};
+sketcher_util_MathUtil.toFixed = function(number,precision) {
+	if(precision == null) {
+		precision = 2;
+	}
+	number *= Math.pow(10,precision);
+	return Math.round(number) / Math.pow(10,precision);
 };
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
