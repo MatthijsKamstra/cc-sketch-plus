@@ -237,27 +237,28 @@ class EmbedUtil {
 	 * It seems that onload can't be used for the first time on the page.
 	 * if the link is cached it works just fine
 	 *
-	 * @exampe
-	 * 		EmbedUtil.embedGoogleFont('Press+Start+2P', onEmbedHandler);
+	 * @example
+	 * 		var family = EmbedUtil.embedGoogleFont('Press+Start+2P::200,300,400,500,600,700', onEmbedHandler); // 'Press Start 2P"
 	 *
 	 * @param family	name given after `...css?family=` (example: Press+Start+2P)
 	 * @param callback
 	 * @param callbackArray
 	 */
-	public static function embedGoogleFont(family:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+	public static function embedGoogleFont(family:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
 		// trace('embedGoogleFont');
 		var _id = 'embededGoogleFonts';
 		var _url = 'https://fonts.googleapis.com/css?family=';
+		var _display = '&display=swap';
 		var link:LinkElement = cast document.getElementById(_id);
 		if (link != null) {
-			var temp = link.href.replace(_url, '');
+			var temp = link.href.replace(_url, '').replace(_display, '');
 			family = temp + '|' + family;
 		} else {
 			link = document.createLinkElement();
 		}
 		if (callbackArray == null)
 			callbackArray = [family];
-		link.href = '${_url}${family}&display=swap';
+		link.href = '${_url}${family}${_display}';
 		link.rel = "stylesheet";
 		link.id = _id;
 		link.onload = function() {
@@ -267,6 +268,13 @@ class EmbedUtil {
 				}, 1); // only works when I delay for a second (1000) but that just is weird
 		}
 		document.head.appendChild(link);
+		return EmbedUtil.cleanFontFamily(family);
+	}
+
+	static function cleanFontFamily(family:String):String {
+		if (family.indexOf(':') != -1)
+			family = family.split(':')[0];
+		return family.replace('+', ' ');
 	}
 
 	// ____________________________________ quick embedding fonts I use often ____________________________________
@@ -276,7 +284,7 @@ class EmbedUtil {
 	 * https://fonts.google.com/specimen/Source+Code+Pro
 	 *
 	 * @exampe
-	 * 		var fontFamily = EmbedUtil.fontMono(onEmbedHandler);
+	 * 		var family = EmbedUtil.fontMono(onEmbedHandler);
 	 *
 	 * @param callback
 	 * @param callbackArray
@@ -284,8 +292,7 @@ class EmbedUtil {
 	 */
 	public static function fontMono(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
 		var fontFamily = 'Source+Code+Pro';
-		EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
-		return 'Source Code Pro';
+		return EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
 	}
 
 	/**
@@ -293,7 +300,7 @@ class EmbedUtil {
 	 * https://fonts.google.com/specimen/Pacifico
 	 *
 	 * @exampe
-	 * 		EmbedUtil.fontHandwritten(onEmbedHandler);
+	 * 		var family = EmbedUtil.fontHandwritten(onEmbedHandler);
 	 *
 	 * @param callback
 	 * @param callbackArray
@@ -301,8 +308,7 @@ class EmbedUtil {
 	 */
 	public static function fontHandwritten(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
 		var fontFamily = 'Pacifico';
-		EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
-		return fontFamily;
+		return EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
 	}
 
 	/**
@@ -310,7 +316,7 @@ class EmbedUtil {
 	 * https://fonts.google.com/specimen/Bebas+Neue
 	 *
 	 * @exampe
-	 * 		EmbedUtil.fontDisplay(onEmbedHandler);
+	 * 		var family = EmbedUtil.fontDisplay(onEmbedHandler);
 	 *
 	 * @param callback
 	 * @param callbackArray
@@ -318,7 +324,6 @@ class EmbedUtil {
 	 */
 	public static function fontDisplay(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
 		var fontFamily = 'Bebas+Neue';
-		EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
-		return 'Bebas Neue';
+		return EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
 	}
 }
