@@ -71,8 +71,52 @@ class ExPolygon {
 		}
 
 		var omtrek = MathUtil.circumferenceCircle(radiusSmall);
+
 		var p = grid.array[0];
-		var circle = sketch.makeCircle(p.x, p.y, radiusSmall);
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 3, radiusSmall);
+		// _polygon.rotate = p.degree;
+		_polygon.strokeColor = getColourObj(BLACK);
+		_polygon.strokeWeight = 1;
+		_polygon.fillOpacity = 0;
+
+		var p = grid.array[1];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 4, radiusSmall);
+		_polygon.rotate = 45;
+		_polygon.setStroke(getColourObj(PINK), 10);
+		_polygon.setFill(getColourObj(LIME));
+
+		var p = grid.array[2];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 5, radiusSmall);
+		// _polygon.rotate = p.degree;
+		_polygon.strokeColor = getColourObj(BLACK);
+		_polygon.strokeWeight = 1;
+		_polygon.fillOpacity = 0;
+
+		var p = grid.array[3];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 6, radiusSmall);
+		// _polygon.rotate = p.degree;
+		_polygon.strokeColor = getColourObj(BLACK);
+		_polygon.strokeWeight = 1;
+		_polygon.fillOpacity = 0;
+
+		var p = grid.array[4];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 7, radiusSmall);
+		// _polygon.rotate = p.degree;
+		_polygon.strokeColor = getColourObj(BLACK);
+		_polygon.strokeWeight = 1;
+		_polygon.fillOpacity = 0;
+
+		var p = grid.array[5];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 8, radiusSmall);
+		// _polygon.rotate = p.degree;
+		_polygon.noStroke();
+		_polygon.setFill("#33C4B8");
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();

@@ -1,8 +1,12 @@
 package sketcher.draw;
 
+import sketcher.util.ColorUtil;
 import sketcher.AST.Point;
+import js.Browser.*;
 
 class Polygon extends Base implements IBase {
+	public static var ISWARN:Bool;
+
 	public var type = 'Polygon'; // base (get class name?)
 
 	@:isVar public var arr(get, set):Array<Float>; // collection of points
@@ -28,12 +32,70 @@ class Polygon extends Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		if (!ISWARN) {
+			console.groupCollapsed('Polygon (${id}) info canvas');
+			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight\n- rotate');
+			console.warn('doesn\'t work\n- move');
+			console.groupEnd();
+			Polygon.ISWARN = true;
+		}
+
+		// set everything to default values
+		useDefaultsCanvas();
+
+		if (this.lineCap != null) {
+			ctx.lineCap = cast this.lineCap;
+		}
+		ctx.lineWidth = this.lineWeight;
+
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _strokeColor = ColorUtil.assumption(this.strokeColor);
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
+
+		if (this.dash != null) {
+			ctx.setLineDash(this.dash);
+		}
+
+		// trace(this.rotate, this.move);
+
 		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+		//
+
+		var _pointArray = convertArr();
+		for (i in 0..._pointArray.length) {
+			var p = _pointArray[i];
+			if (i == 0) {
+				ctx.moveTo(p.x, p.y);
+			} else {
+				ctx.lineTo(p.x, p.y);
+			}
+		}
+
+		ctx.closePath();
+
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null && this.lineWeight != 0) {
+			ctx.stroke();
+		}
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+
+	function convertArr():Array<Point> {
+		var _pointArray = [];
+		for (i in 0...this.arr.length) {
+			if (i % 2 == 0) {
+				var x = this.arr[i];
+				var y = this.arr[i + 1];
+				_pointArray.push({x: x, y: y});
+			}
+		}
+		return _pointArray;
+	}
 
 	// ____________________________________ public functions ____________________________________
 	// not sure what this does?????
