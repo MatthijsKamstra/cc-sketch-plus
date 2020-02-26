@@ -40,7 +40,7 @@ class Polygon extends Base implements IBase {
 			Polygon.ISWARN = true;
 		}
 
-		console.info('1. ' + this.lineCap);
+		// console.info('1. ' + this.lineCap);
 
 		// set everything to default values
 		useDefaultsCanvas();
@@ -49,7 +49,7 @@ class Polygon extends Base implements IBase {
 			ctx.lineCap = cast this.lineCap;
 		}
 
-		console.info('2. ' + this.lineCap);
+		// console.info('2. ' + this.lineCap);
 
 		ctx.lineWidth = this.lineWeight;
 		var _fillColor = ColorUtil.assumption(this.fillColor);

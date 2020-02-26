@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-27 00:13:13");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-27 00:24:19");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -1615,6 +1615,11 @@ examples_ExPolygon.prototype = {
 		_polygon7.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.RED),20);
 		_polygon7.noFill();
 		_polygon7.setLineEnds();
+		var p8 = this.grid.array[8];
+		var _polygon8 = sketch.makePolygon([p8.x - 50,p8.y + 40,p8.x + 30,p8.y - 50,p8.x + 50,p8.y + 20]);
+		_polygon8.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.GRAY),20);
+		_polygon8.setFill("#33C4B8");
+		_polygon8.setLineEnds();
 		sketch.update();
 	}
 	,__class__: examples_ExPolygon
@@ -4377,12 +4382,10 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 			window.console.groupEnd();
 			sketcher_draw_Polygon.ISWARN = true;
 		}
-		window.console.info("1. " + this.get_lineCap());
 		this.useDefaultsCanvas();
 		if(this.get_lineCap() != null) {
 			ctx.lineCap = this.get_lineCap();
 		}
-		window.console.info("2. " + this.get_lineCap());
 		ctx.lineWidth = this.get_lineWeight();
 		var value = this.get_fillColor();
 		var _r = 0;

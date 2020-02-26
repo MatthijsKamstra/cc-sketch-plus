@@ -133,6 +133,14 @@ class ExPolygon {
 		_polygon.noFill();
 		_polygon.setLineEnds();
 
+		var p = grid.array[8];
+		var _polygon = sketch.makePolygon([p.x - 50, p.y + 40, p.x + 30, p.y - 50, p.x + 50, p.y + 20]);
+		_polygon.setStroke(getColourObj(GRAY), 20);
+		_polygon.setFill("#33C4B8");
+
+		// _polygon.noFill();
+		_polygon.setLineEnds();
+
 		// Don't forget to tell two to render everything to the screen
 
 		sketch.update();
