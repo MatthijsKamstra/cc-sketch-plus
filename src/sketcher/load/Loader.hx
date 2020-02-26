@@ -108,7 +108,7 @@ class Loader {
 			func: func
 		};
 		if (_isDebug)
-			trace(_obj);
+			console.debug(_obj);
 		this._loadingArray.push(_obj);
 		return this;
 	}
@@ -123,7 +123,7 @@ class Loader {
 	 */
 	inline public function load():Loader {
 		if (_isDebug)
-			trace('start loading');
+			console.debug('start loading');
 
 		loadingHandler();
 		return this;
@@ -201,7 +201,7 @@ class Loader {
 	 */
 	function fileType(path:String):FileType {
 		var type:FileType = Unknown;
-		var ext = path.split('.')[1];
+		var ext = path.split('.')[path.split('.').length - 1];
 
 		switch (ext.toLowerCase()) {
 			case 'jpg', 'jpeg':
@@ -218,8 +218,14 @@ class Loader {
 				type = Txt;
 			case 'csv':
 				type = Csv;
+			case 'svg':
+				type = Svg;
 			case _:
 				type = Unknown;
+		}
+
+		if (_isDebug) {
+			console.log(ext);
 		}
 
 		return type;
@@ -228,11 +234,11 @@ class Loader {
 	function loadingHandler() {
 		if (_loadCounter >= _loadingArray.length) {
 			if (_isDebug)
-				trace('${toString()} :: Loading queue is done');
+				console.debug('${toString()} :: Loading queue is done');
 			if (_isDebug)
-				trace('show completed array: ' + completeArray);
+				console.debug('show completed array: ' + completeArray);
 			if (_isDebug)
-				trace('length of complete files: ' + completeArray.length);
+				console.debug('length of complete files: ' + completeArray.length);
 			if (Reflect.isFunction(_onComplete))
 				Timer.delay(() -> {
 					Reflect.callMethod(_onComplete, _onComplete, [completeArray]);
@@ -250,7 +256,7 @@ class Loader {
 			case Txt, Xml, Svg, Csv:
 				textLoader(_l);
 			case _:
-				trace('not sure what this type is?: "${_l.path}"');
+				console.warn('not sure what this type is?: "${_l.path}"');
 		}
 	}
 
@@ -348,7 +354,7 @@ class Loader {
 		}
 		req.onError = function(error:String) {
 			if (_isDebug)
-				trace('error: $error, $url');
+				console.error('error: $error, $url');
 
 			if (Reflect.isFunction(_onError))
 				Reflect.callMethod(_onError, _onError, [error]);
@@ -358,7 +364,7 @@ class Loader {
 		}
 		req.onStatus = function(status:Int) {
 			if (_isDebug)
-				trace('status: $status');
+				console.debug('status: $status');
 		}
 		req.request(false); // false=GET, true=POST
 
@@ -374,9 +380,11 @@ class Loader {
 		switch (_l.type) {
 			case FileType.JSON, FileType.Json:
 				xmlHTTP.responseType = XMLHttpRequestResponseType.JSON;
+			case FileType.Svg:
+				xmlHTTP.responseType = XMLHttpRequestResponseType.TEXT;
 			default:
 				xmlHTTP.responseType = XMLHttpRequestResponseType.TEXT;
-				trace("case '" + _l.type + "': trace ('" + _l.type + "');");
+				console.warn("case '" + _l.type + "': trace ('" + _l.type + "');");
 		}
 		xmlHTTP.onload = function(e) {
 			// console.log('a');
@@ -427,7 +435,7 @@ class Loader {
 			// thisImg.src = window.URL.createObjectURL(blob);
 		};
 		xmlHTTP.onerror = function(error) {
-			trace(error);
+			console.warn(error);
 			if (Reflect.isFunction(_onError))
 				Reflect.callMethod(_onError, _onError, [error]);
 			_loadCounter++;
@@ -438,7 +446,7 @@ class Loader {
 				Reflect.callMethod(this, _onProgress, [e.loaded, e.total, (e.loaded / e.total)]);
 		};
 		xmlHTTP.onloadstart = function() {
-			trace('onloadstart');
+			console.debug('onloadstart');
 			if (Reflect.isFunction(_onProgress))
 				Reflect.callMethod(_onProgress, _onProgress, [0, 1, 0]);
 
@@ -446,7 +454,7 @@ class Loader {
 				Reflect.callMethod(_onInit, _onInit, ['init']);
 		};
 		xmlHTTP.onloadend = function() {
-			trace('onloadend');
+			console.debug('onloadend');
 			// You can also remove your progress bar here, if you like.
 			if (Reflect.isFunction(_onProgress))
 				Reflect.callMethod(_onProgress, _onProgress, [1, 1, 1]);
