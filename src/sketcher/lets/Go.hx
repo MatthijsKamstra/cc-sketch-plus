@@ -45,7 +45,7 @@ class Go {
 	/**
 	 * Animate an object to another state (like position, scale, rotation, alpha)
 	 *
-	 * @example		cc.lets.Go.to(foobarMc, 1.5);
+	 * @example		lets.Go.to(foobarMc, 1.5);
 	 *
 	 * @param  target   	object to animate
 	 * @param  duration 	in seconds
