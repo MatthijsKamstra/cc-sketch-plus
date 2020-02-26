@@ -47,6 +47,8 @@ class PullDown {
 	}
 
 	function setup() {
+		// use cursor key lef and right to switch sketches
+
 		var div = document.createDivElement();
 		div.setAttribute('style', 'position: fixed;display: block;top: 0; line-height: 0; z-index:1'); // reset bootstrap line-height
 		div.id = _id;
@@ -94,6 +96,17 @@ class PullDown {
 				}
 			}
 		}
+
+		window.addEventListener(Sketcher.Globals.KEY_DOWN, function(e:js.html.KeyboardEvent) {
+			switch (e.key) {
+				case 'h':
+					if (div.hasAttribute('style')) {
+						div.removeAttribute('style');
+					} else {
+						div.setAttribute('style', 'display:none;');
+					}
+			}
+		}, false);
 	}
 
 	// ____________________________________ query ____________________________________
@@ -151,8 +164,10 @@ class PullDown {
 	 * totally useless class except in my own setup..]
 	 *
 	 * @example
+	 * 				var pulldown : PullDown;
 	 *	 			var arr = PullDown.convertClass(ccTypeArray);
 	 *				pulldown = new PullDown(arr, onSelectHandler);
+	 * 				function onSelectHandler (e){trace(e);// index}
 	 *
 	 * @param ccTypeArray
 	 * @return Array<String>
