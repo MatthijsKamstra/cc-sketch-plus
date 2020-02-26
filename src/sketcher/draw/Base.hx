@@ -63,7 +63,7 @@ class Base {
 	@:isVar public var isVisible(get, set):Bool;
 
 	// transform
-	@:isVar public var rotate(get, set):Float;
+	@:isVar public var rotate(get, null):Float;
 	@:isVar public var move(get, set):Point; // move x/y
 
 	@:isVar public var transform(get, set):String;
