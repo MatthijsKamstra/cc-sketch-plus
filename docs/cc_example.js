@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-26 12:49:12");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-26 23:07:15");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -1521,6 +1521,92 @@ examples_ExLine.prototype = {
 	}
 	,__class__: examples_ExLine
 };
+var examples_ExPolygon = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.radiusSmall = 50;
+	this.init();
+};
+$hxClasses["examples.ExPolygon"] = examples_ExPolygon;
+examples_ExPolygon.__name__ = "examples.ExPolygon";
+examples_ExPolygon.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var omtrek = sketcher_util_MathUtil.circumferenceCircle(this.radiusSmall);
+		var p = this.grid.array[0];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x,p.y,3,this.radiusSmall);
+		_polygon.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		_polygon.set_strokeWeight(1);
+		_polygon.set_fillOpacity(0);
+		var p1 = this.grid.array[1];
+		var _polygon1 = sketch.makePolygon([]);
+		_polygon1.sides(p1.x,p1.y,4,this.radiusSmall);
+		_polygon1.set_rotate(45);
+		_polygon1.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK),10);
+		_polygon1.setFill(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		var p2 = this.grid.array[2];
+		var _polygon2 = sketch.makePolygon([]);
+		_polygon2.sides(p2.x,p2.y,5,this.radiusSmall);
+		_polygon2.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		_polygon2.set_strokeWeight(1);
+		_polygon2.set_fillOpacity(0);
+		var p3 = this.grid.array[3];
+		var _polygon3 = sketch.makePolygon([]);
+		_polygon3.sides(p3.x,p3.y,6,this.radiusSmall);
+		_polygon3.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		_polygon3.set_strokeWeight(1);
+		_polygon3.set_fillOpacity(0);
+		var p4 = this.grid.array[4];
+		var _polygon4 = sketch.makePolygon([]);
+		_polygon4.sides(p4.x,p4.y,7,this.radiusSmall);
+		_polygon4.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		_polygon4.set_strokeWeight(1);
+		_polygon4.set_fillOpacity(0);
+		var p5 = this.grid.array[5];
+		var _polygon5 = sketch.makePolygon([]);
+		_polygon5.sides(p5.x,p5.y,8,this.radiusSmall);
+		_polygon5.noStroke();
+		_polygon5.setFill("#33C4B8");
+		sketch.update();
+	}
+	,__class__: examples_ExPolygon
+};
 var examples_ExPolyline = function() {
 	this.isDebug = true;
 	this.sketchHeight = 400;
@@ -2495,6 +2581,7 @@ var html_Container = function(str,isClear) {
 	this._isDebug = false;
 	this._id = "cc-sketcher-bootstrap-container";
 	this.layout = str;
+	sketcher_util_EmbedUtil.bootstrapStyle();
 	if(isClear) {
 		var elems = window.document.body.getElementsByTagName("div");
 		var _g = 0;
@@ -2508,11 +2595,11 @@ var html_Container = function(str,isClear) {
 		}
 		window.document.body.innerHTML = "";
 	}
-	this.init();
 };
 $hxClasses["html.Container"] = html_Container;
 html_Container.__name__ = "html.Container";
 html_Container.create = function(str) {
+	console.log("src/html/Container.hx:69:","x");
 	var container = new html_Container(str);
 	return container;
 };
@@ -2524,6 +2611,14 @@ html_Container.prototype = {
 		this.set_isFull(isFull);
 		return this;
 	}
+	,noGutter: function() {
+		this.set__isNoGutter(true);
+		return this;
+	}
+	,fullscreen: function() {
+		this.set__isfullscreen(true);
+		return this;
+	}
 	,isDebug: function(isDebug) {
 		if(isDebug == null) {
 			isDebug = true;
@@ -2531,7 +2626,12 @@ html_Container.prototype = {
 		this._isDebug = isDebug;
 		return this;
 	}
+	,attach: function() {
+		this.init();
+		return this;
+	}
 	,init: function() {
+		var style = this.getCSS();
 		var div = window.document.createElement("div");
 		div.id = "" + this._id + "-" + html_Container._count;
 		if(html_Container._count == 0) {
@@ -2542,6 +2642,9 @@ html_Container.prototype = {
 		} else {
 			div.className = "container";
 		}
+		if(this.get__isfullscreen()) {
+			div.setAttribute("style","padding-left: 0; padding-right: 0;");
+		}
 		window.document.body.appendChild(div);
 		var _arr = this.layout.split("\n");
 		var _g = 0;
@@ -2551,8 +2654,11 @@ html_Container.prototype = {
 			var row = _arr[i];
 			var divRow = window.document.createElement("div");
 			divRow.className = "row";
+			if(this.get__isNoGutter()) {
+				divRow.classList.add("no-gutters");
+			}
 			if(this._isDebug) {
-				console.log("src/html/Container.hx:95:",row);
+				console.log("src/html/Container.hx:129:",row);
 			}
 			var col = row.split("|");
 			var _g2 = 0;
@@ -2561,7 +2667,7 @@ html_Container.prototype = {
 				var i1 = _g2++;
 				var _col = col[i1];
 				if(this._isDebug) {
-					console.log("src/html/Container.hx:100:",_col);
+					console.log("src/html/Container.hx:134:",_col);
 				}
 				var divCol = window.document.createElement("div");
 				divCol.className = "col";
@@ -2570,10 +2676,13 @@ html_Container.prototype = {
 					var c = window.document.createElement("div");
 					if(StringTools.startsWith(_col,"#")) {
 						c.id = StringTools.replace(_col,"#","");
+						style += "" + _col + ":after{content:\"" + _col + "\";}";
 					} else if(StringTools.startsWith(_col,".")) {
 						c.className = StringTools.replace(_col,".","");
+						style += "" + _col + ":after{content:\"" + _col + "\";}";
 					} else {
 						c.id = _col;
+						style += "#" + _col + ":after{content:\"" + _col + "\";}";
 					}
 					divCol.appendChild(c);
 				}
@@ -2582,7 +2691,6 @@ html_Container.prototype = {
 		}
 		html_Container._count++;
 		if(this._isDebug) {
-			var style = this.getCSS();
 			var css = window.document.createElement("style");
 			css.appendChild(window.document.createTextNode(style));
 			window.document.getElementsByTagName("head")[0].appendChild(css);
@@ -2593,6 +2701,18 @@ html_Container.prototype = {
 	}
 	,set_isFull: function(value) {
 		return this.isFull = value;
+	}
+	,get__isNoGutter: function() {
+		return this._isNoGutter;
+	}
+	,set__isNoGutter: function(value) {
+		return this._isNoGutter = value;
+	}
+	,get__isfullscreen: function() {
+		return this._isfullscreen;
+	}
+	,set__isfullscreen: function(value) {
+		return this._isfullscreen = value;
 	}
 	,getCSS: function() {
 		return "\n.col{\n    min-height:20px;\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    background-color: rgba(86,61,124,.15);\n    border: 1px solid rgba(86,61,124,.2);\n}\n";
@@ -2660,6 +2780,15 @@ html_PullDown.prototype = {
 				}
 			}
 		};
+		window.addEventListener(Globals.KEY_DOWN,function(e1) {
+			if(e1.key == "h") {
+				if(div.hasAttribute("style")) {
+					div.removeAttribute("style");
+				} else {
+					div.setAttribute("style","display:none;");
+				}
+			}
+		},false);
 	}
 	,test: function() {
 		window.location.search = "post=1234&action=edit";
@@ -2671,17 +2800,17 @@ html_PullDown.prototype = {
 	}
 	,updateURL: function() {
 		window.console.warn("updateURL");
-		console.log("src/html/PullDown.hx:121:",this.get_param());
+		console.log("src/html/PullDown.hx:134:",this.get_param());
 		var urlParams = new URLSearchParams(window.location.search);
-		console.log("src/html/PullDown.hx:123:",urlParams.has(this.keyDefaultValue));
+		console.log("src/html/PullDown.hx:136:",urlParams.has(this.keyDefaultValue));
 		if(!urlParams.has(this.keyDefaultValue)) {
 			urlParams.append(this.keyDefaultValue,this.valueArray[0]);
 			this.set_param(this.valueArray[0]);
-			console.log("src/html/PullDown.hx:127:",this.get_param());
+			console.log("src/html/PullDown.hx:140:",this.get_param());
 		} else {
 			urlParams.set(this.keyDefaultValue,this.get_param());
 		}
-		console.log("src/html/PullDown.hx:131:",this.get_param());
+		console.log("src/html/PullDown.hx:144:",this.get_param());
 	}
 	,setSelected: function(index) {
 		var options = this.select.options;
@@ -4230,15 +4359,121 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
+		if(!sketcher_draw_Polygon.ISWARN) {
+			window.console.groupCollapsed("Polygon (" + this.get_id() + ") info canvas");
+			window.console.info("the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight\n- rotate");
+			window.console.warn("doesn't work\n- move");
+			window.console.groupEnd();
+			sketcher_draw_Polygon.ISWARN = true;
+		}
+		this.useDefaultsCanvas();
+		if(this.get_lineCap() != null) {
+			ctx.lineCap = this.get_lineCap();
+		}
+		ctx.lineWidth = this.get_lineWeight();
+		var value = this.get_fillColor();
+		var _r = 0;
+		var _g = 0;
+		var _b = 0;
+		var _a = 1;
+		value = StringTools.replace(value," ","");
+		if(value.indexOf("rgba") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+			var arr = value.split(",");
+			_r = arr[0];
+			_g = arr[1];
+			_b = arr[2];
+			_a = arr[3];
+		} else if(value.indexOf("rgb") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+			var arr1 = value.split(",");
+			_r = arr1[0];
+			_g = arr1[1];
+			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			var rgb_r = int >> 16 & 255;
+			var rgb_g = int >> 8 & 255;
+			var rgb_b = int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
+		}
+		var _fillColor = { r : _r, g : _g, b : _b, a : _a};
+		ctx.fillStyle = sketcher_util_ColorUtil.getColourObj(_fillColor,this.get_fillOpacity());
+		var value1 = this.get_strokeColor();
+		var _r1 = 0;
+		var _g1 = 0;
+		var _b1 = 0;
+		var _a1 = 1;
+		value1 = StringTools.replace(value1," ","");
+		if(value1.indexOf("rgba") != -1) {
+			value1 = StringTools.replace(StringTools.replace(value1,"rgba(",""),")","");
+			var arr2 = value1.split(",");
+			_r1 = arr2[0];
+			_g1 = arr2[1];
+			_b1 = arr2[2];
+			_a1 = arr2[3];
+		} else if(value1.indexOf("rgb") != -1) {
+			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
+		} else if(value1.indexOf("#") != -1) {
+			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
+			var rgb_r1 = int1 >> 16 & 255;
+			var rgb_g1 = int1 >> 8 & 255;
+			var rgb_b1 = int1 & 255;
+			_r1 = rgb_r1;
+			_g1 = rgb_g1;
+			_b1 = rgb_b1;
+		}
+		var _strokeColor = { r : _r1, g : _g1, b : _b1, a : _a1};
+		ctx.strokeStyle = sketcher_util_ColorUtil.getColourObj(_strokeColor,this.get_strokeOpacity());
+		if(this.get_dash() != null) {
+			ctx.setLineDash(this.get_dash());
+		}
 		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+		var _pointArray = this.convertArr();
+		var _g2 = 0;
+		var _g11 = _pointArray.length;
+		while(_g2 < _g11) {
+			var i = _g2++;
+			var p = _pointArray[i];
+			if(i == 0) {
+				ctx.moveTo(p.x,p.y);
+			} else {
+				ctx.lineTo(p.x,p.y);
+			}
+		}
+		ctx.closePath();
+		if(this.get_fill() != null) {
+			ctx.fill();
+		}
+		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
+			ctx.stroke();
+		}
 	}
 	,gl: function(gl) {
 	}
+	,convertArr: function() {
+		var _pointArray = [];
+		var _g = 0;
+		var _g1 = this.get_arr().length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(i % 2 == 0) {
+				var x = this.get_arr()[i];
+				var y = this.get_arr()[i + 1];
+				_pointArray.push({ x : x, y : y});
+			}
+		}
+		return _pointArray;
+	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			console.log("src/sketcher/draw/Polygon.hx:44:","not in this length");
+			console.log("src/sketcher/draw/Polygon.hx:106:","not in this length");
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
@@ -4355,10 +4590,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4904,6 +5139,9 @@ sketcher_util_EmbedUtil.bootstrapScript = function(id,src,integrity,callback,cal
 sketcher_util_EmbedUtil.quicksettings = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("quicksettings","https://cdn.jsdelivr.net/quicksettings/3.0.2/quicksettings.min.js",callback,callbackArray);
 };
+sketcher_util_EmbedUtil.gsap = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.script("gsap","https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.0/gsap.min.js",callback,callbackArray);
+};
 sketcher_util_EmbedUtil.datgui = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("datgui","https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js",callback,callbackArray);
 	var style = window.document.createElement("style");
@@ -4934,6 +5172,8 @@ sketcher_util_EmbedUtil.zip = function(callback,callbackArray) {
 	}
 };
 sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray) {
+	window.console.info("embedGoogleFont " + family);
+	var _family = sketcher_util_EmbedUtil.cleanFontFamily(family);
 	var _id = "embededGoogleFonts";
 	var _url = "https://fonts.googleapis.com/css?family=";
 	var _display = "&display=swap";
@@ -4959,7 +5199,8 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 		}
 	};
 	window.document.head.appendChild(link);
-	return sketcher_util_EmbedUtil.cleanFontFamily(family);
+	window.console.info("embedGoogleFont " + family);
+	return _family;
 };
 sketcher_util_EmbedUtil.cleanFontFamily = function(family) {
 	if(family.indexOf(":") != -1) {
