@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-25 11:54:30");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-26 12:49:12");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -2492,11 +2492,11 @@ var html_Container = function(str,isClear) {
 	if(str == null) {
 		str = "";
 	}
-	this.isDebug = false;
+	this._isDebug = false;
 	this._id = "cc-sketcher-bootstrap-container";
 	this.layout = str;
-	var elems = window.document.body.getElementsByTagName("div");
 	if(isClear) {
+		var elems = window.document.body.getElementsByTagName("div");
 		var _g = 0;
 		var _g1 = elems.length;
 		while(_g < _g1) {
@@ -2512,14 +2512,36 @@ var html_Container = function(str,isClear) {
 };
 $hxClasses["html.Container"] = html_Container;
 html_Container.__name__ = "html.Container";
+html_Container.create = function(str) {
+	var container = new html_Container(str);
+	return container;
+};
 html_Container.prototype = {
-	init: function() {
+	full: function(isFull) {
+		if(isFull == null) {
+			isFull = true;
+		}
+		this.set_isFull(isFull);
+		return this;
+	}
+	,isDebug: function(isDebug) {
+		if(isDebug == null) {
+			isDebug = true;
+		}
+		this._isDebug = isDebug;
+		return this;
+	}
+	,init: function() {
 		var div = window.document.createElement("div");
 		div.id = "" + this._id + "-" + html_Container._count;
 		if(html_Container._count == 0) {
 			div.id = "" + this._id;
 		}
-		div.className = "container";
+		if(this.get_isFull()) {
+			div.className = "container-fluid";
+		} else {
+			div.className = "container";
+		}
 		window.document.body.appendChild(div);
 		var _arr = this.layout.split("\n");
 		var _g = 0;
@@ -2529,8 +2551,8 @@ html_Container.prototype = {
 			var row = _arr[i];
 			var divRow = window.document.createElement("div");
 			divRow.className = "row";
-			if(this.isDebug) {
-				console.log("src/html/Container.hx:56:",row);
+			if(this._isDebug) {
+				console.log("src/html/Container.hx:95:",row);
 			}
 			var col = row.split("|");
 			var _g2 = 0;
@@ -2538,8 +2560,8 @@ html_Container.prototype = {
 			while(_g2 < _g11) {
 				var i1 = _g2++;
 				var _col = col[i1];
-				if(this.isDebug) {
-					console.log("src/html/Container.hx:61:",_col);
+				if(this._isDebug) {
+					console.log("src/html/Container.hx:100:",_col);
 				}
 				var divCol = window.document.createElement("div");
 				divCol.className = "col";
@@ -2559,6 +2581,21 @@ html_Container.prototype = {
 			div.appendChild(divRow);
 		}
 		html_Container._count++;
+		if(this._isDebug) {
+			var style = this.getCSS();
+			var css = window.document.createElement("style");
+			css.appendChild(window.document.createTextNode(style));
+			window.document.getElementsByTagName("head")[0].appendChild(css);
+		}
+	}
+	,get_isFull: function() {
+		return this.isFull;
+	}
+	,set_isFull: function(value) {
+		return this.isFull = value;
+	}
+	,getCSS: function() {
+		return "\n.col{\n    min-height:20px;\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    background-color: rgba(86,61,124,.15);\n    border: 1px solid rgba(86,61,124,.2);\n}\n";
 	}
 	,__class__: html_Container
 };
@@ -4899,9 +4936,10 @@ sketcher_util_EmbedUtil.zip = function(callback,callbackArray) {
 sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray) {
 	var _id = "embededGoogleFonts";
 	var _url = "https://fonts.googleapis.com/css?family=";
+	var _display = "&display=swap";
 	var link = window.document.getElementById(_id);
 	if(link != null) {
-		var temp = StringTools.replace(link.href,_url,"");
+		var temp = StringTools.replace(StringTools.replace(link.href,_url,""),_display,"");
 		family = temp + "|" + family;
 	} else {
 		link = window.document.createElement("link");
@@ -4909,7 +4947,7 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 	if(callbackArray == null) {
 		callbackArray = [family];
 	}
-	link.href = "" + _url + family + "&display=swap";
+	link.href = "" + _url + family + _display;
 	link.rel = "stylesheet";
 	link.id = _id;
 	link.onload = function() {
@@ -4921,21 +4959,25 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 		}
 	};
 	window.document.head.appendChild(link);
+	return sketcher_util_EmbedUtil.cleanFontFamily(family);
+};
+sketcher_util_EmbedUtil.cleanFontFamily = function(family) {
+	if(family.indexOf(":") != -1) {
+		family = family.split(":")[0];
+	}
+	return StringTools.replace(family,"+"," ");
 };
 sketcher_util_EmbedUtil.fontMono = function(callback,callbackArray) {
 	var fontFamily = "Source+Code+Pro";
-	sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
-	return "Source Code Pro";
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
 };
 sketcher_util_EmbedUtil.fontHandwritten = function(callback,callbackArray) {
 	var fontFamily = "Pacifico";
-	sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
-	return fontFamily;
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
 };
 sketcher_util_EmbedUtil.fontDisplay = function(callback,callbackArray) {
 	var fontFamily = "Bebas+Neue";
-	sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
-	return "Bebas Neue";
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
 };
 sketcher_util_EmbedUtil.prototype = {
 	__class__: sketcher_util_EmbedUtil
