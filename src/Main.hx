@@ -25,6 +25,7 @@ class Main {
 		examples.ExPolyline, //
 		examples.ExBackground, //
 		examples.ExContainer, //
+		examples.ExPolygon, //
 	];
 
 	var pulldown:PullDown;
