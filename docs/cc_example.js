@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-26 23:07:15");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-27 00:13:13");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		_gthis.setupArt();
@@ -1577,12 +1577,12 @@ examples_ExPolygon.prototype = {
 		var p1 = this.grid.array[1];
 		var _polygon1 = sketch.makePolygon([]);
 		_polygon1.sides(p1.x,p1.y,4,this.radiusSmall);
-		_polygon1.set_rotate(45);
+		_polygon1.setRotate(45,p1.x,p1.y);
 		_polygon1.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK),10);
 		_polygon1.setFill(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
 		var p2 = this.grid.array[2];
 		var _polygon2 = sketch.makePolygon([]);
-		_polygon2.sides(p2.x,p2.y,5,this.radiusSmall);
+		_polygon2.sides(p2.x,p2.y,5,this.radiusSmall,54.);
 		_polygon2.set_strokeColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
 		_polygon2.set_strokeWeight(1);
 		_polygon2.set_fillOpacity(0);
@@ -1603,6 +1603,18 @@ examples_ExPolygon.prototype = {
 		_polygon5.sides(p5.x,p5.y,8,this.radiusSmall);
 		_polygon5.noStroke();
 		_polygon5.setFill("#33C4B8");
+		var p6 = this.grid.array[6];
+		var _polygon6 = sketch.makePolygon([]);
+		_polygon6.sides(p6.x,p6.y,4,this.radiusSmall,45);
+		_polygon6.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PURPLE),25);
+		_polygon6.noFill();
+		_polygon6.set_lineJoin("round");
+		var p7 = this.grid.array[7];
+		var _polygon7 = sketch.makePolygon([]);
+		_polygon7.sides(p7.x,p7.y,5,this.radiusSmall);
+		_polygon7.setStroke(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.RED),20);
+		_polygon7.noFill();
+		_polygon7.setLineEnds();
 		sketch.update();
 	}
 	,__class__: examples_ExPolygon
@@ -3154,7 +3166,7 @@ sketcher_draw_Base.prototype = {
 		if(rx == null) {
 			rx = 0;
 		}
-		this.set_rotate(degree);
+		this.rotate = degree;
 		this.set_rx(rx);
 		this.set_ry(ry);
 		var str = "rotate(" + degree;
@@ -3636,10 +3648,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4081,10 +4093,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4271,10 +4283,10 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4361,15 +4373,16 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	,ctx: function(ctx) {
 		if(!sketcher_draw_Polygon.ISWARN) {
 			window.console.groupCollapsed("Polygon (" + this.get_id() + ") info canvas");
-			window.console.info("the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight\n- rotate");
-			window.console.warn("doesn't work\n- move");
+			window.console.warn("doesn't work\n- move\n- rotate\n- lineJoin");
 			window.console.groupEnd();
 			sketcher_draw_Polygon.ISWARN = true;
 		}
+		window.console.info("1. " + this.get_lineCap());
 		this.useDefaultsCanvas();
 		if(this.get_lineCap() != null) {
 			ctx.lineCap = this.get_lineCap();
 		}
+		window.console.info("2. " + this.get_lineCap());
 		ctx.lineWidth = this.get_lineWeight();
 		var value = this.get_fillColor();
 		var _r = 0;
@@ -4473,19 +4486,24 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			console.log("src/sketcher/draw/Polygon.hx:106:","not in this length");
+			console.log("src/sketcher/draw/Polygon.hx:105:","not in this length");
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
 	}
-	,sides: function(x,y,sides,size) {
+	,sides: function(x,y,sides,size,rotateDegree) {
 		this.set_arr([]);
+		if(rotateDegree == null) {
+			rotateDegree = 0;
+		} else {
+			rotateDegree = sketcher_util_MathUtil.radians(rotateDegree);
+		}
 		var _g = 0;
 		var _g1 = sides;
 		while(_g < _g1) {
 			var i = _g++;
-			var _x = x + size * Math.cos(i * (2 * Math.PI) / sides);
-			var _y = y + size * Math.sin(i * (2 * Math.PI) / sides);
+			var _x = x + size * Math.cos(rotateDegree + i * (2 * Math.PI) / sides);
+			var _y = y + size * Math.sin(rotateDegree + i * (2 * Math.PI) / sides);
 			this.get_arr().push(_x);
 			this.get_arr().push(_y);
 		}

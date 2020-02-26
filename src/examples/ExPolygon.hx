@@ -1,5 +1,6 @@
 package examples;
 
+import sketcher.draw.AST.LineJoin;
 import js.Browser.*;
 import sketcher.util.GridUtil;
 import sketcher.util.MathUtil;
@@ -83,13 +84,13 @@ class ExPolygon {
 		var p = grid.array[1];
 		var _polygon = sketch.makePolygon([]);
 		_polygon.sides(p.x, p.y, 4, radiusSmall);
-		_polygon.rotate = 45;
+		_polygon.setRotate(45, p.x, p.y);
 		_polygon.setStroke(getColourObj(PINK), 10);
 		_polygon.setFill(getColourObj(LIME));
 
 		var p = grid.array[2];
 		var _polygon = sketch.makePolygon([]);
-		_polygon.sides(p.x, p.y, 5, radiusSmall);
+		_polygon.sides(p.x, p.y, 5, radiusSmall, ((360 / 5) / 4) + (360 / 10) * 1);
 		// _polygon.rotate = p.degree;
 		_polygon.strokeColor = getColourObj(BLACK);
 		_polygon.strokeWeight = 1;
@@ -118,7 +119,22 @@ class ExPolygon {
 		_polygon.noStroke();
 		_polygon.setFill("#33C4B8");
 
+		var p = grid.array[6];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 4, radiusSmall, 45);
+		_polygon.setStroke(getColourObj(PURPLE), 25);
+		_polygon.noFill();
+		_polygon.lineJoin = LineJoin.Round;
+
+		var p = grid.array[7];
+		var _polygon = sketch.makePolygon([]);
+		_polygon.sides(p.x, p.y, 5, radiusSmall);
+		_polygon.setStroke(getColourObj(RED), 20);
+		_polygon.noFill();
+		_polygon.setLineEnds();
+
 		// Don't forget to tell two to render everything to the screen
+
 		sketch.update();
 	}
 }

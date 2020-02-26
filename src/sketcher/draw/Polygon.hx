@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil;
 import sketcher.AST.Point;
 import js.Browser.*;
@@ -34,11 +35,12 @@ class Polygon extends Base implements IBase {
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.groupCollapsed('Polygon (${id}) info canvas');
-			console.info('the following work\n- strokeOpacity\n- fillOpacity\n- fillColor\n- strokeColor\n- strokeWeight\n- rotate');
-			console.warn('doesn\'t work\n- move');
+			console.warn('doesn\'t work\n- move\n- rotate\n- lineJoin');
 			console.groupEnd();
 			Polygon.ISWARN = true;
 		}
+
+		console.info('1. ' + this.lineCap);
 
 		// set everything to default values
 		useDefaultsCanvas();
@@ -46,23 +48,22 @@ class Polygon extends Base implements IBase {
 		if (this.lineCap != null) {
 			ctx.lineCap = cast this.lineCap;
 		}
+
+		console.info('2. ' + this.lineCap);
+
 		ctx.lineWidth = this.lineWeight;
-
 		var _fillColor = ColorUtil.assumption(this.fillColor);
+
 		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
-
 		var _strokeColor = ColorUtil.assumption(this.strokeColor);
-		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
 
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
 		if (this.dash != null) {
 			ctx.setLineDash(this.dash);
 		}
-
 		// trace(this.rotate, this.move);
-
 		ctx.beginPath();
 		//
-
 		var _pointArray = convertArr();
 		for (i in 0..._pointArray.length) {
 			var p = _pointArray[i];
@@ -72,9 +73,7 @@ class Polygon extends Base implements IBase {
 				ctx.lineTo(p.x, p.y);
 			}
 		}
-
 		ctx.closePath();
-
 		if (this.fill != null) {
 			ctx.fill();
 		}
@@ -129,18 +128,29 @@ class Polygon extends Base implements IBase {
 	 * @param y			y position of the shape
 	 * @param sides		number of sides (3=triangle, 4=square, etc)
 	 * @param size		radius of the polygon (length to the corner)
+	 * @param rotateDegree	(optional) starting rotation
 	 */
-	public function sides(x:Float, y:Float, sides:Int, size:Float) {
+	public function sides(x:Float, y:Float, sides:Int, size:Float, ?rotateDegree:Float) {
 		// reset array
 		this.arr = [];
+
+		if (rotateDegree == null) {
+			rotateDegree = 0;
+		} else {
+			rotateDegree = MathUtil.radians(rotateDegree);
+		}
+
+		// if (rotateDegree > 0) {
+		// 	console.log(rotateDegree);
+		// }
 
 		// trace(x);
 		// trace(y);
 		// this.arr.push((x + size) * Math.cos(0));
 		// this.arr.push((y + size) * Math.sin(0));
 		for (i in 0...sides) {
-			var _x = x + (size * Math.cos(i * (2 * Math.PI) / sides));
-			var _y = y + (size * Math.sin(i * (2 * Math.PI) / sides));
+			var _x = x + (size * Math.cos(rotateDegree + (i * (2 * Math.PI) / sides)));
+			var _y = y + (size * Math.sin(rotateDegree + (i * (2 * Math.PI) / sides)));
 			this.arr.push(_x);
 			this.arr.push(_y);
 		}
