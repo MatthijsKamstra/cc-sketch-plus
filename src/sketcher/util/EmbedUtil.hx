@@ -4,7 +4,7 @@ import haxe.Timer;
 import js.Browser;
 import js.html.DOMParser;
 import js.html.LinkElement;
-import js.Browser.document;
+import js.Browser.*;
 
 using StringTools;
 
@@ -141,6 +141,16 @@ class EmbedUtil {
 
 	/**
 	 * @example
+	 * 					sketcher.util.EmbedUtil.gsap();
+	 * @param callback
+	 * @param callbackArray
+	 */
+	public static function gsap(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.0/gsap.min.js', callback, callbackArray);
+	}
+
+	/**
+	 * @example
 	 * 					sketcher.util.EmbedUtil.datgui();
 	 * @param callback
 	 * @param callbackArray
@@ -245,7 +255,8 @@ class EmbedUtil {
 	 * @param callbackArray
 	 */
 	public static function embedGoogleFont(family:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
-		// trace('embedGoogleFont');
+		console.info('embedGoogleFont $family');
+		var _family = EmbedUtil.cleanFontFamily(family);
 		var _id = 'embededGoogleFonts';
 		var _url = 'https://fonts.googleapis.com/css?family=';
 		var _display = '&display=swap';
@@ -268,7 +279,8 @@ class EmbedUtil {
 				}, 1); // only works when I delay for a second (1000) but that just is weird
 		}
 		document.head.appendChild(link);
-		return EmbedUtil.cleanFontFamily(family);
+		console.info('embedGoogleFont $family');
+		return _family;
 	}
 
 	static function cleanFontFamily(family:String):String {
