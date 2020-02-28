@@ -217,6 +217,10 @@ class VideoExport {
 		var btnStyle = 'color:black; padding:10px; margin:10px; background-color:silver;display: inline-block;font-weight: 400;text-align: center;white-space: nowrap;vertical-align: middle;';
 		var bash = ('#!/bin/bash'
 			+ '\n\n'
+			+ '# `-an`: remove audio\n'
+			+ '# `-qscale 1`:  highest quality\n'
+			+ '#  -c:v libx264\n'
+			+ '\n\n'
 			+ '# [mck] for now just convert to mp4 seems the best solution'
 			+ '\n\n'
 			+ 'say "start convert webm to mp4"'
