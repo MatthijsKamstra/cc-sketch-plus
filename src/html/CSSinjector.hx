@@ -24,6 +24,7 @@ class CSSinjector {
 
 		var css = document.createStyleElement();
 		css.id = elementID;
+		css.type = 'text/css';
 
 		// [mck] it seems that styleSheet isn't in the html externs from Haxe
 		if (untyped css.styleSheet)
