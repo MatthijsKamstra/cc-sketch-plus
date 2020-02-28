@@ -104,3 +104,9 @@ class Settings {
 		return sizeType = value;
 	}
 }
+
+enum abstract SketchType(String) from String to String {
+	var SVG = 'svg';
+	var CANVAS = 'canvas';
+	var WEBGL = 'webgl';
+}
