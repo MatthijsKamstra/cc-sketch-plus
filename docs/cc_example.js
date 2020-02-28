@@ -48,9 +48,10 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-27 00:24:19");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-27 18:17:39");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
+		var ccnav = new html_CCNav(arr);
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -2561,6 +2562,39 @@ haxe_xml_Printer.prototype = {
 	}
 	,__class__: haxe_xml_Printer
 };
+var html_CCNav = function(valueArray) {
+	var _gthis = this;
+	sketcher_util_EmbedUtil.ccnav(function() {
+		window.console.info("CCNav: delay 1 second to add " + valueArray.length + " to nav");
+		haxe_Timer.delay($bind(_gthis,_gthis.onCompleteHandler),1000);
+	});
+	this.valueArray = valueArray;
+};
+$hxClasses["html.CCNav"] = html_CCNav;
+html_CCNav.__name__ = "html.CCNav";
+html_CCNav.prototype = {
+	onCompleteHandler: function() {
+		var div = window.document.getElementById("storage");
+		div.innerHTML = "";
+		var ul = window.document.createElement("ul");
+		var _g = 0;
+		var _g1 = this.valueArray.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _arr = this.valueArray[i];
+			var li = window.document.createElement("li");
+			var a = window.document.createElement("a");
+			var arr = _arr.split(".");
+			var hashLink = arr[arr.length - 1];
+			a.href = "#" + hashLink;
+			a.text = "" + _arr;
+			li.appendChild(a);
+			ul.appendChild(li);
+		}
+		div.appendChild(ul);
+	}
+	,__class__: html_CCNav
+};
 var html_CSSinjector = function(styles,elementID) {
 	if(elementID == null) {
 		elementID = "inject-" + new Date().getTime();
@@ -3653,10 +3687,10 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4098,10 +4132,10 @@ sketcher_draw_Line.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4288,10 +4322,10 @@ sketcher_draw_PolyLine.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4432,10 +4466,10 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4611,10 +4645,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -5162,6 +5196,9 @@ sketcher_util_EmbedUtil.quicksettings = function(callback,callbackArray) {
 };
 sketcher_util_EmbedUtil.gsap = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("gsap","https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.0/gsap.min.js",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.ccnav = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.script("ccnav","https://matthijskamstra.github.io/drop-in-off-canvas-menu/cc_nav.min.js",callback,callbackArray);
 };
 sketcher_util_EmbedUtil.datgui = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("datgui","https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js",callback,callbackArray);

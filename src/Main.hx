@@ -1,5 +1,6 @@
 package;
 
+import html.CCNav;
 import examples.ExContainer;
 import html.PullDown;
 import js.Browser.*;
@@ -38,6 +39,8 @@ class Main {
 			// pulldown
 			var arr = PullDown.convertClass(ccTypeArray);
 			pulldown = new PullDown(arr, onSelectHandler);
+
+			var ccnav = new CCNav(arr);
 
 			// var cc = new examples.All();
 			setupArt();
