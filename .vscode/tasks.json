@@ -15,7 +15,10 @@
         "$haxe-error",
         "$haxe-trace"
       ],
-      "group": "build"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "type": "hxml",
@@ -26,10 +29,7 @@
         "$haxe-error",
         "$haxe-trace"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "group": "build"
     }
   ]
 }
