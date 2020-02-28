@@ -265,7 +265,7 @@ class EmbedUtil {
 	 * @param callbackArray
 	 */
 	public static function embedGoogleFont(family:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
-		console.info('embedGoogleFont $family');
+		// console.info('embedGoogleFont $family');
 		var _family = EmbedUtil.cleanFontFamily(family);
 		var _id = 'embededGoogleFonts';
 		var _url = 'https://fonts.googleapis.com/css?family=';
@@ -289,7 +289,7 @@ class EmbedUtil {
 				}, 1); // only works when I delay for a second (1000) but that just is weird
 		}
 		document.head.appendChild(link);
-		console.info('embedGoogleFont $family');
+		// console.info('embedGoogleFont $family');
 		return _family;
 	}
 
