@@ -582,6 +582,8 @@ class Sketcher {
 			default:
 				trace("case '" + settings.type + "': trace ('" + settings.type + "');");
 		}
+		// empty baseArray
+		baseArray = [];
 	}
 
 	// [mck] TODO create settings AST to have possible object send as well?
