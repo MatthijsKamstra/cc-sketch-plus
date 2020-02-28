@@ -151,6 +151,16 @@ class EmbedUtil {
 
 	/**
 	 * @example
+	 * 					sketcher.util.EmbedUtil.ccnav();
+	 * @param callback
+	 * @param callbackArray
+	 */
+	public static function ccnav(?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		script('ccnav', 'https://matthijskamstra.github.io/drop-in-off-canvas-menu/cc_nav.min.js', callback, callbackArray);
+	}
+
+	/**
+	 * @example
 	 * 					sketcher.util.EmbedUtil.datgui();
 	 * @param callback
 	 * @param callbackArray
