@@ -446,7 +446,8 @@ class Loader {
 				Reflect.callMethod(this, _onProgress, [e.loaded, e.total, (e.loaded / e.total)]);
 		};
 		xmlHTTP.onloadstart = function() {
-			console.debug('onloadstart');
+			if (_isDebug)
+				console.debug('onloadstart');
 			if (Reflect.isFunction(_onProgress))
 				Reflect.callMethod(_onProgress, _onProgress, [0, 1, 0]);
 
@@ -454,7 +455,8 @@ class Loader {
 				Reflect.callMethod(_onInit, _onInit, ['init']);
 		};
 		xmlHTTP.onloadend = function() {
-			console.debug('onloadend');
+			if (_isDebug)
+				console.debug('onloadend');
 			// You can also remove your progress bar here, if you like.
 			if (Reflect.isFunction(_onProgress))
 				Reflect.callMethod(_onProgress, _onProgress, [1, 1, 1]);
