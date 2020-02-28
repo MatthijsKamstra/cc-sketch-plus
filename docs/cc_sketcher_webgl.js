@@ -9,8 +9,8 @@ function $extend(from, fields) {
 var MainWebgl = function() {
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		console.log("src/MainWebgl.hx:27:","MainWebgl");
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-11 13:47:51");
+		console.log("src/MainWebgl.hx:28:","MainWebgl");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-28 12:00:59");
 		_gthis.setupDocument();
 		_gthis.setupCanvas();
 		_gthis.setupGL();
@@ -24,14 +24,21 @@ MainWebgl.prototype = {
 	setupGL: function() {
 	}
 	,setupDocument: function() {
-		sketcher_util_EmbedUtil.bootstrap();
+		sketcher_util_EmbedUtil.bootstrapStyle();
 		sketcher_util_EmbedUtil.datgui();
+		var style = "body{background-color:silver} canvas{border:1px solid gray;background-color:white; background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAFUlEQVQImWNgQAMXL178T3UBBgYGAIeiETu3apCOAAAAAElFTkSuQmCC)}}";
+		new html_CSSinjector(style);
 	}
 	,setupCanvas: function() {
-		var webgl = new sketcher_webgl_WebGLSetup(500,200);
-		webgl.setupProgram("attribute vec3 coordinates;" + "void main(void) {" + " gl_Position = vec4(coordinates, 1.0);" + "gl_PointSize = 10.0;" + "}","void main(void) {" + " gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);" + "}");
+		var webgl = new sketcher_webgl_WebGl(500,200);
+		var gl = webgl.gl;
+		gl.viewport(0,0,webgl.canvas.width,webgl.canvas.height);
+		gl.clearColor(0,0.5,0,1);
+		gl.clear(16384);
+		var vs = " attribute vec2 aVertexPosition;\n\t\tvoid main() {\n\t\t\tgl_Position = vec4(aVertexPosition, 0.0, 1.0);\n\t\t}";
+		var fs = "uniform vec4 uColor;\n\t\tvoid main() {\n\t\t\tgl_FragColor = uColor;\n\t\t}";
+		webgl.setupProgram(vs,fs);
 	}
-	,__class__: MainWebgl
 };
 Math.__name__ = true;
 var Std = function() { };
@@ -44,8 +51,60 @@ StringTools.__name__ = true;
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
+var haxe_Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+haxe_Timer.__name__ = true;
+haxe_Timer.delay = function(f,time_ms) {
+	var t = new haxe_Timer(time_ms);
+	t.run = function() {
+		t.stop();
+		f();
+	};
+	return t;
+};
+haxe_Timer.prototype = {
+	stop: function() {
+		if(this.id == null) {
+			return;
+		}
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
+	}
+};
 var haxe_io_Bytes = function() { };
 haxe_io_Bytes.__name__ = true;
+var html_CSSinjector = function(styles,elementID) {
+	if(elementID == null) {
+		elementID = "inject-" + new Date().getTime();
+	}
+	if(styles != null) {
+		this.setCSS(styles,elementID);
+	}
+};
+html_CSSinjector.__name__ = true;
+html_CSSinjector.prototype = {
+	setCSS: function(styles,elementID) {
+		styles = this.minify(styles);
+		var css = window.document.createElement("style");
+		css.id = elementID;
+		css.type = "text/css";
+		if(css.styleSheet) {
+			css.styleSheet.cssText = styles;
+		} else {
+			css.appendChild(window.document.createTextNode(styles));
+		}
+		window.document.getElementsByTagName("head")[0].appendChild(css);
+	}
+	,minify: function(css) {
+		return css;
+	}
+};
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
 	this.val = val;
@@ -56,7 +115,6 @@ var js__$Boot_HaxeError = function(val) {
 js__$Boot_HaxeError.__name__ = true;
 js__$Boot_HaxeError.__super__ = Error;
 js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-	__class__: js__$Boot_HaxeError
 });
 var js_Boot = function() { };
 js_Boot.__name__ = true;
@@ -225,8 +283,17 @@ sketcher_util_EmbedUtil.bootstrapScript = function(id,src,integrity,callback,cal
 sketcher_util_EmbedUtil.quicksettings = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("quicksettings","https://cdn.jsdelivr.net/quicksettings/3.0.2/quicksettings.min.js",callback,callbackArray);
 };
+sketcher_util_EmbedUtil.gsap = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.script("gsap","https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.0/gsap.min.js",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.ccnav = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.script("ccnav","https://matthijskamstra.github.io/drop-in-off-canvas-menu/cc_nav.min.js",callback,callbackArray);
+};
 sketcher_util_EmbedUtil.datgui = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.script("datgui","https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js",callback,callbackArray);
+	var style = window.document.createElement("style");
+	style.innerHTML = ".dg .c input[type=\"text\"]{\n\t\t\tline-height : normal;\n\t\t}";
+	window.document.head.appendChild(style);
 };
 sketcher_util_EmbedUtil.sanitize = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.stylesheet("sanitize","https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.css",callback,callbackArray);
@@ -240,12 +307,26 @@ sketcher_util_EmbedUtil.bootstrap = function(callback,callbackArray) {
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-popper","https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js","sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo");
 	sketcher_util_EmbedUtil.bootstrapScript("bootstrap-bootstrap","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js","sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6");
 };
+sketcher_util_EmbedUtil.bootstrapStyle = function(callback,callbackArray) {
+	sketcher_util_EmbedUtil.bootstrapStylesheet("bootstrap-stylesheet","https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css","sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh",callback,callbackArray);
+};
+sketcher_util_EmbedUtil.zip = function(callback,callbackArray) {
+	if(!sketcher_util_EmbedUtil.check("jszip")) {
+		sketcher_util_EmbedUtil.script("jszip","https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js",callback,["jszip"]);
+	}
+	if(!sketcher_util_EmbedUtil.check("jsfilesaver")) {
+		sketcher_util_EmbedUtil.script("jsfilesaver","https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js",callback,["jsfilesaver"]);
+	}
+};
 sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray) {
+	window.console.info("embedGoogleFont " + family);
+	var _family = sketcher_util_EmbedUtil.cleanFontFamily(family);
 	var _id = "embededGoogleFonts";
 	var _url = "https://fonts.googleapis.com/css?family=";
+	var _display = "&display=swap";
 	var link = window.document.getElementById(_id);
 	if(link != null) {
-		var temp = StringTools.replace(link.href,_url,"");
+		var temp = StringTools.replace(StringTools.replace(link.href,_url,""),_display,"");
 		family = temp + "|" + family;
 	} else {
 		link = window.document.createElement("link");
@@ -253,18 +334,38 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 	if(callbackArray == null) {
 		callbackArray = [family];
 	}
-	link.href = "" + _url + family;
+	link.href = "" + _url + family + _display;
 	link.rel = "stylesheet";
 	link.id = _id;
 	link.onload = function() {
 		if(callback != null) {
-			callback.apply(callback,callbackArray);
+			haxe_Timer.delay(function() {
+				callback.apply(callback,callbackArray);
+				return;
+			},1);
 		}
 	};
 	window.document.head.appendChild(link);
+	window.console.info("embedGoogleFont " + family);
+	return _family;
 };
-sketcher_util_EmbedUtil.prototype = {
-	__class__: sketcher_util_EmbedUtil
+sketcher_util_EmbedUtil.cleanFontFamily = function(family) {
+	if(family.indexOf(":") != -1) {
+		family = family.split(":")[0];
+	}
+	return StringTools.replace(family,"+"," ");
+};
+sketcher_util_EmbedUtil.fontMono = function(callback,callbackArray) {
+	var fontFamily = "Source+Code+Pro";
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
+};
+sketcher_util_EmbedUtil.fontHandwritten = function(callback,callbackArray) {
+	var fontFamily = "Pacifico";
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
+};
+sketcher_util_EmbedUtil.fontDisplay = function(callback,callbackArray) {
+	var fontFamily = "Bebas+Neue";
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
 };
 var sketcher_webgl_WebGLSetup = function(width_,height_,autoChild) {
 	if(autoChild == null) {
@@ -551,23 +652,123 @@ sketcher_webgl_WebGLSetup.prototype = {
 		this.gl.uniformMatrix4fv(modelViewProjectionID,false,this.matrix32Array);
 		this.gl.drawArrays(4,0,this.indices.length);
 	}
-	,__class__: sketcher_webgl_WebGLSetup
 };
-if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
-String.prototype.__class__ = String;
+var sketcher_webgl_WebGl = function(width,height,autoChild) {
+	if(autoChild == null) {
+		autoChild = true;
+	}
+	this.setupCanvas(width,height,autoChild);
+};
+sketcher_webgl_WebGl.__name__ = true;
+sketcher_webgl_WebGl.shaderFromString = function(gl,shaderType,shaderString) {
+	var shader = gl.createShader(shaderType);
+	gl.shaderSource(shader,shaderString);
+	gl.compileShader(shader);
+	return shader;
+};
+sketcher_webgl_WebGl.resize = function(canvas) {
+	var displayWidth = canvas.clientWidth;
+	var displayHeight = canvas.clientHeight;
+	if(canvas.width != displayWidth || canvas.height != displayHeight) {
+		canvas.width = displayWidth;
+		canvas.height = displayHeight;
+	}
+};
+sketcher_webgl_WebGl.prototype = {
+	setupCanvas: function(width,height,autoChild) {
+		if(autoChild == null) {
+			autoChild = true;
+		}
+		this.width = width;
+		this.height = height;
+		this.canvas = window.document.createElement("canvas");
+		this.canvas.width = width;
+		this.canvas.height = height;
+		var dom = this.canvas;
+		var style = dom.style;
+		style.paddingLeft = "0px";
+		style.paddingTop = "0px";
+		style.left = Std.string(0 + "px");
+		style.top = Std.string(0 + "px");
+		style.position = "absolute";
+		if(autoChild) {
+			window.document.body.appendChild(this.canvas);
+		}
+		this.gl = js_html__$CanvasElement_CanvasUtil.getContextWebGL(this.canvas,null);
+	}
+	,compileShader: function(gl,shaderSource,shaderType) {
+		var shader = gl.createShader(shaderType);
+		gl.shaderSource(shader,shaderSource);
+		gl.compileShader(shader);
+		var success = gl.getShaderParameter(shader,35713);
+		if(!success) {
+			throw new js__$Boot_HaxeError("could not compile shader:" + gl.getShaderInfoLog(shader));
+		}
+		return shader;
+	}
+	,createProgram: function(gl,vertexShader,fragmentShader) {
+		var program = gl.createProgram();
+		gl.attachShader(program,vertexShader);
+		gl.attachShader(program,fragmentShader);
+		gl.linkProgram(program);
+		var success = gl.getProgramParameter(program,35714);
+		if(!success) {
+			throw new js__$Boot_HaxeError("program failed to link:" + gl.getProgramInfoLog(program));
+		}
+		return program;
+	}
+	,createShaderFromScript: function(gl,scriptId,shaderType,opt_shaderType) {
+		var shaderScript = window.document.getElementById(scriptId);
+		if(shaderScript == null) {
+			throw new js__$Boot_HaxeError("*** Error: unknown script element" + scriptId);
+		}
+		var shaderSource = shaderScript.text;
+		if(opt_shaderType == null) {
+			if(shaderScript.type == "x-shader/x-vertex") {
+				shaderType = 35633;
+			} else if(shaderScript.type == "x-shader/x-fragment") {
+				shaderType = 35632;
+			}
+			if(opt_shaderType == null) {
+				throw new js__$Boot_HaxeError("*** Error: shader type not set");
+			}
+		} else {
+			window.console.warn("this might be a good idea in js world, I am not so sure");
+		}
+		return this.compileShader(gl,shaderSource,shaderType);
+	}
+	,createProgramFromScripts: function(gl,shaderScriptIds) {
+		var vertexShader = this.createShaderFromScript(gl,shaderScriptIds[0],35633);
+		var fragmentShader = this.createShaderFromScript(gl,shaderScriptIds[1],35632);
+		return this.createProgram(gl,vertexShader,fragmentShader);
+	}
+	,setupProgram: function(vertexString,fragmentString) {
+		var gl = this.gl;
+		var shader = gl.createShader(35633);
+		gl.shaderSource(shader,vertexString);
+		gl.compileShader(shader);
+		var vertex = shader;
+		var gl1 = this.gl;
+		var shader1 = gl1.createShader(35632);
+		gl1.shaderSource(shader1,fragmentString);
+		gl1.compileShader(shader1);
+		var fragment = shader1;
+		this.program = this.createProgram(this.gl,vertex,fragment);
+		return this.program;
+	}
+};
 String.__name__ = true;
 Array.__name__ = true;
+Date.__name__ = "Date";
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
 }});
 js_Boot.__toStr = ({ }).toString;
-MainWebgl.vertex = "attribute vec3 coordinates;" + "void main(void) {" + " gl_Position = vec4(coordinates, 1.0);" + "gl_PointSize = 10.0;" + "}";
-MainWebgl.fragment = "void main(void) {" + " gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);" + "}";
 sketcher_App.NAME = "[cc-sketcher]";
 sketcher_webgl_WebGLSetup.posName = "pos";
 sketcher_webgl_WebGLSetup.colorName = "color";
 sketcher_webgl_WebGLSetup.textureName = "aTexture";
 MainWebgl.main();
-})(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
+})({});
 
 //# sourceMappingURL=cc_sketcher_webgl.js.map
