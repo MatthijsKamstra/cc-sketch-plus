@@ -393,6 +393,28 @@ class Sketcher {
 	}
 
 	/**
+	 *
+	 * @param array		array of items (IBase), a collection of shapes or groups
+	 	 * @example			sketch.makeMask();
+	 	 *
+	 	 * @return Mask
+	 */
+	public function makeMask(array:Array<IBase>):Mask {
+		var shape = new Mask(array);
+		for (j in 0...array.length) {
+			var _base = array[j];
+			for (i in 0...baseArray.length) {
+				var base:IBase = baseArray[i];
+				if (base == _base) {
+					baseArray[i] = null; // the reason there is base == null!
+				}
+			}
+		}
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
 	 * helpfull debug tool, register point
 	 *
 	 * ```
@@ -551,11 +573,19 @@ class Sketcher {
 					var draw = base.svg(settings);
 					// trace(base.toString());
 					// trace(draw);
-					if (base.type == 'gradient') {
-						defs += draw;
-					} else {
-						content += draw;
+
+					switch (base.type) {
+						case 'gradient', 'mask':
+							defs += draw;
+						default:
+							content += draw;
 					}
+
+					// if (base.type == 'gradient') {
+					// 	defs += draw;
+					// } else {
+					// 	content += draw;
+					// }
 				}
 				_xml += defs + '</defs>';
 				_xml += content + '</svg>';
