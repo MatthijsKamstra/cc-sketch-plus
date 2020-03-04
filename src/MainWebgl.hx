@@ -72,6 +72,19 @@ class MainWebgl {
 		new html.CSSinjector(style);
 	}
 
+	function setupCanvas() {
+		var webgl = new WebGl(500, 200);
+		var vs = ' attribute vec2 aVertexPosition;
+		void main() {
+			gl_Position = vec4(aVertexPosition, 0.0, 1.0);
+		}';
+		var fs = 'uniform vec4 uColor;
+			void main() {
+				gl_FragColor = uColor;
+			}';
+		webgl.setupProgram(vs, fs);
+	}
+
 	// public static inline var vertex:String = 'attribute vec3 coordinates;' //
 	// 	+ 'void main(void) {' //
 	// 	+ ' gl_Position = vec4(coordinates, 1.0);'
@@ -80,27 +93,22 @@ class MainWebgl {
 	// public static inline var fragment:String = 'void main(void) {' //
 	// 	+ ' gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);' //
 	// 	+ '}';
-
-	function setupCanvas() {
-		var webgl = new WebGl(500, 200);
-		var gl = webgl.gl;
-
-		gl.viewport(0, 0, webgl.canvas.width, webgl.canvas.height);
-		gl.clearColor(0, 0.5, 0, 1);
-		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
-
-		var vs = ' attribute vec2 aVertexPosition;
-		void main() {
-			gl_Position = vec4(aVertexPosition, 0.0, 1.0);
-		}';
-
-		var fs = 'uniform vec4 uColor;
-		void main() {
-			gl_FragColor = uColor;
-		}';
-
-		webgl.setupProgram(vs, fs);
-	}
+	// function setupCanvas() {
+	// 	var webgl = new WebGl(500, 200);
+	// 	var gl = webgl.gl;
+	// 	gl.viewport(0, 0, webgl.canvas.width, webgl.canvas.height);
+	// 	gl.clearColor(0, 0.5, 0, 1);
+	// 	gl.clear(RenderingContext.COLOR_BUFFER_BIT);
+	// 	var vs = ' attribute vec2 aVertexPosition;
+	// 	void main() {
+	// 		gl_Position = vec4(aVertexPosition, 0.0, 1.0);
+	// 	}';
+	// 	var fs = 'uniform vec4 uColor;
+	// 	void main() {
+	// 		gl_FragColor = uColor;
+	// 	}';
+	// 	webgl.setupProgram(vs, fs);
+	// }
 
 	static public function main() {
 		var app = new MainWebgl();
