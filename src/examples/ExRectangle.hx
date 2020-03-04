@@ -1,10 +1,9 @@
 package examples;
 
-import sketcher.draw.AST.LineCap;
 import js.Browser.*;
-import sketcher.util.GridUtil;
-import sketcher.util.MathUtil;
+import sketcher.draw.AST.LineCap;
 import sketcher.util.ColorUtil.*;
+import sketcher.util.GridUtil;
 
 class ExRectangle {
 	var rectW:Float = 100;
