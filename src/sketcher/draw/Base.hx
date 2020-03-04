@@ -24,6 +24,8 @@ class Base {
 	@:isVar public var rx(get, set):Float;
 	@:isVar public var ry(get, set):Float;
 
+	@:isVar public var maskID(get, set):String;
+
 	// colors
 
 	/**
@@ -89,6 +91,11 @@ class Base {
 
 	public function setID(id:String) {
 		this.id = id;
+	}
+
+	public function setMask(id:String) {
+		xml.set('mask', 'url(#$id)');
+		this.maskID = id;
 	}
 
 	// ____________________________________ transitions ____________________________________
@@ -262,6 +269,14 @@ class Base {
 	}
 
 	// ____________________________________ getter/setter ____________________________________
+
+	function get_maskID():String {
+		return maskID;
+	}
+
+	function set_maskID(value:String):String {
+		return maskID = value;
+	}
 
 	function get_id():String {
 		if (id == null) {

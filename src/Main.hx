@@ -1,10 +1,9 @@
 package;
 
+import Sketcher.Globals.*;
 import html.CCNav;
-import examples.ExContainer;
 import html.PullDown;
 import js.Browser.*;
-import Sketcher.Globals.*;
 
 using StringTools;
 
@@ -27,6 +26,8 @@ class Main {
 		examples.ExBackground, //
 		examples.ExContainer, //
 		examples.ExPolygon, //
+		examples.ExMirror, //
+		examples.ExMask, //
 	];
 
 	var pulldown:PullDown;
