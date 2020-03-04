@@ -1,5 +1,6 @@
 package examples;
 
+import sketcher.draw.Text.TextAlignType;
 import js.Browser.*;
 import sketcher.util.ColorUtil.*;
 import sketcher.util.GridUtil;
@@ -98,6 +99,17 @@ class ExMask {
 		var circle = sketch.makeCircle(p.x, p.y, 50);
 		circle.setFill(getColourObj(MAROON));
 		circle.setMask('mask-3');
+
+		var p = grid.array[3];
+		var maskShape = sketch.makeText("mask-4", p.x, p.y);
+		maskShape.fontSizePx = 50;
+		maskShape.textAlign = TextAlignType.Center;
+		var mask = sketch.makeMask([maskShape]);
+		mask.id = "mask-4";
+
+		var circle = sketch.makeCircle(p.x, p.y, 50);
+		circle.setFill(getColourObj(ORANGE));
+		circle.setMask('mask-4');
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
