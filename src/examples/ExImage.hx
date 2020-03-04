@@ -1,10 +1,7 @@
 package examples;
 
-import sketcher.util.EmbedUtil;
 import js.Browser.*;
 import sketcher.util.GridUtil;
-import sketcher.util.MathUtil;
-import sketcher.util.ColorUtil.*;
 
 class ExImage {
 	var sketchWidth = 600;
