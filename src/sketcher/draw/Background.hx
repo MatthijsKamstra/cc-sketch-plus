@@ -9,7 +9,7 @@ import sketcher.util.MathUtil;
 class Background extends Base implements IBase {
 	public static var ISWARN:Bool;
 
-	public var type = 'circle'; // base (get class name?)
+	public var type = 'background'; // base (get class name?)
 
 	public function new(color:String) {
 		super('rect');
