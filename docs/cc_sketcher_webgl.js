@@ -10,7 +10,7 @@ var MainWebgl = function() {
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
 		console.log("src/MainWebgl.hx:28:","MainWebgl");
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-02-28 12:00:59");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-04 16:35:47");
 		_gthis.setupDocument();
 		_gthis.setupCanvas();
 		_gthis.setupGL();
@@ -31,12 +31,8 @@ MainWebgl.prototype = {
 	}
 	,setupCanvas: function() {
 		var webgl = new sketcher_webgl_WebGl(500,200);
-		var gl = webgl.gl;
-		gl.viewport(0,0,webgl.canvas.width,webgl.canvas.height);
-		gl.clearColor(0,0.5,0,1);
-		gl.clear(16384);
 		var vs = " attribute vec2 aVertexPosition;\n\t\tvoid main() {\n\t\t\tgl_Position = vec4(aVertexPosition, 0.0, 1.0);\n\t\t}";
-		var fs = "uniform vec4 uColor;\n\t\tvoid main() {\n\t\t\tgl_FragColor = uColor;\n\t\t}";
+		var fs = "uniform vec4 uColor;\n\t\t\tvoid main() {\n\t\t\t\tgl_FragColor = uColor;\n\t\t\t}";
 		webgl.setupProgram(vs,fs);
 	}
 };
@@ -319,7 +315,6 @@ sketcher_util_EmbedUtil.zip = function(callback,callbackArray) {
 	}
 };
 sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray) {
-	window.console.info("embedGoogleFont " + family);
 	var _family = sketcher_util_EmbedUtil.cleanFontFamily(family);
 	var _id = "embededGoogleFonts";
 	var _url = "https://fonts.googleapis.com/css?family=";
@@ -346,7 +341,6 @@ sketcher_util_EmbedUtil.embedGoogleFont = function(family,callback,callbackArray
 		}
 	};
 	window.document.head.appendChild(link);
-	window.console.info("embedGoogleFont " + family);
 	return _family;
 };
 sketcher_util_EmbedUtil.cleanFontFamily = function(family) {
@@ -562,10 +556,10 @@ sketcher_webgl_WebGLSetup.prototype = {
 		var cl = this.colors.length;
 		var this1 = new Float32Array(vl);
 		this.vertices = this1;
-		var this11 = new Uint16Array(il);
-		this.indices = this11;
-		var this12 = new Float32Array(cl);
-		this.colors = this12;
+		var this2 = new Uint16Array(il);
+		this.indices = this2;
+		var this3 = new Float32Array(cl);
+		this.colors = this3;
 	}
 	,setVerticesAndColors: function(vertices,triangleColors) {
 		var rgb_r;
