@@ -47,6 +47,25 @@ class Mask extends Base implements IBase {
 			console.warn('Mask doens\'t work the same as svg, use with care');
 			ISWARN = true;
 		}
+		// Save the state, so we can undo the clipping
+		ctx.save();
+
+		// write in new canvas
+		for (i in 0...this.arr.length) {
+			var base = this.arr[i];
+			if (base == null)
+				continue;
+			console.info(this.id + " --> " + base.type);
+			// base.ctx(newCtx);
+			base.ctx(ctx);
+		}
+		// Clip to the current path
+		ctx.clip();
+
+		// FIXME: masked / clipped canvas needs to go here
+
+		// Undo the clipping
+		ctx.restore();
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
