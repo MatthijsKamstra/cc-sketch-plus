@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-04 17:43:56");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-06 00:09:38");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -2774,7 +2774,6 @@ haxe_xml_Printer.prototype = {
 var html_CCNav = function(valueArray) {
 	var _gthis = this;
 	sketcher_util_EmbedUtil.ccnav(function() {
-		window.console.info("CCNav: delay 1 second to add " + valueArray.length + " to nav");
 		haxe_Timer.delay($bind(_gthis,_gthis.onCompleteHandler),1000);
 	});
 	this.valueArray = valueArray;
@@ -4199,7 +4198,6 @@ sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 		ctx.imageSmoothingQuality = "high";
 		var img = new Image();
 		img.onload = function() {
-			console.log("src/sketcher/draw/Image.hx:65:","image.onload");
 			var prop = img.height / img.width;
 			if(img.width < img.height) {
 				prop = img.width / img.height;
@@ -4428,6 +4426,20 @@ sketcher_draw_Mask.prototype = $extend(sketcher_draw_Base.prototype,{
 			window.console.warn("Mask doens't work the same as svg, use with care");
 			sketcher_draw_Mask.ISWARN = true;
 		}
+		ctx.save();
+		var _g = 0;
+		var _g1 = this.get_arr().length;
+		while(_g < _g1) {
+			var i = _g++;
+			var base = this.get_arr()[i];
+			if(base == null) {
+				continue;
+			}
+			window.console.info(this.get_id() + " --> " + base.type);
+			base.ctx(ctx);
+		}
+		ctx.clip();
+		ctx.restore();
 	}
 	,gl: function(gl) {
 	}
