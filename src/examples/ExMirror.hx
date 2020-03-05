@@ -1,5 +1,8 @@
 package examples;
 
+import sketcher.util.MathUtil;
+import sketcher.util.ColorUtil;
+import sketcher.AST.Point;
 import js.Browser.*;
 import sketcher.draw.AST.LineCap;
 import sketcher.util.ColorUtil.*;
@@ -15,6 +18,8 @@ class ExMirror {
 	var grid:GridUtil;
 	//
 	var isDebug:Bool = true;
+	var total = 20;
+	var randomArray:Array<RandomRect> = [];
 
 	public function new() {
 		init();
@@ -26,10 +31,29 @@ class ExMirror {
 		grid.setNumbered(3, 3); // 3 horizontal, 3 vertical
 		grid.setIsCenterPoint(true); // default true, but can be set if needed
 
+		setupRandom();
+
 		initDocument(); // if document doesn't have elements with correct id
 		sketchSVG();
 		sketchCanvas();
 		// sketchWebgl();
+	}
+
+	function setupRandom() {
+		randomArray = [];
+		for (i in 0...total) {
+			var randomRect:RandomRect = {
+				point: {
+					x: MathUtil.random(sketchWidth),
+					y: MathUtil.random(sketchHeight)
+				},
+				color: ColorUtil.randomColour(),
+				rotation: MathUtil.random(360),
+				width: MathUtil.random(20, sketchWidth * 0.5),
+				height: MathUtil.random(20, sketchHeight * 0.5)
+			};
+			randomArray.push(randomRect);
+		}
 	}
 
 	function initDocument() {
@@ -86,67 +110,27 @@ class ExMirror {
 			sketcher.debug.Grid.gridDots(sketch, grid);
 		}
 
-		var omtrek = (rectW * 2) + (rectH * 2);
+		for (i in 0...randomArray.length) {
+			var randomRect = randomArray[i];
+			var p = randomRect.point;
+			var shape = sketch.makeRectangle(p.x, p.y, randomRect.width, randomRect.height, false);
+			shape.setFill(randomRect.color);
+			shape.setRotate(randomRect.rotation, p.x, p.y);
+			var poly = sketch.makeX(p.x, p.y, 'black');
+		}
 
-		var p = grid.array[0];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.setRotate(10, p.x, p.y);
-
-		var p = grid.array[1];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.fillColor = getColourObj(LIME);
-		// shape.setScale(1.5, 1.5);
-
-		var p = grid.array[2];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.fillColor = getColourObj(LIME);
-		shape.lineWeight = 10;
-
-		var p = grid.array[3];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.lineWeight = 10;
-		shape.fillColor = getColourObj(PINK);
-		shape.fillOpacity = 0.5;
-		shape.setMove(10, 10);
-
-		var p = grid.array[4];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.lineWeight = 10;
-		shape.fillColor = getColourObj(PINK);
-		shape.fillOpacity = 0.5;
-		shape.strokeColor = getColourObj(GREEN);
-
-		var p = grid.array[5];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.lineWeight = 10;
-		shape.fillColor = getColourObj(PINK);
-		shape.fillOpacity = 0.5;
-		shape.strokeColor = getColourObj(GREEN);
-		shape.strokeOpacity = 0.5;
-
-		var p = grid.array[6];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.lineWeight = 10;
-		shape.fillColor = getColourObj(PINK);
-		shape.fillOpacity = 0;
-		shape.strokeColor = getColourObj(FUCHSIA);
-
-		var p = grid.array[7];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.lineWeight = 10;
-		shape.fillOpacity = 0;
-		shape.strokeColor = getColourObj(FUCHSIA);
-		shape.dash = [40, 20];
-
-		var p = grid.array[8];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
-		shape.lineWeight = 10;
-		shape.fillOpacity = 0;
-		shape.strokeColor = getColourObj(FUCHSIA);
-		shape.dash = [40, 20];
-		shape.lineCap = LineCap.Round;
+		var mirror = sketch.makeMirror();
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
 	}
+}
+
+typedef RandomRect = {
+	@:optional var _id:String;
+	var point:Point;
+	var color:String;
+	var rotation:Float;
+	var width:Float;
+	var height:Float;
 }

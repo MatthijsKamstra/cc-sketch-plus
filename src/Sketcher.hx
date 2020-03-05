@@ -1,12 +1,10 @@
 package;
 
-// import cc.draw.Gradient;
-import sketcher.draw.AST.LineJoin;
-import sketcher.draw.AST.LineCap;
 import js.Browser.*;
-import draw.*;
-import sketcher.draw.*;
 import sketcher.AST.Point;
+import sketcher.draw.*;
+import sketcher.draw.AST.LineCap;
+import sketcher.draw.AST.LineJoin;
 
 class Sketcher {
 	var element:js.html.Element;
@@ -120,7 +118,7 @@ class Sketcher {
 	 * @param y			(optional) y position of the text (default: 0)
 	 * @return Text
 	 */
-	public function makeText(str:String, ?x, ?y):Text {
+	public function makeText(str:String, ?x, ?y):sketcher.draw.Text {
 		var shape = new Text(str, x, y);
 		baseArray.push(shape);
 		return shape;
@@ -395,9 +393,9 @@ class Sketcher {
 	/**
 	 *
 	 * @param array		array of items (IBase), a collection of shapes or groups
-	 	 * @example			sketch.makeMask();
-	 	 *
-	 	 * @return Mask
+	 * @example			sketch.makeMask();
+	 *
+	 * @return Mask
 	 */
 	public function makeMask(array:Array<IBase>):Mask {
 		var shape = new Mask(array);
@@ -410,6 +408,12 @@ class Sketcher {
 				}
 			}
 		}
+		baseArray.push(shape);
+		return shape;
+	}
+
+	public function makeMirror(?x):Mirror {
+		var shape = new Mirror();
 		baseArray.push(shape);
 		return shape;
 	}

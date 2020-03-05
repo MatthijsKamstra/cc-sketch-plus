@@ -1,8 +1,8 @@
 package sketcher.draw;
 
+import sketcher.AST;
 import sketcher.draw.AST.LineCap;
 import sketcher.draw.AST.LineJoin;
-import sketcher.AST;
 import sketcher.util.MathUtil;
 
 using StringTools;
