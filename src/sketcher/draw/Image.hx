@@ -62,7 +62,7 @@ class Image extends Base implements IBase {
 		// trace('canvas image');
 		var img = new js.html.Image(); // Create new img element
 		img.onload = function() {
-			trace('image.onload');
+			// trace('image.onload');
 
 			// execute drawImage statements here
 
