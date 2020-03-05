@@ -7,7 +7,7 @@ class CCNav {
 
 	public function new(valueArray:Array<String>) {
 		sketcher.util.EmbedUtil.ccnav(function() {
-			console.info('CCNav: delay 1 second to add ${valueArray.length} to nav');
+			// console.info('CCNav: delay 1 second to add ${valueArray.length} to nav');
 			haxe.Timer.delay(onCompleteHandler, 1000); // /doc/nav.html
 		});
 		this.valueArray = valueArray;
