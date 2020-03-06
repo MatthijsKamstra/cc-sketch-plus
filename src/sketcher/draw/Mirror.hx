@@ -37,12 +37,14 @@ class Mirror extends Base implements IBase {
 		ctx.save();
 		// translate to a point from where we want to redraw the new image
 		ctx.translate(x, y);
+
 		ctx.scale(-1, 1);
 		// ctx.globalAlpha = 0.25;
 
+		// clear
+		ctx.clearRect(0, 0, Sketcher.Globals.w, Sketcher.Globals.h);
+
 		// redraw only bottom part of the image
-		// g.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-		// ctx.drawImage(ctx.canvas, 0, 0, ctx.canvas.width, ctx.canvas.height, 100, x, y, 100);
 		ctx.drawImage(ctx.canvas, x, y, Sketcher.Globals.w, Sketcher.Globals.h, 0, 0, Sketcher.Globals.w, Sketcher.Globals.h);
 		// destination x, y is set to 0, 0 (which will be at translated xy)
 
