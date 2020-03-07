@@ -9,11 +9,10 @@ function $extend(from, fields) {
 var MainWebgl = function() {
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		console.log("src/MainWebgl.hx:28:","MainWebgl");
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-04 16:35:47");
+		console.log("src/MainWebgl.hx:30:","MainWebgl");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-06 11:48:48");
 		_gthis.setupDocument();
 		_gthis.setupCanvas();
-		_gthis.setupGL();
 	});
 };
 MainWebgl.__name__ = true;
@@ -21,19 +20,25 @@ MainWebgl.main = function() {
 	var app = new MainWebgl();
 };
 MainWebgl.prototype = {
-	setupGL: function() {
-	}
-	,setupDocument: function() {
+	setupDocument: function() {
 		sketcher_util_EmbedUtil.bootstrapStyle();
 		sketcher_util_EmbedUtil.datgui();
 		var style = "body{background-color:silver} canvas{border:1px solid gray;background-color:white; background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAFUlEQVQImWNgQAMXL178T3UBBgYGAIeiETu3apCOAAAAAElFTkSuQmCC)}}";
 		new html_CSSinjector(style);
 	}
 	,setupCanvas: function() {
-		var webgl = new sketcher_webgl_WebGl(500,200);
-		var vs = " attribute vec2 aVertexPosition;\n\t\tvoid main() {\n\t\t\tgl_Position = vec4(aVertexPosition, 0.0, 1.0);\n\t\t}";
-		var fs = "uniform vec4 uColor;\n\t\t\tvoid main() {\n\t\t\t\tgl_FragColor = uColor;\n\t\t\t}";
-		webgl.setupProgram(vs,fs);
+		var webgl = new sketcher_webgl_WebGLSetup(800,500);
+		webgl.bgRed = 0;
+		webgl.bgGreen = 0.5;
+		webgl.bgBlue = 0;
+		webgl.bgAlpha = 1;
+		webgl.clearVerticesAndColors();
+		var vs = "\nattribute vec2 a_position;\nvoid main(void) {\n\tgl_Position = vec4(a_position, 0.0, 1.0);\n}\n";
+		var fs = "\nvoid main(void) {\n\tgl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n}\n";
+		var program = webgl.setupProgram(vs,fs);
+		var gl = webgl.gl;
+		var array = new Float32Array([-1.0,-1.0,1.0,-1.0,1.0,1.0,-1.0,1.0]);
+		webgl.render();
 	}
 };
 Math.__name__ = true;
@@ -556,10 +561,10 @@ sketcher_webgl_WebGLSetup.prototype = {
 		var cl = this.colors.length;
 		var this1 = new Float32Array(vl);
 		this.vertices = this1;
-		var this2 = new Uint16Array(il);
-		this.indices = this2;
-		var this3 = new Float32Array(cl);
-		this.colors = this3;
+		var this11 = new Uint16Array(il);
+		this.indices = this11;
+		var this2 = new Float32Array(cl);
+		this.colors = this2;
 	}
 	,setVerticesAndColors: function(vertices,triangleColors) {
 		var rgb_r;

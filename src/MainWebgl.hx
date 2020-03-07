@@ -1,3 +1,5 @@
+import js.lib.Float32Array;
+import sketcher.webgl.WebGLSetup;
 import sketcher.webgl.WebGl;
 import js.Browser.*;
 import js.html.webgl.ContextAttributes;
@@ -31,37 +33,7 @@ class MainWebgl {
 
 			setupDocument();
 			setupCanvas();
-			setupGL();
 		});
-	}
-
-	function setupGL() {
-		// // setup a GLSL program
-		// var vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-		// var fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-		// var program = createProgram(gl, [vertexShader, fragmentShader]);
-		// gl.useProgram(program);
-
-		// // look up where the vertex data needs to go.
-		// var positionLocation = gl.getAttribLocation(program, "a_position");
-
-		// // Create a buffer and put a single clipspace rectangle in
-		// // it (2 triangles)
-		// var buffer = gl.createBuffer();
-		// gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-		// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-		// 	-1.0, -1.0,
-		// 	 1.0, -1.0,
-		// 	-1.0,  1.0,
-		// 	-1.0,  1.0,
-		// 	 1.0, -1.0,
-		// 	 1.0,  1.0
-		// ]), gl.STATIC_DRAW);
-		// gl.enableVertexAttribArray(positionLocation);
-		// gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-		// // draw
-		// gl.drawArrays(gl.TRIANGLES, 0, 6);
 	}
 
 	function setupDocument() {
@@ -73,42 +45,45 @@ class MainWebgl {
 	}
 
 	function setupCanvas() {
-		var webgl = new WebGl(500, 200);
-		var vs = ' attribute vec2 aVertexPosition;
-		void main() {
-			gl_Position = vec4(aVertexPosition, 0.0, 1.0);
-		}';
-		var fs = 'uniform vec4 uColor;
-			void main() {
-				gl_FragColor = uColor;
-			}';
-		webgl.setupProgram(vs, fs);
-	}
+		var webgl = new WebGLSetup(800, 500);
+		webgl.bgRed = 0;
+		webgl.bgGreen = 0.5;
+		webgl.bgBlue = 0;
+		webgl.bgAlpha = 1;
 
-	// public static inline var vertex:String = 'attribute vec3 coordinates;' //
-	// 	+ 'void main(void) {' //
-	// 	+ ' gl_Position = vec4(coordinates, 1.0);'
-	// 	+ 'gl_PointSize = 10.0;' //
-	// 	+ '}';
-	// public static inline var fragment:String = 'void main(void) {' //
-	// 	+ ' gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);' //
-	// 	+ '}';
-	// function setupCanvas() {
-	// 	var webgl = new WebGl(500, 200);
-	// 	var gl = webgl.gl;
-	// 	gl.viewport(0, 0, webgl.canvas.width, webgl.canvas.height);
-	// 	gl.clearColor(0, 0.5, 0, 1);
-	// 	gl.clear(RenderingContext.COLOR_BUFFER_BIT);
-	// 	var vs = ' attribute vec2 aVertexPosition;
-	// 	void main() {
-	// 		gl_Position = vec4(aVertexPosition, 0.0, 1.0);
-	// 	}';
-	// 	var fs = 'uniform vec4 uColor;
-	// 	void main() {
-	// 		gl_FragColor = uColor;
-	// 	}';
-	// 	webgl.setupProgram(vs, fs);
-	// }
+		webgl.clearVerticesAndColors();
+
+		var vs = '
+attribute vec2 a_position;
+void main(void) {
+	gl_Position = vec4(a_position, 0.0, 1.0);
+}
+';
+
+		var fs = '
+void main(void) {
+	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+}
+';
+
+		var program = webgl.setupProgram(vs, fs);
+		var gl = webgl.gl;
+
+		var array = new Float32Array([
+			-1.0, -1.0,
+			 1.0, -1.0,
+			 1.0,  1.0,
+			-1.0,  1.0
+		]);
+
+		vertices = new Array<Float>();
+		indices = new Array<Int>();
+		colors = new Array<Float>();
+
+		WebGLSetup.uploadDataToBuffers(fl, program,);
+
+		webgl.render();
+	}
 
 	static public function main() {
 		var app = new MainWebgl();
