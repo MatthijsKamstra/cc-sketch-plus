@@ -1,5 +1,7 @@
 package examples;
 
+import sketcher.util.EmbedUtil;
+import sketcher.draw.Text.TextAlignType;
 import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil;
 import sketcher.AST.Point;
@@ -20,6 +22,8 @@ class ExMirror {
 	var isDebug:Bool = true;
 	var total = 20;
 	var randomArray:Array<RandomRect> = [];
+
+	var fontFamily:String;
 
 	public function new() {
 		init();
@@ -75,6 +79,8 @@ class ExMirror {
 		// wrapper.appendChild(div2);
 
 		document.body.appendChild(wrapper);
+
+		fontFamily = EmbedUtil.fontMono();
 	}
 
 	function sketchSVG() {
@@ -118,6 +124,26 @@ class ExMirror {
 			shape.setRotate(randomRect.rotation, p.x, p.y);
 			var poly = sketch.makeX(p.x, p.y, 'black');
 		}
+
+		var t1 = sketch.makeText("1", (sketchWidth / 4) * 1, (sketchHeight / 4) * 1);
+		t1.textAlign = TextAlignType.Center;
+		t1.fontFamily = fontFamily;
+		t1.fontSizePx = 60;
+
+		var t1 = sketch.makeText("2", (sketchWidth / 4) * 3, (sketchHeight / 4) * 1);
+		t1.textAlign = TextAlignType.Center;
+		t1.fontFamily = fontFamily;
+		t1.fontSizePx = 60;
+
+		var t1 = sketch.makeText("3", (sketchWidth / 4) * 1, (sketchHeight / 4) * 3);
+		t1.textAlign = TextAlignType.Center;
+		t1.fontFamily = fontFamily;
+		t1.fontSizePx = 60;
+
+		var t1 = sketch.makeText("4", (sketchWidth / 4) * 3, (sketchHeight / 4) * 3);
+		t1.textAlign = TextAlignType.Center;
+		t1.fontFamily = fontFamily;
+		t1.fontSizePx = 60;
 
 		var mirror = sketch.makeMirror();
 
