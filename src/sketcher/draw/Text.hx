@@ -41,14 +41,6 @@ class Text extends Base implements IBase {
 	 */
 	@:isVar public var fontWeight(get, set):String;
 
-	// @:isVar public var textAnchor(get, set):TextAnchorType;
-	/**
-	 * alignment-baseline: auto | baseline | before-edge | text-before-edge | middle | central | after-edge | text-after-edge | ideographic | alphabetic | hanging | mathematical | inherit
-	 * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/alignment-baseline
-	 */
-	// @:isVar public var alignmentBaseline(get, set):AlignmentBaselineType;
-	// @:isVar public var dominantBaseline(get, set):DominantBaselineType;
-
 	/**
 	 * propbably the best option for both?
 	 */
@@ -56,16 +48,12 @@ class Text extends Base implements IBase {
 
 	@:isVar public var textAlign(get, set):TextAlignType;
 
-	/**
-	 * hacky
-	 */
-	// public var _textAlign:String;
-	// public var _textBaseline:String;
+	@:isVar public var style(get, set):String;
 
 	/**
-	 * test style
+	 * calculate the length of the text
 	 */
-	@:isVar public var style(get, set):String;
+	@:isVar public var width(get, null):Float = -1;
 
 	/**
 	 * Create a text element in svg
@@ -92,7 +80,34 @@ class Text extends Base implements IBase {
 		this.textBaseline = value;
 	}
 
-	//  dominant-baseline="middle" text-anchor="middle"
+	public function getWidth() {
+		if (!ISWARN) {
+			console.warn('Get Width of text doens\'t work for svg currenlty');
+			ISWARN = true;
+		}
+
+		/**
+			document.getElementById("test1").getBBox().width
+			document.getElementById("test1").getBoundingClientRect().width
+			document.getElementById("test1").getComputedTextLength()
+
+			// access the text element you want to measure
+			var el = document.getElementsByTagName('text')[3];
+			el.getComputedTextLength(); // returns a pixel integer
+		 */
+
+		// this.width = 20;
+
+		// return this.width;
+
+		var ctx = Sketcher.ctx;
+
+		var _css = '';
+		var _font = '${_css} ${this.fontSizePx}px ${this.fontFamily}'.ltrim();
+		ctx.font = _font;
+		return ctx.measureText(this.str).width;
+	}
+
 	// ____________________________________ create ____________________________________
 	public function svg(?settings:Settings):String {
 		// var style = '<style>.small {font:italic 13px sans-serif; fill:red;}</style>';
@@ -171,6 +186,8 @@ class Text extends Base implements IBase {
 		var _css = '';
 		var _font = '${_css} ${Std.parseInt(this.fontSize)}px ${this.fontFamily}'.ltrim();
 
+		// console.info(ctx.measureText(this.str));
+
 		// trace(_font);
 		ctx.font = _font;
 		// TODO fix
@@ -178,6 +195,9 @@ class Text extends Base implements IBase {
 			ctx.textAlign = convertTextAlign('canvas');
 		if (this.textBaseline != null)
 			ctx.textBaseline = convertTextBaseline('canvas');
+
+		// this.width = ctx.measureText(this.str).width;
+		// trace(ctx.measureText(this.str).width);
 
 		// trace(textAlign, alignmentBaseline);
 		ctx.fillText(this.str, this.x, this.y);
@@ -189,6 +209,7 @@ class Text extends Base implements IBase {
 	public function gl(gl:js.html.webgl.RenderingContext) {}
 
 	// ____________________________________ converters for align and baseline ____________________________________
+	// function
 
 	function convertTextAlign(type:String):String {
 		var svg = '';
@@ -344,6 +365,19 @@ class Text extends Base implements IBase {
 	function set_style(value:String):String {
 		return style = value;
 	}
+
+	/**
+	 * wip?
+	 * @return Float
+	 */
+	function get_width():Float {
+		getWidth();
+		return width;
+	}
+
+	// function set_width(value:Float):Float {
+	// 	return width = value;
+	// }
 }
 
 /*
