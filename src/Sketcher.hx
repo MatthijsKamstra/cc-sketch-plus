@@ -31,11 +31,16 @@ class Sketcher {
 	 */
 	public var svg:String; // should be the svg/xml
 
+	// id for containers
 	public var CANVAS_ID:String = "sketcher_canvas";
 	public var WEBGL_ID:String = "sketcher_canvas_webgl";
 	public var SVG_ID:String = "sketcher_svg";
 	public var WRAPPER_ID:String = "sketcher_wrapper";
 
+	/**
+	 * [Description]
+	 * @param settings
+	 */
 	public function new(settings:Settings) {
 		this.settings = settings;
 
@@ -71,6 +76,11 @@ class Sketcher {
 
 	// ____________________________________ util to append ____________________________________
 
+	/**
+	 * [Description]
+	 * @param element
+	 * @return Sketcher
+	 */
 	public function appendTo(element:js.html.Element):Sketcher {
 		if (element == null) {
 			return this;
@@ -111,6 +121,21 @@ class Sketcher {
 	// ____________________________________ make something ____________________________________
 
 	/**
+	 * create a rectangle that is first in baseArray
+	 * 		doesn't matter when you add the background, it will automaticly be background
+	 *
+	 * @example			sketch.makeBackground(getColourObj(PINK));
+	 *
+	 * @param color		color string (red, #fff, rgba(0,0,0,1))
+	 * @return Background
+	 */
+	public function makeBackground(color:String):Background {
+		var shape = new Background(color);
+		baseArray.unshift(shape); // make sure this is at the start of the array
+		return shape;
+	}
+
+	/**
 	 * Create a text field
 	 *
 	 * @param str		value of the text you want to create
@@ -129,27 +154,12 @@ class Sketcher {
 	 *
 	 * @param x			x position
 	 * @param y			y position
-	 * @param radius
+	 * @param radius	radius of the circle
 	 * @return Circle
 	 */
 	public function makeCircle(x:Float, y:Float, radius:Float):Circle {
 		var shape = new Circle(x, y, radius);
 		baseArray.push(shape);
-		return shape;
-	}
-
-	/**
-	 * create a rectangle that is first in baseArray
-	 * 		doesn't matter when you add the background, it will automaticly be background
-	 *
-	 * @example			sketch.makeBackground(getColourObj(PINK));
-	 *
-	 * @param color		color string (red, #fff, rgba(0,0,0,1))
-	 * @return Background
-	 */
-	public function makeBackground(color:String):Background {
-		var shape = new Background(color);
-		baseArray.unshift(shape); // make sure this is at the start of the array
 		return shape;
 	}
 
@@ -171,6 +181,7 @@ class Sketcher {
 
 	/**
 	 * Not sure why I made this, but at that time it seemed really important
+	 *
 	 * @param x				x position
 	 * @param y				y position
 	 * @param width			width of the rectangle
@@ -190,7 +201,7 @@ class Sketcher {
 	 * @param y				y position
 	 * @param width			width of the rectangle
 	 * @param height		height of the rectangle
-	 * @param radius
+	 * @param radius		radius of the corners
 	 * @param isCenter		default is centered true, otherwise x and y are top-left start pos
 	 * @return Rectangle
 	 */
@@ -250,7 +261,7 @@ class Sketcher {
 	}
 
 	/**
-	 * [Description]
+	 * Create polygon with an array of numbers
 	 *  (example [10,11,20,21] translates to point 1: (x: 10, y: 11) and point 1: (x: 20, y: 21)
 	 *
 	 * @param sides			an array of x and y position
@@ -412,8 +423,12 @@ class Sketcher {
 		return shape;
 	}
 
-	public function makeMirror(?x):Mirror {
-		var shape = new Mirror();
+	public function makeMirror(?dir:Mirror.MirrorType):Mirror {
+		var shape = new Mirror(dir);
+		// only needed for svg
+		if (settings.type.toLowerCase() == 'svg') {
+			shape.baseArray = baseArray;
+		}
 		baseArray.push(shape);
 		return shape;
 	}
