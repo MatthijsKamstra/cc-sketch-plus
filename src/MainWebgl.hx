@@ -80,7 +80,7 @@ void main(void) {
 		indices = new Array<Int>();
 		colors = new Array<Float>();
 
-		WebGLSetup.uploadDataToBuffers(fl, program,);
+		// WebGLSetup.uploadDataToBuffers(fl, program,);
 
 		webgl.render();
 	}

@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-06 10:56:13");
+		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-07 11:33:33");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -243,9 +243,14 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("src/Sketcher.hx:105:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("src/Sketcher.hx:115:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
+	}
+	,makeBackground: function(color) {
+		var shape = new sketcher_draw_Background(color);
+		this.baseArray.unshift(shape);
+		return shape;
 	}
 	,makeText: function(str,x,y) {
 		var shape = new sketcher_draw_Text(str,x,y);
@@ -255,11 +260,6 @@ Sketcher.prototype = {
 	,makeCircle: function(x,y,radius) {
 		var shape = new sketcher_draw_Circle(x,y,radius);
 		this.baseArray.push(shape);
-		return shape;
-	}
-	,makeBackground: function(color) {
-		var shape = new sketcher_draw_Background(color);
-		this.baseArray.unshift(shape);
 		return shape;
 	}
 	,makeRectangle: function(x,y,width,height,isCenter) {
@@ -403,8 +403,11 @@ Sketcher.prototype = {
 		this.baseArray.push(shape);
 		return shape;
 	}
-	,makeMirror: function(x) {
-		var shape = new sketcher_draw_Mirror();
+	,makeMirror: function(dir) {
+		var shape = new sketcher_draw_Mirror(dir);
+		if(this.settings.get_type().toLowerCase() == "svg") {
+			shape.baseArray = this.baseArray;
+		}
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -508,7 +511,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:608:","webgl");
+			console.log("src/Sketcher.hx:623:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -521,7 +524,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:617:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:632:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 		this.baseArray = [];
 	}
@@ -1673,6 +1676,7 @@ examples_ExMirror.prototype = {
 		wrapper.appendChild(div0);
 		wrapper.appendChild(div1);
 		window.document.body.appendChild(wrapper);
+		this.fontFamily = sketcher_util_EmbedUtil.fontMono();
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
@@ -1707,6 +1711,22 @@ examples_ExMirror.prototype = {
 			shape.setRotate(randomRect.rotation,p.x,p.y);
 			var poly = sketch.makeX(p.x,p.y,"black");
 		}
+		var t1 = sketch.makeText("1",this.sketchWidth / 4,this.sketchHeight / 4);
+		t1.set_textAlign(sketcher_draw_TextAlignType.Center);
+		t1.set_fontFamily(this.fontFamily);
+		t1.set_fontSizePx(60);
+		var t11 = sketch.makeText("2",this.sketchWidth / 4 * 3,this.sketchHeight / 4);
+		t11.set_textAlign(sketcher_draw_TextAlignType.Center);
+		t11.set_fontFamily(this.fontFamily);
+		t11.set_fontSizePx(60);
+		var t12 = sketch.makeText("3",this.sketchWidth / 4,this.sketchHeight / 4 * 3);
+		t12.set_textAlign(sketcher_draw_TextAlignType.Center);
+		t12.set_fontFamily(this.fontFamily);
+		t12.set_fontSizePx(60);
+		var t13 = sketch.makeText("4",this.sketchWidth / 4 * 3,this.sketchHeight / 4 * 3);
+		t13.set_textAlign(sketcher_draw_TextAlignType.Center);
+		t13.set_fontFamily(this.fontFamily);
+		t13.set_fontSizePx(60);
 		var mirror = sketch.makeMirror();
 		sketch.update();
 	}
@@ -4432,8 +4452,13 @@ sketcher_draw_Mask.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,__class__: sketcher_draw_Mask
 });
-var sketcher_draw_Mirror = function() {
+var sketcher_draw_Mirror = function(dir) {
+	this.baseArray = [];
 	this.type = "mirror";
+	if(dir == null) {
+		dir = "right";
+	}
+	this.dir = dir;
 	sketcher_draw_Base.call(this,"mirror");
 };
 $hxClasses["sketcher.draw.Mirror"] = sketcher_draw_Mirror;
@@ -4446,20 +4471,30 @@ sketcher_draw_Mirror.prototype = $extend(sketcher_draw_Base.prototype,{
 			window.console.warn("Mirror doens't work the same as canvas, use with care");
 			sketcher_draw_Mirror.ISWARN = true;
 		}
+		var _g = 0;
+		var _g1 = this.baseArray.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _baseArray = this.baseArray[i];
+		}
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
 		if(!sketcher_draw_Mirror.ISWARN) {
-			window.console.warn("Mirror is still WIP");
+			window.console.warn("Mirror works only for the right part of the sketch");
 			sketcher_draw_Mirror.ISWARN = true;
 		}
-		var y = 0;
-		var x = Globals.w / 2;
+		var _y = 0;
+		var _y2 = Globals.h / 2;
+		var _x = 0;
+		var _x2 = Globals.w / 2;
+		var _w = Globals.w / 2;
+		var _h = Globals.h / 2;
 		ctx.save();
-		ctx.translate(x,y);
+		ctx.translate(_x2,_y);
 		ctx.scale(-1,1);
 		ctx.clearRect(0,0,Globals.w,Globals.h);
-		ctx.drawImage(ctx.canvas,x,y,Globals.w,Globals.h,0,0,Globals.w,Globals.h);
+		ctx.drawImage(ctx.canvas,_x2,_y,Globals.w,Globals.h,0,0,Globals.w,Globals.h);
 		ctx.restore();
 	}
 	,gl: function(gl) {
