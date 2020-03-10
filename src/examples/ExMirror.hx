@@ -20,7 +20,7 @@ class ExMirror {
 	var grid:GridUtil;
 	//
 	var isDebug:Bool = true;
-	var total = 20;
+	var total = 10; // 20;
 	var randomArray:Array<RandomRect> = [];
 
 	var fontFamily:String;
@@ -119,7 +119,7 @@ class ExMirror {
 		for (i in 0...randomArray.length) {
 			var randomRect = randomArray[i];
 			var p = randomRect.point;
-			var shape = sketch.makeRectangle(p.x, p.y, randomRect.width, randomRect.height, false);
+			var shape = sketch.makeRectangle(p.x, p.y, randomRect.width, randomRect.height, true);
 			shape.setFill(randomRect.color);
 			shape.setRotate(randomRect.rotation, p.x, p.y);
 			var poly = sketch.makeX(p.x, p.y, 'black');

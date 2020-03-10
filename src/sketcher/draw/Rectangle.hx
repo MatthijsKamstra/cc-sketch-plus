@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import haxe.display.Display.GotoDefinitionResult;
 import js.Browser.*;
 import js.html.webgl.RenderingContext;
 import sketcher.AST.Point;
@@ -16,8 +17,8 @@ class Rectangle extends Base implements IBase {
 
 	public var type = 'rectangle'; // base (get class name?)
 
-	var xpos:Float;
-	var ypos:Float;
+	var cx:Float;
+	var cy:Float;
 	var isCenter:Bool;
 
 	public var point_top_left:Point;
@@ -30,26 +31,26 @@ class Rectangle extends Base implements IBase {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.xpos = this.x - (this.width / 2);
-		this.ypos = this.y - (this.height / 2);
+		this.cx = this.x - (this.width / 2);
+		this.cy = this.y - (this.height / 2);
 
 		this.isCenter = isCenter;
 		if (!isCenter) {
-			this.xpos = this.x;
-			this.ypos = this.y;
+			this.cx = this.x;
+			this.cy = this.y;
 		}
 
-		this.point_top_left = {x: this.xpos, y: this.ypos};
-		this.point_top_right = {x: this.xpos + this.width, y: this.ypos};
-		this.point_bottom_left = {x: this.xpos, y: this.ypos + this.height};
-		this.point_bottom_right = {x: this.xpos + this.width, y: this.ypos + this.height};
+		this.point_top_left = {x: this.cx, y: this.cy};
+		this.point_top_right = {x: this.cx + this.width, y: this.cy};
+		this.point_bottom_left = {x: this.cx, y: this.cy + this.height};
+		this.point_bottom_right = {x: this.cx + this.width, y: this.cy + this.height};
 
 		super('rect');
 	}
 
 	public function svg(?settings:Settings):String {
-		xml.set('x', Std.string(this.xpos));
-		xml.set('y', Std.string(this.ypos));
+		xml.set('x', Std.string(this.cx));
+		xml.set('y', Std.string(this.cy));
 		xml.set('width', Std.string(this.width));
 		xml.set('height', Std.string(this.height));
 
@@ -89,40 +90,49 @@ class Rectangle extends Base implements IBase {
 			ctx.setLineDash(this.dash);
 		}
 
+		console.group('${this.id} - isCenter: ${isCenter}');
+
 		// trace(this.rotate, this.move);
+		console.log('#0 - start');
 
 		ctx.beginPath();
-		// rotation & move...
+		// rotation is set & move is not (still null)...
 		if (this.rotate != null && this.move == null) {
+			console.log('#1 - rotate');
+
 			// trace(this.x, this.y, this.rotate);
 
 			// trace('rotate but not move');
 
 			ctx.save();
 
-			ctx.translate(this.xpos, this.ypos);
+			// ctx.translate(this.cx, this.cy);
+			ctx.translate(this.x, this.y);
 			ctx.rotate(MathUtil.radians(this.rotate));
+
+			ctx.arc(0, 0, 10, 0, 2 * Math.PI);
+			// ctx.translate(-this.cx, -this.cy);
 
 			// if (this.move != null) {
 			// 	ctx.translate(this.move.x, this.move.y);
 			// }
 
-			// if (isCenter) {
-			// 	ctx.rect(this.xpos, this.ypos, this.width, this.height);
-			// } else {
-			// 	ctx.rect(this.xpos, this.ypos, this.width, this.height);
-			// }
-			ctx.rect(0, 0, this.width, this.height);
+			// ctx.rect(0, 0, this.width, this.height);
+			ctx.rect(-(this.width / 2), -(this.height / 2), this.width, this.height);
 
+			// console.debug('$id, x: ${x}, y: ${y}, width: ${width}, height: ${height}, cx: ${cx}, cy: ${cy}, isCenter: ${isCenter}');
+			console.debug('$id, x: ${x}, y: ${y}, width: ${width}, height: ${height}, cx: ${cx}, cy: ${cy}, isCenter: ${isCenter}');
 			// buildCanvasShape(ctx);
 
 			ctx.restore();
 		}
 
+		// move is set & rotation is not (still null)...
 		if (this.move != null && this.rotate == null) {
+			console.log('#2 - move');
 			// trace('move but not rotate');
 			ctx.save();
-			ctx.translate(this.xpos, this.ypos);
+			ctx.translate(this.cx, this.cy);
 
 			ctx.translate(this.move.x, this.move.y);
 
@@ -132,15 +142,19 @@ class Rectangle extends Base implements IBase {
 		}
 
 		if (this.rotate == null && this.move == null) {
+			console.log('#3 - default');
 			buildCanvasShape(ctx);
 		}
+
 		/**
 			ctx.translate(x, y);
 			ctx.rotate(MathUtil.radians(180));
 			fillTriangle(ctx, 0, 0 - sz, 0 + sz, 0 + sz / 2, 0 - sz, 0 + sz / 2);
-						ctx.rotate(MathUtil.radians(-180));
-						ctx.translate(-x, -y);
+			ctx.rotate(MathUtil.radians(-180));
+			ctx.translate(-x, -y);
 		 */
+
+		console.log('#4 - end');
 
 		if (this.fill != null) {
 			ctx.fill();
@@ -151,12 +165,14 @@ class Rectangle extends Base implements IBase {
 
 		// ctx.fill();
 		// ctx.stroke();
+
+		console.groupEnd();
 	}
 
 	private function buildCanvasShape(ctx:js.html.CanvasRenderingContext2D) {
 		if (this.radius == null) {
 			// normal rectangle
-			ctx.rect(this.xpos, this.ypos, this.width, this.height);
+			ctx.rect(this.cx, this.cy, this.width, this.height);
 		} else {
 			// rectangle with radius
 			var radius = {
@@ -165,15 +181,15 @@ class Rectangle extends Base implements IBase {
 				br: this.radius,
 				bl: this.radius
 			};
-			ctx.moveTo(this.xpos + radius.tl, this.ypos);
-			ctx.lineTo(this.xpos + this.width - radius.tr, this.ypos);
-			ctx.quadraticCurveTo(this.xpos + this.width, this.ypos, this.xpos + this.width, this.ypos + radius.tr);
-			ctx.lineTo(this.xpos + this.width, this.ypos + this.height - radius.br);
-			ctx.quadraticCurveTo(this.xpos + this.width, this.ypos + this.height, this.xpos + this.width - radius.br, this.ypos + this.height);
-			ctx.lineTo(this.xpos + radius.bl, this.ypos + this.height);
-			ctx.quadraticCurveTo(this.xpos, this.ypos + this.height, this.xpos, this.ypos + this.height - radius.bl);
-			ctx.lineTo(this.xpos, this.ypos + radius.tl);
-			ctx.quadraticCurveTo(this.xpos, this.ypos, this.xpos + radius.tl, this.ypos);
+			ctx.moveTo(this.cx + radius.tl, this.cy);
+			ctx.lineTo(this.cx + this.width - radius.tr, this.cy);
+			ctx.quadraticCurveTo(this.cx + this.width, this.cy, this.cx + this.width, this.cy + radius.tr);
+			ctx.lineTo(this.cx + this.width, this.cy + this.height - radius.br);
+			ctx.quadraticCurveTo(this.cx + this.width, this.cy + this.height, this.cx + this.width - radius.br, this.cy + this.height);
+			ctx.lineTo(this.cx + radius.bl, this.cy + this.height);
+			ctx.quadraticCurveTo(this.cx, this.cy + this.height, this.cx, this.cy + this.height - radius.bl);
+			ctx.lineTo(this.cx, this.cy + radius.tl);
+			ctx.quadraticCurveTo(this.cx, this.cy, this.cx + radius.tl, this.cy);
 			ctx.closePath();
 		}
 	}

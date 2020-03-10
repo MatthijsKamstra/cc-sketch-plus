@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + sketcher_App.NAME + " Dom ready :: build: " + "2020-03-07 22:40:36");
+		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-03-10 11:41:52");
 		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -1633,7 +1633,7 @@ examples_ExMask.prototype = {
 };
 var examples_ExMirror = function() {
 	this.randomArray = [];
-	this.total = 20;
+	this.total = 10;
 	this.isDebug = true;
 	this.sketchHeight = 400;
 	this.sketchWidth = 600;
@@ -1706,7 +1706,7 @@ examples_ExMirror.prototype = {
 			var i = _g++;
 			var randomRect = this.randomArray[i];
 			var p = randomRect.point;
-			var shape = sketch.makeRectangle(p.x,p.y,randomRect.width,randomRect.height,false);
+			var shape = sketch.makeRectangle(p.x,p.y,randomRect.width,randomRect.height,true);
 			shape.setFill(randomRect.color);
 			shape.setRotate(randomRect.rotation,p.x,p.y);
 			var poly = sketch.makeX(p.x,p.y,"black");
@@ -2010,9 +2010,14 @@ examples_ExRectangle.prototype = {
 		var p = this.grid.array[0];
 		var shape = sketch.makeRectangle(p.x,p.y,this.rectW,this.rectH);
 		shape.setRotate(10,p.x,p.y);
+		shape.set_fillOpacity(0.8);
+		var poly = sketch.makeX(p.x,p.y,"black");
 		var p1 = this.grid.array[1];
-		var shape1 = sketch.makeRectangle(p1.x,p1.y,this.rectW,this.rectH);
+		var shape1 = sketch.makeRectangle(p1.x,p1.y,this.rectW,this.rectH,true);
 		shape1.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
+		shape1.setRotate(-100,p1.x,p1.y);
+		shape1.set_fillOpacity(0.8);
+		var poly1 = sketch.makeX(p1.x,p1.y,"black");
 		var p2 = this.grid.array[2];
 		var shape2 = sketch.makeRectangle(p2.x,p2.y,this.rectW,this.rectH);
 		shape2.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.LIME));
@@ -2024,7 +2029,7 @@ examples_ExRectangle.prototype = {
 		shape3.set_fillOpacity(0.5);
 		shape3.setMove(10,10);
 		var p4 = this.grid.array[4];
-		var shape4 = sketch.makeRectangle(p4.x,p4.y,this.rectW,this.rectH);
+		var shape4 = sketch.makeRectangle(p4.x,p4.y,this.rectW,this.rectH,false);
 		shape4.set_lineWeight(10);
 		shape4.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.PINK));
 		shape4.set_fillOpacity(0.5);
@@ -4887,17 +4892,17 @@ var sketcher_draw_Rectangle = function(x,y,width,height,isCenter) {
 	this.set_y(y);
 	this.set_width(width);
 	this.set_height(height);
-	this.xpos = this.get_x() - this.get_width() / 2;
-	this.ypos = this.get_y() - this.get_height() / 2;
+	this.cx = this.get_x() - this.get_width() / 2;
+	this.cy = this.get_y() - this.get_height() / 2;
 	this.isCenter = isCenter;
 	if(!isCenter) {
-		this.xpos = this.get_x();
-		this.ypos = this.get_y();
+		this.cx = this.get_x();
+		this.cy = this.get_y();
 	}
-	this.point_top_left = { x : this.xpos, y : this.ypos};
-	this.point_top_right = { x : this.xpos + this.get_width(), y : this.ypos};
-	this.point_bottom_left = { x : this.xpos, y : this.ypos + this.get_height()};
-	this.point_bottom_right = { x : this.xpos + this.get_width(), y : this.ypos + this.get_height()};
+	this.point_top_left = { x : this.cx, y : this.cy};
+	this.point_top_right = { x : this.cx + this.get_width(), y : this.cy};
+	this.point_bottom_left = { x : this.cx, y : this.cy + this.get_height()};
+	this.point_bottom_right = { x : this.cx + this.get_width(), y : this.cy + this.get_height()};
 	sketcher_draw_Base.call(this,"rect");
 };
 $hxClasses["sketcher.draw.Rectangle"] = sketcher_draw_Rectangle;
@@ -4906,8 +4911,8 @@ sketcher_draw_Rectangle.__interfaces__ = [sketcher_draw_IBase];
 sketcher_draw_Rectangle.__super__ = sketcher_draw_Base;
 sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
-		this.xml.set("x",Std.string(this.xpos));
-		this.xml.set("y",Std.string(this.ypos));
+		this.xml.set("x",Std.string(this.cx));
+		this.xml.set("y",Std.string(this.cy));
 		this.xml.set("width",Std.string(this.get_width()));
 		this.xml.set("height",Std.string(this.get_height()));
 		if(this.get_radius() != null) {
@@ -4970,10 +4975,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr3 = value1.split(",");
-			_r1 = arr3[0];
-			_g1 = arr3[1];
-			_b1 = arr3[2];
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4988,48 +4993,57 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 		if(this.get_dash() != null) {
 			ctx.setLineDash(this.get_dash());
 		}
+		window.console.group("" + this.get_id() + " - isCenter: " + Std.string(this.isCenter));
+		window.console.log("#0 - start");
 		ctx.beginPath();
 		if(this.get_rotate() != null && this.get_move() == null) {
+			window.console.log("#1 - rotate");
 			ctx.save();
-			ctx.translate(this.xpos,this.ypos);
+			ctx.translate(this.get_x(),this.get_y());
 			ctx.rotate(sketcher_util_MathUtil.radians(this.get_rotate()));
-			ctx.rect(0,0,this.get_width(),this.get_height());
+			ctx.arc(0,0,10,0,2 * Math.PI);
+			ctx.rect(-(this.get_width() / 2),-(this.get_height() / 2),this.get_width(),this.get_height());
+			window.console.debug("" + this.get_id() + ", x: " + this.get_x() + ", y: " + this.get_y() + ", width: " + this.get_width() + ", height: " + this.get_height() + ", cx: " + this.cx + ", cy: " + this.cy + ", isCenter: " + Std.string(this.isCenter));
 			ctx.restore();
 		}
 		if(this.get_move() != null && this.get_rotate() == null) {
+			window.console.log("#2 - move");
 			ctx.save();
-			ctx.translate(this.xpos,this.ypos);
+			ctx.translate(this.cx,this.cy);
 			ctx.translate(this.get_move().x,this.get_move().y);
 			ctx.rect(0,0,this.get_width(),this.get_height());
 			ctx.restore();
 		}
 		if(this.get_rotate() == null && this.get_move() == null) {
+			window.console.log("#3 - default");
 			this.buildCanvasShape(ctx);
 		}
+		window.console.log("#4 - end");
 		if(this.get_fill() != null) {
 			ctx.fill();
 		}
 		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
 			ctx.stroke();
 		}
+		window.console.groupEnd();
 	}
 	,buildCanvasShape: function(ctx) {
 		if(this.get_radius() == null) {
-			ctx.rect(this.xpos,this.ypos,this.get_width(),this.get_height());
+			ctx.rect(this.cx,this.cy,this.get_width(),this.get_height());
 		} else {
 			var radius_tl = this.get_radius();
 			var radius_tr = this.get_radius();
 			var radius_br = this.get_radius();
 			var radius_bl = this.get_radius();
-			ctx.moveTo(this.xpos + radius_tl,this.ypos);
-			ctx.lineTo(this.xpos + this.get_width() - radius_tr,this.ypos);
-			ctx.quadraticCurveTo(this.xpos + this.get_width(),this.ypos,this.xpos + this.get_width(),this.ypos + radius_tr);
-			ctx.lineTo(this.xpos + this.get_width(),this.ypos + this.get_height() - radius_br);
-			ctx.quadraticCurveTo(this.xpos + this.get_width(),this.ypos + this.get_height(),this.xpos + this.get_width() - radius_br,this.ypos + this.get_height());
-			ctx.lineTo(this.xpos + radius_bl,this.ypos + this.get_height());
-			ctx.quadraticCurveTo(this.xpos,this.ypos + this.get_height(),this.xpos,this.ypos + this.get_height() - radius_bl);
-			ctx.lineTo(this.xpos,this.ypos + radius_tl);
-			ctx.quadraticCurveTo(this.xpos,this.ypos,this.xpos + radius_tl,this.ypos);
+			ctx.moveTo(this.cx + radius_tl,this.cy);
+			ctx.lineTo(this.cx + this.get_width() - radius_tr,this.cy);
+			ctx.quadraticCurveTo(this.cx + this.get_width(),this.cy,this.cx + this.get_width(),this.cy + radius_tr);
+			ctx.lineTo(this.cx + this.get_width(),this.cy + this.get_height() - radius_br);
+			ctx.quadraticCurveTo(this.cx + this.get_width(),this.cy + this.get_height(),this.cx + this.get_width() - radius_br,this.cy + this.get_height());
+			ctx.lineTo(this.cx + radius_bl,this.cy + this.get_height());
+			ctx.quadraticCurveTo(this.cx,this.cy + this.get_height(),this.cx,this.cy + this.get_height() - radius_bl);
+			ctx.lineTo(this.cx,this.cy + radius_tl);
+			ctx.quadraticCurveTo(this.cx,this.cy,this.cx + radius_tl,this.cy);
 			ctx.closePath();
 		}
 	}

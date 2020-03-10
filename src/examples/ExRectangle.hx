@@ -91,11 +91,16 @@ class ExRectangle {
 		var p = grid.array[0];
 		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
 		shape.setRotate(10, p.x, p.y);
+		shape.fillOpacity = 0.8;
+		var poly = sketch.makeX(p.x, p.y, 'black');
 
 		var p = grid.array[1];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH, true);
 		shape.fillColor = getColourObj(LIME);
+		shape.setRotate(-100, p.x, p.y);
+		shape.fillOpacity = 0.8;
 		// shape.setScale(1.5, 1.5);
+		var poly = sketch.makeX(p.x, p.y, 'black');
 
 		var p = grid.array[2];
 		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
@@ -110,7 +115,7 @@ class ExRectangle {
 		shape.setMove(10, 10);
 
 		var p = grid.array[4];
-		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH);
+		var shape = sketch.makeRectangle(p.x, p.y, rectW, rectH, false);
 		shape.lineWeight = 10;
 		shape.fillColor = getColourObj(PINK);
 		shape.fillOpacity = 0.5;

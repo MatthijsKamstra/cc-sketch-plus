@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] default color text differenct between svg and canvas
+- [x] rotation canvas seems to move rectangle, see example ExMirror/ExRectangle (center = true)
 
 ## Done
 
@@ -9,7 +10,3 @@
 - [x] Poly
 - [x] Lines
 - [x] Text
-
-Make the drips and spatter in svg and canvas
-
-https://www.instagram.com/p/Bzp5gwiiQLk/?utm_source=ig_web_options_share_sheet

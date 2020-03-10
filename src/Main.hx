@@ -35,7 +35,7 @@ class Main {
 	public function new() {
 		// console.log('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
-			console.log('${sketcher.App.NAME} Dom ready :: build: ${sketcher.App.getBuildDate()}');
+			console.info('${sketcher.App.NAME} Main Dom ready :: build: ${sketcher.App.getBuildDate()}');
 
 			// pulldown
 			var arr = PullDown.convertClass(ccTypeArray);
