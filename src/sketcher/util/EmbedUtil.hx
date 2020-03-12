@@ -28,7 +28,7 @@ class EmbedUtil {
 	 * 				sketcher.util.EmbedUtil.stats();
 	 */
 	public static function stats() {
-		untyped __js__("var script = document.createElement('script');script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);");
+		untyped __js__("var script = document.createElement('script');script.id='mrdoob-stats';script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);");
 
 		/*
 			var script = document.createElement('script');
@@ -43,6 +43,14 @@ class EmbedUtil {
 			script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';
 			document.head.appendChild(script);
 		 */
+	}
+
+	public static function removeStats() {
+		var scriptEl = document.getElementById('mrdoob-stats');
+		console.log(scriptEl);
+		scriptEl.parentElement.removeChild(scriptEl);
+
+		// need to remove div with canvas as well.... toggle will not work
 	}
 
 	/**
