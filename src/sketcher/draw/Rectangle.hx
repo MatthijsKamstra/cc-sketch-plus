@@ -90,15 +90,15 @@ class Rectangle extends Base implements IBase {
 			ctx.setLineDash(this.dash);
 		}
 
-		console.group('${this.id} - isCenter: ${isCenter}');
+		// console.group('${this.id} - isCenter: ${isCenter}');
 
-		// trace(this.rotate, this.move);
-		console.log('#0 - start');
+		// // trace(this.rotate, this.move);
+		// console.log('#0 - start');
 
 		ctx.beginPath();
 		// rotation is set & move is not (still null)...
 		if (this.rotate != null && this.move == null) {
-			console.log('#1 - rotate');
+			// console.log('#1 - rotate');
 
 			// trace(this.x, this.y, this.rotate);
 
@@ -121,7 +121,7 @@ class Rectangle extends Base implements IBase {
 			ctx.rect(-(this.width / 2), -(this.height / 2), this.width, this.height);
 
 			// console.debug('$id, x: ${x}, y: ${y}, width: ${width}, height: ${height}, cx: ${cx}, cy: ${cy}, isCenter: ${isCenter}');
-			console.debug('$id, x: ${x}, y: ${y}, width: ${width}, height: ${height}, cx: ${cx}, cy: ${cy}, isCenter: ${isCenter}');
+			// console.debug('$id, x: ${x}, y: ${y}, width: ${width}, height: ${height}, cx: ${cx}, cy: ${cy}, isCenter: ${isCenter}');
 			// buildCanvasShape(ctx);
 
 			ctx.restore();
@@ -129,7 +129,7 @@ class Rectangle extends Base implements IBase {
 
 		// move is set & rotation is not (still null)...
 		if (this.move != null && this.rotate == null) {
-			console.log('#2 - move');
+			// console.log('#2 - move');
 			// trace('move but not rotate');
 			ctx.save();
 			ctx.translate(this.cx, this.cy);
@@ -142,7 +142,7 @@ class Rectangle extends Base implements IBase {
 		}
 
 		if (this.rotate == null && this.move == null) {
-			console.log('#3 - default');
+			// console.log('#3 - default');
 			buildCanvasShape(ctx);
 		}
 
@@ -154,7 +154,7 @@ class Rectangle extends Base implements IBase {
 			ctx.translate(-x, -y);
 		 */
 
-		console.log('#4 - end');
+		// console.log('#4 - end');
 
 		if (this.fill != null) {
 			ctx.fill();
@@ -166,7 +166,7 @@ class Rectangle extends Base implements IBase {
 		// ctx.fill();
 		// ctx.stroke();
 
-		console.groupEnd();
+		// console.groupEnd();
 	}
 
 	private function buildCanvasShape(ctx:js.html.CanvasRenderingContext2D) {
