@@ -41,8 +41,9 @@ class AudioAnalyser {
 	var audioEl:AudioElement; // MediaElement;
 
 	public var bufferLength:Int;
-	public var frequencyData:js.lib.Uint8Array;
-	public var timeDomainData:js.lib.Uint8Array;
+	public var frequencyBinCount:Int;
+	public var frequencyData:js.lib.Uint8Array; // bars - bar data is from 0 - 256 in 512 bins. no sound is 0;
+	public var timeDomainData:js.lib.Uint8Array; // waveform - waveform data is from 0-256 for 512 bins. no sound is 128.
 
 	/**
 	 * @source		https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/smoothingTimeConstant
@@ -93,6 +94,7 @@ class AudioAnalyser {
 
 		// data
 		bufferLength = analyser.frequencyBinCount;
+		frequencyBinCount = analyser.frequencyBinCount;
 		frequencyData = new js.lib.Uint8Array(bufferLength);
 		timeDomainData = new js.lib.Uint8Array(bufferLength);
 
