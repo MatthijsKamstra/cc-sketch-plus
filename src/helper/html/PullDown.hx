@@ -1,4 +1,4 @@
-package html;
+package helper.html;
 
 import js.html.OptionElement;
 import js.html.HTMLOptionsCollection;
@@ -47,7 +47,11 @@ class PullDown {
 	}
 
 	function setup() {
-		// use cursor key lef and right to switch sketches
+		// check if it is set before (and remove if needed)
+		var previous = document.getElementById(_id);
+		if (previous != null) {
+			previous.parentElement.removeChild(previous);
+		}
 
 		var div = document.createDivElement();
 		div.setAttribute('style', 'position: fixed;display: block;top: 0; line-height: 0; z-index:1'); // reset bootstrap line-height
