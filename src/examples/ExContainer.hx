@@ -27,7 +27,7 @@ class ExContainer {
 
 		var str = '.testclass|testid|#testid2';
 		str += '\n|\ncanvas-wrapper|svg-wrapper\n|\n||||||||||||\n||||||||\n||||\n|||\n||\n|\n\n';
-		var container = new html.Container(str);
+		var container = new helper.html.Container(str);
 	}
 
 	/**
