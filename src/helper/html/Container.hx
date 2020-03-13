@@ -1,7 +1,9 @@
-package html;
+package helper.html;
 
+import js.html.DOMElement;
+import js.html.Element;
 import sketcher.util.EmbedUtil;
-import js.html.Document;
+import js.html.Node;
 import js.Browser.*;
 
 using StringTools;
@@ -14,7 +16,7 @@ using StringTools;
  * @example
  *
  * 		var str = '.testclass|testid|#testid2';
- *		var container = new html.Container(str);
+ *		var container = new helper.html.Container(str);
  *
  *		// or
  *
@@ -23,8 +25,13 @@ using StringTools;
  */
 class Container {
 	var _id = 'cc-sketcher-bootstrap-container';
+	var attachID = '';
 	var layout:String;
 	var _isDebug = false;
+	var _isAttachedToID = false;
+	var _isAttachedToEl = false;
+
+	var attachElement:Element;
 
 	static var _count = 0;
 
@@ -67,7 +74,7 @@ class Container {
 	 */
 	public static function create(str:String) {
 		trace('x');
-		var container = new html.Container(str);
+		var container = new helper.html.Container(str);
 		// container.init();
 		return container;
 	}
@@ -97,6 +104,23 @@ class Container {
 		return this;
 	}
 
+	public function attachToID(id) {
+		_isAttachedToID = true;
+		attachID = id;
+		init();
+		return this;
+	}
+
+	public function attachToElement(el:Element) {
+		_isAttachedToEl = true;
+		attachElement = el;
+
+		console.log(el);
+
+		init();
+		return this;
+	}
+
 	function init() {
 		var style = getCSS();
 		var div = document.createDivElement();
@@ -116,7 +140,19 @@ class Container {
 		}
 
 		// div.innerHTML = '<!-- test -->';
-		document.body.appendChild(div);
+		if (_isAttachedToID) {
+			trace('1');
+			document.body.appendChild(div);
+		} else if (_isAttachedToEl) {
+			trace('2');
+			attachElement.appendChild(div);
+		} else {
+			trace('3');
+			var el = document.getElementById(attachID);
+			el.innerHTML = '<!-- container -->';
+			el.appendChild(div);
+		}
+
 		var _arr:Array<String> = layout.split('\n');
 		for (i in 0..._arr.length) {
 			var row = _arr[i];
