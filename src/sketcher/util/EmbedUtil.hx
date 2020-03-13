@@ -70,6 +70,9 @@ class EmbedUtil {
 	 * @param callbackArray
 	 */
 	public static function script(id:String, src:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		if (document.getElementById(id) != null)
+			return;
+
 		// trace('${toString()} embedSocketScript');
 		var el:js.html.ScriptElement = document.createScriptElement();
 		el.id = id;
@@ -89,6 +92,9 @@ class EmbedUtil {
 	}
 
 	public static function stylesheet(id:String, src:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		if (document.getElementById(id) != null)
+			return;
+
 		var el:js.html.LinkElement = document.createLinkElement();
 		el.id = id;
 		el.rel = 'stylesheet';
@@ -107,6 +113,9 @@ class EmbedUtil {
 	}
 
 	public static function bootstrapStylesheet(id:String, src:String, integrity:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		if (document.getElementById(id) != null)
+			return;
+
 		var el:js.html.LinkElement = document.createLinkElement();
 		el.id = id;
 		el.rel = 'stylesheet';
@@ -126,6 +135,9 @@ class EmbedUtil {
 	}
 
 	public static function bootstrapScript(id:String, src:String, integrity:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
+		if (document.getElementById(id) != null)
+			return;
+
 		var el:js.html.ScriptElement = document.createScriptElement();
 		el.id = id;
 		// el.rel = 'stylesheet';
