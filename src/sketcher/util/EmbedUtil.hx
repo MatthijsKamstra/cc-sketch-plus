@@ -46,11 +46,20 @@ class EmbedUtil {
 	}
 
 	public static function removeStats() {
+		// remove script
 		var scriptEl = document.getElementById('mrdoob-stats');
 		console.log(scriptEl);
 		scriptEl.parentElement.removeChild(scriptEl);
 
-		// need to remove div with canvas as well.... toggle will not work
+		// need to collect all div and search for characteristic for stats
+		var divArr = document.getElementsByTagName('div');
+		for (i in 0...divArr.length) {
+			var div:js.html.DivElement = cast divArr[i];
+			var style = div.getAttribute('style');
+			if (style == 'position: fixed; top: 0px; left: 0px; cursor: pointer; opacity: 0.9; z-index: 10000;') {
+				div.parentElement.removeChild(div);
+			}
+		}
 	}
 
 	/**
