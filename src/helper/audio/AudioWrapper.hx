@@ -7,6 +7,12 @@ class AudioWrapper {
 	var _id:String;
 	var el:js.html.Element;
 
+	/**
+		*
+				var audioWrapper = new AudioWrapper('audio-wrapper');
+
+			 * @param id
+	 */
 	public function new(id:String) {
 		this._id = id;
 
