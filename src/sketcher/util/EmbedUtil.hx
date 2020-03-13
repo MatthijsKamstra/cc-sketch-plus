@@ -48,7 +48,6 @@ class EmbedUtil {
 	public static function removeStats() {
 		// remove script
 		var scriptEl = document.getElementById('mrdoob-stats');
-		console.log(scriptEl);
 		scriptEl.parentElement.removeChild(scriptEl);
 
 		// need to collect all div and search for characteristic for stats
