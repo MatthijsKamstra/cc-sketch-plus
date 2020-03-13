@@ -48,9 +48,9 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-03-10 11:41:52");
-		var arr = html_PullDown.convertClass(_gthis.ccTypeArray);
-		_gthis.pulldown = new html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
+		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-03-13 12:11:07");
+		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
+		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
 		_gthis.setupArt();
 		_gthis.setupNav();
@@ -1091,7 +1091,7 @@ examples_ExContainer.prototype = {
 	,init: function() {
 		var str = ".testclass|testid|#testid2";
 		str += "\n|\ncanvas-wrapper|svg-wrapper\n|\n||||||||||||\n||||||||\n||||\n|||\n||\n|\n\n";
-		var container = new html_Container(str);
+		var container = new helper_html_Container(str);
 	}
 	,css: function() {
 		return "\n.col{\n    min-height:20px;\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    background-color: rgba(86,61,124,.15);\n    border: 1px solid rgba(86,61,124,.2);\n}\n.testclass,\n#testid,\n#testid2,\n#canvas-wrapper,\n#svg-wrapper{\n    width:100%;\n    height:100%;\n    padding:10px;\n}\n\n#canvas-wrapper{\n    background-color: violet;\n}\n#svg-wrapper{\n    background-color: turquoise;\n}\n#svg-wrapper:after{\n    content:\"#svg-wrapper\";\n}\n#canvas-wrapper:after{\n    content:\"#canvas-wrapper\";\n}\n.testclass{\n    background-color: yellowgreen;\n}\n#testid{\n    background-color: tomato;\n}\n#testid2{\n    background-color: red;\n}\n#testid2:after{\n    content:\"#testid2\";\n}\n#testid:after{\n    content:\"#testid\";\n}\n.testclass:after{\n    content:\".testclass\";\n}\n";
@@ -2777,6 +2777,280 @@ haxe_xml_Printer.prototype = {
 	}
 	,__class__: haxe_xml_Printer
 };
+var helper_html_Container = function(str,isClear) {
+	if(isClear == null) {
+		isClear = false;
+	}
+	if(str == null) {
+		str = "";
+	}
+	this._isDebug = false;
+	this._id = "cc-sketcher-bootstrap-container";
+	this.layout = str;
+	sketcher_util_EmbedUtil.bootstrapStyle();
+	if(isClear) {
+		var elems = window.document.body.getElementsByTagName("div");
+		var _g = 0;
+		var _g1 = elems.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _el = elems[i];
+			if(_el == null) {
+				return;
+			}
+		}
+		window.document.body.innerHTML = "";
+	}
+};
+$hxClasses["helper.html.Container"] = helper_html_Container;
+helper_html_Container.__name__ = "helper.html.Container";
+helper_html_Container.create = function(str) {
+	console.log("src/helper/html/Container.hx:69:","x");
+	var container = new helper_html_Container(str);
+	return container;
+};
+helper_html_Container.prototype = {
+	full: function(isFull) {
+		if(isFull == null) {
+			isFull = true;
+		}
+		this.set_isFull(isFull);
+		return this;
+	}
+	,noGutter: function() {
+		this.set__isNoGutter(true);
+		return this;
+	}
+	,fullscreen: function() {
+		this.set__isfullscreen(true);
+		return this;
+	}
+	,isDebug: function(isDebug) {
+		if(isDebug == null) {
+			isDebug = true;
+		}
+		this._isDebug = isDebug;
+		return this;
+	}
+	,attach: function() {
+		this.init();
+		return this;
+	}
+	,init: function() {
+		var style = this.getCSS();
+		var div = window.document.createElement("div");
+		div.id = "" + this._id + "-" + helper_html_Container._count;
+		if(helper_html_Container._count == 0) {
+			div.id = "" + this._id;
+		}
+		if(this.get_isFull()) {
+			div.className = "container-fluid";
+		} else {
+			div.className = "container";
+		}
+		if(this.get__isfullscreen()) {
+			div.setAttribute("style","padding-left: 0; padding-right: 0;");
+		}
+		window.document.body.appendChild(div);
+		var _arr = this.layout.split("\n");
+		var _g = 0;
+		var _g1 = _arr.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var row = _arr[i];
+			var divRow = window.document.createElement("div");
+			divRow.className = "row";
+			if(this.get__isNoGutter()) {
+				divRow.classList.add("no-gutters");
+			}
+			if(this._isDebug) {
+				console.log("src/helper/html/Container.hx:129:",row);
+			}
+			var col = row.split("|");
+			var _g2 = 0;
+			var _g11 = col.length;
+			while(_g2 < _g11) {
+				var i1 = _g2++;
+				var _col = col[i1];
+				if(this._isDebug) {
+					console.log("src/helper/html/Container.hx:134:",_col);
+				}
+				var divCol = window.document.createElement("div");
+				divCol.className = "col";
+				divRow.appendChild(divCol);
+				if(_col != "") {
+					var c = window.document.createElement("div");
+					if(StringTools.startsWith(_col,"#")) {
+						c.id = StringTools.replace(_col,"#","");
+						style += "" + _col + ":after{content:\"" + _col + "\";}";
+					} else if(StringTools.startsWith(_col,".")) {
+						c.className = StringTools.replace(_col,".","");
+						style += "" + _col + ":after{content:\"" + _col + "\";}";
+					} else {
+						c.id = _col;
+						style += "#" + _col + ":after{content:\"" + _col + "\";}";
+					}
+					divCol.appendChild(c);
+				}
+			}
+			div.appendChild(divRow);
+		}
+		helper_html_Container._count++;
+		if(this._isDebug) {
+			var css = window.document.createElement("style");
+			css.appendChild(window.document.createTextNode(style));
+			window.document.getElementsByTagName("head")[0].appendChild(css);
+		}
+	}
+	,get_isFull: function() {
+		return this.isFull;
+	}
+	,set_isFull: function(value) {
+		return this.isFull = value;
+	}
+	,get__isNoGutter: function() {
+		return this._isNoGutter;
+	}
+	,set__isNoGutter: function(value) {
+		return this._isNoGutter = value;
+	}
+	,get__isfullscreen: function() {
+		return this._isfullscreen;
+	}
+	,set__isfullscreen: function(value) {
+		return this._isfullscreen = value;
+	}
+	,getCSS: function() {
+		return "\n.col{\n    min-height:20px;\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    background-color: rgba(86,61,124,.15);\n    border: 1px solid rgba(86,61,124,.2);\n}\n";
+	}
+	,__class__: helper_html_Container
+};
+var helper_html_PullDown = function(valueArray,callback,callbackArray) {
+	this.keyDefaultValue = "ccquicknav";
+	this._id = "cc-sketcher-pulldown";
+	this.textArray = [];
+	this.valueArray = [];
+	this.valueArray = valueArray;
+	this.callback = callback;
+	this.callbackArray = callbackArray;
+	this.setup();
+};
+$hxClasses["helper.html.PullDown"] = helper_html_PullDown;
+helper_html_PullDown.__name__ = "helper.html.PullDown";
+helper_html_PullDown.convertClass = function(ccTypeArray) {
+	var arr = [];
+	var _g = 0;
+	var _g1 = ccTypeArray.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var _ccTypeArray = ccTypeArray[i];
+		var name = _ccTypeArray.__name__;
+		arr.push(name);
+	}
+	return arr;
+};
+helper_html_PullDown.prototype = {
+	setup: function() {
+		var _gthis = this;
+		var previous = window.document.getElementById(this._id);
+		if(previous != null) {
+			previous.parentElement.removeChild(previous);
+		}
+		var div = window.document.createElement("div");
+		div.setAttribute("style","position: fixed;display: block;top: 0; line-height: 0; z-index:1");
+		div.id = this._id;
+		this.select = window.document.createElement("select");
+		this.select.setAttribute("style","font-size: small;");
+		this.select.id = "art";
+		var _g = 0;
+		var _g1 = this.valueArray.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _valueArray = this.valueArray[i];
+			var name = _valueArray;
+			var option = window.document.createElement("option");
+			option.value = "" + name;
+			option.text = "" + name;
+			if(name.indexOf(this.get_param()) != -1) {
+				option.selected = true;
+			}
+			this.select.appendChild(option);
+		}
+		div.appendChild(this.select);
+		window.document.body.appendChild(div);
+		this.select.onchange = function(e) {
+			var index = _gthis.select.selectedIndex;
+			var options = _gthis.select.options;
+			_gthis.set_param(_gthis.valueArray[index]);
+			if(_gthis.callback != null) {
+				if(_gthis.callbackArray == null) {
+					_gthis.callback.apply(_gthis.callback,[index]);
+				} else {
+					_gthis.callback.apply(_gthis.callback,_gthis.callbackArray);
+				}
+			}
+		};
+		window.addEventListener(Globals.KEY_DOWN,function(e1) {
+			if(e1.key == "h") {
+				if(div.hasAttribute("style")) {
+					div.removeAttribute("style");
+				} else {
+					div.setAttribute("style","display:none;");
+				}
+			}
+		},false);
+	}
+	,test: function() {
+		window.location.search = "post=1234&action=edit";
+		var urlParams = new URLSearchParams(window.location.search);
+		window.console.log(urlParams.has("post"));
+		window.console.log(urlParams.get("action"));
+		window.console.log(urlParams.getAll("action"));
+		window.console.log(urlParams);
+	}
+	,updateURL: function() {
+		window.console.warn("updateURL");
+		console.log("src/helper/html/PullDown.hx:138:",this.get_param());
+		var urlParams = new URLSearchParams(window.location.search);
+		console.log("src/helper/html/PullDown.hx:140:",urlParams.has(this.keyDefaultValue));
+		if(!urlParams.has(this.keyDefaultValue)) {
+			urlParams.append(this.keyDefaultValue,this.valueArray[0]);
+			this.set_param(this.valueArray[0]);
+			console.log("src/helper/html/PullDown.hx:144:",this.get_param());
+		} else {
+			urlParams.set(this.keyDefaultValue,this.get_param());
+		}
+		console.log("src/helper/html/PullDown.hx:148:",this.get_param());
+	}
+	,setSelected: function(index) {
+		var options = this.select.options;
+		var o = options.item(index);
+		o.selected = true;
+	}
+	,get_param: function() {
+		return this.param;
+	}
+	,set_param: function(value) {
+		return this.param = value;
+	}
+	,get_hash: function() {
+		var _hash = window.location.hash;
+		this.set_hash(StringTools.replace(_hash,"#",""));
+		return this.hash;
+	}
+	,set_hash: function(value) {
+		window.location.hash = value;
+		return this.hash = value;
+	}
+	,get_selected: function() {
+		return this.selected;
+	}
+	,set_selected: function(value) {
+		this.setSelected(value);
+		return this.selected = value;
+	}
+	,__class__: helper_html_PullDown
+};
 var html_CCNav = function(valueArray) {
 	var _gthis = this;
 	sketcher_util_EmbedUtil.ccnav(function() {
@@ -2836,276 +3110,6 @@ html_CSSinjector.prototype = {
 		return css;
 	}
 	,__class__: html_CSSinjector
-};
-var html_Container = function(str,isClear) {
-	if(isClear == null) {
-		isClear = false;
-	}
-	if(str == null) {
-		str = "";
-	}
-	this._isDebug = false;
-	this._id = "cc-sketcher-bootstrap-container";
-	this.layout = str;
-	sketcher_util_EmbedUtil.bootstrapStyle();
-	if(isClear) {
-		var elems = window.document.body.getElementsByTagName("div");
-		var _g = 0;
-		var _g1 = elems.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var _el = elems[i];
-			if(_el == null) {
-				return;
-			}
-		}
-		window.document.body.innerHTML = "";
-	}
-};
-$hxClasses["html.Container"] = html_Container;
-html_Container.__name__ = "html.Container";
-html_Container.create = function(str) {
-	console.log("src/html/Container.hx:69:","x");
-	var container = new html_Container(str);
-	return container;
-};
-html_Container.prototype = {
-	full: function(isFull) {
-		if(isFull == null) {
-			isFull = true;
-		}
-		this.set_isFull(isFull);
-		return this;
-	}
-	,noGutter: function() {
-		this.set__isNoGutter(true);
-		return this;
-	}
-	,fullscreen: function() {
-		this.set__isfullscreen(true);
-		return this;
-	}
-	,isDebug: function(isDebug) {
-		if(isDebug == null) {
-			isDebug = true;
-		}
-		this._isDebug = isDebug;
-		return this;
-	}
-	,attach: function() {
-		this.init();
-		return this;
-	}
-	,init: function() {
-		var style = this.getCSS();
-		var div = window.document.createElement("div");
-		div.id = "" + this._id + "-" + html_Container._count;
-		if(html_Container._count == 0) {
-			div.id = "" + this._id;
-		}
-		if(this.get_isFull()) {
-			div.className = "container-fluid";
-		} else {
-			div.className = "container";
-		}
-		if(this.get__isfullscreen()) {
-			div.setAttribute("style","padding-left: 0; padding-right: 0;");
-		}
-		window.document.body.appendChild(div);
-		var _arr = this.layout.split("\n");
-		var _g = 0;
-		var _g1 = _arr.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var row = _arr[i];
-			var divRow = window.document.createElement("div");
-			divRow.className = "row";
-			if(this.get__isNoGutter()) {
-				divRow.classList.add("no-gutters");
-			}
-			if(this._isDebug) {
-				console.log("src/html/Container.hx:129:",row);
-			}
-			var col = row.split("|");
-			var _g2 = 0;
-			var _g11 = col.length;
-			while(_g2 < _g11) {
-				var i1 = _g2++;
-				var _col = col[i1];
-				if(this._isDebug) {
-					console.log("src/html/Container.hx:134:",_col);
-				}
-				var divCol = window.document.createElement("div");
-				divCol.className = "col";
-				divRow.appendChild(divCol);
-				if(_col != "") {
-					var c = window.document.createElement("div");
-					if(StringTools.startsWith(_col,"#")) {
-						c.id = StringTools.replace(_col,"#","");
-						style += "" + _col + ":after{content:\"" + _col + "\";}";
-					} else if(StringTools.startsWith(_col,".")) {
-						c.className = StringTools.replace(_col,".","");
-						style += "" + _col + ":after{content:\"" + _col + "\";}";
-					} else {
-						c.id = _col;
-						style += "#" + _col + ":after{content:\"" + _col + "\";}";
-					}
-					divCol.appendChild(c);
-				}
-			}
-			div.appendChild(divRow);
-		}
-		html_Container._count++;
-		if(this._isDebug) {
-			var css = window.document.createElement("style");
-			css.appendChild(window.document.createTextNode(style));
-			window.document.getElementsByTagName("head")[0].appendChild(css);
-		}
-	}
-	,get_isFull: function() {
-		return this.isFull;
-	}
-	,set_isFull: function(value) {
-		return this.isFull = value;
-	}
-	,get__isNoGutter: function() {
-		return this._isNoGutter;
-	}
-	,set__isNoGutter: function(value) {
-		return this._isNoGutter = value;
-	}
-	,get__isfullscreen: function() {
-		return this._isfullscreen;
-	}
-	,set__isfullscreen: function(value) {
-		return this._isfullscreen = value;
-	}
-	,getCSS: function() {
-		return "\n.col{\n    min-height:20px;\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    background-color: rgba(86,61,124,.15);\n    border: 1px solid rgba(86,61,124,.2);\n}\n";
-	}
-	,__class__: html_Container
-};
-var html_PullDown = function(valueArray,callback,callbackArray) {
-	this.keyDefaultValue = "ccquicknav";
-	this._id = "cc-sketcher-pulldown";
-	this.textArray = [];
-	this.valueArray = [];
-	this.valueArray = valueArray;
-	this.callback = callback;
-	this.callbackArray = callbackArray;
-	this.setup();
-};
-$hxClasses["html.PullDown"] = html_PullDown;
-html_PullDown.__name__ = "html.PullDown";
-html_PullDown.convertClass = function(ccTypeArray) {
-	var arr = [];
-	var _g = 0;
-	var _g1 = ccTypeArray.length;
-	while(_g < _g1) {
-		var i = _g++;
-		var _ccTypeArray = ccTypeArray[i];
-		var name = _ccTypeArray.__name__;
-		arr.push(name);
-	}
-	return arr;
-};
-html_PullDown.prototype = {
-	setup: function() {
-		var _gthis = this;
-		var div = window.document.createElement("div");
-		div.setAttribute("style","position: fixed;display: block;top: 0; line-height: 0; z-index:1");
-		div.id = this._id;
-		this.select = window.document.createElement("select");
-		this.select.setAttribute("style","font-size: small;");
-		this.select.id = "art";
-		var _g = 0;
-		var _g1 = this.valueArray.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var _valueArray = this.valueArray[i];
-			var name = _valueArray;
-			var option = window.document.createElement("option");
-			option.value = "" + name;
-			option.text = "" + name;
-			if(name.indexOf(this.get_param()) != -1) {
-				option.selected = true;
-			}
-			this.select.appendChild(option);
-		}
-		div.appendChild(this.select);
-		window.document.body.appendChild(div);
-		this.select.onchange = function(e) {
-			var index = _gthis.select.selectedIndex;
-			var options = _gthis.select.options;
-			_gthis.set_param(_gthis.valueArray[index]);
-			if(_gthis.callback != null) {
-				if(_gthis.callbackArray == null) {
-					_gthis.callback.apply(_gthis.callback,[index]);
-				} else {
-					_gthis.callback.apply(_gthis.callback,_gthis.callbackArray);
-				}
-			}
-		};
-		window.addEventListener(Globals.KEY_DOWN,function(e1) {
-			if(e1.key == "h") {
-				if(div.hasAttribute("style")) {
-					div.removeAttribute("style");
-				} else {
-					div.setAttribute("style","display:none;");
-				}
-			}
-		},false);
-	}
-	,test: function() {
-		window.location.search = "post=1234&action=edit";
-		var urlParams = new URLSearchParams(window.location.search);
-		window.console.log(urlParams.has("post"));
-		window.console.log(urlParams.get("action"));
-		window.console.log(urlParams.getAll("action"));
-		window.console.log(urlParams);
-	}
-	,updateURL: function() {
-		window.console.warn("updateURL");
-		console.log("src/html/PullDown.hx:134:",this.get_param());
-		var urlParams = new URLSearchParams(window.location.search);
-		console.log("src/html/PullDown.hx:136:",urlParams.has(this.keyDefaultValue));
-		if(!urlParams.has(this.keyDefaultValue)) {
-			urlParams.append(this.keyDefaultValue,this.valueArray[0]);
-			this.set_param(this.valueArray[0]);
-			console.log("src/html/PullDown.hx:140:",this.get_param());
-		} else {
-			urlParams.set(this.keyDefaultValue,this.get_param());
-		}
-		console.log("src/html/PullDown.hx:144:",this.get_param());
-	}
-	,setSelected: function(index) {
-		var options = this.select.options;
-		var o = options.item(index);
-		o.selected = true;
-	}
-	,get_param: function() {
-		return this.param;
-	}
-	,set_param: function(value) {
-		return this.param = value;
-	}
-	,get_hash: function() {
-		var _hash = window.location.hash;
-		this.set_hash(StringTools.replace(_hash,"#",""));
-		return this.hash;
-	}
-	,set_hash: function(value) {
-		window.location.hash = value;
-		return this.hash = value;
-	}
-	,get_selected: function() {
-		return this.selected;
-	}
-	,set_selected: function(value) {
-		this.setSelected(value);
-		return this.selected = value;
-	}
-	,__class__: html_PullDown
 };
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
@@ -4975,10 +4979,10 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			_a1 = arr2[3];
 		} else if(value1.indexOf("rgb") != -1) {
 			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
-			var arr11 = value1.split(",");
-			_r1 = arr11[0];
-			_g1 = arr11[1];
-			_b1 = arr11[2];
+			var arr3 = value1.split(",");
+			_r1 = arr3[0];
+			_g1 = arr3[1];
+			_b1 = arr3[2];
 		} else if(value1.indexOf("#") != -1) {
 			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
 			var rgb_r1 = int1 >> 16 & 255;
@@ -4993,21 +4997,16 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 		if(this.get_dash() != null) {
 			ctx.setLineDash(this.get_dash());
 		}
-		window.console.group("" + this.get_id() + " - isCenter: " + Std.string(this.isCenter));
-		window.console.log("#0 - start");
 		ctx.beginPath();
 		if(this.get_rotate() != null && this.get_move() == null) {
-			window.console.log("#1 - rotate");
 			ctx.save();
 			ctx.translate(this.get_x(),this.get_y());
 			ctx.rotate(sketcher_util_MathUtil.radians(this.get_rotate()));
 			ctx.arc(0,0,10,0,2 * Math.PI);
 			ctx.rect(-(this.get_width() / 2),-(this.get_height() / 2),this.get_width(),this.get_height());
-			window.console.debug("" + this.get_id() + ", x: " + this.get_x() + ", y: " + this.get_y() + ", width: " + this.get_width() + ", height: " + this.get_height() + ", cx: " + this.cx + ", cy: " + this.cy + ", isCenter: " + Std.string(this.isCenter));
 			ctx.restore();
 		}
 		if(this.get_move() != null && this.get_rotate() == null) {
-			window.console.log("#2 - move");
 			ctx.save();
 			ctx.translate(this.cx,this.cy);
 			ctx.translate(this.get_move().x,this.get_move().y);
@@ -5015,17 +5014,14 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 			ctx.restore();
 		}
 		if(this.get_rotate() == null && this.get_move() == null) {
-			window.console.log("#3 - default");
 			this.buildCanvasShape(ctx);
 		}
-		window.console.log("#4 - end");
 		if(this.get_fill() != null) {
 			ctx.fill();
 		}
 		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
 			ctx.stroke();
 		}
-		window.console.groupEnd();
 	}
 	,buildCanvasShape: function(ctx) {
 		if(this.get_radius() == null) {
@@ -5477,7 +5473,23 @@ sketcher_util_EmbedUtil.check = function(id) {
 	}
 };
 sketcher_util_EmbedUtil.stats = function() {
-	var script = document.createElement('script');script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);
+	var script = document.createElement('script');script.id='mrdoob-stats';script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);
+};
+sketcher_util_EmbedUtil.removeStats = function() {
+	var scriptEl = window.document.getElementById("mrdoob-stats");
+	window.console.log(scriptEl);
+	scriptEl.parentElement.removeChild(scriptEl);
+	var divArr = window.document.getElementsByTagName("div");
+	var _g = 0;
+	var _g1 = divArr.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var div = divArr[i];
+		var style = div.getAttribute("style");
+		if(style == "position: fixed; top: 0px; left: 0px; cursor: pointer; opacity: 0.9; z-index: 10000;") {
+			div.parentElement.removeChild(div);
+		}
+	}
 };
 sketcher_util_EmbedUtil.script = function(id,src,callback,callbackArray) {
 	var el = window.document.createElement("script");
@@ -6224,7 +6236,7 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
-html_Container._count = 0;
+helper_html_Container._count = 0;
 sketcher_App.NAME = "[cc-sketcher]";
 sketcher_draw_Base.COUNT = 0;
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
