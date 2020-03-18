@@ -17,6 +17,12 @@ class Settings {
 
 	@:isVar public var sizeType(get, set):String;
 
+	/**
+	 *  SketchType.CANVAS
+	 * @param width
+	 * @param height
+	 * @param type
+	 */
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
 		this.height = height;
