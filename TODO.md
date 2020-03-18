@@ -7,6 +7,8 @@
 - [ ] linecap canvas polygon
 - [ ] gradient canvas with mask
 - [ ] elipse svg / canvas
+- [x] rotate polygon (sides) canvas
+- [ ] clean up canvas render... maybe default like line, color in base class (super?)
 
 ## Done
 
