@@ -12,6 +12,10 @@ class Polygon extends Base implements IBase {
 
 	@:isVar public var arr(get, set):Array<Float>; // collection of points
 
+	// for storing the function sides centerpoints
+	var cx:Float;
+	var cy:Float;
+
 	public function new(arr:Array<Float>) {
 		this.arr = arr;
 		super('polygon');
@@ -63,14 +67,41 @@ class Polygon extends Base implements IBase {
 		}
 		// trace(this.rotate, this.move);
 		ctx.beginPath();
-		//
+
+		// get all points, converted
 		var _pointArray = convertArr();
-		for (i in 0..._pointArray.length) {
-			var p = _pointArray[i];
-			if (i == 0) {
-				ctx.moveTo(p.x, p.y);
-			} else {
-				ctx.lineTo(p.x, p.y);
+
+		if (this.rotate != null) {
+			trace('rotate: ${this.rotate}');
+			trace('cx: ${this.cx}');
+			trace('cy: ${this.cy}');
+
+			// todo:  this might fix the sides, but not the normal polygon
+			// fix later
+			ctx.save();
+
+			// // ctx.translate(this.cx, this.cy);
+			ctx.translate(this.cx, this.cy);
+			ctx.rotate(MathUtil.radians(this.rotate));
+
+			for (i in 0..._pointArray.length) {
+				var p = _pointArray[i];
+				if (i == 0) {
+					ctx.moveTo(p.x - this.cx, p.y - this.cy);
+				} else {
+					ctx.lineTo(p.x - this.cx, p.y - this.cy);
+				}
+			}
+
+			ctx.restore();
+		} else {
+			for (i in 0..._pointArray.length) {
+				var p = _pointArray[i];
+				if (i == 0) {
+					ctx.moveTo(p.x, p.y);
+				} else {
+					ctx.lineTo(p.x, p.y);
+				}
 			}
 		}
 		ctx.closePath();
@@ -133,6 +164,10 @@ class Polygon extends Base implements IBase {
 	public function sides(x:Float, y:Float, sides:Int, size:Float, ?rotateDegree:Float) {
 		// reset array
 		this.arr = [];
+
+		// store center point
+		this.cx = x;
+		this.cy = y;
 
 		if (rotateDegree == null) {
 			rotateDegree = 0;
