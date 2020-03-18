@@ -13,8 +13,8 @@ class Polygon extends Base implements IBase {
 	@:isVar public var arr(get, set):Array<Float>; // collection of points
 
 	// for storing the function sides centerpoints
-	var cx:Float;
-	var cy:Float;
+	// var cx:Float;
+	// var cy:Float;
 
 	public function new(arr:Array<Float>) {
 		this.arr = arr;
@@ -39,7 +39,7 @@ class Polygon extends Base implements IBase {
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.groupCollapsed('Polygon (${id}) info canvas');
-			console.warn('doesn\'t work\n- move\n- rotate\n- lineJoin');
+			console.warn('doesn\'t work\n- move\n- rotate (for weird shapes, works for sides)\n- lineJoin');
 			console.groupEnd();
 			Polygon.ISWARN = true;
 		}
@@ -72,24 +72,23 @@ class Polygon extends Base implements IBase {
 		var _pointArray = convertArr();
 
 		if (this.rotate != null) {
-			trace('rotate: ${this.rotate}');
-			trace('cx: ${this.cx}');
-			trace('cy: ${this.cy}');
+			// trace('rotate: ${this.rotate}');
+			// trace('cx: ${this.cx}');
+			// trace('cy: ${this.cy}');
 
 			// todo:  this might fix the sides, but not the normal polygon
 			// fix later
 			ctx.save();
 
-			// // ctx.translate(this.cx, this.cy);
-			ctx.translate(this.cx, this.cy);
+			ctx.translate(this.rx, this.ry);
 			ctx.rotate(MathUtil.radians(this.rotate));
 
 			for (i in 0..._pointArray.length) {
 				var p = _pointArray[i];
 				if (i == 0) {
-					ctx.moveTo(p.x - this.cx, p.y - this.cy);
+					ctx.moveTo(p.x - this.rx, p.y - this.ry);
 				} else {
-					ctx.lineTo(p.x - this.cx, p.y - this.cy);
+					ctx.lineTo(p.x - this.rx, p.y - this.ry);
 				}
 			}
 
@@ -166,8 +165,10 @@ class Polygon extends Base implements IBase {
 		this.arr = [];
 
 		// store center point
-		this.cx = x;
-		this.cy = y;
+		// this.cx = x;
+		// this.cy = y;
+		this.rx = x;
+		this.ry = y;
 
 		if (rotateDegree == null) {
 			rotateDegree = 0;
