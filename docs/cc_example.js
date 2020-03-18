@@ -48,7 +48,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-03-18 09:51:49");
+		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-03-18 10:26:49");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -4773,7 +4773,7 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	,ctx: function(ctx) {
 		if(!sketcher_draw_Polygon.ISWARN) {
 			window.console.groupCollapsed("Polygon (" + this.get_id() + ") info canvas");
-			window.console.warn("doesn't work\n- move\n- rotate\n- lineJoin");
+			window.console.warn("doesn't work\n- move\n- rotate (for weird shapes, works for sides)\n- lineJoin");
 			window.console.groupEnd();
 			sketcher_draw_Polygon.ISWARN = true;
 		}
@@ -4848,11 +4848,8 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 		ctx.beginPath();
 		var _pointArray = this.convertArr();
 		if(this.get_rotate() != null) {
-			console.log("src/sketcher/draw/Polygon.hx:75:","rotate: " + this.get_rotate());
-			console.log("src/sketcher/draw/Polygon.hx:76:","cx: " + this.cx);
-			console.log("src/sketcher/draw/Polygon.hx:77:","cy: " + this.cy);
 			ctx.save();
-			ctx.translate(this.cx,this.cy);
+			ctx.translate(this.get_rx(),this.get_ry());
 			ctx.rotate(sketcher_util_MathUtil.radians(this.get_rotate()));
 			var _g2 = 0;
 			var _g11 = _pointArray.length;
@@ -4860,9 +4857,9 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 				var i = _g2++;
 				var p = _pointArray[i];
 				if(i == 0) {
-					ctx.moveTo(p.x - this.cx,p.y - this.cy);
+					ctx.moveTo(p.x - this.get_rx(),p.y - this.get_ry());
 				} else {
-					ctx.lineTo(p.x - this.cx,p.y - this.cy);
+					ctx.lineTo(p.x - this.get_rx(),p.y - this.get_ry());
 				}
 			}
 			ctx.restore();
@@ -4905,15 +4902,15 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			console.log("src/sketcher/draw/Polygon.hx:136:","not in this length");
+			console.log("src/sketcher/draw/Polygon.hx:135:","not in this length");
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
 	}
 	,sides: function(x,y,sides,size,rotateDegree) {
 		this.set_arr([]);
-		this.cx = x;
-		this.cy = y;
+		this.set_rx(x);
+		this.set_ry(y);
 		if(rotateDegree == null) {
 			rotateDegree = 0;
 		} else {
