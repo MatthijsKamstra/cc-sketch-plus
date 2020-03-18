@@ -7,6 +7,8 @@ class AudioWrapper {
 	var _id:String;
 	var el:js.html.Element;
 
+	// https://www.airtightinteractive.com/demos/js/uberviz/audioanalysis/js/AudioHandler.js
+
 	/**
 		*
 				var audioWrapper = new AudioWrapper('audio-wrapper');
@@ -70,7 +72,9 @@ class AudioWrapper {
 						<button type="button" class="btn btn-secondary" id="audio-reset-btn">Reset</button>
 						<button type="button" class="btn btn-secondary" id="audio-mic-btn">Mic</button>
 						<button type="button" class="btn btn-secondary" id="audio-upload-btn">Upload</button>
-					</div>
+
+					<input id="audio_file" type="file" accept="audio/*"></input>
+						</div>
 				</div>
 			</div>
 		</div>';
@@ -90,5 +94,20 @@ class AudioWrapper {
 		reset.onclick = function(e) {
 			trace('upload');
 		}
+
+		// https://stackoverflow.com/questions/30110701/how-can-i-use-js-webaudioapi-for-beat-detection/30112800
+		/*
+			audio_file.onchange = function() {
+				var file = this.files[0];
+				var reader = new FileReader();
+				var context = new(window.AudioContext || window.webkitAudioContext) ();
+				reader.onload = function() {
+					context.decodeAudioData(reader.result, function(buffer) {
+						prepare(buffer);
+					});
+				};
+				reader.readAsArrayBuffer(file);
+			};
+		 */
 	}
 }
