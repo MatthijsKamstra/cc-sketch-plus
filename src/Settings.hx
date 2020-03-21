@@ -18,10 +18,17 @@ class Settings {
 	@:isVar public var sizeType(get, set):String;
 
 	/**
-	 *  SketchType.CANVAS
-	 * @param width
-	 * @param height
-	 * @param type
+	 *
+	 * @example
+	 * 			this.settings = new Settings(paperW, paperH, 'svg');
+	 *			settings.autostart = true;
+	 *			settings.padding = 10;
+	 *			settings.scale = false;
+	 *			settings.elementID = 'sketcher-svg-wrapper';
+	 *
+	 * @param width		stage/canvas/sketch width in pixels
+	 * @param height	stage/canvas/sketch height in pixels
+	 * @param type		(default svg) type of sketches base; 'svg', 'canvas' will work or use SketchType.CANVAS, SketchType.SVG
 	 */
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
