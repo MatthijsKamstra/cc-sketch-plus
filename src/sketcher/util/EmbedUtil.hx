@@ -330,6 +330,7 @@ class EmbedUtil {
 	// ____________________________________ quick embedding fonts I use often ____________________________________
 
 	/**
+	 * mono font
 	 * Source+Code+Pro
 	 * https://fonts.google.com/specimen/Source+Code+Pro
 	 *
@@ -346,6 +347,7 @@ class EmbedUtil {
 	}
 
 	/**
+	 * handwritten font
 	 * Pacifico
 	 * https://fonts.google.com/specimen/Pacifico
 	 *
@@ -362,6 +364,7 @@ class EmbedUtil {
 	}
 
 	/**
+	 * display font
 	 * Bebas+Neue
 	 * https://fonts.google.com/specimen/Bebas+Neue
 	 *
