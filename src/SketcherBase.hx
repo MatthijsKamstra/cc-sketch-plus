@@ -23,6 +23,9 @@ class SketcherBase {
 	// public
 	public var sketch:Sketcher;
 
+	// check if animation is started
+	private var requestID:Float;
+
 	/**
 	 * constructor
 	 * @param ctx
@@ -180,7 +183,7 @@ class SketcherBase {
 		draw();
 		__export();
 		if (isDrawActive)
-			window.requestAnimationFrame(_draw);
+			requestID = window.requestAnimationFrame(_draw);
 	}
 
 	// ____________________________________ public ____________________________________
@@ -231,7 +234,8 @@ class SketcherBase {
 	 */
 	public function play() {
 		isDrawActive = true;
-		_draw();
+		if (requestID == null)
+			_draw();
 	}
 
 	public function start() {
