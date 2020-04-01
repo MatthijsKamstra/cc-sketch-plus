@@ -66,9 +66,20 @@ class Rectangle extends Base implements IBase {
 		return xml.toString();
 	}
 
+	public function useCanvasShadow(ctx:js.html.CanvasRenderingContext2D) {
+		if (this.shadowColor != null) {
+			ctx.shadowColor = this.shadowColor;
+			ctx.shadowBlur = this.shadowBlur;
+			ctx.shadowOffsetX = this.shadowOffsetX;
+			ctx.shadowOffsetY = this.shadowOffsetY;
+		}
+	}
+
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
 		useDefaultsCanvas();
+
+		// useCanvasShadow(ctx);
 
 		if (this.lineCap != null) {
 			ctx.lineCap = cast this.lineCap;
@@ -167,6 +178,8 @@ class Rectangle extends Base implements IBase {
 		// ctx.stroke();
 
 		// console.groupEnd();
+
+		// ctx.shadowColor = "transparent";
 	}
 
 	private function buildCanvasShape(ctx:js.html.CanvasRenderingContext2D) {
