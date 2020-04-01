@@ -79,6 +79,12 @@ class Base {
 	@:isVar public var lineCap(get, set):LineCap; // "butt|round|square";
 	@:isVar public var lineJoin(get, set):LineJoin; // "arcs|bevel|miter|miter-clip|round";
 
+	// drop shadow
+	@:isVar public var shadowColor(get, set):String;
+	@:isVar public var shadowBlur(get, set):Float;
+	@:isVar public var shadowOffsetX(get, set):Float;
+	@:isVar public var shadowOffsetY(get, set):Float;
+
 	var transArr:Array<String> = [];
 
 	public function new(name:String) {
@@ -200,7 +206,7 @@ class Base {
 	 */
 	public function setFill(color:String, ?opacity:Float = 1) {
 		this.fillColor = color;
-		this.fillOpacity = 1;
+		this.fillOpacity = opacity;
 		return this;
 	}
 
@@ -211,6 +217,20 @@ class Base {
 		this.fillOpacity = 0;
 		this.fillColor = 'transparant';
 		return this;
+	}
+
+	/**
+	 * [Description]
+	 * @param color
+	 * @param blur		A non-negative float specifying the level of shadow blur, where 0 represents no blur and larger numbers represent increasingly more blur
+	 * @param offsetx
+	 * @param offsety
+	 */
+	public function setShadow(color:String, blur:Float = 0, offsetx:Float = 0, offsety:Float = 0) {
+		this.shadowColor = color;
+		this.shadowBlur = blur;
+		this.shadowOffsetX = offsetx;
+		this.shadowOffsetY = offsety;
 	}
 
 	/**
@@ -491,6 +511,38 @@ class Base {
 	function set_lineJoin(value:LineJoin):LineJoin {
 		xml.set('stroke-linejoin', Std.string(value));
 		return lineJoin = value;
+	}
+
+	function get_shadowColor():String {
+		return shadowColor;
+	}
+
+	function set_shadowColor(value:String):String {
+		return shadowColor = value;
+	}
+
+	function get_shadowBlur():Float {
+		return shadowBlur;
+	}
+
+	function set_shadowBlur(value:Float):Float {
+		return shadowBlur = value;
+	}
+
+	function get_shadowOffsetX():Float {
+		return shadowOffsetX;
+	}
+
+	function set_shadowOffsetX(value:Float):Float {
+		return shadowOffsetX = value;
+	}
+
+	function get_shadowOffsetY():Float {
+		return shadowOffsetY;
+	}
+
+	function set_shadowOffsetY(value:Float):Float {
+		return shadowOffsetY = value;
 	}
 
 	function get_isVisible():Bool {
