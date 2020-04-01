@@ -212,20 +212,32 @@ class MathUtil {
 	};
 
 	/**
-	 * not sure how this will work..
+	 * Calculate a chance of 80 procent for being true
 	 *
 	 * @example 	MathUtil.chance(80); // 80% chance for true
 	 *
 	 * what I want is chance(80) or chance(0.8)
 	 * and get a 80% change for a true, otherwise false
 	 * chance
-	 * @param value a value between 0 and 1
+	 * @param value a value between 0 and 1 of 0 and 99
 	 */
 	static public function chance(value:Float):Bool {
 		if (value > 1)
 			value /= 100;
 		// return (random(value) > value - 1);
 		return Math.random() < value;
+	}
+
+	static public function chanceTrue(value:Float):Bool {
+		if (value > 1)
+			value /= 100;
+		return Math.random() < value;
+	}
+
+	static public function chanceFalse(value:Float):Bool {
+		if (value > 1)
+			value /= 100;
+		return Math.random() > value;
 	}
 
 	/**
