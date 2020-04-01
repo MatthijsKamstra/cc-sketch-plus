@@ -291,7 +291,9 @@ class Text extends Base implements IBase {
 		// font names (form Google font) have some issues that don't work well with scg and canvas
 		// * 'Player+One+Start' --> `+` should be ` `
 		// * 'Oswald:200,300,400,500,600,700' --> should be without weights
-		value = value.replace("+", " ");
+		if (value.indexOf('+') != -1) {
+			value = value.replace("+", " ");
+		}
 		if (value.indexOf(':') != -1) {
 			value = value.split(":")[0];
 		}
