@@ -25,15 +25,14 @@ import sketcher.util.ColorUtil.RGB;
  *
  *
  * @example
- * 			var grid:GridUtil = new GridUtil();
+ * 			var grid:GridUtil = new GridUtil(1080, 1080);
  * 			grid.setNumbered(3,3); // 3 horizontal, 3 vertical
  * 			// grid.setCellSize(_cellsize); // use a cellsize (width/height)
  * 			grid.setIsCenterPoint(true); // default true, but can be set if needed
  *
  * 			// quick generate grid
  * 			if (isDebug) {
- * 				ShapeUtil.gridField(ctx, grid); // canvas
- * 				// util.TestUtil.gridDots(sketch, grid); // svg
+ * 				sketcher.debug.Grid.gridDots(sketch, grid);
  * 			}
  *
  * 			// use grid to generate totale amount of shapes/etc
@@ -135,7 +134,7 @@ class GridUtil {
 	}
 
 	/**
-	 * var grid = GridUtil.create(ctx).draw();
+	 * var grid = GridUtil.create(1080, 1080).draw();
 	 *
 	 * @param ctx
 	 * @param text
