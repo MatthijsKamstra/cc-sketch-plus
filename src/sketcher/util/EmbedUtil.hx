@@ -330,6 +330,23 @@ class EmbedUtil {
 	// ____________________________________ quick embedding fonts I use often ____________________________________
 
 	/**
+	 * sans font
+	 * Roboto
+	 * https://fonts.googleapis.com/css?family=Roboto
+	 *
+	 * @exampe
+	 * 		var family = EmbedUtil.fontMono(onEmbedHandler);
+	 *
+	 * @param callback
+	 * @param callbackArray
+	 * @return String
+	 */
+	public static function fontSansSerif(?callback:Dynamic, ?callbackArray:Array<Dynamic>):String {
+		var fontFamily = 'Roboto';
+		return EmbedUtil.embedGoogleFont(fontFamily, callback, callbackArray);
+	}
+
+	/**
 	 * mono font
 	 * Source+Code+Pro
 	 * https://fonts.google.com/specimen/Source+Code+Pro
