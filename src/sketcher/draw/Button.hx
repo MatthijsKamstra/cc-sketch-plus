@@ -1,12 +1,14 @@
 package sketcher.draw;
 
+import Sketcher.Globals;
+import js.lib.webassembly.Global;
 import js.Browser.*;
 import js.html.webgl.RenderingContext;
 import sketcher.AST.Point;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
 
-class Rectangle extends Base implements IBase {
+class Button extends Base implements IBase {
 	public static var ISWARN:Bool;
 
 	@:isVar public var width(get, set):Float;
@@ -24,6 +26,10 @@ class Rectangle extends Base implements IBase {
 	public var point_top_right:Point;
 	public var point_bottom_left:Point;
 	public var point_bottom_right:Point;
+
+	// for mouse stuff
+	var rect:js.html.DOMRect;
+	var scale:Float;
 
 	public function new(x:Float, y:Float, width:Float, height:Float, ?isCenter:Bool = true) {
 		this.x = x;
@@ -75,6 +81,15 @@ class Rectangle extends Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		// use for mouse
+		rect = Sketcher.ctx.canvas.getBoundingClientRect();
+		scale = rect.width / Globals.w;
+
+		// console.log(rect);
+
+		// console.log(Sketcher.ctx.canvas.width);
+		// console.log(Globals.w);
+
 		// set everything to default values
 		useDefaultsCanvas();
 
@@ -179,6 +194,68 @@ class Rectangle extends Base implements IBase {
 		// console.groupEnd();
 
 		// ctx.shadowColor = "transparent";
+
+		// The x and y offset of the canvas from the edge of the page
+
+		Sketcher.ctx.canvas.addEventListener('mousedown', (e:js.html.MouseEvent) -> {
+			// trace('mouse down');
+			Globals.mouseX = e.clientX - rect.left;
+			Globals.mouseY = e.clientY - rect.top;
+
+			// trace(Globals.mouseX, Globals.mouseY);
+
+			if (isMouseOver()) {
+				trace('click');
+			}
+			// this.point_top_left = {x: this.cx, y: this.cy};
+
+			// this.point_top_right = {x: this.cx + this.width, y: this.cy};
+			// this.point_bottom_left = {x: this.cx, y: this.cy + this.height};
+			// this.point_bottom_right = {x: this.cx + this.width, y: this.cy + this.height};
+
+			Globals.isMouseDown = true;
+		});
+
+		Sketcher.ctx.canvas.addEventListener('mousemove', e -> {
+			Globals.mouseX = e.clientX - rect.left;
+			Globals.mouseY = e.clientY - rect.top;
+
+			if (isMouseOver()) {
+				// trace('change'); // cursor: pointer;{cursor: default;}
+
+				Sketcher.ctx.canvas.style.cursor = 'pointer';
+			} else {
+				Sketcher.ctx.canvas.style.cursor = 'default';
+			}
+
+			// if (Globals.isMouseDown == true) {
+			// 	// drawLine(context, x, y, e.clientX - rect.left, e.clientY - rect.top);
+			// 	// x = e.clientX - rect.left;
+			// 	// y = e.clientY - rect.top;
+			// 	trace('mouse move ');
+			// }
+		});
+
+		window.addEventListener('mouseup', e -> {
+			if (Globals.isMouseDown == true) {
+				// drawLine(context, x, y, e.clientX - rect.left, e.clientY - rect.top);
+				// x = 0;
+				// y = 0;
+				// trace('mouse up');
+				Globals.isMouseDown = false;
+			}
+		});
+	}
+
+	function isMouseOver():Bool {
+		if (Globals.mouseX >= this.point_top_left.x * scale
+			&& Globals.mouseX <= this.point_bottom_right.x * scale
+			&& Globals.mouseY >= this.point_top_left.y * scale
+			&& Globals.mouseY <= this.point_bottom_right.y * scale) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private function buildCanvasShape(ctx:js.html.CanvasRenderingContext2D) {
@@ -206,30 +283,7 @@ class Rectangle extends Base implements IBase {
 		}
 	}
 
-	public function gl(gl:js.html.webgl.RenderingContext) {
-		if (!ISWARN) {
-			console.warn('webgl is not implemented yet');
-			ISWARN = true;
-		}
-
-		var c = '#ff3333';
-
-		var rgba = ColorUtil.assumption(c);
-		// trace(rgba);
-		// Set clear color to black, fully opaque
-		// gl.clearColor(rgba.r, rgba.g, rgba.b, rgba.a);
-		// Clear the color buffer with specified clear color
-		// gl.clear(gl.COLOR_BUFFER_BIT);
-		// gl.clear(0);
-
-		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-		// Set the clear color to darkish green.
-		gl.clearColor(rgba.r / 255, rgba.g / 255, rgba.b / 255, rgba.a);
-		// gl.clearColor(0.0, 0.5, 0.0, 1.0);
-		// Clear the context with the newly set color. This is
-		// the function call that actually does the drawing.
-		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
-	}
+	public function gl(gl:js.html.webgl.RenderingContext) {}
 
 	// ____________________________________ getter/setter ____________________________________
 	function get_radius():Int {
