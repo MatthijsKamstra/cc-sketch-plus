@@ -72,6 +72,10 @@ class MathUtil {
 		return dist(x1, y1, x2, y2);
 	}
 
+	static public function distancePoint(p0:Point, p1:Point):Float {
+		return dist(p0.x, p0.y, p1.x, p1.y);
+	}
+
 	/**
 	 * calculate distance between two point (x,y)
 	 * easier to remember
