@@ -24,8 +24,19 @@ class Text extends Base implements IBase {
 	@:isVar public var str(get, set):String;
 
 	@:isVar public var fontSize(get, set):String;
-
 	@:isVar public var fontSizePx(get, set):Int;
+
+	// TODO:  fitwidth
+
+	/**
+	 * use this to automaticly wrap a text in a certain width
+	 */
+	@:isVar public var fitWidth(get, set):Float = 0;
+
+	/**
+	 * set lineheight instead of using a estimate
+	 */
+	@:isVar public var lineHeight(get, set):Float = 0;
 
 	/**
 	 * font-family: family-name|generic-family|initial|inherit;
@@ -198,9 +209,31 @@ class Text extends Base implements IBase {
 
 		// this.width = ctx.measureText(this.str).width;
 		// trace(ctx.measureText(this.str).width);
-
 		// trace(textAlign, alignmentBaseline);
-		ctx.fillText(this.str, this.x, this.y);
+
+		// multi lines
+		var lines = [];
+		var lineheight = (this.lineHeight != 0) ? this.lineHeight : (ctx.measureText('M').width * 1.7);
+
+		if (fitWidth != 0) {
+			var words = this.str.split(' ');
+			console.log('doesnt work yet');
+			var count = 0;
+			var sentance = '';
+			while (ctx.measureText(sentance).width <= fitWidth) {
+				sentance += words[count] + ' ';
+				count++;
+			}
+			lines.push(sentance);
+			trace(sentance);
+		} else {
+			lines = this.str.split('\n');
+		}
+
+		for (i in 0...lines.length) {
+			var line = lines[i];
+			ctx.fillText(line, this.x, this.y + (i * lineheight));
+		}
 
 		// restore canvas to previous position
 		ctx.restore();
@@ -354,6 +387,30 @@ class Text extends Base implements IBase {
 
 	function set_str(value:String):String {
 		return str = value;
+	}
+
+	/**
+	 * wrap text in the width
+	 * @return Float
+	 */
+	function get_fitWidth():Float {
+		return fitWidth;
+	}
+
+	function set_fitWidth(value:Float):Float {
+		return fitWidth = value;
+	}
+
+	/**
+	 * set lineheigth
+	 * @return Float
+	 */
+	function get_lineHeight():Float {
+		return lineHeight;
+	}
+
+	function set_lineHeight(value:Float):Float {
+		return lineHeight = value;
 	}
 
 	/**
