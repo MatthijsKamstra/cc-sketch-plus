@@ -42,6 +42,8 @@ class Go {
 	private var DEBUG:Bool = false;
 	private var VERSION:String = '1.1.1';
 
+	public var id(get, set):String;
+
 	/**
 	 * Animate an object to another state (like position, scale, rotation, alpha)
 	 *
@@ -66,8 +68,12 @@ class Go {
 			console.log('New Go - _id: "$_id" / _duration: ' + _duration + ' / _initTime: ' + _initTime + ' / _tweens.length: ' + _tweens.length);
 		// [mck] extreme little delay to make sure all the values are set
 		// init();
+
+		// console.log('1');
+
 		haxe.Timer.delay(init, 1); // 1 milisecond delay
 
+		// console.log('2');
 		// [mck] TODO check if there is a tween attached to the same animation?
 	}
 
@@ -81,6 +87,7 @@ class Go {
 	 * @return          Go
 	 */
 	static inline public function to(target:Dynamic, duration:Float):Go {
+		// console.log(target, duration);
 		var Go = new Go(target, duration);
 		Go._isFrom = false;
 		return Go;
@@ -482,6 +489,7 @@ class Go {
 
 	// ____________________________________ private ____________________________________
 	private function init():Void {
+		// console.log('init 1');
 		if (_isTimeBased) {
 			// [mck] TODO clean this up!!!!
 			trace('TODO: build timebased animation');
@@ -490,11 +498,14 @@ class Go {
 			// _trigger.run = onEnterFrameHandler;
 		} else {
 			if (_requestId == null) {
-				// console.info('start frame animation');
+				console.info('start frame animation');
 				_requestId = window.requestAnimationFrame(onEnterFrameHandler);
 				// trace(_requestId);
+			} else {
+				onEnterFrameHandler();
 			}
 		}
+		// console.log('init 2');
 	}
 
 	private function onEnterFrameHandler(?time:Float):Void {
@@ -573,7 +584,7 @@ class Go {
 		if (Reflect.isFunction(_options.onUpdate)) {
 			var func = _options.onUpdate;
 			var arr = (_options.onUpdateParams != null) ? _options.onUpdateParams : [];
-			Reflect.callMethod(func, func, [arr]);
+			Reflect.callMethod(func, func, arr);
 		}
 		// [mck] for some reason this can be null
 		if (_props == null)
@@ -695,6 +706,16 @@ class Go {
 			_initTime = 0;
 			_delay = 0;
 		}
+	}
+
+	// ____________________________________ getter/setter ____________________________________
+
+	function get_id():String {
+		return _id;
+	}
+
+	function set_id(value:String):String {
+		return _id = value;
 	}
 }
 
