@@ -45,10 +45,10 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask,examples_ExButton];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-03-18 10:26:49");
+		window.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-04-12 17:43:37");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -275,6 +275,14 @@ Sketcher.prototype = {
 			isCenter = true;
 		}
 		var shape = new sketcher_draw_Rectangle(x,y,width,height);
+		this.baseArray.push(shape);
+		return shape;
+	}
+	,makeButton: function(x,y,width,height,isCenter) {
+		if(isCenter == null) {
+			isCenter = true;
+		}
+		var shape = new sketcher_draw_Button(x,y,width,height,isCenter);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -511,7 +519,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:623:","webgl");
+			console.log("src/Sketcher.hx:639:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -524,7 +532,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("src/Sketcher.hx:632:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:648:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 		this.baseArray = [];
 	}
@@ -975,6 +983,69 @@ examples_ExBackground.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExBackground
+};
+var examples_ExButton = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.rectH = 50;
+	this.rectW = 100;
+	this.init();
+};
+$hxClasses["examples.ExButton"] = examples_ExButton;
+examples_ExButton.__name__ = "examples.ExButton";
+examples_ExButton.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setNumbered(3,3);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		var div2 = window.document.createElement("div");
+		div2.id = "sketcher-canvas-webgl";
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchWebgl: function() {
+		var elem = window.document.getElementById("sketcher-canvas-webgl");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"webgl");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var p = this.grid.array[0];
+		var shape = sketch.makeButton(p.x,p.y,this.rectW,this.rectH);
+		var p1 = this.grid.array[8];
+		var shape1 = sketch.makeButton(p1.x,p1.y,this.rectW,this.rectH);
+		sketch.update();
+	}
+	,__class__: examples_ExButton
 };
 var examples_ExCircles = function() {
 	this.isDebug = true;
@@ -2065,19 +2136,22 @@ examples_ExRectangle.prototype = {
 	,__class__: examples_ExRectangle
 };
 var examples_ExText = function() {
+	this.familyHand = "";
+	this.familyDisplay = "";
+	this.familyMono = "";
 	this.fontFamly = "Oswald:200,300,400,500,600,700";
 	this.isDebug = true;
 	this.sketchHeight = 400;
 	this.sketchWidth = 600;
 	this.radiusSmall = 50;
-	sketcher_util_EmbedUtil.embedGoogleFont(this.fontFamly,$bind(this,this.init));
+	this.familyDisplay = sketcher_util_EmbedUtil.fontDisplay($bind(this,this.init));
 };
 $hxClasses["examples.ExText"] = examples_ExText;
 examples_ExText.__name__ = "examples.ExText";
 examples_ExText.prototype = {
 	init: function() {
 		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
-		this.grid.setNumbered(3,3);
+		this.grid.setNumbered(3,4);
 		this.grid.setIsCenterPoint(true);
 		this.initDocument();
 		this.sketchSVG();
@@ -2125,41 +2199,52 @@ examples_ExText.prototype = {
 		var shape3 = sketch.makeText("left",p3.x,p3.y);
 		shape3.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.MAROON));
 		shape3.set_fontSize("50px");
-		shape3.set_fontFamily(StringTools.replace(this.fontFamly,"+"," "));
+		shape3.set_fontFamily(this.familyDisplay);
 		shape3.set_textAlign(sketcher_draw_TextAlignType.Left);
 		var p4 = this.grid.array[4];
 		var shape4 = sketch.makeText("center",p4.x,p4.y);
 		shape4.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.MAROON));
 		shape4.set_fontSize("50");
-		shape4.set_fontFamily(StringTools.replace(this.fontFamly,"+"," "));
+		shape4.set_fontFamily(this.familyDisplay);
 		shape4.set_textAlign(sketcher_draw_TextAlignType.Center);
 		var p5 = this.grid.array[5];
 		var shape5 = sketch.makeText("right",p5.x,p5.y);
 		shape5.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.MAROON));
 		shape5.set_fontSize("50");
-		shape5.set_fontFamily(StringTools.replace(this.fontFamly,"+"," "));
+		shape5.set_fontFamily(this.familyDisplay);
 		shape5.set_textAlign(sketcher_draw_TextAlignType.Right);
 		var p6 = this.grid.array[6];
 		var shape6 = sketch.makeText("Right T",p6.x,p6.y);
 		shape6.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.OLIVE));
 		shape6.set_fontSize("30");
-		shape6.set_fontFamily(StringTools.replace(this.fontFamly,"+"," "));
+		shape6.set_fontFamily(this.familyDisplay);
 		shape6.set_textAlign(sketcher_draw_TextAlignType.Right);
 		shape6.set_textBaseline(sketcher_draw_TextBaselineType.Top);
 		var p7 = this.grid.array[7];
 		var shape7 = sketch.makeText("Right M",p7.x,p7.y);
 		shape7.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.OLIVE));
 		shape7.set_fontSize("30");
-		shape7.set_fontFamily(StringTools.replace(this.fontFamly,"+"," "));
+		shape7.set_fontFamily(this.familyDisplay);
 		shape7.set_textAlign(sketcher_draw_TextAlignType.Right);
 		shape7.set_textBaseline(sketcher_draw_TextBaselineType.Middle);
 		var p8 = this.grid.array[8];
 		var shape8 = sketch.makeText("Right B",p8.x,p8.y);
 		shape8.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.OLIVE));
 		shape8.set_fontSize("30");
-		shape8.set_fontFamily(StringTools.replace(this.fontFamly,"+"," "));
+		shape8.set_fontFamily(this.familyDisplay);
 		shape8.set_textAlign(sketcher_draw_TextAlignType.Right);
 		shape8.set_textBaseline(sketcher_draw_TextBaselineType.Bottom);
+		var p9 = this.grid.array[9];
+		var shape9 = sketch.makeText("One\nTwo\nThree",p9.x,p9.y);
+		shape9.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		var p10 = this.grid.array[10];
+		var shape10 = sketch.makeText("Long line that needs to be wrapped on a specific length.",p10.x,p10.y);
+		shape10.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		shape10.set_fitWidth(this.grid.cellWidth);
+		var p11 = this.grid.array[11];
+		var shape11 = sketch.makeText("One\nTwo\nThree",p11.x,p11.y);
+		shape11.set_fillColor(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		shape11.set_lineHeight(10);
 		sketch.update();
 	}
 	,__class__: examples_ExText
@@ -3509,13 +3594,28 @@ sketcher_draw_Base.prototype = {
 			opacity = 1;
 		}
 		this.set_fillColor(color);
-		this.set_fillOpacity(1);
+		this.set_fillOpacity(opacity);
 		return this;
 	}
 	,noFill: function() {
 		this.set_fillOpacity(0);
 		this.set_fillColor("transparant");
 		return this;
+	}
+	,setShadow: function(color,blur,offsetx,offsety) {
+		if(offsety == null) {
+			offsety = 0;
+		}
+		if(offsetx == null) {
+			offsetx = 0;
+		}
+		if(blur == null) {
+			blur = 0;
+		}
+		this.set_shadowColor(color);
+		this.set_shadowBlur(blur);
+		this.set_shadowOffsetX(offsetx);
+		this.set_shadowOffsetY(offsety);
 	}
 	,setLineEnds: function(linecap,linejoin) {
 		if(linejoin == null) {
@@ -3529,7 +3629,7 @@ sketcher_draw_Base.prototype = {
 		return this;
 	}
 	,clone: function() {
-		console.log("src/sketcher/draw/Base.hx:231:","WIP");
+		console.log("src/sketcher/draw/Base.hx:251:","WIP");
 		return js_Boot.__cast(JSON.parse(JSON.stringify(this)) , sketcher_draw_Base);
 	}
 	,convertID: function(id) {
@@ -3727,6 +3827,30 @@ sketcher_draw_Base.prototype = {
 		this.xml.set("stroke-linejoin",Std.string(value));
 		return this.lineJoin = value;
 	}
+	,get_shadowColor: function() {
+		return this.shadowColor;
+	}
+	,set_shadowColor: function(value) {
+		return this.shadowColor = value;
+	}
+	,get_shadowBlur: function() {
+		return this.shadowBlur;
+	}
+	,set_shadowBlur: function(value) {
+		return this.shadowBlur = value;
+	}
+	,get_shadowOffsetX: function() {
+		return this.shadowOffsetX;
+	}
+	,set_shadowOffsetX: function(value) {
+		return this.shadowOffsetX = value;
+	}
+	,get_shadowOffsetY: function() {
+		return this.shadowOffsetY;
+	}
+	,set_shadowOffsetY: function(value) {
+		return this.shadowOffsetY = value;
+	}
 	,get_isVisible: function() {
 		return this.isVisible;
 	}
@@ -3867,6 +3991,225 @@ sketcher_draw_Background.prototype = $extend(sketcher_draw_Base.prototype,{
 		gl.clear(16384);
 	}
 	,__class__: sketcher_draw_Background
+});
+var sketcher_draw_Button = function(x,y,width,height,isCenter) {
+	if(isCenter == null) {
+		isCenter = true;
+	}
+	this.type = "rectangle";
+	this.set_x(x);
+	this.set_y(y);
+	this.set_width(width);
+	this.set_height(height);
+	this.cx = this.get_x() - this.get_width() / 2;
+	this.cy = this.get_y() - this.get_height() / 2;
+	this.isCenter = isCenter;
+	if(!isCenter) {
+		this.cx = this.get_x();
+		this.cy = this.get_y();
+	}
+	this.point_top_left = { x : this.cx, y : this.cy};
+	this.point_top_right = { x : this.cx + this.get_width(), y : this.cy};
+	this.point_bottom_left = { x : this.cx, y : this.cy + this.get_height()};
+	this.point_bottom_right = { x : this.cx + this.get_width(), y : this.cy + this.get_height()};
+	sketcher_draw_Base.call(this,"rect");
+};
+$hxClasses["sketcher.draw.Button"] = sketcher_draw_Button;
+sketcher_draw_Button.__name__ = "sketcher.draw.Button";
+sketcher_draw_Button.__interfaces__ = [sketcher_draw_IBase];
+sketcher_draw_Button.__super__ = sketcher_draw_Base;
+sketcher_draw_Button.prototype = $extend(sketcher_draw_Base.prototype,{
+	svg: function(settings) {
+		this.xml.set("x",Std.string(this.cx));
+		this.xml.set("y",Std.string(this.cy));
+		this.xml.set("width",Std.string(this.get_width()));
+		this.xml.set("height",Std.string(this.get_height()));
+		if(this.get_radius() != null) {
+			this.xml.set("rx",Std.string(this.get_radius()));
+			this.xml.set("ry",Std.string(this.get_radius()));
+		}
+		if(this.getTransform() != "") {
+			this.xml.set("transform",this.getTransform());
+		}
+		return haxe_xml_Printer.print(this.xml);
+	}
+	,useCanvasShadow: function(ctx) {
+		if(this.get_shadowColor() != null) {
+			ctx.shadowColor = this.get_shadowColor();
+			ctx.shadowBlur = this.get_shadowBlur();
+			ctx.shadowOffsetX = this.get_shadowOffsetX();
+			ctx.shadowOffsetY = this.get_shadowOffsetY();
+		}
+	}
+	,ctx: function(ctx) {
+		var _gthis = this;
+		this.rect = Sketcher.ctx.canvas.getBoundingClientRect();
+		this.scale = this.rect.width / Globals.w;
+		this.useDefaultsCanvas();
+		if(this.get_lineCap() != null) {
+			ctx.lineCap = this.get_lineCap();
+		}
+		ctx.lineWidth = this.get_lineWeight();
+		var value = this.get_fillColor();
+		var _r = 0;
+		var _g = 0;
+		var _b = 0;
+		var _a = 1;
+		value = StringTools.replace(value," ","");
+		if(value.indexOf("rgba") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgba(",""),")","");
+			var arr = value.split(",");
+			_r = arr[0];
+			_g = arr[1];
+			_b = arr[2];
+			_a = arr[3];
+		} else if(value.indexOf("rgb") != -1) {
+			value = StringTools.replace(StringTools.replace(value,"rgb(",""),")","");
+			var arr1 = value.split(",");
+			_r = arr1[0];
+			_g = arr1[1];
+			_b = arr1[2];
+		} else if(value.indexOf("#") != -1) {
+			var int = Std.parseInt(StringTools.replace(value,"#","0x"));
+			var rgb_r = int >> 16 & 255;
+			var rgb_g = int >> 8 & 255;
+			var rgb_b = int & 255;
+			_r = rgb_r;
+			_g = rgb_g;
+			_b = rgb_b;
+		}
+		var _fillColor = { r : _r, g : _g, b : _b, a : _a};
+		ctx.fillStyle = sketcher_util_ColorUtil.getColourObj(_fillColor,this.get_fillOpacity());
+		var value1 = this.get_strokeColor();
+		var _r1 = 0;
+		var _g1 = 0;
+		var _b1 = 0;
+		var _a1 = 1;
+		value1 = StringTools.replace(value1," ","");
+		if(value1.indexOf("rgba") != -1) {
+			value1 = StringTools.replace(StringTools.replace(value1,"rgba(",""),")","");
+			var arr2 = value1.split(",");
+			_r1 = arr2[0];
+			_g1 = arr2[1];
+			_b1 = arr2[2];
+			_a1 = arr2[3];
+		} else if(value1.indexOf("rgb") != -1) {
+			value1 = StringTools.replace(StringTools.replace(value1,"rgb(",""),")","");
+			var arr11 = value1.split(",");
+			_r1 = arr11[0];
+			_g1 = arr11[1];
+			_b1 = arr11[2];
+		} else if(value1.indexOf("#") != -1) {
+			var int1 = Std.parseInt(StringTools.replace(value1,"#","0x"));
+			var rgb_r1 = int1 >> 16 & 255;
+			var rgb_g1 = int1 >> 8 & 255;
+			var rgb_b1 = int1 & 255;
+			_r1 = rgb_r1;
+			_g1 = rgb_g1;
+			_b1 = rgb_b1;
+		}
+		var _strokeColor = { r : _r1, g : _g1, b : _b1, a : _a1};
+		ctx.strokeStyle = sketcher_util_ColorUtil.getColourObj(_strokeColor,this.get_strokeOpacity());
+		if(this.get_dash() != null) {
+			ctx.setLineDash(this.get_dash());
+		}
+		ctx.beginPath();
+		if(this.get_rotate() != null && this.get_move() == null) {
+			ctx.save();
+			ctx.translate(this.get_x(),this.get_y());
+			ctx.rotate(sketcher_util_MathUtil.radians(this.get_rotate()));
+			ctx.arc(0,0,10,0,2 * Math.PI);
+			ctx.rect(-(this.get_width() / 2),-(this.get_height() / 2),this.get_width(),this.get_height());
+			ctx.restore();
+		}
+		if(this.get_move() != null && this.get_rotate() == null) {
+			ctx.save();
+			ctx.translate(this.cx,this.cy);
+			ctx.translate(this.get_move().x,this.get_move().y);
+			ctx.rect(0,0,this.get_width(),this.get_height());
+			ctx.restore();
+		}
+		if(this.get_rotate() == null && this.get_move() == null) {
+			this.buildCanvasShape(ctx);
+		}
+		if(this.get_fill() != null) {
+			ctx.fill();
+		}
+		if(this.get_stroke() != null && this.get_lineWeight() != 0) {
+			ctx.stroke();
+		}
+		Sketcher.ctx.canvas.addEventListener("mousedown",function(e) {
+			Globals.mouseX = e.clientX - _gthis.rect.left;
+			Globals.mouseY = e.clientY - _gthis.rect.top;
+			if(_gthis.isMouseOver()) {
+				console.log("src/sketcher/draw/Button.hx:208:","click");
+			}
+			return Globals.isMouseDown = true;
+		});
+		Sketcher.ctx.canvas.addEventListener("mousemove",function(e1) {
+			Globals.mouseX = e1.clientX - _gthis.rect.left;
+			Globals.mouseY = e1.clientY - _gthis.rect.top;
+			if(_gthis.isMouseOver()) {
+				return Sketcher.ctx.canvas.style.cursor = "pointer";
+			} else {
+				return Sketcher.ctx.canvas.style.cursor = "default";
+			}
+		});
+		window.addEventListener("mouseup",function(e2) {
+			if(Globals.isMouseDown == true) {
+				Globals.isMouseDown = false;
+			}
+			return;
+		});
+	}
+	,isMouseOver: function() {
+		if(Globals.mouseX >= this.point_top_left.x * this.scale && Globals.mouseX <= this.point_bottom_right.x * this.scale && Globals.mouseY >= this.point_top_left.y * this.scale && Globals.mouseY <= this.point_bottom_right.y * this.scale) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	,buildCanvasShape: function(ctx) {
+		if(this.get_radius() == null) {
+			ctx.rect(this.cx,this.cy,this.get_width(),this.get_height());
+		} else {
+			var radius_tl = this.get_radius();
+			var radius_tr = this.get_radius();
+			var radius_br = this.get_radius();
+			var radius_bl = this.get_radius();
+			ctx.moveTo(this.cx + radius_tl,this.cy);
+			ctx.lineTo(this.cx + this.get_width() - radius_tr,this.cy);
+			ctx.quadraticCurveTo(this.cx + this.get_width(),this.cy,this.cx + this.get_width(),this.cy + radius_tr);
+			ctx.lineTo(this.cx + this.get_width(),this.cy + this.get_height() - radius_br);
+			ctx.quadraticCurveTo(this.cx + this.get_width(),this.cy + this.get_height(),this.cx + this.get_width() - radius_br,this.cy + this.get_height());
+			ctx.lineTo(this.cx + radius_bl,this.cy + this.get_height());
+			ctx.quadraticCurveTo(this.cx,this.cy + this.get_height(),this.cx,this.cy + this.get_height() - radius_bl);
+			ctx.lineTo(this.cx,this.cy + radius_tl);
+			ctx.quadraticCurveTo(this.cx,this.cy,this.cx + radius_tl,this.cy);
+			ctx.closePath();
+		}
+	}
+	,gl: function(gl) {
+	}
+	,get_radius: function() {
+		return this.radius;
+	}
+	,set_radius: function(value) {
+		return this.radius = value;
+	}
+	,get_width: function() {
+		return this.width;
+	}
+	,set_width: function(value) {
+		return this.width = value;
+	}
+	,get_height: function() {
+		return this.height;
+	}
+	,set_height: function(value) {
+		return this.height = value;
+	}
+	,__class__: sketcher_draw_Button
 });
 var sketcher_draw_Circle = function(x,y,radius) {
 	this.type = "circle";
@@ -4975,6 +5318,14 @@ sketcher_draw_Rectangle.prototype = $extend(sketcher_draw_Base.prototype,{
 		}
 		return haxe_xml_Printer.print(this.xml);
 	}
+	,useCanvasShadow: function(ctx) {
+		if(this.get_shadowColor() != null) {
+			ctx.shadowColor = this.get_shadowColor();
+			ctx.shadowBlur = this.get_shadowBlur();
+			ctx.shadowOffsetX = this.get_shadowOffsetX();
+			ctx.shadowOffsetY = this.get_shadowOffsetY();
+		}
+	}
 	,ctx: function(ctx) {
 		this.useDefaultsCanvas();
 		if(this.get_lineCap() != null) {
@@ -5160,6 +5511,8 @@ var sketcher_draw_Text = function(str,x,y) {
 		x = 0;
 	}
 	this.width = -1;
+	this.lineHeight = 0;
+	this.fitWidth = 0;
 	this.type = "Text";
 	this.set_str(str);
 	this.set_x(x);
@@ -5264,7 +5617,29 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		if(this.get_textBaseline() != null) {
 			ctx.textBaseline = this.convertTextBaseline("canvas");
 		}
-		ctx.fillText(this.get_str(),this.get_x(),this.get_y());
+		var lines = [];
+		var lineheight = this.get_lineHeight() != 0 ? this.get_lineHeight() : ctx.measureText("M").width * 1.7;
+		if(this.get_fitWidth() != 0) {
+			var words = this.get_str().split(" ");
+			window.console.log("doesnt work yet");
+			var count = 0;
+			var sentance = "";
+			while(ctx.measureText(sentance).width <= this.get_fitWidth()) {
+				sentance += words[count] + " ";
+				++count;
+			}
+			lines.push(sentance);
+			console.log("src/sketcher/draw/Text.hx:228:",sentance);
+		} else {
+			lines = this.get_str().split("\n");
+		}
+		var _g1 = 0;
+		var _g11 = lines.length;
+		while(_g1 < _g11) {
+			var i = _g1++;
+			var line = lines[i];
+			ctx.fillText(line,this.get_x(),this.get_y() + i * lineheight);
+		}
 		ctx.restore();
 	}
 	,gl: function(gl) {
@@ -5348,7 +5723,9 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		return this.fontFamily;
 	}
 	,set_fontFamily: function(value) {
-		value = StringTools.replace(value,"+"," ");
+		if(value.indexOf("+") != -1) {
+			value = StringTools.replace(value,"+"," ");
+		}
 		if(value.indexOf(":") != -1) {
 			value = value.split(":")[0];
 		}
@@ -5379,6 +5756,18 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,set_str: function(value) {
 		return this.str = value;
+	}
+	,get_fitWidth: function() {
+		return this.fitWidth;
+	}
+	,set_fitWidth: function(value) {
+		return this.fitWidth = value;
+	}
+	,get_lineHeight: function() {
+		return this.lineHeight;
+	}
+	,set_lineHeight: function(value) {
+		return this.lineHeight = value;
 	}
 	,get_style: function() {
 		return this.style;
@@ -5689,6 +6078,10 @@ sketcher_util_EmbedUtil.cleanFontFamily = function(family) {
 	}
 	return StringTools.replace(family,"+"," ");
 };
+sketcher_util_EmbedUtil.fontSansSerif = function(callback,callbackArray) {
+	var fontFamily = "Roboto";
+	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
+};
 sketcher_util_EmbedUtil.fontMono = function(callback,callbackArray) {
 	var fontFamily = "Source+Code+Pro";
 	return sketcher_util_EmbedUtil.embedGoogleFont(fontFamily,callback,callbackArray);
@@ -5808,7 +6201,7 @@ sketcher_util_GridUtil.prototype = {
 		return this;
 	}
 	,calc: function() {
-		console.log("src/sketcher/util/GridUtil.hx:263:","WIP");
+		console.log("src/sketcher/util/GridUtil.hx:262:","WIP");
 		return this;
 	}
 	,setPosition: function(x,y) {
@@ -6139,6 +6532,18 @@ sketcher_util_MathUtil.chance = function(value) {
 	}
 	return Math.random() < value;
 };
+sketcher_util_MathUtil.chanceTrue = function(value) {
+	if(value > 1) {
+		value /= 100;
+	}
+	return Math.random() < value;
+};
+sketcher_util_MathUtil.chanceFalse = function(value) {
+	if(value > 1) {
+		value /= 100;
+	}
+	return Math.random() > value;
+};
 sketcher_util_MathUtil.posNeg = function() {
 	return sketcher_util_MathUtil.randomInt(0,1) * 2 - 1;
 };
@@ -6252,6 +6657,7 @@ Globals.MOUSE_MOVE = "mousemove";
 Globals.KEY_DOWN = "keydown";
 Globals.KEY_UP = "keyup";
 Globals.RESIZE = "resize";
+Globals.isMouseDown = false;
 Globals.mousePressed = 0;
 Globals.mouseReleased = 0;
 Globals.isFullscreen = false;
