@@ -22,16 +22,27 @@ class ExText {
 
 	// var fontFamly = 'Lobster';
 	var fontFamly = 'Oswald:200,300,400,500,600,700';
+	var familyMono = '';
+	var familyDisplay = '';
+	var familyHand = '';
 
 	public function new() {
-		EmbedUtil.embedGoogleFont(fontFamly, init);
+		// EmbedUtil.embedGoogleFont(fontFamly, init);
+
+		// familyMono = EmbedUtil.fontMono(init);
+		familyDisplay = EmbedUtil.fontDisplay(init);
+		// familyHand = EmbedUtil.fontHandwritten(init);
 		// init();
 	}
 
 	function init() {
+		// if (familyMono == '' || familyDisplay == '' || familyHand == '') {
+		// 	return;
+		// }
+
 		// to connected to sketch
 		grid = new GridUtil(sketchWidth, sketchHeight);
-		grid.setNumbered(3, 3); // 3 horizontal, 3 vertical
+		grid.setNumbered(3, 4); // 3 horizontal, 3 vertical
 		grid.setIsCenterPoint(true); // default true, but can be set if needed
 
 		initDocument(); // if document doesn't have elements with correct id
@@ -98,28 +109,28 @@ class ExText {
 		var shape = sketch.makeText("left", p.x, p.y);
 		shape.fillColor = getColourObj(MAROON);
 		shape.fontSize = '50px';
-		shape.fontFamily = fontFamly.replace("+", " ");
+		shape.fontFamily = familyDisplay;
 		shape.textAlign = TextAlignType.Left;
 
 		var p = grid.array[4];
 		var shape = sketch.makeText("center", p.x, p.y);
 		shape.fillColor = getColourObj(MAROON);
 		shape.fontSize = '50';
-		shape.fontFamily = fontFamly.replace("+", " ");
+		shape.fontFamily = familyDisplay;
 		shape.textAlign = TextAlignType.Center;
 
 		var p = grid.array[5];
 		var shape = sketch.makeText("right", p.x, p.y);
 		shape.fillColor = getColourObj(MAROON);
 		shape.fontSize = '50';
-		shape.fontFamily = fontFamly.replace("+", " ");
+		shape.fontFamily = familyDisplay;
 		shape.textAlign = TextAlignType.Right;
 
 		var p = grid.array[6];
 		var shape = sketch.makeText("Right T", p.x, p.y);
 		shape.fillColor = getColourObj(OLIVE);
 		shape.fontSize = '30';
-		shape.fontFamily = fontFamly.replace("+", " ");
+		shape.fontFamily = familyDisplay;
 		shape.textAlign = TextAlignType.Right;
 		shape.textBaseline = TextBaselineType.Top;
 
@@ -127,7 +138,7 @@ class ExText {
 		var shape = sketch.makeText("Right M", p.x, p.y);
 		shape.fillColor = getColourObj(OLIVE);
 		shape.fontSize = '30';
-		shape.fontFamily = fontFamly.replace("+", " ");
+		shape.fontFamily = familyDisplay;
 		shape.textAlign = TextAlignType.Right;
 		shape.textBaseline = TextBaselineType.Middle;
 
@@ -135,9 +146,23 @@ class ExText {
 		var shape = sketch.makeText("Right B", p.x, p.y);
 		shape.fillColor = getColourObj(OLIVE);
 		shape.fontSize = '30';
-		shape.fontFamily = fontFamly.replace("+", " ");
+		shape.fontFamily = familyDisplay;
 		shape.textAlign = TextAlignType.Right;
 		shape.textBaseline = TextBaselineType.Bottom;
+
+		var p = grid.array[9];
+		var shape = sketch.makeText("One\nTwo\nThree", p.x, p.y);
+		shape.fillColor = getColourObj(BLACK);
+
+		var p = grid.array[10];
+		var shape = sketch.makeText("Long line that needs to be wrapped on a specific length.", p.x, p.y);
+		shape.fillColor = getColourObj(BLACK);
+		shape.fitWidth = grid.cellWidth;
+
+		var p = grid.array[11];
+		var shape = sketch.makeText("One\nTwo\nThree", p.x, p.y);
+		shape.fillColor = getColourObj(BLACK);
+		shape.lineHeight = 10;
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
