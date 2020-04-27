@@ -1,5 +1,6 @@
 package sketcher.load;
 
+import haxe.io.StringInput;
 import haxe.Timer;
 import js.Browser.*;
 import js.html.Image;
@@ -123,7 +124,7 @@ class Loader {
 	 */
 	inline public function load():Loader {
 		if (_isDebug)
-			console.debug('start loading');
+			console.debug('init loading');
 
 		loadingHandler();
 		return this;
@@ -373,10 +374,26 @@ class Loader {
 	}
 
 	function textLoaderBig(_l:LoaderObj) {
+		if (_isDebug)
+			console.info('[${_l.type}] loader: ${_l.path}');
+
 		var url = _l.path;
+
 		_l.time.start = Date.now();
 		var xmlHTTP = new XMLHttpRequest();
 		xmlHTTP.open('GET', url, true);
+		xmlHTTP.onreadystatechange = function(e) {
+			// console.log(e);
+			if (xmlHTTP.readyState == 4) {
+				if (xmlHTTP.status == 404) {
+					// dump(xmlHTTP.responseText);
+					console.warn('looks like the file doesn\'t exist at path: ${_l.path}');
+				}
+			}
+		}
+		xmlHTTP.ontimeout = function(e) {
+			console.log(e);
+		}
 		switch (_l.type) {
 			case FileType.JSON, FileType.Json:
 				xmlHTTP.responseType = XMLHttpRequestResponseType.JSON;
@@ -391,7 +408,8 @@ class Loader {
 			var data = xmlHTTP.response;
 			// console.log('b');
 			// console.log(data);
-			// console.log(e);
+			if (_isDebug)
+				console.log(e);
 			// console.log(e.total);
 			// console.log(e.timeStamp);
 
@@ -447,7 +465,7 @@ class Loader {
 		};
 		xmlHTTP.onloadstart = function() {
 			if (_isDebug)
-				console.debug('onloadstart');
+				console.debug('[${_l.type}] onloadstart');
 			if (Reflect.isFunction(_onProgress))
 				Reflect.callMethod(_onProgress, _onProgress, [0, 1, 0]);
 
@@ -456,7 +474,7 @@ class Loader {
 		};
 		xmlHTTP.onloadend = function() {
 			if (_isDebug)
-				console.debug('onloadend');
+				console.debug('[${_l.type}] onloadend');
 			// You can also remove your progress bar here, if you like.
 			if (Reflect.isFunction(_onProgress))
 				Reflect.callMethod(_onProgress, _onProgress, [1, 1, 1]);
