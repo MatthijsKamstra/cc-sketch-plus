@@ -28,6 +28,7 @@ class Main {
 		examples.ExPolygon, //
 		examples.ExMirror, //
 		examples.ExMask, //
+		examples.ExButton, //
 	];
 
 	var pulldown:PullDown;

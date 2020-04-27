@@ -196,6 +196,22 @@ class Sketcher {
 	}
 
 	/**
+	 * make a rectangle with the x and y  pos as center point (default center)
+	 *
+	 * @param x				x position
+	 * @param y				y position
+	 * @param width			width of the rectangle
+	 * @param height		height of the rectangle
+	 * @param isCenter		default is centered true, otherwise x and y are top-left start pos
+	 * @return Rectangle
+	 */
+	public function makeButton(x:Float, y:Float, width:Float, height:Float, isCenter = true):Button {
+		var shape = new Button(x, y, width, height, isCenter);
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
 	 * [Description]
 	 * @param x				x position
 	 * @param y				y position
@@ -660,10 +676,10 @@ class Globals {
 	public static var KEY_DOWN:String = 'keydown';
 	public static var KEY_UP:String = 'keyup';
 	public static var RESIZE:String = 'resize';
-	public static var mouseX:Int;
-	public static var mouseY:Int;
-	public static var mouseMoved:Bool;
-	public static var mouseDown:Bool;
+	public static var mouseX:Float;
+	public static var mouseY:Float;
+	public static var isMouseMoved:Bool;
+	public static var isMouseDown:Bool = false;
 	public static var keyDown:Int;
 	public static var keyUp:Int;
 	public static var mousePressed:Int = 0;
@@ -673,6 +689,4 @@ class Globals {
 	// allows me global access to canvas and it’s width and height properties
 	public static var w:Int;
 	public static var h:Int;
-	// public static var width:Int;
-	// public static var height:Int;
 }
