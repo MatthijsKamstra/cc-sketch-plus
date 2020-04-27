@@ -1,5 +1,6 @@
 package;
 
+import Sketcher.Globals;
 import Sketcher.Globals.*;
 import js.Browser.*;
 import js.html.*;
@@ -67,7 +68,7 @@ class SketcherBase {
 		window.addEventListener(RESIZE, _reset, false);
 		window.addEventListener(KEY_DOWN, _keyDown, false);
 		window.addEventListener(KEY_UP, _keyUp, false);
-		// window.addEventListener(KEY_DOWN, onKeyDown);
+		window.addEventListener(MOUSE_UP, _mouseUp);
 
 		setup();
 		_draw(); // start draw loop
@@ -171,15 +172,20 @@ class SketcherBase {
 
 	function _keyUp(e:js.html.KeyboardEvent) {}
 
+	function _mouseUp(e:MouseEvent) {
+		Globals.isMouseDown = false;
+	}
+
 	// trigger when window resize, draw function is still running, so clear canvas and restart with init
 	function _reset() {
 		// trace("wip");
 		// ctx.clearRect(0, 0, w, h);
-		_draw();
+		// _draw(); // this was active, but perhaps something more clever needs to happen
 	}
 
 	// wrapper around the real `draw` class
 	function _draw(?timestamp:Float) {
+		// trace('_draw ${timestamp}');
 		draw();
 		__export();
 		if (isDrawActive)
