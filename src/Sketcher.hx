@@ -67,8 +67,8 @@ class Sketcher {
 			node.innerHTML = '
 			<!-- with padding -->
 			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
-			svg {margin: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
-			canvas {margin: ${settings.padding}px; width: 100%; background-color:#ffffff; }
+			svg {padding: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
+			canvas {padding: ${settings.padding}px; width: 100%; background-color:#ffffff; }
 			';
 			document.body.appendChild(node);
 		}
