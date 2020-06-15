@@ -8,6 +8,7 @@ import js.Browser.*;
 
 /**
  * version
+ * 		1.2.0 - remove timebased
  * 		1.1.1 - use in Sketcher
  * 		1.1.0 - 3D additions (z-dir)
  * 		1.0.9 - Haxe 4 update
@@ -32,7 +33,7 @@ class Go {
 	private var _isYoyo:Bool = false;
 	private var _isWiggle:Bool = false;
 	private var _isOrbit:Bool = false;
-	private var _isTimeBased:Bool = false; // default is frameBased
+	// private var _isTimeBased:Bool = false; // default is frameBased
 	private var _isDelayDone:Bool = false; // default is frameBased
 	private var _initTime:Int = 0; // should work with time (miliseconds) and frames (FPS)
 	private var _delay:Int = 0;
@@ -40,7 +41,7 @@ class Go {
 	private var _arc:Float = 0;
 	private var FRAME_RATE:Int = 60; // 60 frames per second (FPS)
 	private var DEBUG:Bool = false;
-	private var VERSION:String = '1.1.1';
+	private var VERSION:String = '1.2.0';
 
 	public var id(get, set):String;
 
@@ -58,11 +59,12 @@ class Go {
 		this._target = target;
 		this._duration = getDuration(duration);
 		// this._options = cast{};
-		if (_isTimeBased) {
-			this._initTime = getTimer();
-		} else {
-			this._initTime = this._duration;
-		}
+		// if (_isTimeBased) {
+		// 	this._initTime = getTimer();
+		// } else {
+		// 	this._initTime = this._duration;
+		// }
+		this._initTime = this._duration;
 		_tweens.push(this);
 		if (DEBUG)
 			console.log('New Go - _id: "$_id" / _duration: ' + _duration + ' / _initTime: ' + _initTime + ' / _tweens.length: ' + _tweens.length);
@@ -220,13 +222,12 @@ class Go {
 	 * @param  isTimeBased  (optional)
 	 * @return Go
 	 */
-	inline public function isTimeBased(?isTimeBased:Bool = true):Go {
-		trace('Fixme: this doesn\t work right now');
-		_isTimeBased = isTimeBased;
-		_duration = Std.int(_duration / FRAME_RATE);
-		return this;
-	}
-
+	// inline public function isTimeBased(?isTimeBased:Bool = true):Go {
+	// 	trace('Fixme: this doesn\t work right now');
+	// 	_isTimeBased = isTimeBased;
+	// 	_duration = Std.int(_duration / FRAME_RATE);
+	// 	return this;
+	// }
 	// ____________________________________ properties ____________________________________
 
 	/**
@@ -490,20 +491,27 @@ class Go {
 	// ____________________________________ private ____________________________________
 	private function init():Void {
 		// console.log('init 1');
-		if (_isTimeBased) {
-			// [mck] TODO clean this up!!!!
-			trace('TODO: build timebased animation');
-			// var framerate:Int = Math.round(FRAME_RATE / 2); //30;
-			// _trigger = (_trigger == null) ? new Timer(Std.int(1000 / framerate)) : _trigger;
-			// _trigger.run = onEnterFrameHandler;
+		// if (_isTimeBased) {
+		// 	// [mck] TODO clean this up!!!!
+		// 	trace('TODO: build timebased animation');
+		// 	// var framerate:Int = Math.round(FRAME_RATE / 2); //30;
+		// 	// _trigger = (_trigger == null) ? new Timer(Std.int(1000 / framerate)) : _trigger;
+		// 	// _trigger.run = onEnterFrameHandler;
+		// } else {
+		// 	if (_requestId == null) {
+		// 		console.info('start frame animation');
+		// 		_requestId = window.requestAnimationFrame(onEnterFrameHandler);
+		// 		// trace(_requestId);
+		// 	} else {
+		// 		onEnterFrameHandler();
+		// 	}
+		// }
+		if (_requestId == null) {
+			console.info('start frame animation');
+			_requestId = window.requestAnimationFrame(onEnterFrameHandler);
+			// trace(_requestId);
 		} else {
-			if (_requestId == null) {
-				console.info('start frame animation');
-				_requestId = window.requestAnimationFrame(onEnterFrameHandler);
-				// trace(_requestId);
-			} else {
-				onEnterFrameHandler();
-			}
+			onEnterFrameHandler();
 		}
 		// console.log('init 2');
 	}
@@ -512,14 +520,17 @@ class Go {
 		// if (_initTime == 0) return;
 		if (_tweens.length <= 0) {
 			// [mck] stop timer, we are done!
-			if (_isTimeBased) {
-				// _trigger.stop();
-				// _trigger.run = null;
-			} else {
-				// trace('kill $_requestId');
-				window.cancelAnimationFrame(_requestId);
-				return;
-			}
+			// if (_isTimeBased) {
+			// 	// _trigger.stop();
+			// 	// _trigger.run = null;
+			// } else {
+			// 	trace('kill $_requestId');
+			// 	window.cancelAnimationFrame(_requestId);
+			// 	return;
+			// }
+			trace('kill $_requestId');
+			window.cancelAnimationFrame(_requestId);
+			return;
 		} else
 			for (i in 0..._tweens.length) {
 				// [mck] FIXME :: don't know exactly why I need to check if _tweens[i] != null, but I do.
@@ -533,8 +544,9 @@ class Go {
 	private function update():Void {
 		// [mck] check for delay, simply count down the delay before we animate
 		// [mck] TODO doesn't work with time
-		if (_delay > 0 && _isTimeBased)
-			trace('FIXME this doesn\'t work yet');
+		// if (_delay > 0 && _isTimeBased)
+		// 	trace('FIXME this doesn\'t work yet');
+
 		if (_delay > 0) {
 			_delay--;
 			return;
@@ -567,9 +579,9 @@ class Go {
 
 		this._initTime--;
 		var progressed = (this._duration - this._initTime);
-		if (_isTimeBased) {
-			progressed = getTimer() - _initTime;
-		}
+		// if (_isTimeBased) {
+		// 	progressed = getTimer() - _initTime;
+		// }
 		// trace ('$progressed >= $_duration');
 		if (progressed >= this._duration) {
 			// [mck] setProperties in the final state
@@ -648,11 +660,12 @@ class Go {
 				_props.set(n, _rangeReverse);
 			}
 			// [mck] reset the time and ignore this function for now... :)
-			if (_isTimeBased) {
-				this._initTime = getTimer();
-			} else {
-				this._initTime = _duration;
-			}
+			// if (_isTimeBased) {
+			// 	this._initTime = getTimer();
+			// } else {
+			// 	this._initTime = _duration;
+			// }
+			this._initTime = _duration;
 			_isYoyo = false;
 			return;
 		}
@@ -664,9 +677,11 @@ class Go {
 
 		destroy();
 
-		if (Reflect.isFunction(func))
+		if (Reflect.isFunction(func)) {
+			trace(_tweens.length);
 			Reflect.callMethod(func, func, arr);
-		// Reflect.callMethod(func, func, [arr]);
+			// Reflect.callMethod(func, func, [arr]);
+		}
 	}
 
 	/**
@@ -675,13 +690,16 @@ class Go {
 	 */
 	function getDuration(duration:Float):Int {
 		var d = 0;
-		if (_isTimeBased) {
-			d = Std.int(duration * 1000); // convert seconds to miliseconds
-		} else {
-			if (duration <= 0)
-				duration = 0.1;
-			d = Std.int(duration * FRAME_RATE); // seconds * FPS = frames
-		}
+		// if (_isTimeBased) {
+		// 	d = Std.int(duration * 1000); // convert seconds to miliseconds
+		// } else {
+		// 	if (duration <= 0)
+		// 		duration = 0.1;
+		// 	d = Std.int(duration * FRAME_RATE); // seconds * FPS = frames
+		// }
+		if (duration <= 0)
+			duration = 0.1;
+		d = Std.int(duration * FRAME_RATE); // seconds * FPS = frames
 		return d;
 	}
 

@@ -1,5 +1,9 @@
 # TODO
 
+
+- [ ] Go.to().onComplete doesn't work anymore
+- [ ] Go remove timebased (don't use it, so remove it)
+
 - [ ] default color text differenct between svg and canvas
 - [ ] mask for canvas
 - [ ] mirror for svg

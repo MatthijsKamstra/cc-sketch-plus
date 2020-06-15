@@ -1,5 +1,6 @@
 package sketcher.util;
 
+import js.Syntax;
 import haxe.Timer;
 import js.Browser;
 import js.html.DOMParser;
@@ -28,7 +29,7 @@ class EmbedUtil {
 	 * 				sketcher.util.EmbedUtil.stats();
 	 */
 	public static function stats() {
-		untyped __js__("var script = document.createElement('script');script.id='mrdoob-stats';script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);");
+		Syntax.code("var script = document.createElement('script');script.id='mrdoob-stats';script.onload = function() {var stats = new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop() {stats.update();requestAnimationFrame(loop)});};script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);");
 
 		/*
 			var script = document.createElement('script');
