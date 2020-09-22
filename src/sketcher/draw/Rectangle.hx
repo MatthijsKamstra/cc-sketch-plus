@@ -120,7 +120,7 @@ class Rectangle extends Base implements IBase {
 			ctx.translate(this.x, this.y);
 			ctx.rotate(MathUtil.radians(this.rotate));
 
-			ctx.arc(0, 0, 10, 0, 2 * Math.PI);
+			// ctx.arc(0, 0, 10, 0, 2 * Math.PI);
 			// ctx.translate(-this.cx, -this.cy);
 
 			// if (this.move != null) {
