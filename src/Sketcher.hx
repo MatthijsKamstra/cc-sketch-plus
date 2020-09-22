@@ -1,5 +1,6 @@
 package;
 
+import js.html.svg.SVGElement;
 import js.Browser.*;
 import sketcher.AST.Point;
 import sketcher.draw.*;
@@ -31,6 +32,8 @@ class Sketcher {
 	 */
 	public var svg:String; // should be the svg/xml
 
+	public var svgEl:SVGElement; // should be the svg/xml
+
 	// id for containers
 	public var CANVAS_ID:String = "sketcher_canvas";
 	public var WEBGL_ID:String = "sketcher_canvas_webgl";
@@ -55,7 +58,7 @@ class Sketcher {
 			var node = document.createElement('style');
 			node.innerHTML = '
 			<!-- no padding -->
-			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
+			.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
 			svg {width: 100%; height: 100%; background-color:#ffffff; }
 			canvas{width: 100%; background-color:#ffffff; }
 			';
@@ -66,7 +69,7 @@ class Sketcher {
 			var node = document.createElement('style');
 			node.innerHTML = '
 			<!-- with padding -->
-			.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;	justify-content: center;}
+			.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
 			svg {padding: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
 			canvas {padding: ${settings.padding}px; width: 100%; background-color:#ffffff; }
 			';
@@ -594,7 +597,7 @@ class Sketcher {
 				}
 				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg">';
 				var content = '';
-				var defs = '<defs>';
+				var defs = '';
 				for (i in 0...baseArray.length) {
 					var base = baseArray[i];
 
@@ -622,7 +625,7 @@ class Sketcher {
 					// 	content += draw;
 					// }
 				}
-				_xml += defs + '</defs>';
+				_xml += '<defs>' + defs + '</defs>';
 				_xml += content + '</svg>';
 				svg = _xml; // external acces?
 				element.innerHTML = _xml;
