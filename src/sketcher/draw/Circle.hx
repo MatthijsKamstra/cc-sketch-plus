@@ -43,11 +43,6 @@ class Circle extends Base implements IBase {
 		}
 		ctx.lineWidth = this.lineWeight;
 
-		// trace('fillColor : ' + this.fillColor);
-		// trace('fillOpacity: ' + this.fillOpacity);
-		// trace('strokeColor : ' + this.strokeColor);
-		// trace('strokeOpacity: ' + this.strokeOpacity);
-
 		var _fillColor = ColorUtil.assumption(this.fillColor);
 		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
 
