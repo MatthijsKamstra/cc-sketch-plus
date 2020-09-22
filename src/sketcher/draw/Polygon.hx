@@ -126,6 +126,10 @@ class Polygon extends Base implements IBase {
 		return _pointArray;
 	}
 
+	// ____________________________________ update the arr, without generating new var ____________________________________
+	// public function update(arr:Array<Float>) {
+	// 	this.arr = arr;
+	// }
 	// ____________________________________ public functions ____________________________________
 	// not sure what this does?????
 	//
