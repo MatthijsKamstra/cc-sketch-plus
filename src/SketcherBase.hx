@@ -75,7 +75,7 @@ class SketcherBase {
 
 		// haxe.Timer.delay(function() {}, 500);
 		console.groupCollapsed("Default cc-sketcher keyboard shortcuts are activated");
-		console.info('• [cmd + r] = reload page\n• [cmd + s] = save jpg\n• [cmd + shift + s] = save png\n• [cmd + ctrl + s] = save transparant png\n• [cmd + alt + s] = save svg');
+		console.info('• [cmd + r] = reload page\n• [cmd + s] = save jpg\n• [cmd + shift + s] = save png\n• [cmd + ctrl + s] = save transparant png\n• [cmd + alt + s] = save svg\n• [cmd + f] = toggle fullscreen');
 		console.groupEnd();
 	}
 
@@ -154,6 +154,7 @@ class SketcherBase {
 			}
 		}
 		if (e.metaKey == true && e.key == 'f') {
+			console.log('[cmd + alt + s] = save svg');
 			if (!isFullscreen) {
 				openFullscreen();
 				isFullscreen = true;
@@ -264,11 +265,11 @@ class SketcherBase {
 		var elem = document.documentElement;
 		if (elem.requestFullscreen != null) {
 			elem.requestFullscreen();
-		} else if (untyped elem.mozRequestFullScreen) { /* Firefox */
+		} else if (untyped elem.mozRequestFullScreen) {/* Firefox */
 			untyped elem.mozRequestFullScreen();
-		} else if (untyped elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+		} else if (untyped elem.webkitRequestFullscreen) {/* Chrome, Safari and Opera */
 			untyped elem.webkitRequestFullscreen();
-		} else if (untyped elem.msRequestFullscreen) { /* IE/Edge */
+		} else if (untyped elem.msRequestFullscreen) {/* IE/Edge */
 			untyped elem.msRequestFullscreen();
 		}
 	}
@@ -277,11 +278,11 @@ class SketcherBase {
 	function closeFullscreen() {
 		if (document.exitFullscreen != null) {
 			document.exitFullscreen();
-		} else if (untyped document.mozCancelFullScreen) { /* Firefox */
+		} else if (untyped document.mozCancelFullScreen) {/* Firefox */
 			untyped document.mozCancelFullScreen();
-		} else if (untyped document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+		} else if (untyped document.webkitExitFullscreen) {/* Chrome, Safari and Opera */
 			untyped document.webkitExitFullscreen();
-		} else if (untyped document.msExitFullscreen) { /* IE/Edge */
+		} else if (untyped document.msExitFullscreen) {/* IE/Edge */
 			untyped document.msExitFullscreen();
 		}
 	}
