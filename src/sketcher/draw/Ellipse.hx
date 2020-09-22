@@ -1,5 +1,8 @@
 package sketcher.draw;
 
+import sketcher.util.ColorUtil;
+import sketcher.util.MathUtil;
+
 class Ellipse extends Base implements IBase {
 	@:isVar public var rry(get, set):Float;
 	@:isVar public var rrx(get, set):Float;
@@ -27,9 +30,43 @@ class Ellipse extends Base implements IBase {
 	}
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
+		// set everything to default values
+		useDefaultsCanvas();
+
+		// if (this.lineCap != null) {
+		// 	ctx.lineCap = cast this.lineCap;
+		// }
+		// ctx.lineWidth = this.lineWeight;
+
+		// // trace('fillColor : ' + this.fillColor);
+		// // trace('fillOpacity: ' + this.fillOpacity);
+		// // trace('strokeColor : ' + this.strokeColor);
+		// // trace('strokeOpacity: ' + this.strokeOpacity);
+
+		var _fillColor = ColorUtil.assumption(this.fillColor);
+		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
+
+		var _strokeColor = ColorUtil.assumption(this.strokeColor);
+		ctx.strokeStyle = ColorUtil.getColourObj(_strokeColor, this.strokeOpacity);
+
+		if (this.dash != null) {
+			ctx.setLineDash(this.dash);
+		}
+
+		// ctx.beginPath();
+
+		// ctx.ellipse(this.x, this.y, this.rrx, this.rry, this.rotate, 0, 2 * Math.PI);
+
+		// Draw the ellipse
 		ctx.beginPath();
-		ctx.fill();
-		ctx.stroke();
+		ctx.ellipse(this.x, this.y, this.rrx, this.rry, MathUtil.radians(this.rotate), 0, 2 * Math.PI);
+
+		if (this.fill != null) {
+			ctx.fill();
+		}
+		if (this.stroke != null && this.lineWeight != 0) {
+			ctx.stroke();
+		}
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
