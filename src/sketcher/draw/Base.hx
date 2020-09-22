@@ -75,6 +75,8 @@ class Base {
 
 	@:isVar public var desc(get, set):String;
 
+	@:isVar public var className(get, set):String;
+
 	// line specific
 	@:isVar public var lineCap(get, set):LineCap; // "butt|round|square";
 	@:isVar public var lineJoin(get, set):LineJoin; // "arcs|bevel|miter|miter-clip|round";
@@ -245,6 +247,15 @@ class Base {
 		return this;
 	}
 
+	/**
+	 * possible to set a class on a element
+	 * @param className
+	 */
+	public function setClass(className:String) {
+		this.className = className;
+		return this;
+	}
+
 	// ____________________________________ clone ____________________________________
 
 	public function clone():Base {
@@ -253,6 +264,7 @@ class Base {
 	}
 
 	// ____________________________________ misc ____________________________________
+
 	function convertID(id:String):String {
 		return id.toLowerCase().replace(" ", "_");
 	}
@@ -561,6 +573,15 @@ class Base {
 
 	function get_count():Int {
 		return COUNT;
+	}
+
+	function get_className():String {
+		return className;
+	}
+
+	function set_className(value:String):String {
+		xml.set('class', Std.string(value));
+		return className = value;
 	}
 
 	// ____________________________________ toString ____________________________________
