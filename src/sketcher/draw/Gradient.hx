@@ -1,5 +1,6 @@
 package sketcher.draw;
 
+import js.html.CanvasGradient;
 import js.Browser.*;
 
 // quick gradients: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
@@ -37,7 +38,10 @@ class Gradient extends Base implements IBase {
 	var color0:String;
 	var color1:String;
 
+	var dir:GradientDir = LeftRight;
+
 	var canvasGradient:js.html.CanvasGradient;
+
 	var gradientObj:GradientObj;
 
 	/**
@@ -99,14 +103,37 @@ class Gradient extends Base implements IBase {
 	 * @param ctx
 	 */
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
-		if (!ISWARN) {
-			console.warn('Gradient doens\'t work the same as svg, use with care');
-			ISWARN = true;
-		}
+		// if (!ISWARN) {
+		// 	console.warn('Gradient doens\'t work the same as svg, use with care');
+		// 	ISWARN = true;
+		// }
 
 		var w = ctx.canvas.width;
 		var h = ctx.canvas.height;
-		var grd = ctx.createLinearGradient(0, 0, w, 0);
+		var grd:CanvasGradient;
+
+		switch (dir) {
+			case LeftRight, LR:
+				grd = ctx.createLinearGradient(0, 0, w, 0);
+			case RightLeft, RL:
+				grd = ctx.createLinearGradient(h, 0, 0, 0);
+			case TopBottom, TB:
+				grd = ctx.createLinearGradient(0, 0, 0, h);
+			case BottomTop, BT:
+				grd = ctx.createLinearGradient(0, w, 0, 0);
+			case LeftTopRightBottom, TopLeftBottomRight:
+				grd = ctx.createLinearGradient(0, 0, w, h);
+			case LeftBottomTopRight, BottomLeftRightTop:
+				grd = ctx.createLinearGradient(0, h, w, 0);
+			case RightBottomLeftTop, BottomRightTopLeft:
+				grd = ctx.createLinearGradient(h, w, 0, 0);
+			case TopRightLeftBottom, RightTopBottomLeft:
+				grd = ctx.createLinearGradient(h, 0, 0, h);
+			default:
+				trace("case '" + dir + "': trace ('" + dir + "');");
+				grd = ctx.createLinearGradient(0, 0, w, 0);
+		}
+
 		grd.addColorStop(0, '${this.color0}');
 		grd.addColorStop(1, '${this.color1}');
 
@@ -122,6 +149,39 @@ class Gradient extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+
+	// ____________________________________ misc ____________________________________
+
+	/**
+	 * var gradient = sketch.makeGradient(getColourObj(_color0), getColourObj(_color1));
+	 * gradient.setGradientDirection(LeftTopRightBottom);
+	 *
+	 * @param dir
+	 */
+	public function setGradientDirection(dir:GradientDir) {
+		this.dir = dir;
+	}
+}
+
+enum GradientDir {
+	LeftRight;
+	LR;
+	RightLeft;
+	RL;
+	TopBottom;
+	TB;
+	BottomTop;
+	BT;
+	//
+	LeftTopRightBottom;
+	TopLeftBottomRight; // syntatic sugar
+	LeftBottomTopRight;
+	BottomLeftRightTop; // syntatic sugar
+	//
+	RightBottomLeftTop;
+	BottomRightTopLeft; // syntatic sugar
+	TopRightLeftBottom;
+	RightTopBottomLeft; // syntatic sugar
 }
 
 typedef GradientObj = {

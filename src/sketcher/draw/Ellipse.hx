@@ -33,10 +33,10 @@ class Ellipse extends Base implements IBase {
 		// set everything to default values
 		useDefaultsCanvas();
 
-		// if (this.lineCap != null) {
-		// 	ctx.lineCap = cast this.lineCap;
-		// }
-		// ctx.lineWidth = this.lineWeight;
+		if (this.lineCap != null) {
+			ctx.lineCap = cast this.lineCap;
+		}
+		ctx.lineWidth = this.lineWeight;
 
 		// // trace('fillColor : ' + this.fillColor);
 		// // trace('fillOpacity: ' + this.fillOpacity);
@@ -52,10 +52,6 @@ class Ellipse extends Base implements IBase {
 		if (this.dash != null) {
 			ctx.setLineDash(this.dash);
 		}
-
-		// ctx.beginPath();
-
-		// ctx.ellipse(this.x, this.y, this.rrx, this.rry, this.rotate, 0, 2 * Math.PI);
 
 		// Draw the ellipse
 		ctx.beginPath();
