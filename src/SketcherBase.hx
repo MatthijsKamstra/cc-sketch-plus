@@ -29,7 +29,7 @@ class SketcherBase {
 
 	/**
 	 * constructor
-	 * @param ctx
+	 * @param settings (default: 1080px square, autostart:true, padding:10px, scaling:false)
 	 */
 	public function new(?settings:Settings) {
 		if (isDebug)
@@ -154,7 +154,10 @@ class SketcherBase {
 			}
 		}
 		if (e.metaKey == true && e.key == 'f') {
-			console.log('[cmd + alt + s] = save svg');
+			e.preventDefault();
+			e.stopPropagation();
+			// stop default behaviour
+			console.log('[cmd + f] = toggle fullscreen');
 			if (!isFullscreen) {
 				openFullscreen();
 				isFullscreen = true;
