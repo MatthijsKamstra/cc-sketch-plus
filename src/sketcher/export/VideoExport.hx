@@ -84,7 +84,8 @@ class VideoExport {
 		// default 2.5Mbps -->
 		if (this.options == null) {
 			this.options = {
-				bitsPerSecond: 5500000
+				bitsPerSecond: 5500000 // 5.5Mbps
+				// bitsPerSecond: 51200000 // 51.2Mbps
 			}
 		}
 		// setup audio and video

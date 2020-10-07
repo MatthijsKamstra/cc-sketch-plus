@@ -154,9 +154,9 @@ class SketcherBase {
 			}
 		}
 		if (e.metaKey == true && e.key == 'f') {
+			// stop default behaviour
 			e.preventDefault();
 			e.stopPropagation();
-			// stop default behaviour
 			console.log('[cmd + f] = toggle fullscreen');
 			if (!isFullscreen) {
 				openFullscreen();
