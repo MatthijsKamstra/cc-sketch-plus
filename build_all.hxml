@@ -8,9 +8,12 @@
 -cmd echo '> build target js (build.hxml)'
 -cmd haxe build.hxml
 
-Add an other target (for example JavaScript)
+# Add an other target (for example JavaScript)
 -cmd echo '> build target js (build_webgl.hxml)'
 -cmd haxe build_webgl.hxml
+
+-cmd echo '> build target js (build_all_js.hxml)'
+-cmd haxe build_all_js.hxml
 
 # Create a release and/or debug build
 #-cmd echo '> build target js (build_release.hxml)'
