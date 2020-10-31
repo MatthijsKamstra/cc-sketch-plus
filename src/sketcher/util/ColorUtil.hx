@@ -57,7 +57,7 @@ class ColorUtil {
 	 * @param a 		alpha used for this color (rbga), value is between 0 and 1, if is null rgba is not used
 	 * @return String
 	 */
-	static public function getColourObj(rgb:RGB, ?a:Float):String {
+	static public inline function getColourObj(rgb:RGB, ?a:Float):String {
 		return getColour(rgb.r, rgb.g, rgb.b, a);
 	}
 

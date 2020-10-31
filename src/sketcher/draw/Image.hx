@@ -21,6 +21,9 @@ class Image extends Base implements IBase {
 
 	@:isVar public var isCenter(get, set):Bool;
 
+	// 		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE, 100, 100, true);
+	@:isVar public var image(get, set):js.html.Image;
+
 	public function new(x, y, href, width, height, ?isCenter:Bool = false) {
 		this.x = x;
 		this.y = y;
@@ -32,17 +35,21 @@ class Image extends Base implements IBase {
 		if (isCenter) {
 			this.x = this.x - (this.width / 2);
 			this.y = this.y - (this.height / 2);
-
 			// trace(this.x);
 		}
-
 		super('image');
 	}
 
 	public function svg(?settings:Settings):String {
 		xml.set('x', Std.string(this.x));
 		xml.set('y', Std.string(this.y));
-		xml.set('href', Std.string(this.href));
+		if (href != '') {
+			xml.set('href', Std.string(this.href));
+		} else {
+			// trace('fixme');
+			// trace(image);
+			xml.set('href', Std.string(image.src));
+		}
 		xml.set('width', Std.string(this.width));
 		xml.set('height', Std.string(this.height));
 
@@ -59,54 +66,80 @@ class Image extends Base implements IBase {
 
 		ctx.imageSmoothingEnabled = true; // default true
 		untyped ctx.imageSmoothingQuality = 'high';
-		// trace('canvas image');
+		// trace('canvas image ${this.id}');
 		var img = new js.html.Image(); // Create new img element
 		img.onload = function() {
 			// trace('image.onload');
 
 			// execute drawImage statements here
 
-			// trace(img.width); // 600
-			// trace(img.height); // 529
-			var prop = img.height / img.width;
-			if (img.width < img.height)
-				prop = img.width / img.height;
+			imageStuff(ctx, img);
 
-			// rotation & move...
-			if (this.rotate != null) {
-				// trace(this.x, this.y, this.rotate);
-				ctx.save();
-
-				ctx.translate(this.x, this.y);
-				ctx.rotate(MathUtil.radians(this.rotate));
-
-				if (this.move != null) {
-					ctx.translate(this.move.x, this.move.y);
-				}
-
-				if (isCenter) {
-					ctx.drawImage(img, -(this.width * 0), -(this.height * prop), this.width, this.height * prop);
-				} else {
-					ctx.drawImage(img, 0, 0, this.width, this.height * prop);
-				}
-
-				ctx.restore();
-			}
-			if (this.rotate == null) {
-				ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
-			}
+			// trace(img);
 		};
 		img.onerror = function(e) {
 			console.warn(e);
 		}
 		// img.crossOrigin = "Anonymous"; ???
-		img.src = this.href; // Set source path
+		if (this.href == '') {
+			// trace('"${this.href}" id - ${this.id} ');
+			// trace(image);
+			img = (image);
+
+			// var prop = img.height / img.width;
+			// trace(prop);
+			// // if (img.width < img.height)
+			// // 	prop = img.width / img.height;
+
+			// // trace(prop);
+			// // trace(img.width, img.height);
+
+			// ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
+
+			imageStuff(ctx, img);
+
+			// fixme, this should be done generic (see code onload)
+		} else {
+			img.src = this.href; // Set source path
+		}
 
 		// trace(this.href, this.width, this.height);
 
 		// var testImg = document.createImageElement();
 		// testImg.src = this.href;
 		// document.body.appendChild(testImg);
+	}
+
+	private function imageStuff(ctx:js.html.CanvasRenderingContext2D, img:js.html.Image) {
+		// trace(img.width); // 600
+		// trace(img.height); // 529
+		var prop = img.height / img.width;
+		if (img.width < img.height)
+			prop = img.width / img.height;
+
+		// rotation & move...
+		if (this.rotate != null) {
+			// trace(this.x, this.y, this.rotate);
+			ctx.save();
+
+			ctx.translate(this.x, this.y);
+			ctx.rotate(MathUtil.radians(this.rotate));
+
+			if (this.move != null) {
+				ctx.translate(this.move.x, this.move.y);
+			}
+
+			if (isCenter) {
+				ctx.drawImage(img, -(this.width * 0), -(this.height * prop), this.width, this.height * prop);
+			} else {
+				ctx.drawImage(img, 0, 0, this.width, this.height * prop);
+			}
+
+			ctx.restore();
+		}
+		if (this.rotate == null) {
+			ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
+		}
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
@@ -143,6 +176,14 @@ class Image extends Base implements IBase {
 
 	function set_isCenter(value:Bool):Bool {
 		return isCenter = value;
+	}
+
+	function get_image():js.html.Image {
+		return image;
+	}
+
+	function set_image(value:js.html.Image):js.html.Image {
+		return image = value;
 	}
 
 	function get_preserveAspectRatio():PreserveAspectRatioObj {

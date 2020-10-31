@@ -398,6 +398,23 @@ class Sketcher {
 	}
 
 	/**
+	 * [Description]
+	 * @param x
+	 * @param y
+	 * @param img
+	 * @param width
+	 * @param height
+	 * @param isCenter
+	 * @return Image
+	 */
+	public function makeImageFromImage(x:Float, y:Float, img:js.html.Image, width:Float, height:Float, ?isCenter:Bool = false):Image {
+		var shape = new Image(x, y, '', width, height, isCenter);
+		shape.image = img;
+		baseArray.push(shape);
+		return shape;
+	}
+
+	/**
 	 * Group is an collection of IBase items
 	 * usefull if you want to rotate/color/stroke-weight a group of items at the same time.
 	 * In Illustrator it will be layer, so usefull to group items to make a more structured file
