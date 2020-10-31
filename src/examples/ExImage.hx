@@ -13,6 +13,7 @@ class ExImage {
 	var isDebug:Bool = true;
 	var IMAGE_FRAME = new js.html.Image();
 	var IMAGE_VIRUS = new js.html.Image();
+	var IMAGE_HAMMER = new js.html.Image();
 
 	public function new() {
 		// sketcher.util.EmbedUtil.quicksettings();
@@ -33,6 +34,7 @@ class ExImage {
 		var load = Loader.create().isDebug(false)
 			.add('img/virus.png')
 			.add('img/frame.png')
+			.add('img/hammer.jpg')
 			.onComplete(onCompleteHandler).load();
 
 		initDocument(); // if document doesn't have elements with correct id
@@ -42,16 +44,27 @@ class ExImage {
 	}
 
 	function onCompleteHandler(completeArray:Array<LoaderObj>) {
-		trace('onCompleteHandler: ' + completeArray.length);
-		var l:LoaderObj = completeArray[0];
-		console.log(l);
-		console.log('loading time: ' + l.time.durationMS + 'ms');
-		// console.log(l.filesize);
-		console.log(l.image);
+		// trace('onCompleteHandler: ' + completeArray.length);
 
-		IMAGE_VIRUS = l.image;
+		// for (i in 0...completeArray.length) {
+		// 	var l:LoaderObj = completeArray[i];
 
-		console.log('Image is loaded');
+		// 	// console.log(l);
+		// 	// console.log('loading time: ' + l.time.durationMS + 'ms');
+		// 	// // console.log(l.filesize);
+		// 	// console.log(l.image);
+
+		// 	// IMAGE_VIRUS = l.image;
+		// }
+
+		// console.log('Loading is complete');
+
+		// trace(Loader.getID('frame'));
+		// trace(Loader.getID('frame').image);
+
+		IMAGE_FRAME = Loader.getID('frame').image;
+		IMAGE_VIRUS = Loader.getID('virus').image;
+		IMAGE_HAMMER = Loader.getID('hammer').image;
 
 		// now we can use the image
 		sketchSVG();
@@ -114,9 +127,16 @@ class ExImage {
 
 		var p = grid.array[2];
 		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_VIRUS, 100, 100, true);
+		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_VIRUS, 100, 100, false);
+		// image.opacity = 0.5; // doesnt' work
 
 		var p = grid.array[5];
-		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_VIRUS, 100, 100, true);
+		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_FRAME, 100, 100, true);
+		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_FRAME, 100, 100, false);
+
+		var p = grid.array[6];
+		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_HAMMER, 100, 100, true);
+		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE_HAMMER, 100, 100, false);
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
