@@ -1,13 +1,11 @@
 package sketcher.load;
 
-import haxe.io.StringInput;
 import haxe.Timer;
 import js.Browser.*;
 import js.html.Image;
 import js.html.ProgressEvent;
 import js.html.XMLHttpRequest;
 import js.html.XMLHttpRequestResponseType;
-import sketcher.util.MathUtil;
 
 /**
  * 	var load = Loader.create().add(filePath).isDebug(false)
@@ -32,8 +30,9 @@ import sketcher.util.MathUtil;
 class Loader {
 	@:isVar public var _id(get, set):String;
 	@:isVar public var _loadingArray(get, set):Array<LoaderObj> = [];
-	public var completeArray:Array<LoaderObj> = [];
 	@:isVar public var _isDebug(get, set):Bool = false;
+
+	public static var completeArray:Array<LoaderObj> = [];
 
 	var _onComplete:Dynamic;
 	var _onCompleteParams:Array<Dynamic>;
@@ -197,6 +196,36 @@ class Loader {
 	}
 
 	/**
+	 * [Description]
+	 * @param id		use path of the file, of parts of it(guessing game)
+	 * @return LoaderObj
+	 */
+	public static function getID(id:String):LoaderObj {
+		var l:LoaderObj = null;
+		for (i in 0...completeArray.length) {
+			var _completeArray = completeArray[i];
+			if (_completeArray._id == id) {
+				l = _completeArray;
+				break;
+			}
+			if (_completeArray._id.indexOf(id) != -1) {
+				l = _completeArray;
+				break;
+			}
+		}
+		return l;
+	}
+
+	/**
+	 * syntatic sugar for getID
+	 * @param id
+	 * @return Image
+	 */
+	public static function getImageByID(id:String):Image {
+		return Loader.getID(id).image;
+	}
+
+	/**
 	 * lets start simple
 	 * 		expect : 'foo/bar/file.json'
 	 *
@@ -211,19 +240,19 @@ class Loader {
 			case 'jpg', 'jpeg':
 				type = JPG;
 			case 'gif':
-				type = Gif;
+				type = GIF;
 			case 'png':
-				type = Png;
+				type = PNG;
 			case 'json':
-				type = Json;
+				type = JSON;
 			case 'xml':
-				type = Xml;
+				type = XML;
 			case 'txt':
-				type = Txt;
+				type = TXT;
 			case 'csv':
-				type = Csv;
+				type = CSV;
 			case 'svg':
-				type = Svg;
+				type = SVG;
 			case _:
 				type = Unknown;
 		}
@@ -253,11 +282,11 @@ class Loader {
 		// create the image used
 		var _l:LoaderObj = _loadingArray[_loadCounter];
 		switch (_l.type) {
-			case JPEG, JPG, Png, Gif, Img:
+			case JPEG, JPG, PNG, GIF, Img:
 				imageLoader(_l);
-			case Json:
+			case JSON:
 				textLoaderBig(_l);
-			case Txt, Xml, Svg, Csv:
+			case TXT, XML, SVG, CSV:
 				textLoader(_l);
 			case _:
 				console.warn('not sure what this type is?: "${_l.path}"');
