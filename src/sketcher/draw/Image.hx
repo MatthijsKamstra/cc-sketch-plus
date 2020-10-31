@@ -21,7 +21,7 @@ class Image extends Base implements IBase {
 
 	@:isVar public var isCenter(get, set):Bool;
 
-	// 		var image = sketch.makeImageFromImage(p.x, p.y, IMAGE, 100, 100, true);
+	//  var image = sketch.makeImageFromImage(p.x, p.y, IMAGE, 100, 100, true);
 	@:isVar public var image(get, set):js.html.Image;
 
 	public function new(x, y, href, width, height, ?isCenter:Bool = false) {
@@ -32,15 +32,21 @@ class Image extends Base implements IBase {
 		this.height = height;
 
 		this.isCenter = isCenter;
-		if (isCenter) {
-			this.x = this.x - (this.width / 2);
-			this.y = this.y - (this.height / 2);
-			// trace(this.x);
-		}
+		// if (isCenter) {
+		// 	this.x = this.x - (this.width / 2);
+		// 	this.y = this.y - (this.height / 2);
+		// 	// trace(this.x);
+
+		// 	// todo canvas might not work this way
+		// }
 		super('image');
 	}
 
 	public function svg(?settings:Settings):String {
+		if (isCenter) {
+			this.x = this.x - (this.width / 2);
+			this.y = this.y - (this.height / 2);
+		}
 		xml.set('x', Std.string(this.x));
 		xml.set('y', Std.string(this.y));
 		if (href != '') {
@@ -73,7 +79,7 @@ class Image extends Base implements IBase {
 
 			// execute drawImage statements here
 
-			imageStuff(ctx, img);
+			canvasImage(ctx, img);
 
 			// trace(img);
 		};
@@ -82,23 +88,8 @@ class Image extends Base implements IBase {
 		}
 		// img.crossOrigin = "Anonymous"; ???
 		if (this.href == '') {
-			// trace('"${this.href}" id - ${this.id} ');
-			// trace(image);
-			img = (image);
-
-			// var prop = img.height / img.width;
-			// trace(prop);
-			// // if (img.width < img.height)
-			// // 	prop = img.width / img.height;
-
-			// // trace(prop);
-			// // trace(img.width, img.height);
-
-			// ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
-
-			imageStuff(ctx, img);
-
-			// fixme, this should be done generic (see code onload)
+			img = image;
+			canvasImage(ctx, img);
 		} else {
 			img.src = this.href; // Set source path
 		}
@@ -110,12 +101,12 @@ class Image extends Base implements IBase {
 		// document.body.appendChild(testImg);
 	}
 
-	private function imageStuff(ctx:js.html.CanvasRenderingContext2D, img:js.html.Image) {
+	private function canvasImage(ctx:js.html.CanvasRenderingContext2D, img:js.html.Image) {
 		// trace(img.width); // 600
 		// trace(img.height); // 529
-		var prop = img.height / img.width;
-		if (img.width < img.height)
-			prop = img.width / img.height;
+		var ratio = img.height / img.width;
+		// if (img.width < img.height)
+		// ratio = img.width / img.height;
 
 		// rotation & move...
 		if (this.rotate != null) {
@@ -130,15 +121,32 @@ class Image extends Base implements IBase {
 			}
 
 			if (isCenter) {
-				ctx.drawImage(img, -(this.width * 0), -(this.height * prop), this.width, this.height * prop);
+				ctx.drawImage(img, -(this.width * 0), -(this.height * ratio), this.width, this.height * ratio);
 			} else {
-				ctx.drawImage(img, 0, 0, this.width, this.height * prop);
+				ctx.drawImage(img, 0, 0, this.width, this.height * ratio);
 			}
 
 			ctx.restore();
 		}
 		if (this.rotate == null) {
-			ctx.drawImage(img, this.x, this.y, this.width, this.height * prop);
+			// ctx.drawImage(img, this.x, this.y, this.width, this.height * ratio);
+			// ctx.drawImage(img, this.x, this.y, this.width, this.height * ratio);
+
+			if (isCenter) {
+				// trace('${get_id()}');
+				this.x = this.x - (this.width / 2);
+				this.y = this.y - ((this.height * ratio) / 2);
+
+				ctx.drawImage(img, this.x, this.y, this.width, this.height * ratio);
+
+				// ctx.drawImage(img, 0, 0, this.width, this.height * ratio);
+
+				// ctx.drawImage(img, this.x - (img.width / 2), this.y - (img.height / 2), this.width, this.height * ratio);
+				// ctx.drawImage(img, -(this.width * 0), -(this.height * ratio), this.width, this.height * ratio);
+			} else {
+				ctx.drawImage(img, this.x, this.y, this.width, this.height * ratio);
+				// ctx.drawImage(img, 0, 0, this.width, this.height * ratio);
+			}
 		}
 	}
 
