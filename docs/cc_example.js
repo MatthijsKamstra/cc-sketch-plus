@@ -73,7 +73,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask,examples_ExButton];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-10-31 09:42:26");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-10-31 17:33:22");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -1563,6 +1563,7 @@ examples_FizzyText.prototype = {
 	__class__: examples_FizzyText
 };
 var examples_ExImage = function() {
+	this.IMAGE_HAMMER = new Image();
 	this.IMAGE_VIRUS = new Image();
 	this.IMAGE_FRAME = new Image();
 	this.isDebug = true;
@@ -1601,24 +1602,28 @@ examples_ExImage.prototype = {
 		}
 		_this.get__loadingArray().push(_obj);
 		var _this1 = _this;
-		_this1._onComplete = $bind(this,this.onCompleteHandler);
-		_this1._onCompleteParams = null;
+		var type = null;
+		var _type = type == null ? _this1.fileType("img/hammer.jpg") : type;
+		var _obj = { _id : "img/hammer.jpg", path : "img/hammer.jpg", type : _type, time : { }, filesize : { }, func : null};
+		if(_this1.get__isDebug()) {
+			$global.console.debug(_obj);
+		}
+		_this1.get__loadingArray().push(_obj);
 		var _this = _this1;
-		if(_this.get__isDebug()) {
+		_this._onComplete = $bind(this,this.onCompleteHandler);
+		_this._onCompleteParams = null;
+		var _this1 = _this;
+		if(_this1.get__isDebug()) {
 			$global.console.debug("init loading");
 		}
-		_this.loadingHandler();
-		var load = _this;
+		_this1.loadingHandler();
+		var load = _this1;
 		this.initDocument();
 	}
 	,onCompleteHandler: function(completeArray) {
-		console.log("src/examples/ExImage.hx:45:","onCompleteHandler: " + completeArray.length);
-		var l = completeArray[0];
-		$global.console.log(l);
-		$global.console.log("loading time: " + l.time.durationMS + "ms");
-		$global.console.log(l.image);
-		this.IMAGE_VIRUS = l.image;
-		$global.console.log("Image is loaded");
+		this.IMAGE_FRAME = Loader.getID("frame").image;
+		this.IMAGE_VIRUS = Loader.getID("virus").image;
+		this.IMAGE_HAMMER = Loader.getID("hammer").image;
 		this.sketchSVG();
 		this.sketchCanvas();
 	}
@@ -1662,8 +1667,13 @@ examples_ExImage.prototype = {
 		image.setRotate(90,p.x,p.y);
 		var p = this.grid.array[2];
 		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_VIRUS,100,100,true);
+		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_VIRUS,100,100,false);
 		var p = this.grid.array[5];
-		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_VIRUS,100,100,true);
+		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_FRAME,100,100,true);
+		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_FRAME,100,100,false);
+		var p = this.grid.array[6];
+		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_HAMMER,100,100,true);
+		var image = sketch.makeImageFromImage(p.x,p.y,this.IMAGE_HAMMER,100,100,false);
 		sketch.update();
 	}
 	,__class__: examples_ExImage
@@ -5154,10 +5164,6 @@ var sketcher_draw_Image = function(x,y,href,width,height,isCenter) {
 	this.set_width(width);
 	this.set_height(height);
 	this.set_isCenter(isCenter);
-	if(isCenter) {
-		this.set_x(this.get_x() - this.get_width() / 2);
-		this.set_y(this.get_y() - this.get_height() / 2);
-	}
 	sketcher_draw_Base.call(this,"image");
 };
 $hxClasses["sketcher.draw.Image"] = sketcher_draw_Image;
@@ -5166,6 +5172,10 @@ sketcher_draw_Image.__interfaces__ = [sketcher_draw_IBase];
 sketcher_draw_Image.__super__ = sketcher_draw_Base;
 sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
+		if(this.get_isCenter()) {
+			this.set_x(this.get_x() - this.get_width() / 2);
+			this.set_y(this.get_y() - this.get_height() / 2);
+		}
 		this.xml.set("x",Std.string(this.get_x()));
 		this.xml.set("y",Std.string(this.get_y()));
 		if(this.get_href() != "") {
@@ -5187,23 +5197,20 @@ sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 		ctx.imageSmoothingQuality = "high";
 		var img = new Image();
 		img.onload = function() {
-			_gthis.imageStuff(ctx,img);
+			_gthis.canvasImage(ctx,img);
 		};
 		img.onerror = function(e) {
 			$global.console.warn(e);
 		};
 		if(this.get_href() == "") {
 			img = this.get_image();
-			this.imageStuff(ctx,img);
+			this.canvasImage(ctx,img);
 		} else {
 			img.src = this.get_href();
 		}
 	}
-	,imageStuff: function(ctx,img) {
-		var prop = img.height / img.width;
-		if(img.width < img.height) {
-			prop = img.width / img.height;
-		}
+	,canvasImage: function(ctx,img) {
+		var ratio = img.height / img.width;
 		if(this.get_rotate() != null) {
 			ctx.save();
 			ctx.translate(this.get_x(),this.get_y());
@@ -5212,14 +5219,20 @@ sketcher_draw_Image.prototype = $extend(sketcher_draw_Base.prototype,{
 				ctx.translate(this.get_move().x,this.get_move().y);
 			}
 			if(this.get_isCenter()) {
-				ctx.drawImage(img,-(this.get_width() * 0),-(this.get_height() * prop),this.get_width(),this.get_height() * prop);
+				ctx.drawImage(img,-(this.get_width() * 0),-(this.get_height() * ratio),this.get_width(),this.get_height() * ratio);
 			} else {
-				ctx.drawImage(img,0,0,this.get_width(),this.get_height() * prop);
+				ctx.drawImage(img,0,0,this.get_width(),this.get_height() * ratio);
 			}
 			ctx.restore();
 		}
 		if(this.get_rotate() == null) {
-			ctx.drawImage(img,this.get_x(),this.get_y(),this.get_width(),this.get_height() * prop);
+			if(this.get_isCenter()) {
+				this.set_x(this.get_x() - this.get_width() / 2);
+				this.set_y(this.get_y() - this.get_height() * ratio / 2);
+				ctx.drawImage(img,this.get_x(),this.get_y(),this.get_width(),this.get_height() * ratio);
+			} else {
+				ctx.drawImage(img,this.get_x(),this.get_y(),this.get_width(),this.get_height() * ratio);
+			}
 		}
 	}
 	,gl: function(gl) {
@@ -6431,7 +6444,6 @@ var sketcher_draw_TextBaselineType = $hxEnums["sketcher.draw.TextBaselineType"] 
 var Loader = $hx_exports["Loader"] = function(id) {
 	this._loadCounter = 0;
 	this._isDebug = false;
-	this.completeArray = [];
 	this._loadingArray = [];
 	if(id == null) {
 		this.set__id("" + this.toString() + "_" + new Date().getTime());
@@ -6444,6 +6456,27 @@ Loader.__name__ = "Loader";
 Loader.create = function(id) {
 	var loader = new Loader(id);
 	return loader;
+};
+Loader.getID = function(id) {
+	var l = null;
+	var _g = 0;
+	var _g1 = Loader.completeArray.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var _completeArray = Loader.completeArray[i];
+		if(_completeArray._id == id) {
+			l = _completeArray;
+			break;
+		}
+		if(_completeArray._id.indexOf(id) != -1) {
+			l = _completeArray;
+			break;
+		}
+	}
+	return l;
+};
+Loader.getImageByID = function(id) {
+	return Loader.getID(id).image;
 };
 Loader.prototype = {
 	isDebug: function(isDebug) {
@@ -6499,28 +6532,28 @@ Loader.prototype = {
 		var ext = path.split(".")[path.split(".").length - 1];
 		switch(ext.toLowerCase()) {
 		case "csv":
-			type = sketcher_load_FileType.Csv;
+			type = sketcher_load_FileType.CSV;
 			break;
 		case "gif":
-			type = sketcher_load_FileType.Gif;
+			type = sketcher_load_FileType.GIF;
 			break;
 		case "jpeg":case "jpg":
 			type = sketcher_load_FileType.JPG;
 			break;
 		case "json":
-			type = sketcher_load_FileType.Json;
+			type = sketcher_load_FileType.JSON;
 			break;
 		case "png":
-			type = sketcher_load_FileType.Png;
+			type = sketcher_load_FileType.PNG;
 			break;
 		case "svg":
-			type = sketcher_load_FileType.Svg;
+			type = sketcher_load_FileType.SVG;
 			break;
 		case "txt":
-			type = sketcher_load_FileType.Txt;
+			type = sketcher_load_FileType.TXT;
 			break;
 		case "xml":
-			type = sketcher_load_FileType.Xml;
+			type = sketcher_load_FileType.XML;
 			break;
 		default:
 			type = sketcher_load_FileType.Unknown;
@@ -6537,28 +6570,28 @@ Loader.prototype = {
 				$global.console.debug("" + this.toString() + " :: Loading queue is done");
 			}
 			if(this.get__isDebug()) {
-				$global.console.debug("show completed array: " + Std.string(this.completeArray));
+				$global.console.debug("show completed array: " + Std.string(Loader.completeArray));
 			}
 			if(this.get__isDebug()) {
-				$global.console.debug("length of complete files: " + this.completeArray.length);
+				$global.console.debug("length of complete files: " + Loader.completeArray.length);
 			}
 			if(Reflect.isFunction(this._onComplete)) {
 				haxe_Timer.delay(function() {
-					_gthis._onComplete.apply(_gthis._onComplete,[_gthis.completeArray]);
+					_gthis._onComplete.apply(_gthis._onComplete,[Loader.completeArray]);
 				},1);
 			}
 			return;
 		}
 		var _l = this.get__loadingArray()[this._loadCounter];
 		switch(_l.type._hx_index) {
-		case 3:case 13:case 15:case 17:
-			this.textLoader(_l);
-			break;
-		case 5:
+		case 6:
 			this.textLoaderBig(_l);
 			break;
-		case 1:case 7:case 9:case 11:case 12:
+		case 1:case 8:case 10:case 11:case 12:
 			this.imageLoader(_l);
+			break;
+		case 4:case 14:case 16:case 18:
+			this.textLoader(_l);
 			break;
 		default:
 			$global.console.warn("not sure what this type is?: \"" + _l.path + "\"");
@@ -6575,20 +6608,20 @@ Loader.prototype = {
 			_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
 			_l.time.durationS = (_l.time.end.getTime() - _l.time.start.getTime()) / 1000;
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:278:","image source: " + _img.src);
-				console.log("src/sketcher/load/Loader.hx:279:","image width: " + _img.width);
-				console.log("src/sketcher/load/Loader.hx:280:","image height: " + _img.height);
+				console.log("src/sketcher/load/Loader.hx:307:","image source: " + _img.src);
+				console.log("src/sketcher/load/Loader.hx:308:","image width: " + _img.width);
+				console.log("src/sketcher/load/Loader.hx:309:","image height: " + _img.height);
 			}
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:284:","complete array length: " + _gthis.completeArray.length);
+				console.log("src/sketcher/load/Loader.hx:313:","complete array length: " + Loader.completeArray.length);
 			}
 			_l.image = _img;
-			_gthis.completeArray.push(_l);
+			Loader.completeArray.push(_l);
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:288:","complete array: " + Std.string(_gthis.completeArray));
+				console.log("src/sketcher/load/Loader.hx:317:","complete array: " + Std.string(Loader.completeArray));
 			}
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:290:","complete array length: " + _gthis.completeArray.length);
+				console.log("src/sketcher/load/Loader.hx:319:","complete array length: " + Loader.completeArray.length);
 			}
 			if(Reflect.isFunction(_l.func)) {
 				_l.func.apply(_l.func,[_l]);
@@ -6632,7 +6665,7 @@ Loader.prototype = {
 				} else {
 					_l.json = "";
 				}
-				_gthis.completeArray.push(_l);
+				Loader.completeArray.push(_l);
 				if(Reflect.isFunction(_l.func)) {
 					_l.func.apply(_l.func,[_l]);
 				}
@@ -6644,7 +6677,7 @@ Loader.prototype = {
 			} catch( _g ) {
 				var e = haxe_Exception.caught(_g).unwrap();
 				if(_gthis.get__isDebug()) {
-					console.log("src/sketcher/load/Loader.hx:356:",e);
+					console.log("src/sketcher/load/Loader.hx:385:",e);
 				}
 				if(Reflect.isFunction(_gthis._onError)) {
 					_gthis._onError.apply(_gthis._onError,[e]);
@@ -6717,7 +6750,7 @@ Loader.prototype = {
 			_l.time.end = new Date();
 			_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
 			_l.time.durationS = (_l.time.end.getTime() - _l.time.start.getTime()) / 1000;
-			_gthis.completeArray.push(_l);
+			Loader.completeArray.push(_l);
 			if(Reflect.isFunction(_l.func)) {
 				_l.func.apply(_l.func,[_l]);
 			}
@@ -7697,6 +7730,7 @@ haxe_xml_Parser.escapes = (function($this) {
 helper_html_Container._count = 0;
 sketcher_App.NAME = "[cc-sketcher]";
 sketcher_draw_Base.COUNT = 0;
+Loader.completeArray = [];
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 sketcher_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
 sketcher_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};
