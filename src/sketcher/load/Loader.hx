@@ -27,6 +27,8 @@ import sketcher.util.MathUtil;
  *
  * onprogress doesn't work with text yet
  */
+@:native("Loader")
+@:expose
 class Loader {
 	@:isVar public var _id(get, set):String;
 	@:isVar public var _loadingArray(get, set):Array<LoaderObj> = [];
@@ -102,6 +104,7 @@ class Loader {
 	inline public function add(path:String, ?func:LoaderObj->Void, ?type:FileType):Loader {
 		var _type = (type == null) ? fileType(path) : type;
 		var _obj:LoaderObj = {
+			_id: path,
 			path: path,
 			type: _type,
 			time: {},
@@ -262,14 +265,20 @@ class Loader {
 	}
 
 	function imageLoader(_l:LoaderObj) {
+		_l.time.start = Date.now();
 		var _img = new Image();
 		_img.crossOrigin = "Anonymous";
 		_img.src = _l.path;
 		_img.onload = function() {
+			_l.time.end = Date.now();
+			_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
+			_l.time.durationS = (_l.time.end.getTime() - _l.time.start.getTime()) / 1000;
+
 			if (_isDebug) {
 				trace('image source: ' + _img.src);
 				trace('image width: ' + _img.width);
 				trace('image height: ' + _img.height);
+				// trace('image filesize: ' + _img.sizes);
 			}
 			if (_isDebug)
 				trace('complete array length: ' + completeArray.length);
@@ -539,7 +548,7 @@ enum FileType {
 }
 
 typedef LoaderObj = {
-	@:optional var _id:Int;
+	@:optional var _id:String;
 	var path:String;
 	var type:FileType;
 	@:optional var time:TimeObj;

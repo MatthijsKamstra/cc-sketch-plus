@@ -42,3 +42,7 @@ don't forget to add it to your build file
 ```
 -lib cc-sketch-plus
 ```
+
+## classes
+
+https://lib.haxe.org/p/uglifyjs/
