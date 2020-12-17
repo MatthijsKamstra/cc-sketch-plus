@@ -70,10 +70,10 @@ Lambda.exists = function(it,f) {
 	return false;
 };
 var Main = function() {
-	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask,examples_ExButton];
+	this.ccTypeArray = [examples_ExAll,examples_ExCircles,examples_ExRectangle,examples_ExLine,examples_ExImage,examples_ExGui,examples_ExGroup,examples_ExText,examples_ExEllipse,examples_ExGradient,examples_ExPolyline,examples_ExBackground,examples_ExContainer,examples_ExPolygon,examples_ExMirror,examples_ExMask,examples_ExButton,examples_GenColors];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-10-31 17:33:22");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2020-11-02 13:01:31");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -2427,6 +2427,81 @@ examples_ExText.prototype = {
 		sketch.update();
 	}
 	,__class__: examples_ExText
+};
+var examples_GenColors = function() {
+	this.isDebug = true;
+	this.sketchHeight = 400;
+	this.sketchWidth = 600;
+	this.rectH = 50;
+	this.rectW = 100;
+	this.init();
+};
+$hxClasses["examples.GenColors"] = examples_GenColors;
+examples_GenColors.__name__ = "examples.GenColors";
+examples_GenColors.prototype = {
+	init: function() {
+		this.grid = new sketcher_util_GridUtil(this.sketchWidth,this.sketchHeight);
+		this.grid.setTotal(sketcher_util_ColorUtil.niceColor100SortedString.length);
+		this.grid.setIsCenterPoint(true);
+		this.initDocument();
+		this.sketchSVG();
+		this.sketchCanvas();
+	}
+	,initDocument: function() {
+		var wrapper = window.document.createElement("div");
+		wrapper.id = "sketcher-wrapper";
+		wrapper.className = "container";
+		var div0 = window.document.createElement("div");
+		div0.id = "sketcher-svg";
+		var div1 = window.document.createElement("div");
+		div1.id = "sketcher-canvas";
+		var div2 = window.document.createElement("div");
+		div2.id = "sketcher-canvas-webgl";
+		wrapper.appendChild(div0);
+		wrapper.appendChild(div1);
+		window.document.body.appendChild(wrapper);
+	}
+	,sketchSVG: function() {
+		var elem = window.document.getElementById("sketcher-svg");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,sketchCanvas: function() {
+		var elem = window.document.getElementById("sketcher-canvas");
+		var settings = new Settings(this.sketchWidth,this.sketchHeight,"canvas");
+		var sketch = Sketcher.create(settings).appendTo(elem);
+		this.generateShapes(sketch);
+	}
+	,generateShapes: function(sketch) {
+		if(this.isDebug) {
+			sketcher_debug_Grid.gridDots(sketch,this.grid);
+		}
+		var arr = sketcher_util_ColorUtil.niceColor100SortedString;
+		var _g = 0;
+		var _g1 = arr.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var sortedColorArr = arr[i];
+			var p = this.grid.array[i];
+			var w = 5;
+			var h = 20;
+			var grArr = [];
+			var _g2 = 0;
+			var _g3 = sortedColorArr.length;
+			while(_g2 < _g3) {
+				var j = _g2++;
+				var color = sortedColorArr[j];
+				var shape = sketch.makeRectangle(p.x + j * w,p.y,w,h);
+				shape.set_id(color);
+				shape.setFill(color);
+				grArr.push(shape);
+			}
+			var g = sketch.makeGroup(grArr);
+		}
+		sketch.update();
+	}
+	,__class__: examples_GenColors
 };
 var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
@@ -6608,20 +6683,20 @@ Loader.prototype = {
 			_l.time.durationMS = _l.time.end.getTime() - _l.time.start.getTime();
 			_l.time.durationS = (_l.time.end.getTime() - _l.time.start.getTime()) / 1000;
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:307:","image source: " + _img.src);
-				console.log("src/sketcher/load/Loader.hx:308:","image width: " + _img.width);
-				console.log("src/sketcher/load/Loader.hx:309:","image height: " + _img.height);
+				console.log("src/sketcher/load/Loader.hx:324:","image source: " + _img.src);
+				console.log("src/sketcher/load/Loader.hx:325:","image width: " + _img.width);
+				console.log("src/sketcher/load/Loader.hx:326:","image height: " + _img.height);
 			}
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:313:","complete array length: " + Loader.completeArray.length);
+				console.log("src/sketcher/load/Loader.hx:330:","complete array length: " + Loader.completeArray.length);
 			}
 			_l.image = _img;
 			Loader.completeArray.push(_l);
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:317:","complete array: " + Std.string(Loader.completeArray));
+				console.log("src/sketcher/load/Loader.hx:334:","complete array: " + Std.string(Loader.completeArray));
 			}
 			if(_gthis.get__isDebug()) {
-				console.log("src/sketcher/load/Loader.hx:319:","complete array length: " + Loader.completeArray.length);
+				console.log("src/sketcher/load/Loader.hx:336:","complete array length: " + Loader.completeArray.length);
 			}
 			if(Reflect.isFunction(_l.func)) {
 				_l.func.apply(_l.func,[_l]);
@@ -6677,7 +6752,7 @@ Loader.prototype = {
 			} catch( _g ) {
 				var e = haxe_Exception.caught(_g).unwrap();
 				if(_gthis.get__isDebug()) {
-					console.log("src/sketcher/load/Loader.hx:385:",e);
+					console.log("src/sketcher/load/Loader.hx:402:",e);
 				}
 				if(Reflect.isFunction(_gthis._onError)) {
 					_gthis._onError.apply(_gthis._onError,[e]);
@@ -7301,6 +7376,16 @@ sketcher_util_GridUtil.prototype = {
 		}
 		this.numHor = numHor;
 		this.numVer = numVer;
+		this._isNumbered = true;
+		this.calculate();
+	}
+	,setTotal: function(total) {
+		if(this._isDebug) {
+			$global.console.log("" + this.toString() + " setTotal (total: " + this.numHor + ")");
+		}
+		var val = Math.ceil(Math.sqrt(total));
+		this.numHor = val;
+		this.numVer = val;
 		this._isNumbered = true;
 		this.calculate();
 	}

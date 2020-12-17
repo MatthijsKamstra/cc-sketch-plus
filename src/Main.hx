@@ -29,6 +29,7 @@ class Main {
 		examples.ExMirror, //
 		examples.ExMask, //
 		examples.ExButton, //
+		examples.GenColors, //
 	];
 
 	var pulldown:PullDown;
