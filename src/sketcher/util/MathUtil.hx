@@ -10,12 +10,12 @@ import sketcher.AST;
  *
  * @example
  * ```
- * import cc.util.MathUtil;
+ * import sketcher.util.MathUtil;
  * MathUtil.random (10);
  *
  * // or
  *
- * import cc.util.MathUtil.*;
+ * import sketcher.util.MathUtil.*;
  * random(10); // make it easier to read
  * ```
  *
