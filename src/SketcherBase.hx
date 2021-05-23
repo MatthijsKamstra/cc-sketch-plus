@@ -348,7 +348,7 @@ class SketcherBase {
 
 	// ____________________________________ misc ____________________________________
 
-	function getFileName():String {
+	public function getFileName():String {
 		if (patternName == "" && description == "") {
 			patternName = 'CC-Sketcher-MatthijsKamstra';
 		} else if (patternName == "" && description != "") {
