@@ -34,6 +34,11 @@ class Group extends Base implements IBase {
 		if (isOpacityOverride) {
 			xml.set('opacity-override', 'true');
 		}
+
+		// Inkscape adjustments for easy import
+		xml.set('inkscape:groupmode', 'layer');
+		xml.set('inkscape:label', '${id} Layer');
+
 		// if (isOpacityOverride) {
 		// 	untyped base.strokeOpacity = 0;
 		// 	untyped base.fillOpacity = 0;
