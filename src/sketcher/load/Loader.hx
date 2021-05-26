@@ -196,8 +196,10 @@ class Loader {
 	}
 
 	/**
-	 * [Description]
-	 * @param id		use path of the file, of parts of it(guessing game)
+	 * @example 		var obj:LoaderObj = Loader.getID('frame');
+	 *
+	 * @param id		use path of the file, of parts of it (guessing game)
+	 *
 	 * @return LoaderObj
 	 */
 	public static function getID(id:String):LoaderObj {
@@ -218,7 +220,22 @@ class Loader {
 
 	/**
 	 * syntatic sugar for getID
-	 * @param id
+	 *
+	 * get the loaderobj or image via the id.
+	 * For id we use the path of the file (if it loads, you can find it with the path)
+	 *
+	 * sure thing is to use the path given in the load
+	 * for exampe:
+	 * 		`var load = Loader.create().add('folder/example.png').load();`
+	 *
+	 * `Loader.getID('folder/example.png')` will get you this specific file
+	 * but you could also use
+	 * `Loader.getID('example')` what probably get you your file, except if you als loaded `_exmple_test.jpg`
+	 *
+	 * @example 	`var image:js.html.Image = Loader.getID('frame').image;`
+	 *
+	 * @param id		use path of the file, of parts of it (guessing game)
+	 *
 	 * @return Image
 	 */
 	public static function getImageByID(id:String):Image {
