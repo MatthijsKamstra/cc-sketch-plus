@@ -27,6 +27,9 @@ class SketcherBase {
 	// check if animation is started
 	private var requestID:Float;
 
+	// if the settings are made
+	public var isSet = false;
+
 	/**
 	 * constructor
 	 * @param settings (default: 1080px square, autostart:true, padding:10px, scaling:false)
@@ -37,6 +40,27 @@ class SketcherBase {
 
 		// trace('${settings}');
 
+		sketchSettings(settings);
+
+		if (!isSet) {
+			window.addEventListener(RESIZE, _reset, false);
+			window.addEventListener(KEY_DOWN, _keyDown, false);
+			window.addEventListener(KEY_UP, _keyUp, false);
+			window.addEventListener(MOUSE_UP, _mouseUp);
+		}
+
+		setup();
+		_draw(); // start draw loop
+
+		// haxe.Timer.delay(function() {}, 500);
+		console.groupCollapsed("Default cc-sketcher keyboard shortcuts are activated");
+		console.info('• [cmd + r] = reload page\n• [cmd + s] = save jpg\n• [cmd + shift + s] = save png\n• [cmd + ctrl + s] = save transparant png\n• [cmd + alt + s] = save svg\n• [cmd + f] = toggle fullscreen');
+		console.groupEnd();
+
+		isSet = true;
+	}
+
+	function sketchSettings(?settings:Settings) {
 		if (settings == null) {
 			// use default settings
 			var stageW = 1080; // 1024; // video?
@@ -48,8 +72,14 @@ class SketcherBase {
 			settings.elementID = 'sketcher-canvas-wrapper';
 		}
 
+		// is settings set, and has it an element?
 		if (settings != null && settings.element != null)
 			trace(settings.element);
+
+		// content should be empty
+		if (document.getElementById(settings.elementID) != null) {
+			document.getElementById(settings.elementID).innerHTML = '';
+		}
 
 		if (settings.elementID != null && document.getElementById(settings.elementID) == null) {
 			// check if html document has this settings.elementID, if not create one
@@ -64,19 +94,6 @@ class SketcherBase {
 		}
 
 		// sketch = Sketcher.create(settings).appendTo(document.getElementById(settings.elementID));
-
-		window.addEventListener(RESIZE, _reset, false);
-		window.addEventListener(KEY_DOWN, _keyDown, false);
-		window.addEventListener(KEY_UP, _keyUp, false);
-		window.addEventListener(MOUSE_UP, _mouseUp);
-
-		setup();
-		_draw(); // start draw loop
-
-		// haxe.Timer.delay(function() {}, 500);
-		console.groupCollapsed("Default cc-sketcher keyboard shortcuts are activated");
-		console.info('• [cmd + r] = reload page\n• [cmd + s] = save jpg\n• [cmd + shift + s] = save png\n• [cmd + ctrl + s] = save transparant png\n• [cmd + alt + s] = save svg\n• [cmd + f] = toggle fullscreen');
-		console.groupEnd();
 	}
 
 	// ____________________________________ private ____________________________________
@@ -182,6 +199,7 @@ class SketcherBase {
 
 	// trigger when window resize, draw function is still running, so clear canvas and restart with init
 	function _reset() {
+		resize();
 		// trace("wip");
 		// ctx.clearRect(0, 0, w, h);
 		// _draw(); // this was active, but perhaps something more clever needs to happen
@@ -213,6 +231,14 @@ class SketcherBase {
 	public function draw() {
 		if (isDebug)
 			trace('DRAW :: ${toString()} -> override public function draw()');
+	}
+
+	/**
+	 * you might want to overwrite this class to get the   window `resize`
+	 */
+	public function resize() {
+		if (isDebug)
+			trace('RESIZE :: ${toString()} -> override public function resize()');
 	}
 
 	/**
@@ -348,7 +374,7 @@ class SketcherBase {
 
 	// ____________________________________ misc ____________________________________
 
-	function getFileName():String {
+	public function getFileName():String {
 		if (patternName == "" && description == "") {
 			patternName = 'CC-Sketcher-MatthijsKamstra';
 		} else if (patternName == "" && description != "") {

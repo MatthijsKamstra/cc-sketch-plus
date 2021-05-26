@@ -345,6 +345,22 @@ class GridUtil {
 	}
 
 	/**
+	 * lazy grid maker
+	 *
+	 * @param total ask for the total number of
+	 */
+	public function setTotal(total:Int) {
+		if (_isDebug)
+			console.log('${toString()} setTotal (total: ${numHor})');
+
+		var val = Math.ceil(Math.sqrt(total));
+		this.numHor = val;
+		this.numVer = val;
+		this._isNumbered = true;
+		calculate();
+	}
+
+	/**
 	 * use these values to calculate the grid
 	 * if this is only set, it will x, y, width, height of the grid
 	 *
