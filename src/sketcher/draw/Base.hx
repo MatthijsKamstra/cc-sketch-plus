@@ -489,7 +489,10 @@ class Base {
 	function set_dash(value:Array<Float>):Array<Float> {
 		var str = '';
 		for (i in 0...value.length) {
-			str += value[i] + " ";
+			// str += value[i] + " "; // old (works with illustrator & browser)
+			str += value[i];
+			if (i != value.length - 1)
+				str += ",";
 		}
 		xml.set('stroke-dasharray', str);
 		return dash = value;
