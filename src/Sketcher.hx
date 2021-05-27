@@ -55,25 +55,31 @@ class Sketcher {
 		}
 
 		if (settings.scale == true) {
-			var node = document.createElement('style');
-			node.innerHTML = '
-			<!-- no padding -->
-			.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
-			svg {width: 100%; height: 100%; background-color:#ffffff; }
-			canvas{width: 100%; background-color:#ffffff; }
-			';
-			document.body.appendChild(node);
+			if (document.getElementById('${settings.elementID}-style') == null) {
+				var node = document.createElement('style');
+				node.id = '${settings.elementID}-style';
+				node.innerHTML = '
+				<!-- no padding -->
+				.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
+				svg {width: 100%; height: 100%; background-color:#ffffff; }
+				canvas{width: 100%; background-color:#ffffff; }
+				';
+				document.body.appendChild(node);
+			}
 		}
 
 		if (settings.padding != null && settings.padding >= 0) {
-			var node = document.createElement('style');
-			node.innerHTML = '
-			<!-- with padding -->
-			.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
-			svg {padding: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
-			canvas {padding: ${settings.padding}px; width: 100%; background-color:#ffffff; }
-			';
-			document.body.appendChild(node);
+			if (document.getElementById('${settings.elementID}-style') == null) {
+				var node = document.createElement('style');
+				node.id = '${settings.elementID}-style';
+				node.innerHTML = '
+				<!-- with padding -->
+				.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
+				svg {padding: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
+				canvas {padding: ${settings.padding}px; width: 100%; background-color:#ffffff; }
+				';
+				document.body.appendChild(node);
+			}
 		}
 	}
 
