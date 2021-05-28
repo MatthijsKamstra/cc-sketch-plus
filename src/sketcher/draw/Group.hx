@@ -147,6 +147,25 @@ class Group extends Base implements IBase {
 		trace('test if casting works');
 	}
 
+	public function getHeight() {
+		// trace(arr.length);
+		for (i in 0...this.arr.length) {
+			var group = this.arr[i];
+			// trace(group.id);
+			// trace(cast(group, Group).arr.length);
+
+			for (j in 0...cast(group, Group).arr.length) {
+				var sh = cast(group, Group).arr[j];
+				// trace(sh);
+				if (sh.type == 'rectangle') {
+					// trace(cast(sh, Rectangle));
+				}
+			}
+		}
+
+		return 'WIP group.getHeight()';
+	}
+
 	// ____________________________________ getter/setter ____________________________________
 
 	function get_arr():Array<IBase> {
