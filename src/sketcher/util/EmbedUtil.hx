@@ -70,8 +70,17 @@ class EmbedUtil {
 	 * @param callbackArray
 	 */
 	public static function script(id:String, src:String, ?callback:Dynamic, ?callbackArray:Array<Dynamic>) {
-		if (document.getElementById(id) != null)
+		if (document.getElementById(id) != null) {
+			// okay script is already embedded, so don't do that again, just callback
+			if (callback != null) {
+				if (callbackArray == null) {
+					Reflect.callMethod(callback, callback, [id]);
+				} else {
+					Reflect.callMethod(callback, callback, callbackArray);
+				}
+			}
 			return;
+		}
 
 		// trace('${toString()} embedSocketScript');
 		var el:js.html.ScriptElement = document.createScriptElement();
