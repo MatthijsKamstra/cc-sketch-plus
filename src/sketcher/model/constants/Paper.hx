@@ -118,10 +118,18 @@ class Paper {
 		return value * dpi / 25.4;
 	}
 
+	public static function mm2pixelInt(value:Float):Int {
+		return Std.int(mm2pixel(value));
+	}
+
 	public static function pixel2mm(value:Float):Float {
 		// mm = ( pixels * 25.4 ) / DPI
 		var dpi = 72;
 		return value * 25.4 / dpi;
+	}
+
+	public static function pixel2mmInt(value:Float):Int {
+		return Std.int(pixel2mm(value));
 	}
 
 	/**
