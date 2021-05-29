@@ -118,7 +118,7 @@ class Paper {
 		return value * dpi / 25.4;
 	}
 
-	public static function mm2pixelInt(value:Float):Int {
+	public static function mm2pxInt(value:Float):Int {
 		return Std.int(mm2pixel(value));
 	}
 
@@ -128,7 +128,7 @@ class Paper {
 		return value * 25.4 / dpi;
 	}
 
-	public static function pixel2mmInt(value:Float):Int {
+	public static function px2mmInt(value:Float):Int {
 		return Std.int(pixel2mm(value));
 	}
 
