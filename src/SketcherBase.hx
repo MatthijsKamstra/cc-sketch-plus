@@ -380,7 +380,11 @@ class SketcherBase {
 		} else if (patternName == "" && description != "") {
 			patternName = description;
 		}
-		return '${patternName.replace(' ', '_').replace('\n', '_')}-${Date.now().getTime()}';
+		var date = Date.now();
+		var year = '${date.getFullYear()}';
+		var month = '${date.getMonth() + 1}'.lpad('0', 2);
+		var day = '${date.getDate()}'.lpad('0', 2);
+		return '${patternName.replace(' ', '_').replace('\n', '_')}-${year}${month}${day}-${(date.getTime())}';
 	}
 
 	/**
