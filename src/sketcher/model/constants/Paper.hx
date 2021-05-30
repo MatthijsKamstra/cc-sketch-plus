@@ -109,7 +109,8 @@ class Paper {
 	 * @return Float
 	 */
 	public static function mm2pixel(value:Float):Float {
-		var dpi = 72;
+		// var dpi = 72;
+		var dpi = 96;
 
 		// mm = ( pixels * 25.4 ) / DPI
 		// Width : 10 cm * 300 / 2.54 = 1181 pixels
@@ -122,9 +123,28 @@ class Paper {
 		return Std.int(mm2pixel(value));
 	}
 
+	/**
+	 * https://www.pixelto.net/px-to-mm-converter
+	 *
+	 * dpi is the pixel density or dots per inch.
+	 * 96 dpi means there are 96 pixels per inch.
+	 * 1 inch is equal to 25.4 millimeters.
+	 *
+	 * 	1 inch = 25.4 mm
+	 * 		dpi = 96 px / in
+	 * 		96 px / 25.4 mm
+	 *
+	 * 		Therefore one pixel is equal to
+	 * 		1 px = 25.4 mm / 96
+	 * 		1 px = 0.26458333 mm
+	 *
+	 * @param value
+	 * @return Float
+	 */
 	public static function pixel2mm(value:Float):Float {
 		// mm = ( pixels * 25.4 ) / DPI
-		var dpi = 72;
+		// var dpi = 72;
+		var dpi = 96;
 		return value * 25.4 / dpi;
 	}
 
