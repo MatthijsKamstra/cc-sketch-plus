@@ -61,8 +61,8 @@ class Paper {
 			default:
 				trace("case '" + papersize + "': trace ('" + papersize + "');");
 		}
-		rectangle.width = Std.int(mm2pixel(w));
-		rectangle.height = Std.int(mm2pixel(h));
+		rectangle.width = mm2pxInt(w);
+		rectangle.height = mm2pxInt(h);
 		rectangle.x = 0;
 		rectangle.y = 0;
 		return rectangle;
