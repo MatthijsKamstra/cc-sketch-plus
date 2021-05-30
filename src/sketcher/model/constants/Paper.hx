@@ -119,8 +119,25 @@ class Paper {
 		return value * dpi / 25.4;
 	}
 
+	public static function mm2px(value:Float):Float {
+		return mm2pixel(value);
+	}
+
 	public static function mm2pxInt(value:Float):Int {
 		return Std.int(mm2pixel(value));
+	}
+
+	public static function mm2pxConvert(value:Float):Dynamic {
+		var obj = {
+			'mm': value,
+			'converted': {
+				'px': mm2px(value),
+				'px int': mm2pxInt(value),
+				'mm': px2mm(mm2px(value)),
+				'mm int': px2mmInt(mm2px(value)),
+			}
+		};
+		return obj;
 	}
 
 	/**
@@ -150,6 +167,10 @@ class Paper {
 
 	public static function px2mmInt(value:Float):Int {
 		return Std.int(pixel2mm(value));
+	}
+
+	public static function px2mm(value:Float):Float {
+		return pixel2mm(value);
 	}
 
 	/**
