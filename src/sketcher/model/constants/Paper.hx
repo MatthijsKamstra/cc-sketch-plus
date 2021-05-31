@@ -124,7 +124,7 @@ class Paper {
 	}
 
 	public static function mm2pxInt(value:Float):Int {
-		return Std.int(mm2pixel(value));
+		return Math.round(mm2pixel(value));
 	}
 
 	public static function mm2pxConvert(value:Float):Dynamic {
@@ -166,7 +166,7 @@ class Paper {
 	}
 
 	public static function px2mmInt(value:Float):Int {
-		return Std.int(pixel2mm(value));
+		return Math.round(pixel2mm(value));
 	}
 
 	public static function px2mm(value:Float):Float {
