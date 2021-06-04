@@ -30,6 +30,10 @@ class Line extends Base implements IBase {
 		if (lineWeight != null)
 			xml.set('stroke-width', Std.string(this.lineWeight));
 
+		if (this.getTransform() != '') {
+			xml.set('transform', this.getTransform());
+		}
+
 		return xml.toString();
 	}
 
