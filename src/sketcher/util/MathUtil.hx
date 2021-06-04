@@ -412,6 +412,109 @@ class MathUtil {
 	}
 
 	/**
+	 * use the cos to calculate the angle or one of the sides ('aanliggende zijde' or 'schuine zijde')
+	 *
+	 * @usage 	trace ('aanliggende zijde: ' + CASsostoa ( 45, Null, 20 );
+	 * @param	angleInDegree		angle in degrees	(return value will be in degrees)
+	 * @param	aSide				'aanliggende zijde'	whatever size (pixel or cm)
+	 * @param	sSide				'schuine zijde' whatever size (pixel or cm)
+	 * @return		depends on the data not send in the params
+	 * 				angle in degrees or a side value (depends on input: pixel or cm)
+	 */
+	public static function CASsostoa(angleInDegree:Float = null, aSide:Float = null, sSide:Float = null):Float {
+		if ((angleInDegree) == null) {
+			// return (caculate) the angle in degrees
+			return toDegree(Math.acos(aSide / sSide));
+		}
+		if ((aSide) == null) {
+			// return (caculate) the 'aanliggende zijde'
+			return (Math.cos(toRadian(angleInDegree)) * sSide);
+		}
+		if ((sSide) == null) {
+			// return (caculate) the 'schuine zijde'
+			return (aSide / Math.cos(toRadian(angleInDegree)));
+		}
+		return null;
+	}
+
+	/**
+	 * use the sinus to calculate the angle or one of the sides ('overstaande zijde' or 'schuine zijde')
+	 *
+	 * @usage 	trace ('angle in degree: ' + casSOStoa ( null, 10, 20 );
+	 * @param	angleInDegree		angle in degrees	(return value will be in degrees)
+	 * @param	oSide				'overstaande zijde'	whatever size (pixel or cm)
+	 * @param	sSide				'schuine zijde' whatever size (pixel or cm)
+	 * @return		depends on the data not send in the params
+	 * 				angle in degrees or a side value (depends on input: pixel or cm)
+	 */
+	public static function casSOStoa(angleInDegree:Float = null, oSide:Float = null, sSide:Float = null):Float {
+		if ((angleInDegree) == null) {
+			// return (caculate) the angle in degrees
+			return toDegree(Math.asin(oSide / sSide));
+		}
+		if ((oSide) == null) {
+			// return (caculate) the 'overliggende zijde'
+			return (Math.sin(toRadian(angleInDegree)) * sSide);
+		}
+		if ((sSide) == null) {
+			// return (caculate) the 'schuine zijde'
+			return (oSide / Math.sin(toRadian(angleInDegree)));
+		}
+		return null;
+	}
+
+	/**
+	 * use the tan to calculate the angle or one of the sides ('overstaande zijde' or 'aanliggende zijde')
+	 *
+	 * @usage 	trace ('aanliggende zijde: ' + cassosTOA ( 80, 10, null );
+	 * 			trace( ">> cassosTOA (null , 40 , 40) : " + cassosTOA (null , 40 , 40) );
+	 * @param	angleInDegree		angle in degrees	(return value will be in degrees)
+	 * @param	oSide				'overstaande zijde'	whatever size (pixel or cm)
+	 * @param	aSide				'aanliggende zijde' whatever size (pixel or cm)
+	 * @return		depends on the data not send in the params
+	 * 				angle in degrees or a side value (depends on input: pixel or cm)
+	 */
+	public static function cassosTOA(angleInDegree:Float = null, oSide:Float = null, aSide:Float = null):Float {
+		if ((angleInDegree) == null) {
+			// return (caculate) the angle in degrees
+			return toDegree(Math.atan(oSide / aSide));
+		}
+		if ((oSide) == null) {
+			// return (caculate) the 'overliggende zijde'
+			return (Math.tan(toRadian(angleInDegree)) * aSide);
+		}
+		if ((aSide) == null) {
+			// return (caculate) the 'aanliggende  zijde'
+			return (oSide / Math.tan(toRadian(angleInDegree)));
+		}
+		return null;
+	}
+
+	// so we don't need other classes to make it work
+
+	/**
+	 * Converts an angle from radians to degrees
+	 * @param	angleRadian	A number representing the angle in radians
+	 * @return					The angle in degrees
+	 */
+	public static function toDegree(angleRadian:Float):Float {
+		var degrees:Float = angleRadian / (Math.PI / 180);
+		// degrees = radians * 180/Math.PI
+		return (degrees);
+	}
+
+	/**
+	 * Converts an angle from degrees to radians.
+	 * @param	angleInDegree	A number representing the angle in dregrees
+	 * @return					The angle in radians
+	 */
+	public static function toRadian(angleInDegree:Float):Float {
+		var radians:Float = angleInDegree * Math.PI / 180;
+		// radians = degrees * Math.PI/180
+		return (radians);
+	}
+
+	/**
 		function xyz(px, py, pz, pitch, roll, yaw) {
 
 		var cosa = Math.cos(yaw);
