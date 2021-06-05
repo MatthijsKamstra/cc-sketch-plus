@@ -12,16 +12,93 @@ class Polygon extends Base implements IBase {
 
 	@:isVar public var arr(get, set):Array<Float>; // collection of points
 
+	@:isVar public var arrPoint(get, set):Array<Point>;
+
 	// for storing the function sides centerpoints
-	// var cx:Float;
-	// var cy:Float;
+	public var cx:Float;
+	public var cy:Float;
+	public var width:Float = null;
+	public var height:Float = null;
 
 	public function new(arr:Array<Float>) {
 		this.arr = arr;
+		calculateSize();
 		super('polygon');
 	}
 
+	public function calculateSize() {
+		if (this.arrPoint == null) {
+			this.arrPoint = convertArr();
+		}
+
+		var lt:Point = {x: null, y: null};
+		var rt:Point = {x: null, y: null};
+		var lb:Point = {x: null, y: null};
+		var rb:Point = {x: null, y: null};
+
+		for (i in 0...this.arrPoint.length) {
+			var p:Point = this.arrPoint[i];
+			// trace(p);
+			// trace(p.x <= lt.x);
+			// trace(p.y <= lt.y);
+
+			//
+			if (lt.x == null)
+				lt = {x: p.x, y: p.y};
+			if (rt.x == null)
+				rt = {x: p.x, y: p.y};
+			if (lb.x == null)
+				lb = {x: p.x, y: p.y};
+			if (rb.x == null)
+				rb = {x: p.x, y: p.y};
+
+			//
+			// console.warn(lt, rt, lb, rb);
+			if (p.x <= lt.x) {
+				lt.x = p.x;
+			}
+			if (p.y <= lt.y) {
+				lt.y = p.y;
+			}
+			if (p.x >= rt.x) {
+				rt.x = p.x;
+			}
+			if (p.y <= rt.y) {
+				rt.y = p.y;
+			}
+			// console.warn(lt, rt, lb, rb);
+			if (p.x <= lb.x) {
+				lb.x = p.x;
+			}
+			if (p.y >= lb.y) {
+				lb.y = p.y;
+			}
+			if (p.x >= rb.x) {
+				rb.x = p.x;
+			}
+			if (p.y >= rb.y) {
+				rb.y = p.y;
+			}
+		}
+
+		this.x = lt.x;
+		this.y = lt.y;
+		this.width = rt.x - lt.x;
+		this.height = rb.y - rt.y;
+		this.cx = lt.x + (this.width / 2);
+		this.cy = lt.y + (this.height / 2);
+
+		// console.group('lt, rt, lb, rb');
+		// console.log(lt); // :Point = {x: null, y: null};
+		// console.log(rt); // :Point = {x: null, y: null};
+		// console.log(lb); // :Point = {x: null, y: null};
+		// console.log(rb); // :Point = {x: null, y: null};
+		// console.groupEnd();
+	}
+
 	public function svg(?settings:Settings):String {
+		calculateSize();
+
 		var str = '';
 		for (i in 0...this.arr.length) {
 			var value = this.arr[i];
@@ -204,5 +281,13 @@ class Polygon extends Base implements IBase {
 
 	function set_arr(value:Array<Float>):Array<Float> {
 		return arr = value;
+	}
+
+	function get_arrPoint():Array<Point> {
+		return arrPoint;
+	}
+
+	function set_arrPoint(value:Array<Point>):Array<Point> {
+		return arrPoint = value;
 	}
 }
