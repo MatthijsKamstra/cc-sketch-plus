@@ -437,6 +437,10 @@ class MathUtil {
 		return null;
 	}
 
+	public static function cas(angleInDegree:Float = null, aSide:Float = null, sSide:Float = null):Float {
+		return CASsostoa(angleInDegree, aSide, sSide);
+	}
+
 	/**
 	 * use the sinus to calculate the angle or one of the sides ('overstaande zijde' or 'schuine zijde')
 	 *
@@ -461,6 +465,10 @@ class MathUtil {
 			return (oSide / Math.sin(toRadian(angleInDegree)));
 		}
 		return null;
+	}
+
+	public static function sos(angleInDegree:Float = null, oSide:Float = null, sSide:Float = null):Float {
+		return casSOStoa(angleInDegree, oSide, sSide);
 	}
 
 	/**
@@ -488,6 +496,10 @@ class MathUtil {
 			return (oSide / Math.tan(toRadian(angleInDegree)));
 		}
 		return null;
+	}
+
+	public static function toa(angleInDegree:Float = null, oSide:Float = null, aSide:Float = null):Float {
+		return cassosTOA(angleInDegree, oSide, aSide);
 	}
 
 	// so we don't need other classes to make it work
