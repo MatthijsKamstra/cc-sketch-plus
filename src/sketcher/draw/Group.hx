@@ -11,6 +11,7 @@ class Group extends Base implements IBase {
 	@:isVar public var arr(get, set):Array<IBase>;
 
 	var isOpacityOverride:Bool = false;
+	var isGroupHidden:Bool = false;
 
 	/**
 	 * create a group to join a couple of IBase items
@@ -33,6 +34,10 @@ class Group extends Base implements IBase {
 		// xml.set('y', Std.string(this.y));
 		if (isOpacityOverride) {
 			xml.set('opacity-override', 'true');
+		}
+		if (isGroupHidden) {
+			// style="display:none"
+			xml.set('style', 'display:none');
 		}
 
 		// Inkscape adjustments for easy import
@@ -135,12 +140,17 @@ class Group extends Base implements IBase {
 
 	// ____________________________________ unique functions for this specific class ____________________________________
 
-	public function hide() {
+	/**
+	 * [Description]
+	 * @param isHidden
+	 */
+	public function hide(?isHidden:Bool = true) {
 		// hide this group with
 		// opacity:0 // old way... doesn't work that well for canvas
-		fillOpacity = 0;
-		strokeOpacity = 0;
-		isOpacityOverride = true;
+		// fillOpacity = 0;
+		// strokeOpacity = 0;
+		// isOpacityOverride = true;
+		isGroupHidden = isHidden;
 	}
 
 	public function test() {
