@@ -312,6 +312,7 @@ class Sketcher {
 			_sides.push(i.y);
 		}
 		var shape = new Polygon(_sides);
+		shape.arrPoint = sides;
 		baseArray.push(shape);
 		return shape;
 	}
