@@ -41,7 +41,17 @@ class Sketcher {
 	public var WRAPPER_ID:String = "sketcher_wrapper";
 
 	/**
-	 * [Description]
+	 * Create sketcher
+	 *
+	 * @example
+	 * 		var settings = new Settings(paperW, paperH, 'svg');
+	 *		settings.autostart = true;
+	 *		settings.padding = 10;
+	 *		settings.scale = false;
+	 *		settings.elementID = 'sketcher-svg-wrapper';
+	 *
+	 *		var sketch2 = Sketcher.create(settings).appendTo(div0);
+	 *
 	 * @param settings
 	 */
 	public function new(settings:Settings) {
