@@ -210,6 +210,8 @@ class SketcherBase {
 		// trace('_draw ${timestamp}');
 		draw();
 		__export();
+		if (!sketch.settings.isAnimation)
+			return;
 		if (isDrawActive)
 			requestID = window.requestAnimationFrame(_draw);
 	}
