@@ -6,24 +6,28 @@ class Settings {
 	@:isVar public var width(get, set):Int;
 	@:isVar public var height(get, set):Int;
 
-	@:isVar public var padding(get, set):Int;
-	@:isVar public var margin(get, set):Int;
+	@:isVar public var padding(get, set):Int = 0;
+	@:isVar public var margin(get, set):Int = 0;
 
-	@:isVar public var scale(get, set):Bool;
-	@:isVar public var autostart(get, set):Bool;
+	@:isVar public var scale(get, set):Bool = false;
+	@:isVar public var autostart(get, set):Bool = false; // don't think this does anything (yet)
+	@:isVar public var isAnimation(get, set):Bool = true;
 
 	@:isVar public var element(get, set):js.html.Element;
 	@:isVar public var elementID(get, set):String;
 
-	@:isVar public var sizeType(get, set):String;
+	@:isVar public var sizeType(get, set):String; // ???? 'mm' vs 'px'
 
 	/**
+	 * Settings use for sketcher
 	 *
 	 * @example
-	 * 			this.settings = new Settings(paperW, paperH, 'svg');
-	 *			settings.autostart = true;
+	 * 			var settings = new Settings(210, 297, 'svg');
+	 *			settings.autostart = false; // (default is false)
+	 *			settings.isAnimation = false; // default is true (based upon canvas)
 	 *			settings.padding = 10;
-	 *			settings.scale = false;
+	 *			settings.scale = false; // (default is false)
+	 *			settings.sizeType = 'mm';
 	 *			settings.elementID = 'sketcher-svg-wrapper';
 	 *
 	 * @param width		stage/canvas/sketch width in pixels
@@ -33,10 +37,11 @@ class Settings {
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
 		this.height = height;
-		this.type = type.toLowerCase(); // make sure to user lowercase
+		this.type = type.toLowerCase(); // make sure to use lowercase
 	}
 
 	// ____________________________________ getter/setter ____________________________________
+
 	function get_width():Int {
 		return width;
 	}
@@ -115,6 +120,14 @@ class Settings {
 
 	function set_sizeType(value:String):String {
 		return sizeType = value;
+	}
+
+	function get_isAnimation():Bool {
+		return isAnimation;
+	}
+
+	function set_isAnimation(value:Bool):Bool {
+		return isAnimation = value;
 	}
 }
 
