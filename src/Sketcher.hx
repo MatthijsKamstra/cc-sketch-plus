@@ -588,7 +588,7 @@ class Sketcher {
 	 */
 	public function getSVGElement():js.html.svg.SVGElement {
 		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
-		var svg:js.html.svg.SVGElement = cast document.getElementById(SVG_ID);
+		var svg:js.html.svg.SVGElement = cast document.getElementById('${WRAPPER_ID}_${SVG_ID}');
 		return svg;
 	}
 
@@ -619,7 +619,7 @@ class Sketcher {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';
 				}
-				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
+				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${WRAPPER_ID}_${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
 				var content = '';
 				var defs = '';
 				for (i in 0...baseArray.length) {
