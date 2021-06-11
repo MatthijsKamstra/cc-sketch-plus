@@ -1,7 +1,8 @@
 package;
 
-import js.html.svg.SVGElement;
 import js.Browser.*;
+import js.html.svg.Element;
+import js.html.svg.SVGElement;
 import sketcher.AST.Point;
 import sketcher.draw.*;
 import sketcher.draw.AST.LineCap;
@@ -111,8 +112,17 @@ class Sketcher {
 
 		switch (settings.type) {
 			case 'svg':
-				// trace('svg');
-				update();
+				// trace('appendto - svg');
+				var svgW = '${settings.width}';
+				var svgH = '${settings.height}';
+				if (settings.sizeType != null) {
+					svgW += '${settings.sizeType}';
+					svgH += '${settings.sizeType}';
+				}
+				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${WRAPPER_ID}_${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"></svg>';
+				element.innerHTML = (_xml);
+
+			// update();
 			case 'canvas':
 				// trace('canvas');
 				canvas = document.createCanvasElement();
@@ -559,14 +569,20 @@ class Sketcher {
 	}
 
 	/**
-	 * basic reset
+	 * basic reset, for svg not the best solution
 	 */
 	public function clear() {
 		baseArray = [];
-		if (settings.type.toLowerCase() == 'svg')
-			element.innerHTML = '';
-		if (settings.type.toLowerCase() == 'canvas')
+		if (settings.type.toLowerCase() == 'svg') {
+			if (getSVGElement() != null) {
+				getSVGElement().innerHTML = '';
+			} else {
+				element.innerHTML = '';
+			}
+		}
+		if (settings.type.toLowerCase() == 'canvas') {
 			ctx.clearRect(0, 0, settings.width, settings.height);
+		}
 	}
 
 	/**
@@ -610,7 +626,7 @@ class Sketcher {
 	 * So to generate the svg, you need to update it!
 	 */
 	public function update() {
-		// trace('WIP update');
+		// trace('update');
 
 		if (element == null) {
 			// make sure the element exists
@@ -621,7 +637,7 @@ class Sketcher {
 
 		switch (settings.type) {
 			case 'svg':
-				// trace('svg');
+				trace('svg');
 				// [mck] TODO change string into XML!!!
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
@@ -629,7 +645,16 @@ class Sketcher {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';
 				}
+
+				// console.log(this.getSVGElement());
+				// if (this.getSVGElement() != null) {
+				// 	trace('new way');
+				// } else {
+				// 	trace('old way');
+				// }
+
 				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${WRAPPER_ID}_${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
+				var svgInnerHtml = '';
 				var content = '';
 				var defs = '';
 				for (i in 0...baseArray.length) {
@@ -661,8 +686,20 @@ class Sketcher {
 				}
 				_xml += '<defs>' + defs + '</defs>';
 				_xml += content + '</svg>';
+
+				svgInnerHtml += '<defs>' + defs + '</defs>';
+				svgInnerHtml += content + '</svg>';
+
 				svg = _xml; // external acces?
-				element.innerHTML = _xml;
+
+				if (this.getSVGElement() != null) {
+					this.getSVGElement().innerHTML = svgInnerHtml;
+				} else {
+					element.innerHTML = _xml;
+				}
+			// [mck] not sure I want to reset it, but currently this is not usefull, only for animations
+			// // empty baseArray
+			// baseArray = [];
 			case 'canvas':
 				// trace('canvas');
 				for (i in 0...baseArray.length) {
@@ -672,6 +709,8 @@ class Sketcher {
 					// trace(base.type);
 					base.ctx(ctx);
 				}
+				// empty baseArray
+				baseArray = [];
 			case 'webgl':
 				trace('webgl');
 				for (i in 0...baseArray.length) {
@@ -681,11 +720,11 @@ class Sketcher {
 					// trace(base.type);
 					base.gl(gl);
 				}
+				// empty baseArray
+				baseArray = [];
 			default:
 				trace("case '" + settings.type + "': trace ('" + settings.type + "');");
 		}
-		// empty baseArray
-		baseArray = [];
 	}
 
 	// [mck] TODO create settings AST to have possible object send as well?
