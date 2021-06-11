@@ -272,6 +272,7 @@ class SketcherBase {
 	 */
 	public function play() {
 		isDrawActive = true;
+		// [mck] TODO this will probably not work when using settings.isAnimation = false (default true)
 		if (requestID == null)
 			_draw();
 	}
