@@ -637,7 +637,7 @@ class Sketcher {
 
 		switch (settings.type) {
 			case 'svg':
-				trace('svg');
+				// trace('svg');
 				// [mck] TODO change string into XML!!!
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
@@ -645,13 +645,6 @@ class Sketcher {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';
 				}
-
-				// console.log(this.getSVGElement());
-				// if (this.getSVGElement() != null) {
-				// 	trace('new way');
-				// } else {
-				// 	trace('old way');
-				// }
 
 				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${WRAPPER_ID}_${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
 				var svgInnerHtml = '';
