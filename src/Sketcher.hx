@@ -486,6 +486,28 @@ class Sketcher {
 		return shape;
 	}
 
+	/**
+	 *
+	 * @param array		array of items (IBase), a collection of shapes or groups
+	 * @example			sketch.makeMarker();
+	 *
+	 * @return Marker
+	 */
+	public function makeMarker(array:Array<IBase>):Marker {
+		var shape = new Marker(array);
+		for (j in 0...array.length) {
+			var _base = array[j];
+			for (i in 0...baseArray.length) {
+				var base:IBase = baseArray[i];
+				if (base == _base) {
+					baseArray[i] = null; // the reason there is base == null!
+				}
+			}
+		}
+		baseArray.push(shape);
+		return shape;
+	}
+
 	public function makeMirror(?dir:Mirror.MirrorType):Mirror {
 		var shape = new Mirror(dir);
 		// only needed for svg
@@ -665,7 +687,7 @@ class Sketcher {
 					// trace(draw);
 
 					switch (base.type) {
-						case 'gradient', 'mask':
+						case 'gradient', 'mask', 'marker':
 							defs += draw;
 						default:
 							content += draw;

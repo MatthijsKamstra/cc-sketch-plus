@@ -26,6 +26,8 @@ class Base {
 
 	@:isVar public var maskID(get, set):String;
 
+	@:isVar public var markerID(get, set):String;
+
 	// colors
 
 	/**
@@ -104,6 +106,26 @@ class Base {
 	public function setMask(id:String) {
 		xml.set('mask', 'url(#$id)');
 		this.maskID = id;
+	}
+
+	// ____________________________________ marker ____________________________________
+
+	public function setMarkerEnd(id:String) {
+		xml.set('marker-end', 'url(#$id)');
+		this.markerID = id;
+	}
+
+	public function setMarkerStart(id:String) {
+		xml.set('marker-start', 'url(#$id)');
+		this.markerID = id;
+	}
+
+	public function setMarker(id:String, pos:String = 'end') {
+		if (pos != 'end' || pos != 'start') {
+			pos != 'end';
+		}
+		xml.set('marker-${pos}', 'url(#$id)');
+		this.markerID = id;
 	}
 
 	// ____________________________________ transitions ____________________________________
@@ -308,6 +330,14 @@ class Base {
 
 	function set_maskID(value:String):String {
 		return maskID = value;
+	}
+
+	function get_markerID():String {
+		return markerID;
+	}
+
+	function set_markerID(value:String):String {
+		return markerID = value;
 	}
 
 	function get_id():String {

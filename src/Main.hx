@@ -13,23 +13,24 @@ class Main {
 	var ccTypeArray:Array<Class<Dynamic>> = [
 		//
 		examples.ExAll, //
+		examples.ExBackground, //
+		examples.ExButton, //
 		examples.ExCircles, //
-		examples.ExRectangle, //
-		examples.ExLine, //
-		examples.ExImage, //
-		examples.ExGui, //
-		examples.ExGroup, //
-		examples.ExText, //
+		examples.ExContainer, //
 		examples.ExEllipse, //
 		examples.ExGradient, //
-		examples.ExPolyline, //
-		examples.ExBackground, //
-		examples.ExContainer, //
-		examples.ExPolygon, //
-		examples.ExMirror, //
+		examples.ExGroup, //
+		examples.ExGui, //
+		examples.ExImage, //
+		examples.ExLine, //
 		examples.ExMask, //
-		examples.ExButton, //
+		examples.ExMirror, //
+		examples.ExPolygon, //
+		examples.ExPolyline, //
+		examples.ExRectangle, //
+		examples.ExText, //
 		examples.GenColors, //
+		examples.ExArrow, //
 	];
 
 	var pulldown:PullDown;
