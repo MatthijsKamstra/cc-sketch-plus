@@ -58,6 +58,19 @@ class MathUtil {
 	}
 
 	/**
+	 * change nr to value above zero (-1 becomes 1)
+	 *
+	 * @param nr
+	 * @return Float
+	 */
+	static public function isPositive(nr:Float):Float {
+		if (nr < 0) {
+			nr *= -1;
+		}
+		return nr;
+	}
+
+	/**
 	 * calculate distance between two point (x,y)
 	 * easier to remember
 	 *
@@ -74,19 +87,6 @@ class MathUtil {
 
 	static public function distancePoint(p0:Point, p1:Point):Float {
 		return dist(p0.x, p0.y, p1.x, p1.y);
-	}
-
-	/**
-	 * change nr to value above zero (-1 becomes 1)
-	 *
-	 * @param nr
-	 * @return Float
-	 */
-	static public function isPositive(nr:Float):Float {
-		if (nr < 0) {
-			nr *= -1;
-		}
-		return nr;
 	}
 
 	/**

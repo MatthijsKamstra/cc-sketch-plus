@@ -73,7 +73,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-12 12:28:25");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-12 13:37:46");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -494,6 +494,7 @@ Sketcher.prototype = {
 		return shape;
 	}
 	,makeMarker: function(array) {
+		console.log("src/Sketcher.hx:497:","xxxx");
 		var shape = new sketcher_draw_Marker(array);
 		var _g = 0;
 		var _g1 = array.length;
@@ -633,7 +634,7 @@ Sketcher.prototype = {
 			}
 			break;
 		case "webgl":
-			console.log("src/Sketcher.hx:730:","webgl");
+			console.log("src/Sketcher.hx:731:","webgl");
 			var _g = 0;
 			var _g1 = this.baseArray.length;
 			while(_g < _g1) {
@@ -647,7 +648,7 @@ Sketcher.prototype = {
 			this.baseArray = [];
 			break;
 		default:
-			console.log("src/Sketcher.hx:741:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("src/Sketcher.hx:742:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -1133,6 +1134,7 @@ examples_ExArrow.prototype = {
 		var rgb = sketcher_util_ColorUtil.PINK;
 		line.set_strokeColor(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
 		line.setMarkerEnd("pointer");
+		sketch.update();
 		sketch.update();
 	}
 	,__class__: examples_ExArrow
@@ -5722,6 +5724,7 @@ sketcher_draw_Marker.__interfaces__ = [sketcher_draw_IBase];
 sketcher_draw_Marker.__super__ = sketcher_draw_Base;
 sketcher_draw_Marker.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
+		console.log("src/sketcher/draw/Marker.hx:29:","---->>> marker");
 		this.xml.set("markerWidth","" + this.get_width());
 		this.xml.set("markerHeight","" + this.get_height());
 		this.xml.set("refX","" + this.get_refX());
