@@ -122,7 +122,7 @@ class Text extends Base implements IBase {
 	// ____________________________________ create ____________________________________
 	public function svg(?settings:Settings):String {
 		// var style = '<style>.small {font:italic 13px sans-serif; fill:red;}</style>';
-		var comment = Xml.createComment('${this.str}');
+		var comment = Xml.createComment('${this.str.replace('--', '__')}');
 		var content = Xml.parse(this.str);
 
 		xml.addChild(comment); // strange reason I need to add this comment first otherwise the next line will not work
