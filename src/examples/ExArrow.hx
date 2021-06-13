@@ -135,5 +135,6 @@ class ExArrow {
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
+		sketch.update();
 	}
 }
