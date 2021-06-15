@@ -66,9 +66,9 @@ class SketcherBase {
 			var stageW = 1080; // 1024; // video?
 			var stageH = 1080; // 1024; // video?
 			settings = new Settings(stageW, stageH, 'canvas');
-			settings.autostart = true;
+			settings.isAutostart = true;
 			settings.padding = 10;
-			settings.scale = false;
+			settings.isScaled = false;
 			settings.elementID = 'sketcher-canvas-wrapper';
 		}
 
