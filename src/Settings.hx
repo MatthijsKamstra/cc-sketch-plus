@@ -6,7 +6,7 @@ import js.Browser.*;
 class Settings {
 	@:isVar public var type(get, set):String = 'svg';
 
-	@:isVar public var width(get, set):Int; // width for canvas, width for svg
+	@:isVar public var width(get, set):Int; // CANVAS width in pixels - SVG width (in pixels or mm, depending on sizeType is set)
 	@:isVar public var height(get, set):Int;
 
 	@:isVar public var padding(get, set):Int = 0;
@@ -19,8 +19,8 @@ class Settings {
 	@:isVar public var element(get, set):js.html.Element;
 	@:isVar public var elementID(get, set):String;
 
-	// only for svg
-	@:isVar public var viewBox(get, set):Array<Float>;
+	// SVG ONLY
+	@:isVar public var viewBox(get, set):Array<Float>; // always in pixels
 	@:isVar public var sizeType(get, set):String; // ???? 'mm' vs 'px' // perhaps only for svg
 
 	/**
