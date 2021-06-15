@@ -15,11 +15,6 @@ class Marker extends Base implements IBase {
 	@:isVar public var refX(get, set):Float = 0;
 	@:isVar public var refY(get, set):Float = 0;
 
-	/**
-	 * create a group to join a couple of IBase items
-	 * useful in `svg`, not so much in `canvas`
-	 * might be usefull to push all actions into one transform
-	 */
 	public function new(arr:Array<IBase>) {
 		this.arr = arr;
 		super('marker');
