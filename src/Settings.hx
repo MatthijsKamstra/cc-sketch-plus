@@ -1,32 +1,37 @@
+import js.Browser.*;
+
 /**
  * https://two.js.org/#documentation
  */
 class Settings {
 	@:isVar public var type(get, set):String = 'svg';
-	@:isVar public var width(get, set):Int;
+
+	@:isVar public var width(get, set):Int; // width for canvas, width for svg
 	@:isVar public var height(get, set):Int;
 
 	@:isVar public var padding(get, set):Int = 0;
 	@:isVar public var margin(get, set):Int = 0;
 
-	@:isVar public var scale(get, set):Bool = false;
-	@:isVar public var autostart(get, set):Bool = false; // don't think this does anything (yet)
+	@:isVar public var isScaled(get, set):Bool = false;
+	@:isVar public var isAutostart(get, set):Bool = false; // don't think this does anything (yet)
 	@:isVar public var isAnimation(get, set):Bool = true;
 
 	@:isVar public var element(get, set):js.html.Element;
 	@:isVar public var elementID(get, set):String;
 
-	@:isVar public var sizeType(get, set):String; // ???? 'mm' vs 'px'
+	// only for svg
+	@:isVar public var viewBox(get, set):Array<Float>;
+	@:isVar public var sizeType(get, set):String; // ???? 'mm' vs 'px' // perhaps only for svg
 
 	/**
 	 * Settings use for sketcher
 	 *
 	 * @example
 	 * 			var settings = new Settings(210, 297, 'svg');
-	 *			settings.autostart = false; // (default is false)
+	 *			settings.isAutostart = false; // (default is false)
 	 *			settings.isAnimation = false; // default is true (based upon canvas)
 	 *			settings.padding = 10;
-	 *			settings.scale = false; // (default is false)
+	 *			settings.isScaled = false; // (default is false)
 	 *			settings.sizeType = 'mm';
 	 *			settings.elementID = 'sketcher-svg-wrapper';
 	 *
@@ -74,12 +79,12 @@ class Settings {
 		return padding = value;
 	}
 
-	function get_scale():Bool {
-		return scale;
+	function get_isScaled():Bool {
+		return isScaled;
 	}
 
-	function set_scale(value:Bool):Bool {
-		return scale = value;
+	function set_isScaled(value:Bool):Bool {
+		return isScaled = value;
 	}
 
 	function get_element():js.html.Element {
@@ -98,12 +103,12 @@ class Settings {
 		return margin = value;
 	}
 
-	function get_autostart():Bool {
-		return autostart;
+	function get_isAutostart():Bool {
+		return isAutostart;
 	}
 
-	function set_autostart(value:Bool):Bool {
-		return autostart = value;
+	function set_isAutostart(value:Bool):Bool {
+		return isAutostart = value;
 	}
 
 	function get_elementID():String {
@@ -128,6 +133,17 @@ class Settings {
 
 	function set_isAnimation(value:Bool):Bool {
 		return isAnimation = value;
+	}
+
+	function get_viewBox():Array<Float> {
+		return viewBox;
+	}
+
+	function set_viewBox(value:Array<Float>):Array<Float> {
+		if (value.length != 4) {
+			console.warn('Expect 4 float values: "0 0 300 400"');
+		}
+		return viewBox = value;
 	}
 }
 
