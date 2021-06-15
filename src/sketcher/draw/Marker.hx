@@ -54,7 +54,7 @@ class Marker extends Base implements IBase {
 
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
-			console.warn('Marker doens\'t work the same as svg, use with care');
+			console.warn('Marker doens\'t work for canvas');
 			ISWARN = true;
 		}
 		// Save the state, so we can undo the clipping
