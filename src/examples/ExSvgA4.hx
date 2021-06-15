@@ -106,6 +106,10 @@ class ExSvgA4 {
 		markerArrow.refX = 0;
 		markerArrow.refY = 3.5;
 
+		var bg = sketch.makeRectangle(0, 0, sketchWidth, sketchHeight, false);
+		bg.id = 'background-color';
+		bg.setFill(getColourObj(SILVER));
+
 		// test polyline
 		var pointerShape = sketch.makePolyLine([1, 1, 9, 5, 1, 9]);
 		pointerShape.noFill();

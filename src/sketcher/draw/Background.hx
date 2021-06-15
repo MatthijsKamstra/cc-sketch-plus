@@ -20,6 +20,7 @@ class Background extends Base implements IBase {
 	public function svg(?settings:Settings):String {
 		xml.set('x', '0');
 		xml.set('y', "0");
+
 		xml.set('width', Std.string(Sketcher.Globals.w));
 		xml.set('height', Std.string(Sketcher.Globals.h));
 

@@ -73,7 +73,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-15 22:55:36");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-15 23:41:56");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -2555,6 +2555,10 @@ examples_ExSvgA4.prototype = {
 		markerArrow.set_height(7);
 		markerArrow.set_refX(0);
 		markerArrow.set_refY(3.5);
+		var bg = sketch.makeRectangle(0,0,this.sketchWidth,this.sketchHeight,false);
+		bg.set_id("background-color");
+		var rgb = sketcher_util_ColorUtil.SILVER;
+		bg.setFill(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
 		var pointerShape = sketch.makePolyLine([1,1,9,5,1,9]);
 		pointerShape.noFill();
 		var rgb = sketcher_util_ColorUtil.BLACK;
@@ -5151,7 +5155,13 @@ var sketcher_draw_Circle = function(x,y,radius) {
 	this.type = "circle";
 	this.set_x(x);
 	this.set_y(y);
+	this.cx = x;
+	this.cy = y;
 	this.set_radius(radius);
+	this.point_top_left = { x : this.cx - this.get_radius(), y : this.cy - this.get_radius()};
+	this.point_top_right = { x : this.cx + this.get_radius(), y : this.cy - this.get_radius()};
+	this.point_bottom_left = { x : this.cx - this.get_radius(), y : this.cy + this.get_radius()};
+	this.point_bottom_right = { x : this.cx + this.get_radius(), y : this.cy + this.get_radius()};
 	sketcher_draw_Base.call(this,"circle");
 };
 $hxClasses["sketcher.draw.Circle"] = sketcher_draw_Circle;
@@ -5271,7 +5281,7 @@ sketcher_draw_Circle.prototype = $extend(sketcher_draw_Base.prototype,{
 	,gl: function(gl) {
 	}
 	,debug: function() {
-		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 96, className : "sketcher.draw.Circle", methodName : "debug"});
+		haxe_Log.trace("" + this.toString(),{ fileName : "src/sketcher/draw/Circle.hx", lineNumber : 115, className : "sketcher.draw.Circle", methodName : "debug"});
 	}
 	,get_radius: function() {
 		return this.radius;
