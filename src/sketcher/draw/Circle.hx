@@ -1,5 +1,8 @@
 package sketcher.draw;
 
+import js.Browser.*;
+import js.html.webgl.RenderingContext;
+import sketcher.AST.Point;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
 
@@ -10,10 +13,26 @@ class Circle extends Base implements IBase {
 
 	@:isVar public var radius(get, set):Float;
 
+	var cx:Float;
+	var cy:Float;
+
+	public var point_top_left:Point;
+	public var point_top_right:Point;
+	public var point_bottom_left:Point;
+	public var point_bottom_right:Point;
+
 	public function new(x, y, radius) {
 		this.x = x;
 		this.y = y;
+		this.cx = x;
+		this.cy = y;
 		this.radius = radius;
+
+		this.point_top_left = {x: this.cx - this.radius, y: this.cy - this.radius};
+		this.point_top_right = {x: this.cx + this.radius, y: this.cy - this.radius};
+		this.point_bottom_left = {x: this.cx - this.radius, y: this.cy + this.radius};
+		this.point_bottom_right = {x: this.cx + this.radius, y: this.cy + this.radius};
+
 		super('circle');
 		// this.dash = []; // reset the dash for canvas?
 	}
