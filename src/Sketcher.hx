@@ -41,6 +41,9 @@ class Sketcher {
 	public var SVG_ID:String = "sketcher_svg";
 	public var WRAPPER_ID:String = "sketcher_wrapper";
 
+	public static var UNIQ_ID:String = "";
+	public static var SVG_UNIQ_ID:String = "";
+
 	/**
 	 * Create sketcher
 	 *
@@ -61,11 +64,20 @@ class Sketcher {
 		Sketcher.Globals.w = settings.width;
 		Sketcher.Globals.h = settings.height;
 
+		// make sure the svg id is 'uniq'
+		var u = Date.now().getTime();
+		if ('$u' == UNIQ_ID) {
+			UNIQ_ID = '${u}_1';
+		} else {
+			UNIQ_ID = '${u}';
+		}
+		SVG_UNIQ_ID = '${WRAPPER_ID}_${SVG_ID}_${UNIQ_ID}';
+
 		if (settings.elementID != null) {
 			WRAPPER_ID = settings.elementID;
 		}
 
-		if (settings.scale == true) {
+		if (settings.isScaled == true) {
 			if (document.getElementById('${settings.elementID}-style') == null) {
 				var node = document.createElement('style');
 				node.id = '${settings.elementID}-style';
@@ -115,12 +127,19 @@ class Sketcher {
 				// trace('appendto - svg');
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
+				var svgViewBox = '0 0 ${settings.width} ${settings.width}';
 				if (settings.sizeType != null) {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';
 				}
-				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${WRAPPER_ID}_${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"></svg>';
+				if (settings.viewBox != null) {
+					svgViewBox = '${settings.viewBox[0]} ${settings.viewBox[1]} ${settings.viewBox[2]} ${settings.viewBox[3]}';
+				}
+
+				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="${svgViewBox}" version="1.1" id="${SVG_UNIQ_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"></svg>';
 				element.innerHTML = (_xml);
+
+				svgEl = cast element;
 
 			// update();
 			case 'canvas':
@@ -636,7 +655,7 @@ class Sketcher {
 	 */
 	public function getSVGElement():js.html.svg.SVGElement {
 		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
-		var svg:js.html.svg.SVGElement = cast document.getElementById('${WRAPPER_ID}_${SVG_ID}');
+		var svg:js.html.svg.SVGElement = cast document.getElementById('${SVG_UNIQ_ID}');
 		return svg;
 	}
 
@@ -663,12 +682,16 @@ class Sketcher {
 				// [mck] TODO change string into XML!!!
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
+				var svgViewBox = '0 0 ${settings.width} ${settings.width}';
 				if (settings.sizeType != null) {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';
 				}
+				if (settings.viewBox != null) {
+					svgViewBox = '${settings.viewBox[0]} ${settings.viewBox[1]} ${settings.viewBox[2]} ${settings.viewBox[3]}';
+				}
 
-				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" version="1.1" id="${WRAPPER_ID}_${SVG_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
+				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="${svgViewBox}" version="1.1" id="${SVG_UNIQ_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
 				var svgInnerHtml = '';
 				var content = '';
 				var defs = '';
@@ -778,6 +801,6 @@ class Globals {
 	public static var isFullscreen:Bool = false;
 	public static var TWO_PI:Float = Math.PI * 2;
 	// allows me global access to canvas and it’s width and height properties
-	public static var w:Int;
-	public static var h:Int;
+	public static var w:Float;
+	public static var h:Float;
 }
