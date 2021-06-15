@@ -518,6 +518,44 @@ class MathUtil {
 	// so we don't need other classes to make it work
 
 	/**
+	 * convert mm 2 pixels
+	 *
+	 * @param value
+	 * @return Float
+	 */
+	public static function mm2pixel(value:Float):Float {
+		// var dpi = 72;
+		var dpi = 96;
+
+		// mm = ( pixels * 25.4 ) / DPI
+		// Width : 10 cm * 300 / 2.54 = 1181 pixels
+		// Height: 15 cm * 300 / 2.54 = 1772 pixels
+
+		return value * dpi / 25.4;
+	}
+
+	public static function mm2px(value:Float):Float {
+		return mm2pixel(value);
+	}
+
+	/**
+	 * convert mm 2 pixels
+	 *
+	 * @param value
+	 * @return Float
+	 */
+	public static function pixel2mm(value:Float):Float {
+		// mm = ( pixels * 25.4 ) / DPI
+		// var dpi = 72;
+		var dpi = 96;
+		return value * 25.4 / dpi;
+	}
+
+	public static function px2mm(value:Float):Float {
+		return pixel2mm(value);
+	}
+
+	/**
 	 * Converts an angle from radians to degrees
 	 * @param	angleRadian	A number representing the angle in radians
 	 * @return					The angle in degrees
