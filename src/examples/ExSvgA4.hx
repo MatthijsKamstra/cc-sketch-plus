@@ -68,7 +68,9 @@ class ExSvgA4 {
 		var sketch = Sketcher.create(settings).appendTo(elem);
 
 		sketch.svgEl.onclick = function() {
-			FileExport.downloadTextFile(sketch.svg, 'a4_${Date.now().getTime()}.svg');
+			var filename = 'a4_${Date.now().getTime()}';
+			FileExport.downloadTextFile(sketch.svg, filename + '.svg');
+			FileExport.svg2Canvas(sketch.getSVGElement(), false, filename);
 		}
 
 		generateShapes(sketch);

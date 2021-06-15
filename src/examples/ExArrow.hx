@@ -1,5 +1,6 @@
 package examples;
 
+import sketcher.export.FileExport;
 import sketcher.draw.AST.LineCap;
 import js.Browser.*;
 import sketcher.util.GridUtil;
@@ -51,7 +52,14 @@ class ExArrow {
 		// Make an instance of two and place it on the page.
 		var elem = document.getElementById('sketcher-svg');
 		var settings:Settings = new Settings(sketchWidth, sketchHeight, 'svg');
+
 		var sketch = Sketcher.create(settings).appendTo(elem);
+
+		sketch.svgEl.onclick = function() {
+			var filename = 'a4_${Date.now().getTime()}';
+			FileExport.downloadTextFile(sketch.svg, filename + '.svg');
+			FileExport.svg2Canvas(sketch.getSVGElement(), false, filename);
+		}
 
 		generateShapes(sketch);
 	}

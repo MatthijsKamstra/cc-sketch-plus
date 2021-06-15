@@ -127,7 +127,7 @@ class Sketcher {
 				// trace('appendto - svg');
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
-				var svgViewBox = '0 0 ${settings.width} ${settings.width}';
+				var svgViewBox = '0 0 ${settings.width} ${settings.height}';
 				if (settings.sizeType != null) {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';
@@ -682,7 +682,7 @@ class Sketcher {
 				// [mck] TODO change string into XML!!!
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
-				var svgViewBox = '0 0 ${settings.width} ${settings.width}';
+				var svgViewBox = '0 0 ${settings.width} ${settings.height}';
 				if (settings.sizeType != null) {
 					svgW += '${settings.sizeType}';
 					svgH += '${settings.sizeType}';

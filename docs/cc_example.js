@@ -73,7 +73,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-15 23:41:56");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-16 00:02:10");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -315,7 +315,7 @@ Sketcher.prototype = {
 		case "svg":
 			var svgW = "" + this.settings.get_width();
 			var svgH = "" + this.settings.get_height();
-			var svgViewBox = "0 0 " + this.settings.get_width() + " " + this.settings.get_width();
+			var svgViewBox = "0 0 " + this.settings.get_width() + " " + this.settings.get_height();
 			if(this.settings.get_sizeType() != null) {
 				svgW += "" + this.settings.get_sizeType();
 				svgH += "" + this.settings.get_sizeType();
@@ -617,7 +617,7 @@ Sketcher.prototype = {
 		case "svg":
 			var svgW = "" + this.settings.get_width();
 			var svgH = "" + this.settings.get_height();
-			var svgViewBox = "0 0 " + this.settings.get_width() + " " + this.settings.get_width();
+			var svgViewBox = "0 0 " + this.settings.get_width() + " " + this.settings.get_height();
 			if(this.settings.get_sizeType() != null) {
 				svgW += "" + this.settings.get_sizeType();
 				svgH += "" + this.settings.get_sizeType();
@@ -1090,6 +1090,11 @@ examples_ExArrow.prototype = {
 		var elem = window.document.getElementById("sketcher-svg");
 		var settings = new Settings(this.sketchWidth,this.sketchHeight,"svg");
 		var sketch = Sketcher.create(settings).appendTo(elem);
+		sketch.svgEl.onclick = function() {
+			var filename = "a4_" + new Date().getTime();
+			sketcher_export_FileExport.downloadTextFile(sketch.svg,filename + ".svg");
+			sketcher_export_FileExport.svg2Canvas(sketch.getSVGElement(),false,filename);
+		};
 		this.generateShapes(sketch);
 	}
 	,sketchCanvas: function() {
@@ -2534,7 +2539,9 @@ examples_ExSvgA4.prototype = {
 		settings.set_viewBox([0,0,this.sketchWidth,this.sketchHeight]);
 		var sketch = Sketcher.create(settings).appendTo(elem);
 		sketch.svgEl.onclick = function() {
-			sketcher_export_FileExport.downloadTextFile(sketch.svg,"a4_" + new Date().getTime() + ".svg");
+			var filename = "a4_" + new Date().getTime();
+			sketcher_export_FileExport.downloadTextFile(sketch.svg,filename + ".svg");
+			sketcher_export_FileExport.svg2Canvas(sketch.getSVGElement(),false,filename);
 		};
 		this.generateShapes(sketch);
 	}
