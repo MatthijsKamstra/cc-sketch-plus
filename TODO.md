@@ -1,5 +1,17 @@
 # TODO
 
+- [ ] svg not default animation
+- [ ] svg update only new nodes
+- [ ] use svg to draw, use js to interact?
+- [ ] line with arrows don't import in illustor
+- [ ] fix issues with import illustrator
+
+```
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 793.7008 1122.5197"
+```
 
 - [ ] Go.to().onComplete doesn't work anymore
 - [ ] Go remove timebased (don't use it, so remove it)
