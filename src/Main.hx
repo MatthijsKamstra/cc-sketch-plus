@@ -31,6 +31,7 @@ class Main {
 		examples.ExText, //
 		examples.GenColors, //
 		examples.ExArrow, //
+		examples.ExSvgA4, //
 	];
 
 	var pulldown:PullDown;
