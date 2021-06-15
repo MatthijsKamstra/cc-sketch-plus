@@ -133,8 +133,12 @@ class ExArrow {
 		line.strokeColor = getColourObj(PINK);
 		line.setMarkerEnd('pointer');
 
+		var p = grid.array[4];
+		var line = sketch.makeLine(p.x, p.y, p.x - radiusSmall, p.y + radiusSmall);
+		line.strokeColor = getColourObj(BLUE);
+
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();
-		sketch.update();
+		// sketch.update();
 	}
 }
