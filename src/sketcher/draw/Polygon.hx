@@ -20,6 +20,11 @@ class Polygon extends Base implements IBase {
 	public var width:Float = null;
 	public var height:Float = null;
 
+	public var point_top_left:Point;
+	public var point_top_right:Point;
+	public var point_bottom_left:Point;
+	public var point_bottom_right:Point;
+
 	public function new(arr:Array<Float>) {
 		this.arr = arr;
 		calculateSize();
@@ -87,6 +92,11 @@ class Polygon extends Base implements IBase {
 		this.height = rb.y - rt.y;
 		this.cx = lt.x + (this.width / 2);
 		this.cy = lt.y + (this.height / 2);
+
+		this.point_top_left = lt;
+		this.point_top_right = rt;
+		this.point_bottom_left = lb;
+		this.point_bottom_right = rb;
 
 		// console.group('lt, rt, lb, rb');
 		// console.log(lt); // :Point = {x: null, y: null};

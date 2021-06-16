@@ -73,7 +73,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-16 00:02:10");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-16 15:27:14");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -6356,6 +6356,10 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.height = rb.y - rt.y;
 		this.cx = lt.x + this.width / 2;
 		this.cy = lt.y + this.height / 2;
+		this.point_top_left = lt;
+		this.point_top_right = rt;
+		this.point_bottom_left = lb;
+		this.point_bottom_right = rb;
 	}
 	,svg: function(settings) {
 		this.calculateSize();
@@ -6511,7 +6515,7 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			haxe_Log.trace("not in this length",{ fileName : "src/sketcher/draw/Polygon.hx", lineNumber : 216, className : "sketcher.draw.Polygon", methodName : "getPoint"});
+			haxe_Log.trace("not in this length",{ fileName : "src/sketcher/draw/Polygon.hx", lineNumber : 226, className : "sketcher.draw.Polygon", methodName : "getPoint"});
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
