@@ -1,5 +1,6 @@
 package;
 
+import sketcher.util.MathUtil;
 import js.Browser.*;
 import js.html.svg.Element;
 import js.html.svg.SVGElement;
@@ -129,8 +130,8 @@ class Sketcher {
 				var svgH = '${settings.height}';
 				var svgViewBox = '0 0 ${settings.width} ${settings.height}';
 				if (settings.sizeType != null) {
-					svgW += '${settings.sizeType}';
-					svgH += '${settings.sizeType}';
+					svgW = '${Math.round(MathUtil.px2mm(settings.width))}${settings.sizeType}';
+					svgH = '${Math.round(MathUtil.px2mm(settings.height))}${settings.sizeType}';
 				}
 				if (settings.viewBox != null) {
 					svgViewBox = '${settings.viewBox[0]} ${settings.viewBox[1]} ${settings.viewBox[2]} ${settings.viewBox[3]}';

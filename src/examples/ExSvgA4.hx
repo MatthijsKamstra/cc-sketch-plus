@@ -1,5 +1,6 @@
 package examples;
 
+import Settings.SizeType;
 import sketcher.export.FileExport;
 import sketcher.draw.AST.LineCap;
 import js.Browser.*;
@@ -58,11 +59,11 @@ class ExSvgA4 {
 	function sketchSVG() {
 		// Make an instance of two and place it on the page.
 		var elem = document.getElementById('sketcher-svg');
-		var settings:Settings = new Settings(Math.round(MathUtil.px2mm(sketchWidth)), Math.round(MathUtil.px2mm(sketchHeight)), 'svg');
+		var settings:Settings = new Settings(Math.round(sketchWidth), Math.round(sketchHeight), 'svg');
 		settings.isAnimation = false; // default is true (based upon canvas)
 		settings.padding = 0;
 		settings.isScaled = true; // (default is false)
-		settings.sizeType = 'mm';
+		settings.sizeType = SizeType.MM;
 		settings.viewBox = [0, 0, sketchWidth, sketchHeight];
 
 		var sketch = Sketcher.create(settings).appendTo(elem);
@@ -108,9 +109,12 @@ class ExSvgA4 {
 		markerArrow.refX = 0;
 		markerArrow.refY = 3.5;
 
-		var bg = sketch.makeRectangle(0, 0, sketchWidth, sketchHeight, false);
+		// var bg = sketch.makeRectangle(0, 0, sketchWidth, sketchHeight, false);
+		// bg.id = 'background-color';
+		// bg.setFill(getColourObj(SILVER));
+
+		var bg = sketch.makeBackground(getColourObj(SILVER));
 		bg.id = 'background-color';
-		bg.setFill(getColourObj(SILVER));
 
 		// test polyline
 		var pointerShape = sketch.makePolyLine([1, 1, 9, 5, 1, 9]);

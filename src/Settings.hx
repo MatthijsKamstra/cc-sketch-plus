@@ -21,7 +21,7 @@ class Settings {
 
 	// SVG ONLY
 	@:isVar public var viewBox(get, set):Array<Float>; // always in pixels
-	@:isVar public var sizeType(get, set):String; // ???? 'mm' vs 'px' // perhaps only for svg
+	@:isVar public var sizeType(get, set):SizeType; // ???? 'mm' vs 'px' // perhaps only for svg
 
 	/**
 	 * Settings use for sketcher
@@ -119,11 +119,11 @@ class Settings {
 		return elementID = value;
 	}
 
-	function get_sizeType():String {
+	function get_sizeType():SizeType {
 		return sizeType;
 	}
 
-	function set_sizeType(value:String):String {
+	function set_sizeType(value:SizeType):SizeType {
 		return sizeType = value;
 	}
 
@@ -151,4 +151,10 @@ enum abstract SketchType(String) from String to String {
 	var SVG = 'svg';
 	var CANVAS = 'canvas';
 	var WEBGL = 'webgl';
+}
+
+enum abstract SizeType(String) from String to String {
+	var PX = 'px';
+	var MM = 'mm';
+	var CM = 'cm';
 }

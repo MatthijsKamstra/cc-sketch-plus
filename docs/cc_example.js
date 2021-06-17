@@ -73,7 +73,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-16 15:27:14");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-17 14:59:19");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -317,8 +317,8 @@ Sketcher.prototype = {
 			var svgH = "" + this.settings.get_height();
 			var svgViewBox = "0 0 " + this.settings.get_width() + " " + this.settings.get_height();
 			if(this.settings.get_sizeType() != null) {
-				svgW += "" + this.settings.get_sizeType();
-				svgH += "" + this.settings.get_sizeType();
+				svgW = "" + Math.round(sketcher_util_MathUtil.px2mm(this.settings.get_width())) + this.settings.get_sizeType();
+				svgH = "" + Math.round(sketcher_util_MathUtil.px2mm(this.settings.get_height())) + this.settings.get_sizeType();
 			}
 			if(this.settings.get_viewBox() != null) {
 				svgViewBox = "" + this.settings.get_viewBox()[0] + " " + this.settings.get_viewBox()[1] + " " + this.settings.get_viewBox()[2] + " " + this.settings.get_viewBox()[3];
@@ -336,7 +336,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			haxe_Log.trace("case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 163, className : "Sketcher", methodName : "appendTo"});
+			haxe_Log.trace("case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 164, className : "Sketcher", methodName : "appendTo"});
 		}
 		return this;
 	}
@@ -658,7 +658,7 @@ Sketcher.prototype = {
 			}
 			break;
 		case "webgl":
-			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 753, className : "Sketcher", methodName : "update"});
+			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 754, className : "Sketcher", methodName : "update"});
 			var _g = 0;
 			var _g1 = this.baseArray.length;
 			while(_g < _g1) {
@@ -672,7 +672,7 @@ Sketcher.prototype = {
 			this.baseArray = [];
 			break;
 		default:
-			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 764, className : "Sketcher", methodName : "update"});
+			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 765, className : "Sketcher", methodName : "update"});
 		}
 	}
 	,__class__: Sketcher
@@ -2531,7 +2531,7 @@ examples_ExSvgA4.prototype = {
 	}
 	,sketchSVG: function() {
 		var elem = window.document.getElementById("sketcher-svg");
-		var settings = new Settings(Math.round(sketcher_util_MathUtil.px2mm(this.sketchWidth)),Math.round(sketcher_util_MathUtil.px2mm(this.sketchHeight)),"svg");
+		var settings = new Settings(Math.round(this.sketchWidth),Math.round(this.sketchHeight),"svg");
 		settings.set_isAnimation(false);
 		settings.set_padding(0);
 		settings.set_isScaled(true);
@@ -2562,10 +2562,9 @@ examples_ExSvgA4.prototype = {
 		markerArrow.set_height(7);
 		markerArrow.set_refX(0);
 		markerArrow.set_refY(3.5);
-		var bg = sketch.makeRectangle(0,0,this.sketchWidth,this.sketchHeight,false);
-		bg.set_id("background-color");
 		var rgb = sketcher_util_ColorUtil.SILVER;
-		bg.setFill(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
+		var bg = sketch.makeBackground(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
+		bg.set_id("background-color");
 		var pointerShape = sketch.makePolyLine([1,1,9,5,1,9]);
 		pointerShape.noFill();
 		var rgb = sketcher_util_ColorUtil.BLACK;
