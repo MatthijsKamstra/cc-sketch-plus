@@ -166,15 +166,15 @@ class Base {
 	 * @param rx		(optional) center x
 	 * @param ry   		(optional) center y
 	 */
-	public function setRotate(degree:Float, ?rx:Float = 0, ?ry:Float = 0) {
+	public function setRotate(degree:Float, ?rx:Float = null, ?ry:Float = null) {
 		this.rotate = degree;
 		this.rx = rx;
 		this.ry = ry;
 
 		var str = 'rotate(${degree}';
-		if (rx != 0)
+		if (rx != null)
 			str += ',${rx}';
-		if (ry != 0)
+		if (ry != null)
 			str += ',${ry}';
 		str += ')';
 		transArr.push(str);
