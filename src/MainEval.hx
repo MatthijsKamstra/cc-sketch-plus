@@ -1,15 +1,11 @@
 package;
 
-import sketcher.util.ColorUtil;
 import Globals.Globals.*;
-//
 import Settings.SizeType;
-// import sketcher.export.FileExport;
 import sketcher.draw.AST.LineCap;
-// import js.Browser.*;
-// import sketcher.util.GridUtil;
-import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil.*;
+import sketcher.util.ColorUtil;
+import sketcher.util.MathUtil;
 
 class MainEval {
 	public function new() {
@@ -47,7 +43,7 @@ class MainEval {
 
 		trace(sketch.update());
 
-		writeFile('bin', 'test.svg', sketch.update());
+		writeFile('bin', 'test_eval.svg', sketch.update());
 	}
 
 	/**

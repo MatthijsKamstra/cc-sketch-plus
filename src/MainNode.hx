@@ -3,25 +3,24 @@ package;
 import js.Node;
 import js.node.Fs;
 //
+import Globals.Globals.*;
 import Settings.SizeType;
-import sketcher.export.FileExport;
-import sketcher.draw.AST.LineCap;
 import js.Browser.*;
+import sketcher.draw.AST.LineCap;
+import sketcher.draw.AST.LineCap;
+import sketcher.export.FileExport;
+import sketcher.util.ColorUtil;
 import sketcher.util.GridUtil;
 import sketcher.util.MathUtil;
-import sketcher.util.ColorUtil.*;
 
 class MainNode {
 	public function new() {
 		trace('MainNode');
-
 		init();
 	}
 
 	function init() {
 		sketchSVG();
-
-		writeFile();
 	}
 
 	function sketchSVG() {
@@ -36,26 +35,36 @@ class MainNode {
 		settings.sizeType = SizeType.MM;
 		settings.viewBox = [0, 0, sketchWidth, sketchHeight];
 
-		var sketch = Sketcher.create(settings); // .appendTo(elem);
+		var sketch = SketcherSVG.create(settings).setup();
 
-		// sketch.svgEl.onclick = function() {
-		// 	var filename = 'a4_${Date.now().getTime()}';
-		// 	FileExport.downloadTextFile(sketch.svg, filename + '.svg');
-		// 	FileExport.svg2Canvas(sketch.getSVGElement(), false, filename);
-		// }
+		var bg = sketch.makeBackground('white');
 
-		// generateShapes(sketch);
+		for (i in 0...10) {
+			var circle = sketch.makeCircle(MathUtil.random(w), MathUtil.random(h), MathUtil.clamp(MathUtil.random(200), 50, 200));
+			var color = ColorUtil.niceColor100[MathUtil.randomInt(ColorUtil.niceColor100.length - 1)];
+			circle.setFill(color[0]);
+		}
+
+		// trace(sketch);
+
+		trace(sketch.update());
+
+		writeFile('export', 'test_node.svg', sketch.update());
 	}
 
-	function writeFile() {
-		var str:String = 'Hello World!\nWritten on: ' + Date.now().toString();
-		// this code example is closest to the pure node.js example
-		Fs.writeFile('hello.txt', str, {}, function(err) {
-			if (err != null)
-				trace("err: " + err);
-			else
-				trace('Hello > hello.txt');
-		});
+	/**
+	 * simply write the files
+	 * @param path 		folder to write the files (current assumption is `EXPORT`)
+	 * @param filename	(with extension) the file name
+	 * @param content	what to write to the file (in our case markdown)
+	 */
+	function writeFile(path:String, filename:String, content:String) {
+		if (!sys.FileSystem.exists(path)) {
+			sys.FileSystem.createDirectory(path);
+		}
+		// write the file
+		sys.io.File.saveContent(path + '/${filename}', content);
+		trace('written file: ${path}/${filename}');
 	}
 
 	static public function main() {

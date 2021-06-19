@@ -37,10 +37,23 @@
         "$haxe-error",
         "$haxe-trace"
       ],
+      "group": "build",
+      "label": "haxe: build_eval.hxml"
+    },
+    {
+      "type": "hxml",
+      "file": "build_node.hxml",
+      "problemMatcher": [
+        "$haxe-absolute",
+        "$haxe",
+        "$haxe-error",
+        "$haxe-trace"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
-      }
+      },
+      "label": "haxe: build_node.hxml"
     }
   ]
 }
