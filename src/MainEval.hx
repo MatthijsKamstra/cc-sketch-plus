@@ -39,7 +39,7 @@ class MainEval {
 		var colorBg = sketch.makeRectangle(w2, h2, w, h);
 		colorBg.setFill(colorArr[0]);
 
-		for (i in 0...10) {
+		for (i in 0...100) {
 			var circle = sketch.makeCircle(MathUtil.random(w), MathUtil.random(h), MathUtil.clamp(MathUtil.random(200), 50, 200));
 			circle.setFill(colorArr[MathUtil.randomInt(0, colorArr.length - 1)]);
 		}
