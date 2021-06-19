@@ -1,6 +1,8 @@
 package sketcher.draw;
 
+#if js
 import js.Browser.*;
+#end
 
 class Mirror extends Base implements IBase {
 	public static var ISWARN:Bool;
@@ -21,7 +23,11 @@ class Mirror extends Base implements IBase {
 
 	public function svg(?settings:Settings):String {
 		if (!ISWARN) {
+			#if js
 			console.warn('Mirror doens\'t work the same as canvas, use with care');
+			#else
+			trace('Mirror doens\'t work the same as canvas, use with care');
+			#end
 			ISWARN = true;
 		}
 
@@ -34,6 +40,7 @@ class Mirror extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.warn('Mirror works only for the right part of the sketch');
@@ -41,11 +48,11 @@ class Mirror extends Base implements IBase {
 		}
 
 		var _y = 0;
-		var _y2 = Sketcher.Globals.h / 2;
+		var _y2 = Globals.Globals.h / 2;
 		var _x = 0;
-		var _x2 = Sketcher.Globals.w / 2;
-		var _w = Sketcher.Globals.w / 2;
-		var _h = Sketcher.Globals.h / 2;
+		var _x2 = Globals.Globals.w / 2;
+		var _w = Globals.Globals.w / 2;
+		var _h = Globals.Globals.h / 2;
 
 		// draw the original image
 		// this is already done
@@ -59,10 +66,10 @@ class Mirror extends Base implements IBase {
 		// ctx.globalAlpha = 0.25;
 
 		// clear rectangle in which we want to copy, so if no background color is used we don't have images there
-		ctx.clearRect(0, 0, Sketcher.Globals.w, Sketcher.Globals.h);
+		ctx.clearRect(0, 0, Globals.Globals.w, Globals.Globals.h);
 
 		// redraw only bottom part of the image
-		ctx.drawImage(ctx.canvas, _x2, _y, Sketcher.Globals.w, Sketcher.Globals.h, 0, 0, Sketcher.Globals.w, Sketcher.Globals.h);
+		ctx.drawImage(ctx.canvas, _x2, _y, Globals.Globals.w, Globals.Globals.h, 0, 0, Globals.Globals.w, Globals.Globals.h);
 		// destination x, y is set to 0, 0 (which will be at translated xy)
 
 		// Revert transform and scale
@@ -70,6 +77,7 @@ class Mirror extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 }
 
 enum abstract MirrorType(String) from String to String {

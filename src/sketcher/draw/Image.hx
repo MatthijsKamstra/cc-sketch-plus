@@ -2,8 +2,10 @@ package sketcher.draw;
 
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
+#if js
 import js.html.Image;
 import js.Browser.*;
+#end
 
 class Image extends Base implements IBase {
 	public static var ISWARN:Bool;
@@ -22,7 +24,9 @@ class Image extends Base implements IBase {
 	@:isVar public var isCenter(get, set):Bool;
 
 	//  var image = sketch.makeImageFromImage(p.x, p.y, IMAGE, 100, 100, true);
+	#if js
 	@:isVar public var image(get, set):js.html.Image;
+	#end
 
 	public function new(x, y, href, width, height, ?isCenter:Bool = false) {
 		this.x = x;
@@ -54,7 +58,9 @@ class Image extends Base implements IBase {
 		} else {
 			// trace('fixme');
 			// trace(image);
+			#if js
 			xml.set('href', Std.string(image.src));
+			#end
 		}
 		xml.set('width', Std.string(this.width));
 		xml.set('height', Std.string(this.height));
@@ -66,6 +72,7 @@ class Image extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
 		useDefaultsCanvas();
@@ -151,6 +158,7 @@ class Image extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ getter/setter ____________________________________
 
@@ -186,6 +194,7 @@ class Image extends Base implements IBase {
 		return isCenter = value;
 	}
 
+	#if js
 	function get_image():js.html.Image {
 		return image;
 	}
@@ -193,6 +202,7 @@ class Image extends Base implements IBase {
 	function set_image(value:js.html.Image):js.html.Image {
 		return image = value;
 	}
+	#end
 
 	function get_preserveAspectRatio():PreserveAspectRatioObj {
 		return preserveAspectRatio;
@@ -201,9 +211,8 @@ class Image extends Base implements IBase {
 	function set_preserveAspectRatio(value:PreserveAspectRatioObj):PreserveAspectRatioObj {
 		return preserveAspectRatio = value;
 	}
-}
+} // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/preserveAspectRatio
 
-// https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/preserveAspectRatio
 enum abstract PreserveAspectRatioObj(String) {
 	var None = "none"; // Do not force uniform scaling. Scale the graphic content of the given element non-uniformly if necessary such that the element's bounding box exactly matches the viewport rectangle. Note that if <align> is none, then the optional <meetOrSlice> value is ignored.
 	var xMinYMin = "xMinYMin"; // - Force uniform scaling.

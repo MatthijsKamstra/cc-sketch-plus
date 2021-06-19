@@ -1,9 +1,8 @@
 package sketcher.draw;
 
-import Sketcher.Globals;
-import js.lib.webassembly.Global;
+#if js
 import js.Browser.*;
-import js.html.webgl.RenderingContext;
+#end
 import sketcher.AST.Point;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
@@ -28,7 +27,9 @@ class Button extends Base implements IBase {
 	public var point_bottom_right:Point;
 
 	// for mouse stuff
+	#if js
 	var rect:js.html.DOMRect;
+	#end
 	var scale:Float;
 
 	public function new(x:Float, y:Float, width:Float, height:Float, ?isCenter:Bool = true) {
@@ -71,6 +72,7 @@ class Button extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function useCanvasShadow(ctx:js.html.CanvasRenderingContext2D) {
 		if (this.shadowColor != null) {
 			ctx.shadowColor = this.shadowColor;
@@ -284,6 +286,7 @@ class Button extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ getter/setter ____________________________________
 	function get_radius():Int {

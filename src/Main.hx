@@ -1,6 +1,6 @@
 package;
 
-import Sketcher.Globals.*;
+import Globals.Globals.*;
 import html.CCNav;
 import helper.html.PullDown;
 import js.Browser.*;

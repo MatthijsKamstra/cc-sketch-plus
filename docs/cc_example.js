@@ -23,6 +23,10 @@ EReg.prototype = {
 	}
 	,__class__: EReg
 };
+Math.__name__ = "Math";
+var Globals = function() { };
+$hxClasses["Globals"] = Globals;
+Globals.__name__ = "Globals";
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
 HxOverrides.__name__ = "HxOverrides";
@@ -73,7 +77,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-17 14:59:19");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-19 15:06:47");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -136,7 +140,6 @@ Main.prototype = {
 	}
 	,__class__: Main
 };
-Math.__name__ = "Math";
 var Reflect = function() { };
 $hxClasses["Reflect"] = Reflect;
 Reflect.__name__ = "Reflect";
@@ -213,6 +216,12 @@ Settings.prototype = {
 	,set_element: function(value) {
 		return this.element = value;
 	}
+	,get_elementID: function() {
+		return this.elementID;
+	}
+	,set_elementID: function(value) {
+		return this.elementID = value;
+	}
 	,get_margin: function() {
 		return this.margin;
 	}
@@ -224,12 +233,6 @@ Settings.prototype = {
 	}
 	,set_isAutostart: function(value) {
 		return this.isAutostart = value;
-	}
-	,get_elementID: function() {
-		return this.elementID;
-	}
-	,set_elementID: function(value) {
-		return this.elementID = value;
 	}
 	,get_sizeType: function() {
 		return this.sizeType;
@@ -336,7 +339,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			haxe_Log.trace("case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 164, className : "Sketcher", methodName : "appendTo"});
+			haxe_Log.trace("case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 171, className : "Sketcher", methodName : "appendTo"});
 		}
 		return this;
 	}
@@ -658,7 +661,7 @@ Sketcher.prototype = {
 			}
 			break;
 		case "webgl":
-			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 754, className : "Sketcher", methodName : "update"});
+			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 761, className : "Sketcher", methodName : "update"});
 			var _g = 0;
 			var _g1 = this.baseArray.length;
 			while(_g < _g1) {
@@ -672,14 +675,11 @@ Sketcher.prototype = {
 			this.baseArray = [];
 			break;
 		default:
-			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 765, className : "Sketcher", methodName : "update"});
+			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 772, className : "Sketcher", methodName : "update"});
 		}
 	}
 	,__class__: Sketcher
 };
-var Globals = function() { };
-$hxClasses["Globals"] = Globals;
-Globals.__name__ = "Globals";
 var Std = function() { };
 $hxClasses["Std"] = Std;
 Std.__name__ = "Std";
@@ -4452,20 +4452,14 @@ sketcher_draw_Base.prototype = {
 		this.setPosition(x,y);
 	}
 	,setRotate: function(degree,rx,ry) {
-		if(ry == null) {
-			ry = 0;
-		}
-		if(rx == null) {
-			rx = 0;
-		}
 		this.rotate = degree;
 		this.set_rx(rx);
 		this.set_ry(ry);
 		var str = "rotate(" + degree;
-		if(rx != 0) {
+		if(rx != null) {
 			str += "," + rx;
 		}
-		if(ry != 0) {
+		if(ry != null) {
 			str += "," + ry;
 		}
 		str += ")";
@@ -5089,7 +5083,7 @@ sketcher_draw_Button.prototype = $extend(sketcher_draw_Base.prototype,{
 			Globals.mouseX = e.clientX - _gthis.rect.left;
 			Globals.mouseY = e.clientY - _gthis.rect.top;
 			if(_gthis.isMouseOver()) {
-				haxe_Log.trace("click",{ fileName : "src/sketcher/draw/Button.hx", lineNumber : 208, className : "sketcher.draw.Button", methodName : "ctx"});
+				haxe_Log.trace("click",{ fileName : "src/sketcher/draw/Button.hx", lineNumber : 210, className : "sketcher.draw.Button", methodName : "ctx"});
 			}
 			return Globals.isMouseDown = true;
 		});
@@ -5617,7 +5611,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.isGroupHidden = isHidden;
 	}
 	,test: function() {
-		haxe_Log.trace("test if casting works",{ fileName : "src/sketcher/draw/Group.hx", lineNumber : 157, className : "sketcher.draw.Group", methodName : "test"});
+		haxe_Log.trace("test if casting works",{ fileName : "src/sketcher/draw/Group.hx", lineNumber : 161, className : "sketcher.draw.Group", methodName : "test"});
 	}
 	,getHeight: function() {
 		var _g = 0;
@@ -6514,7 +6508,7 @@ sketcher_draw_Polygon.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,getPoint: function(id) {
 		if(id * 2 > this.get_arr().length) {
-			haxe_Log.trace("not in this length",{ fileName : "src/sketcher/draw/Polygon.hx", lineNumber : 226, className : "sketcher.draw.Polygon", methodName : "getPoint"});
+			haxe_Log.trace("not in this length",{ fileName : "src/sketcher/draw/Polygon.hx", lineNumber : 230, className : "sketcher.draw.Polygon", methodName : "getPoint"});
 		}
 		var p = { x : this.get_arr()[id * 2], y : this.get_arr()[id * 2 + 1]};
 		return p;
@@ -6912,7 +6906,7 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 				++count;
 			}
 			lines.push(sentance);
-			haxe_Log.trace(sentance,{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 228, className : "sketcher.draw.Text", methodName : "ctx"});
+			haxe_Log.trace(sentance,{ fileName : "src/sketcher/draw/Text.hx", lineNumber : 235, className : "sketcher.draw.Text", methodName : "ctx"});
 		} else {
 			lines = this.get_str().split("\n");
 		}
@@ -8053,7 +8047,7 @@ sketcher_util_GridUtil.prototype = {
 		return this;
 	}
 	,calc: function() {
-		haxe_Log.trace("WIP",{ fileName : "src/sketcher/util/GridUtil.hx", lineNumber : 262, className : "sketcher.util.GridUtil", methodName : "calc"});
+		haxe_Log.trace("WIP",{ fileName : "src/sketcher/util/GridUtil.hx", lineNumber : 265, className : "sketcher.util.GridUtil", methodName : "calc"});
 		return this;
 	}
 	,setPosition: function(x,y) {
@@ -8571,10 +8565,10 @@ sketcher_util_MathUtil.toRadian = function(angleInDegree) {
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
+$hxClasses["Math"] = Math;
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }
-$hxClasses["Math"] = Math;
 if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.prototype.__class__ = $hxClasses["String"] = String;
 String.__name__ = "String";
@@ -8589,8 +8583,6 @@ var Bool = Boolean;
 var Class = { };
 var Enum = { };
 js_Boot.__toStr = ({ }).toString;
-Sketcher.UNIQ_ID = "";
-Sketcher.SVG_UNIQ_ID = "";
 Globals.MOUSE_DOWN = "mousedown";
 Globals.MOUSE_UP = "mouseup";
 Globals.MOUSE_MOVE = "mousemove";
@@ -8602,6 +8594,8 @@ Globals.mousePressed = 0;
 Globals.mouseReleased = 0;
 Globals.isFullscreen = false;
 Globals.TWO_PI = Math.PI * 2;
+Sketcher.UNIQ_ID = "";
+Sketcher.SVG_UNIQ_ID = "";
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;

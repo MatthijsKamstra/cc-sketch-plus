@@ -1,9 +1,12 @@
 package sketcher.util;
 
+#if js
+import js.Browser.*;
+#end
 // import Sketch.Global.*;
 import sketcher.AST;
-import js.Browser.*;
-import js.html.CanvasRenderingContext2D;
+// import js.Browser.*;
+// import js.html.CanvasRenderingContext2D;
 import sketcher.util.ColorUtil.RGB;
 
 /**
@@ -644,12 +647,14 @@ class GridUtil {
 		}
 
 		total = array.length; // just to have easy access to the array lentth
+		#if js
 		if (_isDebug) {
 			console.groupCollapsed('${toString()} Sata');
 			console.log('x: $x, y: $y, width: $width, height: $height, cellWidth: $cellWidth, cellHeight: $cellHeight, numHor: $numHor, numVer: $numVer, array: ${array.length}');
 			console.table(array);
 			console.groupEnd();
 		}
+		#end
 
 		totalRow = Math.round(numVer);
 		totalColumn = Math.round(numHor);

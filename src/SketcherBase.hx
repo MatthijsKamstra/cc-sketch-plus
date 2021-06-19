@@ -1,7 +1,7 @@
 package;
 
-import Sketcher.Globals;
-import Sketcher.Globals.*;
+import Globals.Globals;
+import Globals.Globals.*;
 import js.Browser.*;
 import js.html.*;
 import js.html.CanvasElement;

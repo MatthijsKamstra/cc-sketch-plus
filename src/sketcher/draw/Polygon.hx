@@ -1,9 +1,11 @@
 package sketcher.draw;
 
+#if js
+import js.Browser.*;
+#end
 import sketcher.util.MathUtil;
 import sketcher.util.ColorUtil;
 import sketcher.AST.Point;
-import js.Browser.*;
 
 class Polygon extends Base implements IBase {
 	public static var ISWARN:Bool;
@@ -123,6 +125,7 @@ class Polygon extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.groupCollapsed('Polygon (${id}) info canvas');
@@ -200,6 +203,7 @@ class Polygon extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	function convertArr():Array<Point> {
 		var _pointArray = [];

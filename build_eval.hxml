@@ -1,0 +1,9 @@
+# -lib hxquicksettings
+# -lib cc-sketch
+# -lib hxexterns
+# -lib hxnodejs
+-cp src
+-D analyzer-optimize
+-main MainEval
+--interp
+

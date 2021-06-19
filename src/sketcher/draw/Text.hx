@@ -1,6 +1,8 @@
 package sketcher.draw;
 
+#if js
 import js.Browser.*;
+#end
 import sketcher.util.ColorUtil;
 
 using StringTools;
@@ -91,6 +93,7 @@ class Text extends Base implements IBase {
 		this.textBaseline = value;
 	}
 
+	#if js
 	public function getWidth() {
 		if (!ISWARN) {
 			console.warn('Get Width of text doens\'t work for svg currenlty');
@@ -118,6 +121,7 @@ class Text extends Base implements IBase {
 		ctx.font = _font;
 		return ctx.measureText(this.str).width;
 	}
+	#end
 
 	// ____________________________________ create ____________________________________
 	public function svg(?settings:Settings):String {
@@ -145,10 +149,12 @@ class Text extends Base implements IBase {
 			// var style = '<style type="text/css">.fontstyle_${className} {${this.style}}</style>';
 			// xml.addChild(Xml.parse(style));
 
+			#if js
 			// [mck] this doesn't break the svg export to jpg or png, but it doesn't show it in the canvas when rendering
 			var style = document.createElement('style');
 			style.innerHTML = '.fontstyle_${className} {${this.style}}';
 			document.body.appendChild(style);
+			#end
 
 			// var _svg:js.html.svg.SVGElement = document.getElementsByName('svg')[0];
 			// _svg.insertBefore(_svg.firstChild, style);
@@ -172,6 +178,7 @@ class Text extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		useDefaultsCanvas();
 
@@ -240,6 +247,7 @@ class Text extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ converters for align and baseline ____________________________________
 	// function
@@ -430,7 +438,9 @@ class Text extends Base implements IBase {
 	 * @return Float
 	 */
 	function get_width():Float {
+		#if js
 		getWidth();
+		#end
 		return width;
 	}
 
@@ -486,8 +496,7 @@ class Text extends Base implements IBase {
 	var TextBeforeEdge = "text-before-edge";
 	var Inherit = 'inherit';
 	}
- */
-// generic type
+ */ // generic type
 enum TextAlignType {
 	Center;
 	Left;

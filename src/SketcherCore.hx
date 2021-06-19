@@ -1,178 +1,21 @@
 package;
 
-#if js
-import js.Browser.*;
-import js.html.svg.Element;
-import js.html.svg.SVGElement;
-#end
 import sketcher.AST.Point;
 import sketcher.draw.*;
 import sketcher.draw.AST.LineCap;
 import sketcher.draw.AST.LineJoin;
 import sketcher.util.MathUtil;
 
-class Sketcher {
-	#if js
-	var element:js.html.Element;
-	#end
-
-	var baseArray:Array<IBase> = [];
-
+class SketcherCore {
 	/**
 	 * read the settings if needed
 	 */
 	public var settings:Settings;
 
 	/**
-	 * canvas used for graphics
+	 * collect all shapes in this array
 	 */
-	#if js
-	public var canvas:js.html.CanvasElement;
-
-	// canvas context
-	public static var ctx:js.html.CanvasRenderingContext2D;
-
-	// webgl?
-	public static var gl:js.html.webgl.RenderingContext;
-	#end
-
-	/**
-	 * the svg string (string injected into div)
-	 */
-	public var svg:String; // should be the svg/xml
-
-	public var svgEl:SVGElement; // should be the svg/xml
-
-	// id for containers
-	public var CANVAS_ID:String = "sketcher_canvas";
-	public var WEBGL_ID:String = "sketcher_canvas_webgl";
-	public var SVG_ID:String = "sketcher_svg";
-	public var WRAPPER_ID:String = "sketcher_wrapper";
-
-	public static var UNIQ_ID:String = "";
-	public static var SVG_UNIQ_ID:String = "";
-
-	/**
-	 * Create sketcher
-	 *
-	 * @example
-	 * 		var settings = new Settings(paperW, paperH, 'svg');
-	 *		settings.autostart = true;
-	 *		settings.padding = 10;
-	 *		settings.scale = false;
-	 *		settings.elementID = 'sketcher-svg-wrapper';
-	 *
-	 *		var sketch2 = Sketcher.create(settings).appendTo(div0);
-	 *
-	 * @param settings
-	 */
-	public function new(settings:Settings) {
-		this.settings = settings;
-
-		Globals.Globals.w = settings.width;
-		Globals.Globals.h = settings.height;
-
-		// make sure the svg id is 'uniq'
-		var u = Date.now().getTime();
-		if ('$u' == UNIQ_ID) {
-			UNIQ_ID = '${u}_1';
-		} else {
-			UNIQ_ID = '${u}';
-		}
-		SVG_UNIQ_ID = '${WRAPPER_ID}_${SVG_ID}_${UNIQ_ID}';
-
-		if (settings.elementID != null) {
-			WRAPPER_ID = settings.elementID;
-		}
-
-		if (settings.isScaled == true) {
-			if (document.getElementById('${settings.elementID}-style') == null) {
-				var node = document.createElement('style');
-				node.id = '${settings.elementID}-style';
-				node.innerHTML = '
-				<!-- no padding -->
-				.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
-				svg {width: 100%; height: 100%; background-color:#ffffff; }
-				canvas{width: 100%; background-color:#ffffff; }
-				';
-				document.body.appendChild(node);
-			}
-		}
-
-		if (settings.padding != null && settings.padding >= 0) {
-			if (document.getElementById('${settings.elementID}-style') == null) {
-				var node = document.createElement('style');
-				node.id = '${settings.elementID}-style';
-				node.innerHTML = '
-				<!-- with padding -->
-				.sketcher-wrapper{width: 100%;height: 100%; max-width: 100vh;padding: 0;margin: 0 auto;display: flex;align-items: center;justify-content: center;}
-				svg {padding: ${settings.padding}px; width: 100%;  height: 100%; background-color:#ffffff; }
-				canvas {padding: ${settings.padding}px; width: 100%; background-color:#ffffff; }
-				';
-				document.body.appendChild(node);
-			}
-		}
-	}
-
-	// ____________________________________ util to append ____________________________________
-
-	/**
-	 * [Description]
-	 * @param element
-	 * @return Sketcher
-	 */
-	public function appendTo(element:js.html.Element):Sketcher {
-		if (element == null) {
-			return this;
-		}
-		this.element = element;
-
-		// console.log(settings);
-		// console.log(element);
-
-		switch (settings.type) {
-			case 'svg':
-				// trace('appendto - svg');
-				var svgW = '${settings.width}';
-				var svgH = '${settings.height}';
-				var svgViewBox = '0 0 ${settings.width} ${settings.height}';
-				if (settings.sizeType != null) {
-					svgW = '${Math.round(MathUtil.px2mm(settings.width))}${settings.sizeType}';
-					svgH = '${Math.round(MathUtil.px2mm(settings.height))}${settings.sizeType}';
-				}
-				if (settings.viewBox != null) {
-					svgViewBox = '${settings.viewBox[0]} ${settings.viewBox[1]} ${settings.viewBox[2]} ${settings.viewBox[3]}';
-				}
-
-				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="${svgViewBox}" version="1.1" id="${SVG_UNIQ_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"></svg>';
-				element.innerHTML = (_xml);
-
-				svgEl = cast element;
-
-			// update();
-			case 'canvas':
-				// trace('canvas');
-				canvas = document.createCanvasElement();
-				canvas.width = settings.width;
-				canvas.height = settings.height;
-				canvas.id = CANVAS_ID;
-				ctx = canvas.getContext2d();
-				element.appendChild(canvas);
-			// console.log(canvas);
-			case 'webgl':
-				// trace('webgl');
-				canvas = document.createCanvasElement();
-				canvas.width = settings.width;
-				canvas.height = settings.height;
-				canvas.id = WEBGL_ID;
-				gl = canvas.getContextWebGL();
-				element.appendChild(canvas);
-			default:
-				trace("case '" + settings.type.toLowerCase() + "': trace ('" + settings.type.toLowerCase() + "');");
-		}
-
-		return this;
-	}
+	var baseArray:Array<IBase> = [];
 
 	// ____________________________________ make something ____________________________________
 
@@ -461,12 +304,14 @@ class Sketcher {
 	 * @param isCenter
 	 * @return Image
 	 */
+	#if js
 	public function makeImageFromImage(x:Float, y:Float, img:js.html.Image, width:Float, height:Float, ?isCenter:Bool = false):Image {
 		var shape = new Image(x, y, '', width, height, isCenter);
 		shape.image = img;
 		baseArray.push(shape);
 		return shape;
 	}
+	#end
 
 	/**
 	 * Group is an collection of IBase items
@@ -618,23 +463,6 @@ class Sketcher {
 	}
 
 	/**
-	 * basic reset, for svg not the best solution
-	 */
-	public function clear() {
-		baseArray = [];
-		if (settings.type.toLowerCase() == 'svg') {
-			if (getSVGElement() != null) {
-				getSVGElement().innerHTML = '';
-			} else {
-				element.innerHTML = '';
-			}
-		}
-		if (settings.type.toLowerCase() == 'canvas') {
-			ctx.clearRect(0, 0, settings.width, settings.height);
-		}
-	}
-
-	/**
 	 * all elements created in code, are store here,
 	 * this way its possible to add a element (for example a rectangle)
 	 * and later put that rectangle in a group
@@ -644,170 +472,4 @@ class Sketcher {
 	public function getBaseArray():Array<IBase> {
 		return baseArray;
 	}
-
-	/**
-	 * get the SVG (as String) used for this sketch
-	 *
-	 * @return String
-	 */
-	public function getSVG():String {
-		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
-		var div = document.getElementById(WRAPPER_ID);
-		return div.innerHTML;
-	}
-
-	/**
-	 * get the SVGElement used for the sketch
-	 *
-	 * @return js.html.svg.SVGElement
-	 */
-	public function getSVGElement():js.html.svg.SVGElement {
-		// var svg:js.html.svg.SVGElement = cast wrapperDiv.getElementsByTagName('svg')[0];
-		var svg:js.html.svg.SVGElement = cast document.getElementById('${SVG_UNIQ_ID}');
-		return svg;
-	}
-
-	// ____________________________________ update ____________________________________
-
-	/**
-	 * svg will be generated in array and objects
-	 *
-	 * So to generate the svg, you need to update it!
-	 */
-	public function update() {
-		// trace('update');
-
-		if (element == null) {
-			// make sure the element exists
-			// console.warn('element doesn\'t exist in DOM (${element})');
-			return;
-		}
-		// trace('type:${settings.type}, id:${element.id}');
-
-		switch (settings.type) {
-			case 'svg':
-				// trace('svg');
-				// [mck] TODO change string into XML!!!
-				var svgW = '${settings.width}';
-				var svgH = '${settings.height}';
-				var svgViewBox = '0 0 ${settings.width} ${settings.height}';
-				if (settings.sizeType != null) {
-					svgW += '${settings.sizeType}';
-					svgH += '${settings.sizeType}';
-				}
-				if (settings.viewBox != null) {
-					svgViewBox = '${settings.viewBox[0]} ${settings.viewBox[1]} ${settings.viewBox[2]} ${settings.viewBox[3]}';
-				}
-
-				var _xml = '<?xml version="1.0" standalone="no"?><svg width="${svgW}" height="${svgH}" viewBox="${svgViewBox}" version="1.1" id="${SVG_UNIQ_ID}" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">';
-				var svgInnerHtml = '';
-				var content = '';
-				var defs = '';
-				for (i in 0...baseArray.length) {
-					var base = baseArray[i];
-
-					if (base == null)
-						continue; // with the creation of groups there are base == null
-
-					// if (base.type == 'Group') {
-					// 	trace('groups do this');
-					// 	cast(base, draw.Group).test();
-					// }
-					var draw = base.svg(settings);
-					// trace(base.toString());
-					// trace(draw);
-
-					switch (base.type) {
-						case 'gradient', 'mask', 'marker':
-							defs += draw;
-						default:
-							content += draw;
-					}
-
-					// if (base.type == 'gradient') {
-					// 	defs += draw;
-					// } else {
-					// 	content += draw;
-					// }
-				}
-				_xml += '<defs>' + defs + '</defs>';
-				_xml += content + '</svg>';
-
-				svgInnerHtml += '<defs>' + defs + '</defs>';
-				svgInnerHtml += content + '</svg>';
-
-				svg = _xml; // external acces?
-
-				if (this.getSVGElement() != null) {
-					this.getSVGElement().innerHTML = svgInnerHtml;
-				} else {
-					element.innerHTML = _xml;
-				}
-			// [mck] not sure I want to reset it, but currently this is not usefull, only for animations
-			// // empty baseArray
-			// baseArray = [];
-			case 'canvas':
-				// trace('canvas');
-				for (i in 0...baseArray.length) {
-					var base = baseArray[i];
-					if (base == null)
-						continue; // with the creation of groups there are base == null
-					// trace(base.type);
-					base.ctx(ctx);
-				}
-				// empty baseArray
-				baseArray = [];
-			case 'webgl':
-				trace('webgl');
-				for (i in 0...baseArray.length) {
-					var base = baseArray[i];
-					if (base == null)
-						continue; // with the creation of groups there are base == null
-					// trace(base.type);
-					base.gl(gl);
-				}
-				// empty baseArray
-				baseArray = [];
-			default:
-				trace("case '" + settings.type + "': trace ('" + settings.type + "');");
-		}
-	}
-
-	// [mck] TODO create settings AST to have possible object send as well?
-	public static function create(settings:Settings):Sketcher {
-		var sketcher = new Sketcher(settings);
-		sketcher.baseArray = []; // make sure it's empty
-		return sketcher;
-	}
 }
-// /**
-//  * Globals.Globals has values you can access easily
-//  *
-//  * @usage:
-//  * 		import Globals.Globals.*;
-//  *
-//  * @source
-//  * 			https://groups.google.com/forum/#!topic/haxelang/CPbyE3WCvnc
-//  * 			https://gist.github.com/nadako/5913724
-//  */
-// class Globals {
-// 	public static var MOUSE_DOWN:String = 'mousedown';
-// 	public static var MOUSE_UP:String = 'mouseup';
-// 	public static var MOUSE_MOVE:String = 'mousemove';
-// 	public static var KEY_DOWN:String = 'keydown';
-// 	public static var KEY_UP:String = 'keyup';
-// 	public static var RESIZE:String = 'resize';
-// 	public static var mouseX:Float;
-// 	public static var mouseY:Float;
-// 	public static var isMouseMoved:Bool;
-// 	public static var isMouseDown:Bool = false;
-// 	public static var keyDown:Int;
-// 	public static var keyUp:Int;
-// 	public static var mousePressed:Int = 0;
-// 	public static var mouseReleased:Int = 0;
-// 	public static var isFullscreen:Bool = false;
-// 	public static var TWO_PI:Float = Math.PI * 2;
-// 	// allows me global access to canvas and it’s width and height properties
-// 	public static var w:Float;
-// 	public static var h:Float;
-// }

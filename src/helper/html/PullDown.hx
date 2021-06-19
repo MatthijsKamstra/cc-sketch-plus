@@ -101,7 +101,7 @@ class PullDown {
 			}
 		}
 
-		window.addEventListener(Sketcher.Globals.KEY_DOWN, function(e:js.html.KeyboardEvent) {
+		window.addEventListener(Globals.Globals.KEY_DOWN, function(e:js.html.KeyboardEvent) {
 			switch (e.key) {
 				case 'h':
 					if (div.hasAttribute('style')) {

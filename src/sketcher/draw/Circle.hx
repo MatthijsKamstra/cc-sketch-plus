@@ -1,10 +1,8 @@
 package sketcher.draw;
 
-import js.Browser.*;
-import js.html.webgl.RenderingContext;
-import sketcher.AST.Point;
-import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
+import sketcher.util.ColorUtil;
+import sketcher.AST.Point;
 
 class Circle extends Base implements IBase {
 	public static var ISWARN:Bool;
@@ -53,6 +51,7 @@ class Circle extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
 		useDefaultsCanvas();
@@ -108,6 +107,7 @@ class Circle extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ debug ____________________________________
 

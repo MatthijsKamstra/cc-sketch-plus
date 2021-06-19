@@ -1,7 +1,9 @@
 package sketcher.draw;
 
 import sketcher.util.MathUtil;
+#if js
 import js.Browser.*;
+#end
 
 class Group extends Base implements IBase {
 	public static var ISWARN:Bool;
@@ -62,6 +64,7 @@ class Group extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.groupCollapsed('Group (${id}) info canvas');
@@ -137,6 +140,7 @@ class Group extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ unique functions for this specific class ____________________________________
 

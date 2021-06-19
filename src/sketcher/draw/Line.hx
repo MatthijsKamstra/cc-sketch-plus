@@ -37,6 +37,7 @@ class Line extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
 		useDefaultsCanvas();
@@ -76,6 +77,7 @@ class Line extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ getter/setter ____________________________________
 

@@ -1,7 +1,9 @@
 package sketcher.draw;
 
+#if js
 import js.Browser.*;
 import js.html.webgl.RenderingContext;
+#end
 import sketcher.AST.Point;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
@@ -21,12 +23,13 @@ class Background extends Base implements IBase {
 		xml.set('x', '0');
 		xml.set('y', "0");
 
-		xml.set('width', Std.string(Sketcher.Globals.w));
-		xml.set('height', Std.string(Sketcher.Globals.h));
+		xml.set('width', Std.string(Globals.Globals.w));
+		xml.set('height', Std.string(Globals.Globals.h));
 
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// set everything to default values
 		useDefaultsCanvas();
@@ -35,7 +38,7 @@ class Background extends Base implements IBase {
 		ctx.fillStyle = ColorUtil.getColourObj(_fillColor, this.fillOpacity);
 
 		ctx.beginPath();
-		ctx.rect(0, 0, Sketcher.Globals.w, Sketcher.Globals.h);
+		ctx.rect(0, 0, Globals.Globals.w, Globals.Globals.h);
 		ctx.fill();
 		ctx.closePath();
 	}
@@ -64,4 +67,5 @@ class Background extends Base implements IBase {
 		// the function call that actually does the drawing.
 		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
 	}
+	#end
 }

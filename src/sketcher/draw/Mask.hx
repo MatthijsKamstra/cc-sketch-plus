@@ -1,6 +1,8 @@
 package sketcher.draw;
 
+#if js
 import js.Browser.*;
+#end
 
 class Mask extends Base implements IBase {
 	public static var ISWARN:Bool;
@@ -24,8 +26,8 @@ class Mask extends Base implements IBase {
 	public function svg(?settings:Settings):String {
 		xml.set('x', '0');
 		xml.set('y', "0");
-		xml.set('width', Std.string(Sketcher.Globals.w));
-		xml.set('height', Std.string(Sketcher.Globals.h));
+		xml.set('width', Std.string(Globals.Globals.w));
+		xml.set('height', Std.string(Globals.Globals.h));
 
 		var comment = Xml.createComment('Mask: ${id}');
 		xml.addChild(comment); // not sure why?
@@ -42,6 +44,7 @@ class Mask extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		if (!ISWARN) {
 			console.warn('Mask doens\'t work the same as svg, use with care');
@@ -69,6 +72,7 @@ class Mask extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ getter/setter ____________________________________
 

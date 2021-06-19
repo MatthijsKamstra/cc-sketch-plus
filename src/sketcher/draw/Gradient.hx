@@ -1,7 +1,9 @@
 package sketcher.draw;
 
+#if js
 import js.html.CanvasGradient;
 import js.Browser.*;
+#end
 
 // quick gradients: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
 
@@ -40,9 +42,11 @@ class Gradient extends Base implements IBase {
 
 	var dir:GradientDir = LeftRight;
 
+	#if js
 	var canvasGradient:js.html.CanvasGradient;
 
 	var gradientObj:GradientObj;
+	#end
 
 	/**
 	 * quick way to create an gradient, needs more love
@@ -102,6 +106,7 @@ class Gradient extends Base implements IBase {
 	 *
 	 * @param ctx
 	 */
+	#if js
 	public function ctx(ctx:js.html.CanvasRenderingContext2D) {
 		// if (!ISWARN) {
 		// 	console.warn('Gradient doens\'t work the same as svg, use with care');
@@ -149,6 +154,7 @@ class Gradient extends Base implements IBase {
 	}
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
+	#end
 
 	// ____________________________________ misc ____________________________________
 
@@ -184,7 +190,9 @@ enum GradientDir {
 	RightTopBottomLeft; // syntatic sugar
 }
 
+#if js
 typedef GradientObj = {
 	var id:String;
 	var canvasGradient:js.html.CanvasGradient;
 }
+#end

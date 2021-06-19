@@ -1,7 +1,9 @@
 package sketcher.draw;
 
+#if js
 import js.Browser.*;
 import js.html.webgl.RenderingContext;
+#end
 import sketcher.AST.Point;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
@@ -65,6 +67,7 @@ class Rectangle extends Base implements IBase {
 		return xml.toString();
 	}
 
+	#if js
 	public function useCanvasShadow(ctx:js.html.CanvasRenderingContext2D) {
 		if (this.shadowColor != null) {
 			ctx.shadowColor = this.shadowColor;
@@ -230,6 +233,7 @@ class Rectangle extends Base implements IBase {
 		// the function call that actually does the drawing.
 		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
 	}
+	#end
 
 	// ____________________________________ getter/setter ____________________________________
 	function get_radius():Int {

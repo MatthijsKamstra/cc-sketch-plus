@@ -1,0 +1,21 @@
+# -lib hxquicksettings
+# -lib cc-sketch
+-lib hxexterns
+-lib hxnodejs
+-cp src
+-main MainNode
+-js bin/cc_test_export.js
+-D source-map-content
+-D state=debug
+-debug
+-D js-es=6
+# -dce full
+# -dce no
+
+--next
+
+# Use terminal command to start Node.js!
+--cmd echo "use: 'node bin/cc_test_export.js' to check script "
+--cmd cd bin
+--cmd node cc_test_export.js
+--cmd echo exit

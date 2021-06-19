@@ -1,5 +1,3 @@
-import js.Browser.*;
-
 /**
  * https://two.js.org/#documentation
  */
@@ -16,8 +14,10 @@ class Settings {
 	@:isVar public var isAutostart(get, set):Bool = false; // don't think this does anything (yet)
 	@:isVar public var isAnimation(get, set):Bool = true;
 
+	#if js
 	@:isVar public var element(get, set):js.html.Element;
 	@:isVar public var elementID(get, set):String;
+	#end
 
 	// SVG ONLY
 	@:isVar public var viewBox(get, set):Array<Float>; // always in pixels
@@ -87,6 +87,7 @@ class Settings {
 		return isScaled = value;
 	}
 
+	#if js
 	function get_element():js.html.Element {
 		return element;
 	}
@@ -94,6 +95,17 @@ class Settings {
 	function set_element(value:js.html.Element):js.html.Element {
 		return element = value;
 	}
+	#end
+
+	#if js
+	function get_elementID():String {
+		return elementID;
+	}
+
+	function set_elementID(value:String):String {
+		return elementID = value;
+	}
+	#end
 
 	function get_margin():Int {
 		return margin;
@@ -109,14 +121,6 @@ class Settings {
 
 	function set_isAutostart(value:Bool):Bool {
 		return isAutostart = value;
-	}
-
-	function get_elementID():String {
-		return elementID;
-	}
-
-	function set_elementID(value:String):String {
-		return elementID = value;
 	}
 
 	function get_sizeType():SizeType {
@@ -141,7 +145,11 @@ class Settings {
 
 	function set_viewBox(value:Array<Float>):Array<Float> {
 		if (value.length != 4) {
-			console.warn('Expect 4 float values: "0 0 300 400"');
+			#if js
+			js.Browser.console.warn('Expect 4 float values: "0 0 300 400"');
+			#else
+			trace('Expect 4 float values: "0 0 300 400"');
+			#end
 		}
 		return viewBox = value;
 	}
