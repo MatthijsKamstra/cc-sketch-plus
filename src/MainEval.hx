@@ -26,17 +26,22 @@ class MainEval {
 		settings.isAnimation = false; // default is true (based upon canvas)
 		settings.padding = 0;
 		settings.isScaled = true; // (default is false)
-		settings.sizeType = SizeType.MM;
+		// settings.sizeType = SizeType.MM;
 		settings.viewBox = [0, 0, sketchWidth, sketchHeight];
 
 		var sketch = SketcherSVG.create(settings).setup();
 
 		var bg = sketch.makeBackground('white');
 
+		// colors
+		var colorArr = ColorUtil.niceColor100SortedString[MathUtil.randomInt(ColorUtil.niceColor100SortedString.length - 1)];
+
+		var colorBg = sketch.makeRectangle(w2, h2, w, h);
+		colorBg.setFill(colorArr[0]);
+
 		for (i in 0...10) {
 			var circle = sketch.makeCircle(MathUtil.random(w), MathUtil.random(h), MathUtil.clamp(MathUtil.random(200), 50, 200));
-			var color = ColorUtil.niceColor100[MathUtil.randomInt(ColorUtil.niceColor100.length - 1)];
-			circle.setFill(color[0]);
+			circle.setFill(colorArr[MathUtil.randomInt(0, colorArr.length - 1)]);
 		}
 
 		// trace(sketch);
