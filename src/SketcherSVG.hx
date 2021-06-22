@@ -4,8 +4,6 @@ import sketcher.util.MathUtil;
 import sketcher.draw.*;
 
 class SketcherSVG extends SketcherCore {
-
-
 	// id for containers
 	public var CANVAS_ID:String = "sketcher_canvas";
 	public var WEBGL_ID:String = "sketcher_canvas_webgl";
@@ -86,7 +84,7 @@ class SketcherSVG extends SketcherCore {
 	 * So to generate the svg, you need to update it!
 	 */
 	public function update() {
-		// trace('svg');
+		trace('svg');
 		// [mck] TODO change string into XML!!!
 		var svgW = '${settings.width}';
 		var svgH = '${settings.height}';
