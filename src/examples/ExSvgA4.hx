@@ -1,5 +1,7 @@
 package examples;
 
+import sketcher.draw.Text.TextAlignType;
+import sketcher.util.EmbedUtil;
 import Settings.SizeType;
 import sketcher.export.FileExport;
 import sketcher.draw.AST.LineCap;
@@ -18,6 +20,8 @@ class ExSvgA4 {
 	//
 	var isDebug:Bool = true;
 
+	var family = '';
+
 	/**
 		<svg
 		  width="210mm"
@@ -26,7 +30,8 @@ class ExSvgA4 {
 		  version="1.1"
 	 */
 	public function new() {
-		init();
+		family = EmbedUtil.embedGoogleFont('Black+Ops+One', init);
+		// init();
 	}
 
 	function init() {
@@ -63,7 +68,7 @@ class ExSvgA4 {
 		settings.isAnimation = false; // default is true (based upon canvas)
 		settings.padding = 0;
 		settings.isScaled = true; // (default is false)
-		settings.sizeType = SizeType.MM;
+		// settings.sizeType = SizeType.MM;
 		settings.viewBox = [0, 0, sketchWidth, sketchHeight];
 
 		var sketch = Sketcher.create(settings).appendTo(elem);
@@ -168,6 +173,13 @@ class ExSvgA4 {
 		var rect = sketch.makeRectangle(p.x, p.y, MathUtil.mm2pixel(50), MathUtil.mm2pixel(100));
 		rect.setStroke(getColourObj(BLUE));
 		rect.setFill(getColourObj(MAROON));
+
+		var p = grid.array[6];
+		var shape = sketch.makeText("left", p.x, p.y);
+		shape.fillColor = getColourObj(MAROON);
+		shape.fontSize = '50px';
+		shape.fontFamily = family;
+		shape.textAlign = TextAlignType.Left;
 
 		// Don't forget to tell two to render everything to the screen
 		sketch.update();

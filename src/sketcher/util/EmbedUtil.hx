@@ -324,7 +324,7 @@ class EmbedUtil {
 			if (callback != null)
 				Timer.delay(() -> {
 					Reflect.callMethod(callback, callback, callbackArray);
-				}, 1); // only works when I delay for a second (1000) but that just is weird
+				}, 1); // only works when I delay for a milisecond (1) but that just is weird
 		}
 		document.head.appendChild(link);
 		// console.info('embedGoogleFont $family');

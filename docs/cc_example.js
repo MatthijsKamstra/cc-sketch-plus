@@ -77,7 +77,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-19 15:06:47");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2021-06-22 20:47:47");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -2501,11 +2501,12 @@ examples_ExRectangle.prototype = {
 	,__class__: examples_ExRectangle
 };
 var examples_ExSvgA4 = function() {
+	this.family = "";
 	this.isDebug = true;
 	this.sketchHeight = 1122.5197;
 	this.sketchWidth = 793.70079;
 	this.radiusSmall = 50;
-	this.init();
+	this.family = sketcher_util_EmbedUtil.embedGoogleFont("Black+Ops+One",$bind(this,this.init));
 };
 $hxClasses["examples.ExSvgA4"] = examples_ExSvgA4;
 examples_ExSvgA4.__name__ = "examples.ExSvgA4";
@@ -2535,7 +2536,6 @@ examples_ExSvgA4.prototype = {
 		settings.set_isAnimation(false);
 		settings.set_padding(0);
 		settings.set_isScaled(true);
-		settings.set_sizeType("mm");
 		settings.set_viewBox([0,0,this.sketchWidth,this.sketchHeight]);
 		var sketch = Sketcher.create(settings).appendTo(elem);
 		sketch.svgEl.onclick = function() {
@@ -2618,6 +2618,13 @@ examples_ExSvgA4.prototype = {
 		rect.setStroke(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
 		var rgb = sketcher_util_ColorUtil.MAROON;
 		rect.setFill(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
+		var p = this.grid.array[6];
+		var shape = sketch.makeText("left",p.x,p.y);
+		var rgb = sketcher_util_ColorUtil.MAROON;
+		shape.set_fillColor(sketcher_util_ColorUtil.getColour(rgb.r,rgb.g,rgb.b,null));
+		shape.set_fontSize("50px");
+		shape.set_fontFamily(this.family);
+		shape.set_textAlign(sketcher_draw_TextAlignType.Left);
 		sketch.update();
 	}
 	,__class__: examples_ExSvgA4
