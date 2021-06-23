@@ -147,4 +147,11 @@ class SketcherSVG extends SketcherCore {
 
 		return svg;
 	}
+
+	/**
+	 * basic reset, for svg not the best solution
+	 */
+	public function clear() {
+		baseArray = [];
+	}
 }
