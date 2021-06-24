@@ -85,6 +85,7 @@ class Text extends Base implements IBase {
 	}
 
 	// ____________________________________ func ____________________________________
+
 	public function align(value:TextAlignType) {
 		this.textAlign = value;
 	}
@@ -124,6 +125,7 @@ class Text extends Base implements IBase {
 	#end
 
 	// ____________________________________ create ____________________________________
+
 	public function svg(?settings:Settings):String {
 		// var style = '<style>.small {font:italic 13px sans-serif; fill:red;}</style>';
 		var comment = Xml.createComment('${this.str.replace('--', '__')}');
@@ -248,6 +250,20 @@ class Text extends Base implements IBase {
 
 	public function gl(gl:js.html.webgl.RenderingContext) {}
 	#end
+
+	// ____________________________________ set default family ____________________________________
+
+	public function setFontfamilyMono() {
+		xml.set('font-family', 'monospace');
+	}
+
+	public function setFontfamilySans() {
+		xml.set('font-family', 'Arial, Helvetica, sans-serif');
+	}
+
+	public function setFontfamilySerif() {
+		xml.set('font-family', 'serif');
+	}
 
 	// ____________________________________ converters for align and baseline ____________________________________
 	// function
