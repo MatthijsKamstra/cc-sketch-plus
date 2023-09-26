@@ -12,6 +12,8 @@
 # -dce full
 # -dce no
 
+-D no-deprecation-warnings
+
 --next
 
 # Use terminal command to start Node.js!
