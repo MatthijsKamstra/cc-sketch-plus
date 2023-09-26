@@ -37,7 +37,7 @@ class Settings {
 	 *
 	 * @param width		stage/canvas/sketch width in pixels
 	 * @param height	stage/canvas/sketch height in pixels
-	 * @param type		(default svg) type of sketches base; 'svg', 'canvas' will work or use SketchType.CANVAS, SketchType.SVG
+	 * @param type		(default svg) type of sketches base; 'svg', 'canvas' will work or use SketchTyper.CANVAS, SketchTyper.SVG
 	 */
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
 		this.width = width;
@@ -155,7 +155,7 @@ class Settings {
 	}
 }
 
-enum abstract SketchType(String) from String to String {
+enum abstract SketchTyper(String) from String to String {
 	var SVG = 'svg';
 	var CANVAS = 'canvas';
 	var WEBGL = 'webgl';
