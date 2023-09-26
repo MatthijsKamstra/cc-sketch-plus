@@ -27,19 +27,19 @@ How to install cc-sketch-plus
 
 Use this git repos as a development directory:
 
-```
+```bash
 haxelib dev cc-sketch-plus path/to/folder
 ```
 
 or use this git-repository directly
 
-```
+```bash
 haxelib git cc-sketch-plus https://github.com/MatthijsKamstra/cc-sketch-plus.git
 ```
 
 don't forget to add it to your build file
 
-```
+```haxe
 -lib cc-sketch-plus
 ```
 

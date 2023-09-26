@@ -1,12 +1,12 @@
-import js.lib.Float32Array;
-import sketcher.webgl.WebGLSetup;
-import sketcher.webgl.WebGl;
 import js.Browser.*;
 import js.html.webgl.ContextAttributes;
 import js.html.webgl.Program;
 import js.html.webgl.RenderingContext;
 import js.html.webgl.Shader;
 import js.html.webgl.UniformLocation;
+import js.lib.Float32Array;
+import sketcher.webgl.WebGLSetup;
+import sketcher.webgl.WebGl;
 
 using sketcher.webgl.WebGl;
 

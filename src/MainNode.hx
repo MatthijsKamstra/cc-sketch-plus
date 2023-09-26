@@ -1,11 +1,10 @@
 package;
 
-import js.Node;
-import js.node.Fs;
-//
 import Globals.Globals.*;
 import Settings.SizeType;
 import js.Browser.*;
+import js.Node;
+import js.node.Fs;
 import sketcher.draw.AST.LineCap;
 import sketcher.draw.AST.LineCap;
 import sketcher.export.FileExport;
@@ -13,6 +12,7 @@ import sketcher.util.ColorUtil;
 import sketcher.util.GridUtil;
 import sketcher.util.MathUtil;
 
+//
 class MainNode {
 	public function new() {
 		trace('MainNode');
