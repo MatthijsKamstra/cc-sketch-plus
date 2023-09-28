@@ -4,9 +4,9 @@ package sketcher.util;
 import js.Browser.*;
 #end
 // import Sketch.Global.*;
-import sketcher.AST;
 // import js.Browser.*;
 // import js.html.CanvasRenderingContext2D;
+import sketcher.AST;
 import sketcher.util.ColorUtil.RGB;
 
 /**

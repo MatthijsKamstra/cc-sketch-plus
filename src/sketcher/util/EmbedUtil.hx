@@ -1,11 +1,11 @@
 package sketcher.util;
 
-import js.Syntax;
 import haxe.Timer;
+import js.Browser.*;
 import js.Browser;
+import js.Syntax;
 import js.html.DOMParser;
 import js.html.LinkElement;
-import js.Browser.*;
 
 using StringTools;
 
