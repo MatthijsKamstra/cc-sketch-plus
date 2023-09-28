@@ -1,7 +1,5 @@
 package sketcher.util;
 
-import js.Browser.*;
-
 class WordsUtil {
 	public function new() {
 		// your code
@@ -10,11 +8,13 @@ class WordsUtil {
 	/**
 	 * @example
 	 *
-	 * 		for (i in 0...99) {
-	 *					var wordPercentage = WordsUtil.number2Words(Math.round(i));
-	 *						console.warn('$i - $wordPercentage');
-	 *					}
-	 * 		console.log(WordsUtil.number2Words(Math.round(pct * 100))); // Fifty-Eight
+	 * ```
+	 * for (i in 0...99) {
+	 *		var wordPercentage = WordsUtil.number2Words(Math.round(i));
+	 *		trace('$i - $wordPercentage');
+	 * }
+	 * trace(WordsUtil.number2Words(Math.round(pct * 100))); // Fifty-Eight
+	 * ```
 	 *
 	 * @param value		Int between 0 and 99
 	 * @return String
@@ -22,7 +22,7 @@ class WordsUtil {
 	public static function number2Words(value:Int):String {
 		var arr = Std.string(value).split('');
 		if (arr.length > 2) {
-			console.warn('not possible (yet) for bigger the 99');
+			trace('not possible (yet) for bigger the 99');
 			return '';
 		}
 		var words = '';

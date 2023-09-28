@@ -23,7 +23,10 @@ class Paper {
 	/**
 	 * inPixel
 	 *
-	 * @example		Paper.inPixel(PaperSize.A$)
+	 * @example
+	 * ```
+	 * 		sketcher.model.constants.Paper.inPixel(Paper.PaperSize.A4);
+	 * ```
 	 * @see
 	 *
 	 * @param
