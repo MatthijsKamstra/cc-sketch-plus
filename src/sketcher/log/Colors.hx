@@ -1,4 +1,4 @@
-package log;
+package sketcher.log;
 
 // https://gist.github.com/vratiu/9780109
 // https: // gkarthiks.github.io/quick-commands-cheat-sheet/bash_command.html

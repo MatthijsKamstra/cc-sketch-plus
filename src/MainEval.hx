@@ -3,13 +3,14 @@ package;
 import Globals.Globals.*;
 import Settings.SizeType;
 import sketcher.draw.AST.LineCap;
+import sketcher.log.*;
 import sketcher.util.ColorUtil.*;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
 
 class MainEval {
 	public function new() {
-		trace('MainEval');
+		info('MainEval');
 		init();
 	}
 

@@ -1,6 +1,6 @@
-package log;
+package sketcher.log;
 
-import log.Colors.*;
+import sketcher.log.Colors.*;
 
 /**
  *
