@@ -120,7 +120,7 @@ class SketcherCore {
 	 * @param isCenter		default is centered true, otherwise x and y are top-left start pos
 	 * @return Rectangle
 	 */
-	public function makeRoundedRectangle(x, y, width, height, radius, isCenter = true):Rectangle {
+	public function makeRoundedRectangle(x:Float, y:Float, width:Float, height:Float, radius:Int, isCenter = true):Rectangle {
 		if (!isCenter) {
 			x = Math.round(width / 2);
 			y = Math.round(height / 2);

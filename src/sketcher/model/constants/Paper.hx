@@ -71,26 +71,26 @@ class Paper {
 		return rectangle;
 	}
 
-	public static function inMM(papersize:String):Rectangle {
+	public static function inMM(papersize:PaperSize):Rectangle {
 		var w:Int = 0;
 		var h:Int = 0;
-		switch (papersize.toUpperCase()) {
-			case 'A1':
+		switch (papersize) {
+			case PaperSize.A1:
 				w = 594;
 				h = 841; // mm	23.4 x 33.1 in
-			case 'A2':
+			case PaperSize.A2:
 				w = 420;
 				h = 594; // mm	16.5 x 23.4 in
-			case 'A3':
+			case PaperSize.A3:
 				w = 297;
 				h = 420; // mm	11.7 x 16.5 in
-			case 'A4':
+			case PaperSize.A4:
 				w = 210;
 				h = 297; // mm	8.3 x 11.7 in
-			case 'A5':
+			case PaperSize.A5:
 				w = 148;
 				h = 210; // mm	5.8 x 8.3 in
-			case 'A6':
+			case PaperSize.A6:
 				w = 105;
 				h = 148; // mm	4.1 x 5.8 in
 			default:

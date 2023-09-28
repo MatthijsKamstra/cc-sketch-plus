@@ -3,7 +3,8 @@ package;
 import Globals.Globals.*;
 import Settings.SizeType;
 import sketcher.draw.AST.LineCap;
-import sketcher.log.*;
+import sketcher.log.Colors.*;
+import sketcher.log.Logger.*;
 import sketcher.util.ColorUtil.*;
 import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
@@ -47,7 +48,7 @@ class MainEval {
 
 		// trace(sketch);
 
-		trace(sketch.update());
+		warn(sketch.update());
 
 		writeFile('bin', 'test_eval.svg', sketch.update());
 	}
@@ -64,7 +65,7 @@ class MainEval {
 		}
 		// write the file
 		sys.io.File.saveContent(path + '/${filename}', content);
-		trace('written file: ${path}/${filename}');
+		mute('written file: ${path}/${filename}');
 	}
 
 	static public function main() {
