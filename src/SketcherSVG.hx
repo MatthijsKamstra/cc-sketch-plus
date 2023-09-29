@@ -84,7 +84,7 @@ class SketcherSVG extends SketcherCore {
 	 * So to generate the svg, you need to update it!
 	 */
 	public function update() {
-		info('svg');
+		// info('svg');
 		// [mck] TODO change string into XML!!!
 		var svgW = '${settings.width}';
 		var svgH = '${settings.height}';

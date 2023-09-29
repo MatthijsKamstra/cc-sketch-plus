@@ -10,7 +10,7 @@ class Group extends Base implements IBase {
 
 	public var type = 'group'; // base (get class name?)
 
-	@:isVar public var arr(get, set):Array<IBase>;
+	@:isVar public var arr(get, set):Array<IBase> = [];
 
 	var isOpacityOverride:Bool = false;
 	var isGroupHidden:Bool = false;
@@ -21,6 +21,7 @@ class Group extends Base implements IBase {
 	 * might be usefull to push all actions into one transform
 	 */
 	public function new(arr:Array<IBase>) {
+		this.arr = [];
 		this.arr = arr;
 		super('g');
 	}

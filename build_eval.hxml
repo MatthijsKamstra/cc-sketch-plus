@@ -4,6 +4,6 @@
 # -lib hxnodejs
 -cp src
 -D analyzer-optimize
--main MainInterp
+-main MainEval
 --interp
 

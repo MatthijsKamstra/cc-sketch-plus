@@ -686,7 +686,7 @@ class Sketcher {
 
 		switch (settings.type) {
 			case 'svg':
-				// trace('svg');
+				trace('svg');
 				// [mck] TODO change string into XML!!!
 				var svgW = '${settings.width}';
 				var svgH = '${settings.height}';
@@ -708,6 +708,8 @@ class Sketcher {
 
 					if (base == null)
 						continue; // with the creation of groups there are base == null
+
+					mute(base.type, 1);
 
 					// if (base.type == 'Group') {
 					// 	trace('groups do this');

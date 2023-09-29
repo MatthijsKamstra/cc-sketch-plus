@@ -325,8 +325,10 @@ class SketcherCore {
 		var shape = new Group(array);
 		for (j in 0...array.length) {
 			var _base = array[j];
+			// mute(_base.id, 1);
 			for (i in 0...baseArray.length) {
 				var base:IBase = baseArray[i];
+				// mute(base.id, 2);
 				if (base == _base) {
 					baseArray[i] = null; // the reason there is base == null!
 				}

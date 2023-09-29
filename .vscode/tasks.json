@@ -26,10 +26,7 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"label": "haxe: build.hxml"
 		},
 		{
@@ -55,6 +52,16 @@
 			],
 			"group": "build",
 			"label": "haxe: build_node.hxml"
+		},
+		{
+			"type": "hxml",
+			"file": "build_interp.hxml",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "hxml: build_interp.hxml"
 		}
 	]
 }
