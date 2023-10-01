@@ -266,6 +266,17 @@ class SketcherCore {
 	}
 
 	/**
+	 * Create a gradient, and set that gradient on a shape
+	 *
+	 * @example
+	 * ```
+	 * 		var gradient = sketch.makeGradient(gradient[0]);
+	 * 		gradient.id = 'gradientz';
+	 * 		var rect = sketch.makeRectangle(0, 0, w, h, false);
+	 * 		rect.id = 'bg with gradient';
+	 * 		rect.fillGradientColor = 'gradientz';
+	 * ```
+	 *
 	 * @source 	https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Gradients
 	 * 			https://www.w3schools.com/graphics/svg_grad_linear.asp
 	 */
@@ -274,6 +285,9 @@ class SketcherCore {
 		baseArray.push(shape);
 		return shape;
 	}
+
+	// hmmm, is it really usefull?????
+	// public function makeRectWithGradient(x, y, w, h, colors:Array<String>, isLinear:Bool = true):Gradient {
 
 	/**
 	 * add an image

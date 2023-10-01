@@ -15,6 +15,9 @@ class Group extends Base implements IBase {
 	var isOpacityOverride:Bool = false;
 	var isGroupHidden:Bool = false;
 
+	// maybe only for Inkscape
+	public var opacityStyle:Float;
+
 	/**
 	 * create a group to join a couple of IBase items
 	 * useful in `svg`, not so much in `canvas`
@@ -46,6 +49,11 @@ class Group extends Base implements IBase {
 		// Inkscape adjustments for easy import
 		xml.set('inkscape:groupmode', 'layer');
 		xml.set('inkscape:label', '${id} Layer');
+
+		// Inkscape???
+		if (opacityStyle != null) {
+			xml.set('style', 'opacity:${opacityStyle}');
+		}
 
 		// if (isOpacityOverride) {
 		// 	untyped base.strokeOpacity = 0;

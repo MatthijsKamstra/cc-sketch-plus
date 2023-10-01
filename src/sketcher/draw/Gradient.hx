@@ -59,9 +59,6 @@ class Gradient extends Base implements IBase {
 	 * @param isLinear
 	 */
 	public function new(colors:Array<String>, isLinear:Bool = true) {
-		// this.color0 = color0;
-		// this.color1 = color1;
-
 		this.colors = colors;
 
 		super('linearGradient');
@@ -80,11 +77,12 @@ class Gradient extends Base implements IBase {
 		for (i in 0...colors.length) {
 			var _colors = colors[i];
 			// trace(_colors);
-			var _percentage = Math.random((i / colors.length) * 100);
+			var _percentage = Math.round((i / (colors.length - 1)) * 100);
 			var stop = Xml.createElement('stop');
 			stop.set('offset', '${_percentage}%');
 			stop.set('stop-color', '${_colors}');
 			xml.addChild(stop);
+			// warn(stop);
 		}
 
 		// // xml.set('id', 'test-gradient');
