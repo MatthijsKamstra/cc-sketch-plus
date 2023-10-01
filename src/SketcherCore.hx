@@ -269,8 +269,8 @@ class SketcherCore {
 	 * @source 	https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Gradients
 	 * 			https://www.w3schools.com/graphics/svg_grad_linear.asp
 	 */
-	public function makeGradient(color0:String, color1:String, isLinear:Bool = true):Gradient {
-		var shape = new Gradient(color0, color1, isLinear);
+	public function makeGradient(colors:Array<String>, isLinear:Bool = true):Gradient {
+		var shape = new Gradient(colors, isLinear);
 		baseArray.push(shape);
 		return shape;
 	}

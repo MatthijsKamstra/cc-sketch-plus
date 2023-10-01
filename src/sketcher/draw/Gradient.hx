@@ -1,8 +1,8 @@
 package sketcher.draw;
 
 #if js
-import js.html.CanvasGradient;
 import js.Browser.*;
+import js.html.CanvasGradient;
 #end
 
 // quick gradients: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
@@ -37,6 +37,7 @@ class Gradient extends Base implements IBase {
 
 	public var type = 'gradient'; // base (get class name?)
 
+	var colors:Array<String> = [];
 	var color0:String;
 	var color1:String;
 
@@ -51,13 +52,17 @@ class Gradient extends Base implements IBase {
 	/**
 	 * quick way to create an gradient, needs more love
 	 *
-	 * @param color0
-	 * @param color1
+	 * @example
+	 * new Gradient(['#2BC0E4', '#EAECC6'])
+	 *
+	 * @param colors		use and string array
 	 * @param isLinear
 	 */
-	public function new(color0:String, color1:String, isLinear:Bool = true) {
-		this.color0 = color0;
-		this.color1 = color1;
+	public function new(colors:Array<String>, isLinear:Bool = true) {
+		// this.color0 = color0;
+		// this.color1 = color1;
+
+		this.colors = colors;
 
 		super('linearGradient');
 	}
@@ -72,26 +77,36 @@ class Gradient extends Base implements IBase {
 		</linearGradient>
 	 */
 	public function svg(?settings:Settings):String {
-		// xml.set('id', 'test-gradient');
-		var stop0 = Xml.createElement('stop');
-		stop0.set('offset', '0%');
-		stop0.set('stop-color', '${this.color0}');
-		var stop1 = Xml.createElement('stop');
-		stop1.set('offset', '100%');
-		stop1.set('stop-color', '${this.color1}');
-		// var stop2 = Xml.createElement('stop');
-		// stop2.set('offset', '50%');
-		// stop2.set('stop-color', 'pink');
+		for (i in 0...colors.length) {
+			var _colors = colors[i];
+			// trace(_colors);
+			var _percentage = Math.random((i / colors.length) * 100);
+			var stop = Xml.createElement('stop');
+			stop.set('offset', '${_percentage}%');
+			stop.set('stop-color', '${_colors}');
+			xml.addChild(stop);
+		}
 
-		xml.addChild(stop0);
-		xml.addChild(stop1);
-		// xml.addChild(stop2);
+		// // xml.set('id', 'test-gradient');
+		// var stop0 = Xml.createElement('stop');
+		// stop0.set('offset', '0%');
+		// stop0.set('stop-color', '${this.color0}');
+		// var stop1 = Xml.createElement('stop');
+		// stop1.set('offset', '100%');
+		// stop1.set('stop-color', '${this.color1}');
+		// // var stop2 = Xml.createElement('stop');
+		// // stop2.set('offset', '50%');
+		// // stop2.set('stop-color', 'pink');
 
-		// if (this.stroke != null)
-		// 	xml.set('stroke', this.stroke);
+		// xml.addChild(stop0);
+		// xml.addChild(stop1);
+		// // xml.addChild(stop2);
 
-		// if (lineWeight != null)
-		// 	xml.set('stroke-width', Std.string(this.lineWeight));
+		// // if (this.stroke != null)
+		// // 	xml.set('stroke', this.stroke);
+
+		// // if (lineWeight != null)
+		// // 	xml.set('stroke-width', Std.string(this.lineWeight));
 
 		return xml.toString();
 	}
