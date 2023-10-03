@@ -20,6 +20,8 @@ class GradientUtil {
 		['#f857a6', '#ff5858'],
 		['#EE9CA7', '#FFDDE1'],
 		['#93A5CF', '#E4EfE9'],
+		['#02AABD', '#00CDAC'],
+		['#D8B5FF', '#1EAE98'],
 	];
 
 	// https://www.b3multimedia.ie/beautiful-color-gradients-for-your-next-design-project/
