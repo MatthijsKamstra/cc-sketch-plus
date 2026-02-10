@@ -77,7 +77,7 @@ var Main = function() {
 	this.ccTypeArray = [examples_ExAll,examples_ExBackground,examples_ExButton,examples_ExCircles,examples_ExContainer,examples_ExEllipse,examples_ExGradient,examples_ExGroup,examples_ExGui,examples_ExImage,examples_ExLine,examples_ExMask,examples_ExMirror,examples_ExPolygon,examples_ExPolyline,examples_ExRectangle,examples_ExText,examples_GenColors,examples_ExArrow,examples_ExSvgA4];
 	var _gthis = this;
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2023-09-28 20:48:29");
+		$global.console.info("" + sketcher_App.NAME + " Main Dom ready :: build: " + "2026-02-10 12:51:54");
 		var arr = helper_html_PullDown.convertClass(_gthis.ccTypeArray);
 		_gthis.pulldown = new helper_html_PullDown(arr,$bind(_gthis,_gthis.onSelectHandler));
 		var ccnav = new html_CCNav(arr);
@@ -443,7 +443,7 @@ Sketcher.prototype = {
 		if(isLinear == null) {
 			isLinear = true;
 		}
-		var shape = new sketcher_draw_Gradient(color0,color1,isLinear);
+		var shape = new sketcher_draw_Gradient([color0,color1],isLinear);
 		this.baseArray.push(shape);
 		return shape;
 	}
@@ -605,6 +605,7 @@ Sketcher.prototype = {
 			this.baseArray = [];
 			break;
 		case "svg":
+			haxe_Log.trace("svg",{ fileName : "src/Sketcher.hx", lineNumber : 689, className : "Sketcher", methodName : "update"});
 			var svgW = "" + this.settings.get_width();
 			var svgH = "" + this.settings.get_height();
 			var svgViewBox = "0 0 " + this.settings.get_width() + " " + this.settings.get_height();
@@ -627,6 +628,19 @@ Sketcher.prototype = {
 				if(base == null) {
 					continue;
 				}
+				var v = base.type;
+				var tab = 1;
+				if(tab == null) {
+					tab = 1;
+				}
+				var t = "";
+				var _g2 = 0;
+				var _g3 = tab;
+				while(_g2 < _g3) {
+					var i1 = _g2++;
+					t += sketcher_log_Logger.TAB;
+				}
+				haxe_Log.trace("" + t + "→ " + Std.string(v),{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 62, className : "sketcher.log.Logger", methodName : "mute"});
 				var draw = base.svg(this.settings);
 				switch(base.type) {
 				case "gradient":case "marker":case "mask":
@@ -648,7 +662,7 @@ Sketcher.prototype = {
 			}
 			break;
 		case "webgl":
-			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 761, className : "Sketcher", methodName : "update"});
+			haxe_Log.trace("webgl",{ fileName : "src/Sketcher.hx", lineNumber : 763, className : "Sketcher", methodName : "update"});
 			var _g = 0;
 			var _g1 = this.baseArray.length;
 			while(_g < _g1) {
@@ -662,7 +676,7 @@ Sketcher.prototype = {
 			this.baseArray = [];
 			break;
 		default:
-			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 772, className : "Sketcher", methodName : "update"});
+			haxe_Log.trace("case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');",{ fileName : "src/Sketcher.hx", lineNumber : 774, className : "Sketcher", methodName : "update"});
 		}
 	}
 	,__class__: Sketcher
@@ -5417,14 +5431,14 @@ sketcher_draw_Ellipse.prototype = $extend(sketcher_draw_Base.prototype,{
 	}
 	,__class__: sketcher_draw_Ellipse
 });
-var sketcher_draw_Gradient = function(color0,color1,isLinear) {
+var sketcher_draw_Gradient = function(colors,isLinear) {
 	if(isLinear == null) {
 		isLinear = true;
 	}
 	this.dir = sketcher_draw_GradientDir.LeftRight;
+	this.colors = [];
 	this.type = "gradient";
-	this.color0 = color0;
-	this.color1 = color1;
+	this.colors = colors;
 	sketcher_draw_Base.call(this,"linearGradient");
 };
 $hxClasses["sketcher.draw.Gradient"] = sketcher_draw_Gradient;
@@ -5433,14 +5447,17 @@ sketcher_draw_Gradient.__interfaces__ = [sketcher_draw_IBase];
 sketcher_draw_Gradient.__super__ = sketcher_draw_Base;
 sketcher_draw_Gradient.prototype = $extend(sketcher_draw_Base.prototype,{
 	svg: function(settings) {
-		var stop0 = Xml.createElement("stop");
-		stop0.set("offset","0%");
-		stop0.set("stop-color","" + this.color0);
-		var stop1 = Xml.createElement("stop");
-		stop1.set("offset","100%");
-		stop1.set("stop-color","" + this.color1);
-		this.xml.addChild(stop0);
-		this.xml.addChild(stop1);
+		var _g = 0;
+		var _g1 = this.colors.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var _colors = this.colors[i];
+			var _percentage = Math.round(i / (this.colors.length - 1) * 100);
+			var stop = Xml.createElement("stop");
+			stop.set("offset","" + _percentage + "%");
+			stop.set("stop-color","" + _colors);
+			this.xml.addChild(stop);
+		}
 		return haxe_xml_Printer.print(this.xml);
 	}
 	,ctx: function(ctx) {
@@ -5509,7 +5526,9 @@ sketcher_draw_GradientDir.__constructs__ = [sketcher_draw_GradientDir.LeftRight,
 var sketcher_draw_Group = function(arr) {
 	this.isGroupHidden = false;
 	this.isOpacityOverride = false;
+	this.arr = [];
 	this.type = "group";
+	this.set_arr([]);
 	this.set_arr(arr);
 	sketcher_draw_Base.call(this,"g");
 };
@@ -5533,6 +5552,9 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		}
 		this.xml.set("inkscape:groupmode","layer");
 		this.xml.set("inkscape:label","" + this.get_id() + " Layer");
+		if(this.opacityStyle != null) {
+			this.xml.set("style","opacity:" + this.opacityStyle);
+		}
 		var comment = Xml.createComment("Group: " + this.get_id());
 		this.xml.addChild(comment);
 		this.xml.addChild(Xml.parse("<desc>" + this.get_id() + "</desc>"));
@@ -5614,7 +5636,7 @@ sketcher_draw_Group.prototype = $extend(sketcher_draw_Base.prototype,{
 		this.isGroupHidden = isHidden;
 	}
 	,test: function() {
-		haxe_Log.trace("test if casting works",{ fileName : "src/sketcher/draw/Group.hx", lineNumber : 161, className : "sketcher.draw.Group", methodName : "test"});
+		haxe_Log.trace("test if casting works",{ fileName : "src/sketcher/draw/Group.hx", lineNumber : 170, className : "sketcher.draw.Group", methodName : "test"});
 	}
 	,getHeight: function() {
 		var _g = 0;
@@ -7646,6 +7668,196 @@ var sketcher_load_FileType = $hxEnums["sketcher.load.FileType"] = { __ename__:tr
 	,CSV: {_hx_name:"CSV",_hx_index:18,__enum__:"sketcher.load.FileType",toString:$estr}
 };
 sketcher_load_FileType.__constructs__ = [sketcher_load_FileType.Unknown,sketcher_load_FileType.Img,sketcher_load_FileType.IMG,sketcher_load_FileType.Txt,sketcher_load_FileType.TXT,sketcher_load_FileType.Json,sketcher_load_FileType.JSON,sketcher_load_FileType.Gif,sketcher_load_FileType.GIF,sketcher_load_FileType.Png,sketcher_load_FileType.PNG,sketcher_load_FileType.JPEG,sketcher_load_FileType.JPG,sketcher_load_FileType.Xml,sketcher_load_FileType.XML,sketcher_load_FileType.Svg,sketcher_load_FileType.SVG,sketcher_load_FileType.Csv,sketcher_load_FileType.CSV];
+var sketcher_log_Colors = function() { };
+$hxClasses["sketcher.log.Colors"] = sketcher_log_Colors;
+sketcher_log_Colors.__name__ = "sketcher.log.Colors";
+var sketcher_log_Logger = function() { };
+$hxClasses["sketcher.log.Logger"] = sketcher_log_Logger;
+sketcher_log_Logger.__name__ = "sketcher.log.Logger";
+sketcher_log_Logger.setup = function() {
+	haxe_Log.trace = function(v,infos) {
+		var str = "" + sketcher_log_Colors.BLUE + " → " + sketcher_log_Colors.RED_UNDERLINED + infos.fileName + ":" + infos.lineNumber + " " + sketcher_log_Colors.RED_BOLD + Std.string(v) + sketcher_log_Colors.RESET;
+		haxe_Log.trace(str,{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 33, className : "sketcher.log.Logger", methodName : "setup"});
+	};
+};
+sketcher_log_Logger.log = function(v,tab) {
+	if(tab == null) {
+		tab = 0;
+	}
+	var t = "";
+	var _g = 0;
+	var _g1 = tab;
+	while(_g < _g1) {
+		var i = _g++;
+		t += sketcher_log_Logger.TAB;
+	}
+	haxe_Log.trace("" + t + "→ " + Std.string(v),{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 46, className : "sketcher.log.Logger", methodName : "log"});
+};
+sketcher_log_Logger.mute = function(v,tab) {
+	if(tab == null) {
+		tab = 1;
+	}
+	var t = "";
+	var _g = 0;
+	var _g1 = tab;
+	while(_g < _g1) {
+		var i = _g++;
+		t += sketcher_log_Logger.TAB;
+	}
+	haxe_Log.trace("" + t + "→ " + Std.string(v),{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 62, className : "sketcher.log.Logger", methodName : "mute"});
+};
+sketcher_log_Logger.info = function(v,tab) {
+	if(tab == null) {
+		tab = 0;
+	}
+	var t = "";
+	var _g = 0;
+	var _g1 = tab;
+	while(_g < _g1) {
+		var i = _g++;
+		t += sketcher_log_Logger.TAB;
+	}
+	haxe_Log.trace("" + t + "♥ " + Std.string(v),{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 73, className : "sketcher.log.Logger", methodName : "info"});
+};
+sketcher_log_Logger.warn = function(v,tab,infos) {
+	if(tab == null) {
+		tab = 0;
+	}
+	var t = "";
+	var _g = 0;
+	var _g1 = tab;
+	while(_g < _g1) {
+		var i = _g++;
+		t += sketcher_log_Logger.TAB;
+	}
+	haxe_Log.trace("" + t + "⚠️ " + Std.string(v) + " [" + infos.fileName + ":" + infos.lineNumber + "]",{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 84, className : "sketcher.log.Logger", methodName : "warn"});
+};
+sketcher_log_Logger.wip = function(v,tab) {
+	if(tab == null) {
+		tab = 0;
+	}
+	var t = "";
+	var _g = 0;
+	var _g1 = tab;
+	while(_g < _g1) {
+		var i = _g++;
+		t += sketcher_log_Logger.TAB;
+	}
+	haxe_Log.trace("" + t + "🚧 WIP: " + Std.string(v),{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 95, className : "sketcher.log.Logger", methodName : "wip"});
+};
+sketcher_log_Logger.progress = function(v) {
+	haxe_Log.trace("🔋 " + Std.string(v),{ fileName : "src/sketcher/log/Logger.hx", lineNumber : 103, className : "sketcher.log.Logger", methodName : "progress"});
+};
+var sketcher_model_constants_Paper = function() { };
+$hxClasses["sketcher.model.constants.Paper"] = sketcher_model_constants_Paper;
+sketcher_model_constants_Paper.__name__ = "sketcher.model.constants.Paper";
+sketcher_model_constants_Paper.inPixel = function(papersize) {
+	var rectangle = { width : 0, height : 0, x : 0, y : 0};
+	var w;
+	var h;
+	switch(papersize._hx_index) {
+	case 0:
+		w = 105;
+		h = 148;
+		break;
+	case 1:
+		w = 148;
+		h = 210;
+		break;
+	case 2:
+		w = 210;
+		h = 297;
+		break;
+	case 3:
+		w = 297;
+		h = 420;
+		break;
+	case 4:
+		w = 420;
+		h = 594;
+		break;
+	case 5:
+		w = 594;
+		h = 841;
+		break;
+	}
+	rectangle.width = sketcher_model_constants_Paper.mm2pxInt(w);
+	rectangle.height = sketcher_model_constants_Paper.mm2pxInt(h);
+	rectangle.x = 0;
+	rectangle.y = 0;
+	return rectangle;
+};
+sketcher_model_constants_Paper.inMM = function(papersize) {
+	var w = 0;
+	var h = 0;
+	switch(papersize._hx_index) {
+	case 0:
+		w = 105;
+		h = 148;
+		break;
+	case 1:
+		w = 148;
+		h = 210;
+		break;
+	case 2:
+		w = 210;
+		h = 297;
+		break;
+	case 3:
+		w = 297;
+		h = 420;
+		break;
+	case 4:
+		w = 420;
+		h = 594;
+		break;
+	case 5:
+		w = 594;
+		h = 841;
+		break;
+	}
+	var rectangle = { width : w, height : h, x : 0, y : 0};
+	return rectangle;
+};
+sketcher_model_constants_Paper.mm2pixel = function(value) {
+	var dpi = 96;
+	return value * dpi / 25.4;
+};
+sketcher_model_constants_Paper.mm2px = function(value) {
+	return sketcher_model_constants_Paper.mm2pixel(value);
+};
+sketcher_model_constants_Paper.mm2pxInt = function(value) {
+	return Math.round(sketcher_model_constants_Paper.mm2pixel(value));
+};
+sketcher_model_constants_Paper.mm2pxConvert = function(value) {
+	var obj = { "mm" : value, "converted" : { "px" : sketcher_model_constants_Paper.mm2px(value), "px int" : sketcher_model_constants_Paper.mm2pxInt(value), "mm" : sketcher_model_constants_Paper.px2mm(sketcher_model_constants_Paper.mm2px(value)), "mm int" : sketcher_model_constants_Paper.px2mmInt(sketcher_model_constants_Paper.mm2px(value))}};
+	return obj;
+};
+sketcher_model_constants_Paper.pixel2mm = function(value) {
+	var dpi = 96;
+	return value * 25.4 / dpi;
+};
+sketcher_model_constants_Paper.px2mmInt = function(value) {
+	return Math.round(sketcher_model_constants_Paper.pixel2mm(value));
+};
+sketcher_model_constants_Paper.px2mm = function(value) {
+	return sketcher_model_constants_Paper.pixel2mm(value);
+};
+sketcher_model_constants_Paper.convertmm2pixel = function(mm,dpi) {
+	if(dpi == null) {
+		dpi = 72;
+	}
+	return mm * dpi / 25.4;
+};
+var sketcher_model_constants_PaperSize = $hxEnums["sketcher.model.constants.PaperSize"] = { __ename__:true,__constructs__:null
+	,A6: {_hx_name:"A6",_hx_index:0,__enum__:"sketcher.model.constants.PaperSize",toString:$estr}
+	,A5: {_hx_name:"A5",_hx_index:1,__enum__:"sketcher.model.constants.PaperSize",toString:$estr}
+	,A4: {_hx_name:"A4",_hx_index:2,__enum__:"sketcher.model.constants.PaperSize",toString:$estr}
+	,A3: {_hx_name:"A3",_hx_index:3,__enum__:"sketcher.model.constants.PaperSize",toString:$estr}
+	,A2: {_hx_name:"A2",_hx_index:4,__enum__:"sketcher.model.constants.PaperSize",toString:$estr}
+	,A1: {_hx_name:"A1",_hx_index:5,__enum__:"sketcher.model.constants.PaperSize",toString:$estr}
+};
+sketcher_model_constants_PaperSize.__constructs__ = [sketcher_model_constants_PaperSize.A6,sketcher_model_constants_PaperSize.A5,sketcher_model_constants_PaperSize.A4,sketcher_model_constants_PaperSize.A3,sketcher_model_constants_PaperSize.A2,sketcher_model_constants_PaperSize.A1];
 var sketcher_util_ColorUtil = function() {
 };
 $hxClasses["sketcher.util.ColorUtil"] = sketcher_util_ColorUtil;
@@ -8631,6 +8843,72 @@ helper_html_Container._count = 0;
 sketcher_App.NAME = "[cc-sketcher]";
 sketcher_draw_Base.COUNT = 0;
 Loader.completeArray = [];
+sketcher_log_Colors.RESET = "\x1B[0m";
+sketcher_log_Colors.GRAY = "\x1B[1;30m";
+sketcher_log_Colors.BLACK = "\x1B[0;30m";
+sketcher_log_Colors.RED = "\x1B[0;31m";
+sketcher_log_Colors.GREEN = "\x1B[0;32m";
+sketcher_log_Colors.YELLOW = "\x1B[0;33m";
+sketcher_log_Colors.BLUE = "\x1B[0;34m";
+sketcher_log_Colors.MAGENTA = "\x1B[0;35m";
+sketcher_log_Colors.CYAN = "\x1B[0;36m";
+sketcher_log_Colors.WHITE = "\x1B[0;37m";
+sketcher_log_Colors.BLACK_BOLD = "\x1B[1;30m";
+sketcher_log_Colors.RED_BOLD = "\x1B[1;31m";
+sketcher_log_Colors.GREEN_BOLD = "\x1B[1;32m";
+sketcher_log_Colors.YELLOW_BOLD = "\x1B[1;33m";
+sketcher_log_Colors.BLUE_BOLD = "\x1B[1;34m";
+sketcher_log_Colors.MAGENTA_BOLD = "\x1B[1;35m";
+sketcher_log_Colors.CYAN_BOLD = "\x1B[1;36m";
+sketcher_log_Colors.WHITE_BOLD = "\x1B[1;37m";
+sketcher_log_Colors.BLACK_UNDERLINED = "\x1B[4;30m";
+sketcher_log_Colors.RED_UNDERLINED = "\x1B[4;31m";
+sketcher_log_Colors.GREEN_UNDERLINED = "\x1B[4;32m";
+sketcher_log_Colors.YELLOW_UNDERLINED = "\x1B[4;33m";
+sketcher_log_Colors.BLUE_UNDERLINED = "\x1B[4;34m";
+sketcher_log_Colors.MAGENTA_UNDERLINED = "\x1B[4;35m";
+sketcher_log_Colors.CYAN_UNDERLINED = "\x1B[4;36m";
+sketcher_log_Colors.WHITE_UNDERLINED = "\x1B[4;37m";
+sketcher_log_Colors.BLACK_BACKGROUND = "\x1B[40m";
+sketcher_log_Colors.RED_BACKGROUND = "\x1B[41m";
+sketcher_log_Colors.GREEN_BACKGROUND = "\x1B[42m";
+sketcher_log_Colors.YELLOW_BACKGROUND = "\x1B[43m";
+sketcher_log_Colors.BLUE_BACKGROUND = "\x1B[44m";
+sketcher_log_Colors.MAGENTA_BACKGROUND = "\x1B[45m";
+sketcher_log_Colors.CYAN_BACKGROUND = "\x1B[46m";
+sketcher_log_Colors.WHITE_BACKGROUND = "\x1B[47m";
+sketcher_log_Colors.BLACK_BRIGHT = "\x1B[0;90m";
+sketcher_log_Colors.RED_BRIGHT = "\x1B[0;91m";
+sketcher_log_Colors.GREEN_BRIGHT = "\x1B[0;92m";
+sketcher_log_Colors.YELLOW_BRIGHT = "\x1B[0;93m";
+sketcher_log_Colors.BLUE_BRIGHT = "\x1B[0;94m";
+sketcher_log_Colors.MAGENTA_BRIGHT = "\x1B[0;95m";
+sketcher_log_Colors.CYAN_BRIGHT = "\x1B[0;96m";
+sketcher_log_Colors.WHITE_BRIGHT = "\x1B[0;97m";
+sketcher_log_Colors.BLACK_BOLD_BRIGHT = "\x1B[1;90m";
+sketcher_log_Colors.RED_BOLD_BRIGHT = "\x1B[1;91m";
+sketcher_log_Colors.GREEN_BOLD_BRIGHT = "\x1B[1;92m";
+sketcher_log_Colors.YELLOW_BOLD_BRIGHT = "\x1B[1;93m";
+sketcher_log_Colors.BLUE_BOLD_BRIGHT = "\x1B[1;94m";
+sketcher_log_Colors.MAGENTA_BOLD_BRIGHT = "\x1B[1;95m";
+sketcher_log_Colors.CYAN_BOLD_BRIGHT = "\x1B[1;96m";
+sketcher_log_Colors.WHITE_BOLD_BRIGHT = "\x1B[1;97m";
+sketcher_log_Colors.BLACK_BACKGROUND_BRIGHT = "\x1B[0;100m";
+sketcher_log_Colors.RED_BACKGROUND_BRIGHT = "\x1B[0;101m";
+sketcher_log_Colors.GREEN_BACKGROUND_BRIGHT = "\x1B[0;102m";
+sketcher_log_Colors.YELLOW_BACKGROUND_BRIGHT = "\x1B[0;103m";
+sketcher_log_Colors.BLUE_BACKGROUND_BRIGHT = "\x1B[0;104m";
+sketcher_log_Colors.MAGENTA_BACKGROUND_BRIGHT = "\x1B[0;105m";
+sketcher_log_Colors.CYAN_BACKGROUND_BRIGHT = "\x1B[0;106m";
+sketcher_log_Colors.WHITE_BACKGROUND_BRIGHT = "\x1B[0;107m";
+sketcher_log_Logger.TAB = "    ";
+sketcher_model_constants_Paper.A6 = "a6";
+sketcher_model_constants_Paper.A5 = "a5";
+sketcher_model_constants_Paper.A4 = "a4";
+sketcher_model_constants_Paper.A3 = "a3";
+sketcher_model_constants_Paper.A2 = "a2";
+sketcher_model_constants_Paper.A1 = "a1";
+sketcher_model_constants_Paper.ARR = ["a6","a5","a4","a3","a2","a1"];
 sketcher_util_ColorUtil.NAVY = { r : Math.round(0), g : Math.round(31), b : Math.round(63)};
 sketcher_util_ColorUtil.BLUE = { r : Math.round(0), g : Math.round(116), b : Math.round(217)};
 sketcher_util_ColorUtil.AQUA = { r : Math.round(127), g : Math.round(219), b : Math.round(255)};

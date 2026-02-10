@@ -427,7 +427,7 @@ class Sketcher {
 	 * 			https://www.w3schools.com/graphics/svg_grad_linear.asp
 	 */
 	public function makeGradient(color0:String, color1:String, isLinear:Bool = true):Gradient {
-		var shape = new Gradient(color0, color1, isLinear);
+		var shape = new Gradient([color0, color1], isLinear);
 		baseArray.push(shape);
 		return shape;
 	}

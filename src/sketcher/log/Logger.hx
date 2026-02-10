@@ -27,7 +27,11 @@ class Logger {
 		// now we are going to overwrite the default trace with our own
 		haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
 			var str = '${BLUE} → ${RED_UNDERLINED}${infos.fileName}:${infos.lineNumber} ${RED_BOLD}${v}${RESET}';
+			#if sys
 			Sys.println(str);
+			#else
+			trace(str);
+			#end
 		}
 	}
 
@@ -36,7 +40,11 @@ class Logger {
 		var t:String = '';
 		for (i in 0...tab)
 			t += TAB;
+		#if sys
 		Sys.println('${t}${BLUE}→ ${WHITE}${v}${RESET}');
+		#else
+		trace('${t}→ ${v}');
+		#end
 	}
 
 	/**
@@ -48,31 +56,51 @@ class Logger {
 		var t:String = '';
 		for (i in 0...tab)
 			t += TAB;
+		#if sys
 		Sys.println('${t}${GRAY}→ ${v}${RESET}');
+		#else
+		trace('${t}→ ${v}');
+		#end
 	}
 
 	public static inline function info(v:Dynamic, ?tab = 0) {
 		var t:String = '';
 		for (i in 0...tab)
 			t += TAB;
+		#if sys
 		Sys.println('${t}${BLUE}♥ ${GREEN}${v}${RESET}');
+		#else
+		trace('${t}♥ ${v}');
+		#end
 	}
 
 	public static inline function warn(v:Dynamic, ?tab = 0, ?infos:haxe.PosInfos) {
 		var t:String = '';
 		for (i in 0...tab)
 			t += TAB;
+		#if sys
 		Sys.println('${t}${BLUE}⚠️ ${BLACK}${RED_BACKGROUND}${v} [${infos.fileName}:${infos.lineNumber}]${RESET}');
+		#else
+		trace('${t}⚠️ ${v} [${infos.fileName}:${infos.lineNumber}]');
+		#end
 	}
 
 	public static inline function wip(v:Dynamic, ?tab = 0) {
 		var t:String = '';
 		for (i in 0...tab)
 			t += TAB;
+		#if sys
 		Sys.println('${t}${BLUE}🚧 WIP: ${BLACK}${WHITE_BACKGROUND}${v}${RESET}');
+		#else
+		trace('${t}🚧 WIP: ${v}');
+		#end
 	}
 
 	public static inline function progress(v:Dynamic) {
+		#if sys
 		Sys.println('${BLUE}🔋 ${RED}${v}${RESET}');
+		#else
+		trace('🔋 ${v}');
+		#end
 	}
 }
