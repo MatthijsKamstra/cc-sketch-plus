@@ -3,7 +3,6 @@ package sketcher.draw;
 #if js
 import js.Browser;
 #end
-
 import sketcher.AST;
 import sketcher.draw.AST.LineCap;
 import sketcher.draw.AST.LineJoin;
