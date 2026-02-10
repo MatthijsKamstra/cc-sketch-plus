@@ -1,8 +1,13 @@
 package sketcher.draw;
 
+#if js
+import js.Browser;
+#end
+
 import sketcher.AST;
 import sketcher.draw.AST.LineCap;
 import sketcher.draw.AST.LineJoin;
+import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
 
 using StringTools;
@@ -372,6 +377,13 @@ class Base {
 	}
 
 	function set_fillColor(value:String):String {
+		if (value == null || value.trim() == "") {
+			warn('${getName()}: fillColor is empty');
+			return fill;
+		}
+		if (!ColorUtil.isValidColor(value)) {
+			warn('${getName()}: invalid fillColor "${value}"');
+		}
 		return fill = value;
 	}
 
@@ -380,6 +392,10 @@ class Base {
 	}
 
 	function set_fillGradientColor(value:String):String {
+		if (value == null || value.trim() == "") {
+			warn('${getName()}: fillGradientColor is empty');
+			return fill;
+		}
 		value = convertID(value);
 		return fill = 'url(#$value)';
 	}
@@ -398,6 +414,13 @@ class Base {
 	}
 
 	function set_strokeColor(value:String):String {
+		if (value == null || value.trim() == "") {
+			warn('${getName()}: strokeColor is empty');
+			return stroke;
+		}
+		if (!ColorUtil.isValidColor(value)) {
+			warn('${getName()}: invalid strokeColor "${value}"');
+		}
 		return stroke = value;
 	}
 
@@ -406,6 +429,10 @@ class Base {
 	}
 
 	function set_lineWeight(value:Float):Float {
+		if (value < 0) {
+			warn('${getName()}: lineWeight cannot be negative, clamped to 0');
+			value = 0;
+		}
 		xml.set('stroke-width', Std.string(value));
 		return lineWeight = value;
 	}
@@ -563,7 +590,22 @@ class Base {
 	}
 
 	function set_shadowColor(value:String):String {
+		if (value == null || value.trim() == "") {
+			warn('${getName()}: shadowColor is empty');
+			return shadowColor;
+		}
+		if (!ColorUtil.isValidColor(value)) {
+			warn('${getName()}: invalid shadowColor "${value}"');
+		}
 		return shadowColor = value;
+	}
+
+	static function warn(message:String):Void {
+		#if js
+		Browser.console.warn(message);
+		#else
+		trace(message);
+		#end
 	}
 
 	function get_shadowBlur():Float {

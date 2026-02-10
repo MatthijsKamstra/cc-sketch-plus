@@ -1,3 +1,5 @@
+using StringTools;
+
 /**
  * https://two.js.org/#documentation
  */
@@ -40,9 +42,32 @@ class Settings {
 	 * @param type		(default svg) type of sketches base; 'svg', 'canvas' will work or use SketchTyper.CANVAS, SketchTyper.SVG
 	 */
 	public function new(width:Int, height:Int, ?type:String = 'svg') {
-		this.width = width;
-		this.height = height;
-		this.type = type.toLowerCase(); // make sure to use lowercase
+		this.width = (width <= 0) ? 1 : width;
+		this.height = (height <= 0) ? 1 : height;
+		this.type = normalizeType(type);
+	}
+
+	static function normalizeType(value:String):String {
+		if (value == null || value.trim() == '') {
+			warn('Settings.type is empty, defaulting to svg');
+			return SketchTyper.SVG;
+		}
+		var normalized = value.toLowerCase();
+		switch (normalized) {
+			case SketchTyper.SVG, SketchTyper.CANVAS, SketchTyper.WEBGL:
+				return normalized;
+			default:
+				warn('Unknown Settings.type "${value}", defaulting to svg');
+				return SketchTyper.SVG;
+		}
+	}
+
+	static function warn(message:String):Void {
+		#if js
+		js.Browser.console.warn(message);
+		#else
+		trace(message);
+		#end
 	}
 
 	// ____________________________________ getter/setter ____________________________________
@@ -52,6 +77,10 @@ class Settings {
 	}
 
 	function set_width(value:Int):Int {
+		if (value <= 0) {
+			warn('Settings.width must be > 0, using 1');
+			value = 1;
+		}
 		return width = value;
 	}
 
@@ -60,6 +89,10 @@ class Settings {
 	}
 
 	function set_height(value:Int):Int {
+		if (value <= 0) {
+			warn('Settings.height must be > 0, using 1');
+			value = 1;
+		}
 		return height = value;
 	}
 
@@ -68,7 +101,7 @@ class Settings {
 	}
 
 	function set_type(value:String):String {
-		return type = value;
+		return type = normalizeType(value);
 	}
 
 	function get_padding():Int {
@@ -128,6 +161,10 @@ class Settings {
 	}
 
 	function set_sizeType(value:SizeType):SizeType {
+		if (value == null) {
+			warn('Settings.sizeType is null, defaulting to px');
+			return sizeType = SizeType.PX;
+		}
 		return sizeType = value;
 	}
 
@@ -144,12 +181,16 @@ class Settings {
 	}
 
 	function set_viewBox(value:Array<Float>):Array<Float> {
-		if (value.length != 4) {
+		if (value == null || value.length != 4) {
 			#if js
 			js.Browser.console.warn('Expect 4 float values: "0 0 300 400"');
 			#else
 			trace('Expect 4 float values: "0 0 300 400"');
 			#end
+			if (viewBox == null) {
+				viewBox = [0, 0, width, height];
+			}
+			return viewBox;
 		}
 		return viewBox = value;
 	}

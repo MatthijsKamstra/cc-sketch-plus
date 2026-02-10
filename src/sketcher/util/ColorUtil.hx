@@ -24,6 +24,23 @@ typedef RGBA = {
 class ColorUtil {
 	public function new() {}
 
+	public static function isValidColor(value:String):Bool {
+		if (value == null)
+			return false;
+		var v = value.trim();
+		if (v == "")
+			return false;
+		if (v.indexOf("url(#") == 0)
+			return true;
+		if (v == "none" || v == "transparent" || v == "transparant")
+			return true;
+		if (v.indexOf("rgba(") == 0 || v.indexOf("rgb(") == 0)
+			return v.indexOf(")") > 0;
+		if (v.charAt(0) == "#")
+			return v.length == 4 || v.length == 7 || v.length == 9;
+		return ~/^[a-zA-Z]+$/.match(v);
+	}
+
 	/**
 	 * convert an rgb and alpha to RGB or RBGA string value
 	 * value checks are done in rgb and rbga function
