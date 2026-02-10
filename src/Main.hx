@@ -1,8 +1,8 @@
 package;
 
 import Globals.Globals.*;
-import html.CCNav;
 import helper.html.PullDown;
+import html.CCNav;
 import js.Browser.*;
 
 using StringTools;
@@ -13,6 +13,11 @@ class Main {
 	var ccTypeArray:Array<Class<Dynamic>> = [
 		//
 		examples.ExAll, //
+		examples.ExMiniCircle, //
+		examples.ExMiniRectangle, //
+		examples.ExMiniLine, //
+		examples.ExMiniText, //
+		examples.ExMiniImage, //
 		examples.ExBackground, //
 		examples.ExButton, //
 		examples.ExCircles, //

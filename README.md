@@ -59,6 +59,16 @@ Recommended starters:
 - `ExGradient.hx` - gradients
 - `ExSvgA4.hx` - A4 layout with mm units
 
+Minimal examples (with screenshots):
+
+| Example              | Preview                                   |
+| -------------------- | ----------------------------------------- |
+| `ExMiniCircle.hx`    | ![](docs/img/examples/mini-circle.png)    |
+| `ExMiniRectangle.hx` | ![](docs/img/examples/mini-rectangle.png) |
+| `ExMiniLine.hx`      | ![](docs/img/examples/mini-line.png)      |
+| `ExMiniText.hx`      | ![](docs/img/examples/mini-text.png)      |
+| `ExMiniImage.hx`     | ![](docs/img/examples/mini-image.png)     |
+
 ## API cheatsheet (Canvas/SVG)
 
 Create a sketch:
