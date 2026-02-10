@@ -1,6 +1,6 @@
 # CC-Sketch-Plus
 
-Proof of concept to sketch in canvas and svg in one library.
+Creative coding library that targets both Canvas and SVG with one API.
 
 [CC-Sketch](https://github.com/MatthijsKamstra/cc-sketch) is a creative coding library written in Javascript via [Haxe](http://www.haxe.org).
 This project started when I did a [30-days-challenge](https://matthijskamstra.github.io/creative-coding) and I decided it should be open-source.
@@ -11,88 +11,97 @@ This project started when I did a [30-days-challenge](https://matthijskamstra.gi
 
 ## Quick start
 
+Minimal setup for SVG:
+
 ```haxe
 package;
 
-import Globals.Globals.*;
-import Settings.SizeType;
-import sketcher.util.ColorUtil;
 import sketcher.util.MathUtil;
+import sketcher.util.ColorUtil;
 
 class Main {
 	public function new() {
-		trace('Main');
-		sketchSVG();
-	}
+		var settings = new Settings(800, 600, 'svg');
+		settings.elementID = 'sketcher-svg-root';
 
-	function sketchSVG() {
-		// var size = (Paper.inPixel(Paper.PaperSize.A4));
-		var size = (Paper.inMM(Paper.PaperSize.A4));
+		var sketch = Sketcher.create(settings).appendTo(js.Browser.document.body);
 
-		var sketchWidth = size.width;
-		var sketchHeight = size.height;
-
-		// Make an instance of two and place it on the page.
-		var settings:Settings = new Settings(Math.round(sketchWidth), Math.round(sketchHeight), 'svg');
-		settings.isAnimation = false; // default is true (based upon canvas)
-		settings.padding = 0;
-		settings.isScaled = true; // (default is false)
-		settings.sizeType = SizeType.MM;
-		settings.viewBox = [0, 0, sketchWidth, sketchHeight];
-
-		var sketch = SketcherSVG.create(settings).setup();
-
-		var bg = sketch.makeBackground('white');
-
-		for (i in 0...10) {
-			var circle = sketch.makeCircle(MathUtil.random(w), MathUtil.random(h), MathUtil.clamp(MathUtil.random(200), 50, 200));
+		for (i in 0...8) {
+			var circle = sketch.makeCircle(MathUtil.random(800), MathUtil.random(600), 40 + i * 6);
 			var color = ColorUtil.niceColor100[MathUtil.randomInt(ColorUtil.niceColor100.length - 1)];
 			circle.setFill(color[0]);
 		}
 
-		trace(sketch.update());
-
-		writeFile('export', 'test_node.svg', sketch.update());
-	}
-
-	/**
-	 * simply write the files
-	 * @param path 		folder to write the files
-	 * @param filename	(with extension) the file name
-	 * @param content	what to write to the file (in our case markdown)
-	 */
-	function writeFile(path:String, filename:String, content:String) {
-		if (!sys.FileSystem.exists(path)) {
-			sys.FileSystem.createDirectory(path);
-		}
-		// write the file
-		sys.io.File.saveContent(path + '/${filename}', content);
-		trace('written file: ${path}/${filename}');
+		sketch.update();
 	}
 
 	static public function main() {
-		var app = new Main();
+		new Main();
 	}
 }
-
 ```
 
-build file
-
-```haxe
-// build.hxml
--lib cc-sketch-plus
-
--cp src
--D analyzer-optimize
--main Main
---interp
-```
-
-build
+Build:
 
 ```bash
 haxe build.hxml
+```
+
+## Examples
+
+- Haxe examples live in [src/examples](src/examples)
+- Gallery page: [docs/collection.html](docs/collection.html)
+- Animation demo: [docs/animation.html](docs/animation.html)
+
+Recommended starters:
+
+- `ExAll.hx` - overview of shapes and styling
+- `ExGradient.hx` - gradients
+- `ExSvgA4.hx` - A4 layout with mm units
+
+## API cheatsheet (Canvas/SVG)
+
+Create a sketch:
+
+```haxe
+var settings = new Settings(800, 600, 'canvas'); // or 'svg'
+settings.elementID = 'sketcher-root';
+var sketch = Sketcher.create(settings).appendTo(js.Browser.document.body);
+```
+
+Core shapes:
+
+```haxe
+var circle = sketch.makeCircle(120, 120, 60);
+var rect = sketch.makeRectangle(80, 200, 140, 90);
+var line = sketch.makeLine(40, 40, 240, 180);
+var text = sketch.makeText('Hello', 120, 40);
+```
+
+Styling:
+
+```haxe
+circle.setFill('#ff6b35');
+circle.setStroke('#1f1f1f');
+circle.lineWeight = 4;
+
+rect.fillOpacity = 0.6;
+rect.noStroke();
+```
+
+SVG-only helpers:
+
+```haxe
+var gradient = sketch.makeGradient('#2193b0', '#6dd5ed');
+gradient.id = 'cool-blue';
+rect.fillGradientColor = 'cool-blue';
+```
+
+Canvas-only helpers:
+
+```haxe
+// direct access to the canvas context
+var ctx = sketch.canvas.getContext2d();
 ```
 
 ## Source
@@ -129,6 +138,7 @@ don't forget to add it to your build file
 -lib cc-sketch-plus
 ```
 
-## classes
+## Notes
 
-https://lib.haxe.org/p/uglifyjs/
+- Build targets live in the root `.hxml` files.
+- SVG export uses the generated SVG string; canvas export uses canvas data URLs.
